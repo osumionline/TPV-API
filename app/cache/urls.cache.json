@@ -1,0 +1,1 @@
+[{"id":"cerrado","url":"\/cerrado","action":"closed","comment":"Página temporal, sitio cerrado","layout":"blank","module":"home"},{"id":"home","url":"\/","action":"index","comment":"Home pública","module":"home"},{"id":"api_call","url":"\/api\/call","action":"apiCall","comment":"Función llamada por API","filter":"tokenFilter","module":"api","type":"json"}]

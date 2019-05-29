@@ -1,0 +1,19 @@
+{
+  "db": {
+  	"host": "localhost",
+  	"user": "apitpv",
+  	"pass": "Uhn94&9j",
+  	"name": "apitpv"
+  },
+  "cookies": {
+  	"prefix": "osumitpv",
+  	"url": ".osumi.es"
+  },
+  "debug": false,
+  "base_url": "https://apitpv.osumi.es/",
+  "admin_email": "inigo.gorosabel@osumi.es",
+  "default_title": "Osumi TPV",
+  "extra": {
+    "secret": "df6dbf577a76645dbf309bc379998243ac1cd341"
+  }
+}
