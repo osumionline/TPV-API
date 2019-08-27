@@ -233,8 +233,6 @@ class api extends OController{
    * Función para guardar un artículo
    */
   function saveArticulo($req){
-    var_dump($req);
-    exit();
     $status = 'ok';
     $id                 = Base::getParam('id',                $req['url_params'], false);
     $localizador         = Base::getParam('localizador',       $req['url_params'], false);
@@ -251,7 +249,7 @@ class api extends OController{
     $lote_optimo         = Base::getParam('loteOptimo',        $req['url_params'], false);
     $iva                 = Base::getParam('iva',               $req['url_params'], false);
     $fecha_caducidad     = Base::getParam('fechaCaducidad',    $req['url_params'], false);
-    $mostrar_fec_cad     = Base::getParam('mostrarFecCad',     $req['url_params'], false);
+    $mostrar_feccad      = Base::getParam('mostrarFecCad',     $req['url_params'], false);
     $observaciones       = Base::getParam('observaciones',     $req['url_params'], false);
     $mostrar_obs_pedidos = Base::getParam('mostrarObsPedidos', $req['url_params'], false);
     $mostrar_obs_ventas  = Base::getParam('mostrarObsVentas',  $req['url_params'], false);
@@ -270,37 +268,64 @@ class api extends OController{
     
     if ($status=='ok'){
       $art = new Articulo();
-      if ($id!==false){
+      if (!empty($id)){
         $art->find(['id'=>$id]);
       }
       else{
         $localizador = $this->articulos_service->getNewLocalizador();
       }
-      $art->set('localizador', $localizador);
-      $art->set('nombre', $nombre);
-      $art->set('puc', $puc);
-      $art->set('pvp', $pvp);
-      $art->set('margen', $margen);
-      $art->set('palb', $palb);
-      $art->set('id_marca', $id_marca);
-      $art->set('id_proveedor', $id_proveedor);
-      $art->set('stock', $stock);
-      $art->set('stock_min', $stock_min);
-      $art->set('stock_max', $stock_max);
-      $art->set('lote_optimo', $lote_optimo);
-      $art->set('iva', $iva);
-      $art->set('fecha_caducidad', $fecha_caducidad);
-      $art->set('mostrar_fec_cad', $mostrar_fec_cad);
-      $art->set('observaciones', $observaciones);
+      $art->set('localizador',         $localizador);
+      $art->set('nombre',              $nombre);
+      $art->set('puc',                 $puc);
+      $art->set('pvp',                 $pvp);
+      $art->set('margen',              $margen);
+      $art->set('palb',                $palb);
+      $art->set('id_marca',            $id_marca);
+      $art->set('id_proveedor',        $id_proveedor);
+      $art->set('stock',               $stock);
+      $art->set('stock_min',           $stock_min);
+      $art->set('stock_max',           $stock_max);
+      $art->set('lote_optimo',         $lote_optimo);
+      $art->set('iva',                 $iva);
+      $art->set('fecha_caducidad',     $fecha_caducidad);
+      $art->set('mostrar_feccad',      $mostrar_feccad);
+      $art->set('observaciones',       $observaciones);
       $art->set('mostrar_obs_pedidos', $mostrar_obs_pedidos);
-      $art->set('mostrar_obs_ventas', $mostrar_obs_ventas);
-      $art->set('referencia', $referencia);
-      $art->set('venta_online', $venta_online);
-      $art->set('mostrar_en_web', $mostrar_en_web);
-      $art->set('id_categoria', $id_categoria);
-      $art->set('desc_corta', $desc_corta);
-      $art->set('desc', $desc);
-      $art->set('activo', $activo);
+      $art->set('mostrar_obs_ventas',  $mostrar_obs_ventas);
+      $art->set('referencia',          $referencia);
+      $art->set('venta_online',        $venta_online);
+      $art->set('mostrar_en_web',      $mostrar_en_web);
+      $art->set('id_categoria',        $id_categoria);
+      $art->set('desc_corta',          $desc_corta);
+      $art->set('desc',                $desc);
+      $art->set('activo',              $activo);
+      
+      $art->save();
+      $id = $art->get('id');
+      
+      $cod_barras_por_defecto = false;
+      foreach ($codigos_barras as $cod){
+        if (!empty($cod['codigoBarras'])){
+          $cb = new CodigoBarras();
+          if (!empty($cod['id'])){
+            $cb->find(['id'=>$cod['id']]);
+          }
+          $cb->set('id_articulo', $id);
+          $cb->set('codigo_barras', $cod['codigoBarras']);
+          if ($cb->get('por_defecto')){
+            $cod_barras_por_defecto = true;
+          }
+          $cb->save();
+        }
+      }
+      
+      if (!$cod_barras_por_defecto){
+        $cb = new CodigoBarras();
+        $cb->set('id_articulo', $id);
+        $cb->set('codigo_barras', $localizador);
+        $cb->set('por_defecto', true);
+        $cb->save();
+      }
     }
     
     $this->getTemplate()->add('status', $status);
