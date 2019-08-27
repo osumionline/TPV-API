@@ -1,12 +1,7 @@
 <?php
-class api extends OController{
-  /*
-   * Página temporal, sitio cerrado
-   */
-  public function closed($req){}
-
+class home extends OController{
   /*
    * Home pública
    */
-  public function index($req){}
+  function index($req){}
 }

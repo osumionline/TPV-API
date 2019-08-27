@@ -5,13 +5,6 @@
       "module": "home",
       "urls": [
         {
-          "id": "cerrado",
-          "url": "/cerrado",
-          "action": "closed",
-          "comment": "Página temporal, sitio cerrado",
-          "layout": "blank"
-        },
-        {
           "id": "home",
           "url": "/",
           "action": "index",
@@ -26,11 +19,64 @@
       "prefix": "/api",
       "urls": [
         {
-          "id": "api_call",
-          "url": "/call",
-          "action": "apiCall",
-          "comment": "Función llamada por API",
-          "filter": "tokenFilter"
+          "id": "checkStart",
+          "url": "/checkStart",
+          "action": "checkStart",
+          "comment": "Función para obtener los datos iniciales de configuración y comprobar el cierre de caja"
+        },
+        {
+          "id": "saveInstallation",
+          "url": "/saveInstallation",
+          "action": "saveInstallation",
+          "comment": "Función guardar los datos iniciales de configuración"
+        },
+        {
+          "id": "openBox",
+          "url": "/openBox",
+          "action": "openBox",
+          "comment": "Función para abrir la caja"
+        },
+        {
+          "id": "getMarcas",
+          "url": "/getMarcas",
+          "action": "getMarcas",
+          "comment": "Función para obtener la lista de marcas"
+        },
+        {
+          "id": "getProveedores",
+          "url": "/getProveedores",
+          "action": "getProveedores",
+          "comment": "Función para obtener la lista de proveedores"
+        },
+        {
+          "id": "getCategorias",
+          "url": "/getCategorias",
+          "action": "getCategorias",
+          "comment": "Función para obtener la lista de categorías"
+        },
+        {
+          "id": "disableProduct",
+          "url": "/disableProduct",
+          "action": "disableProduct",
+          "comment": "Función para dar de baja un artículo"
+        },
+        {
+          "id": "saveMarca",
+          "url": "/saveMarca",
+          "action": "saveMarca",
+          "comment": "Función para guardar una marca"
+        },
+        {
+          "id": "saveProveedor",
+          "url": "/saveProveedor",
+          "action": "saveProveedor",
+          "comment": "Función para guardar un proveedor"
+        },
+        {
+          "id": "saveArticulo",
+          "url": "/saveArticulo",
+          "action": "saveArticulo",
+          "comment": "Función para guardar un artículo"
         }
       ]
     }
