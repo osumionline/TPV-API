@@ -77,6 +77,12 @@
           "url": "/saveArticulo",
           "action": "saveArticulo",
           "comment": "Función para guardar un artículo"
+        },
+        {
+          "id": "loadArticulo",
+          "url": "/loadArticulo",
+          "action": "loadArticulo",
+          "comment": "Función para obtener los datos de un artículo"
         }
       ]
     }

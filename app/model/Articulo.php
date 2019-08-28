@@ -165,4 +165,32 @@ class Articulo extends OBase{
 
     parent::load($table_name, $model);
   }
+  
+  private $codigos_barras = null;
+  
+  public function getCodigosBarras(){
+    if (is_null($this->codigos_barras)){
+      $this->loadCodigosBarras();
+    }
+    return $this->codigos_barras;
+  }
+  
+  public function setCodigosBarras($cb){
+    $this->codigos_barras = $cb;
+  }
+  
+  public function loadCodigosBarras(){
+    $db = new ODB();
+    $sql = "SELECT * FROM `codigo_barras` WHERE `id_articulo` = ?";
+    $db->query($sql, [$this->get('id')]);
+    $list = [];
+    
+    while ($res=$db->next()){
+      $cb = new CodigoBarras();
+      $cb->update($res);
+      array_push($list, $cb);
+    }
+
+    $this->setCodigosBarras($list);
+  }
 }

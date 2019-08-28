@@ -274,6 +274,11 @@ class api extends OController{
       else{
         $localizador = $this->articulos_service->getNewLocalizador();
       }
+      $feccad = null;
+      if ($mostrar_feccad){
+        $arr_feccad = explode('/', $fecha_caducidad);
+        $feccad = $arr_feccad[1] . '-' . $arr_feccad[0]. '-01 00:00:00';
+      }
       $art->set('localizador',         $localizador);
       $art->set('nombre',              $nombre);
       $art->set('puc',                 $puc);
@@ -287,7 +292,7 @@ class api extends OController{
       $art->set('stock_max',           $stock_max);
       $art->set('lote_optimo',         $lote_optimo);
       $art->set('iva',                 $iva);
-      $art->set('fecha_caducidad',     $fecha_caducidad);
+      $art->set('fecha_caducidad',     $feccad);
       $art->set('mostrar_feccad',      $mostrar_feccad);
       $art->set('observaciones',       $observaciones);
       $art->set('mostrar_obs_pedidos', $mostrar_obs_pedidos);
@@ -330,5 +335,32 @@ class api extends OController{
     
     $this->getTemplate()->add('status', $status);
     $this->getTemplate()->add('localizador', $localizador);
+  }
+
+  /*
+   * Función para obtener los datos de un artículo
+   */
+  function loadArticulo($req){
+    $status = 'ok';
+    $localizador = Base::getParam('localizador', $req['url_params'], false);
+    $articulo    = null;
+
+    if ($localizador===false){
+      $status = 'error';
+    }
+    
+    if ($status=='ok'){
+      $cb = new CodigoBarras();
+      if ($cb->find(['codigo_barras'=>$localizador])){
+        $articulo = new Articulo();
+        $articulo->find(['id'=>$cb->get('id_articulo')]);
+      }
+      else{
+        $status = 'error';
+      }
+    }
+    
+    $this->getTemplate()->add('status', $status);
+    $this->getTemplate()->addPartial('articulo', 'api/articulo', ['articulo'=>$articulo, 'extra'=>'nourlencode']);
   }
 }

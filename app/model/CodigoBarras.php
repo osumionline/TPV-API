@@ -15,10 +15,9 @@ class CodigoBarras extends OBase{
         'comment' => 'Id del artículo al que pertenece el código de barras'
       ],
       'codigo_barras' => [
-        'type'    => Base::TEXT,
+        'type'    => Base::NUM,
         'nullable' => false,
         'default' => null,
-        'size' => 100,
         'comment' => 'Código de barras del artículo'
       ],
       'por_defecto' => [
