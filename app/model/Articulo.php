@@ -181,7 +181,7 @@ class Articulo extends OBase{
   
   public function loadCodigosBarras(){
     $db = new ODB();
-    $sql = "SELECT * FROM `codigo_barras` WHERE `id_articulo` = ?";
+    $sql = "SELECT * FROM `codigo_barras` WHERE `id_articulo` = ? ORDER BY `por_defecto` DESC, `created_at` ASC";
     $db->query($sql, [$this->get('id')]);
     $list = [];
     

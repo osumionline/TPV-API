@@ -30,8 +30,7 @@
       {
         "id": <?php echo $cb->get('id') ?>,
         "codigoBarras": <?php echo $cb->get('codigo_barras') ?>,
-        "porDefecto": <?php echo $cb->get('por_defecto') ? 'true' : 'false' ?>,
-        "fixed": true
+        "porDefecto": <?php echo $cb->get('por_defecto') ? 'true' : 'false' ?>
       }<?php if ($i<count($values['articulo']->getCodigosBarras())-1): ?>,<?php endif ?>
 <?php endforeach ?>
     ],
