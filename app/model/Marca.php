@@ -1,52 +1,52 @@
 <?php
-class Marca extends OBase{
+class Marca extends OModel{
   function __construct(){
     $table_name  = 'marca';
     $model = [
       'id' => [
-        'type'    => Base::PK,
+        'type'    => OCore::PK,
         'comment' => 'Id único para cada marca'
       ],
       'nombre' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => false,
         'default' => null,
         'size' => 50,
         'comment' => 'Nombre de la marca'
       ],
       'telefono' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => true,
         'default' => null,
         'size' => 15,
         'comment' => 'Teléfono de la marca'
       ],
       'email' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => true,
         'default' => null,
         'size' => 100,
         'comment' => 'Dirección de email de la marca'
       ],
       'web' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => true,
         'default' => null,
         'size' => 100,
         'comment' => 'Dirección de la página web de la marca'
       ],
       'observaciones' => [
-        'type'    => Base::LONGTEXT,
+        'type'    => OCore::LONGTEXT,
         'nullable' => true,
         'default' => null,
         'comment' => 'Observaciones o notas personales de la marca'
       ],
       'created_at' => [
-        'type'    => Base::CREATED,
+        'type'    => OCore::CREATED,
         'comment' => 'Fecha de creación del registro'
       ],
       'updated_at' => [
-        'type'    => Base::UPDATED,
+        'type'    => OCore::UPDATED,
         'nullable' => true,
         'default' => null,
         'comment' => 'Fecha de última modificación del registro'

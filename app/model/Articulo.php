@@ -1,162 +1,162 @@
 <?php
-class Articulo extends OBase{
+class Articulo extends OModel{
   function __construct(){
     $table_name  = 'articulo';
     $model = [
       'id' => [
-        'type'    => Base::PK,
+        'type'    => OCore::PK,
         'comment' => 'Id único de cada artículo'
       ],
       'localizador' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => null,
         'comment' => 'Localizador único de cada artículo'
       ],
       'nombre' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => false,
         'default' => null,
         'size' => 100,
         'comment' => 'Nombre del artículo'
       ],
       'puc' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Precio Unitario de Compra del artículo'
       ],
       'pvp' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Precio de Venta al Público del artículo'
       ],
       'margen' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Margen de beneficio del artículo'
       ],
       'palb' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Precio del artículo en el albarán'
       ],
       'id_marca' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => null,
         'ref' => 'marca.id',
         'comment' => 'Id de la marca del artículo'
       ],
       'id_proveedor' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => null,
         'ref' => 'proveedor.id',
         'comment' => 'Id del proveedor del artículo'
       ],
       'stock' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Stock actual del artículo'
       ],
       'stock_min' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Stock mínimo del artículo'
       ],
       'stock_max' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Stock máximo del artículo'
       ],
       'lote_optimo' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Lote óptimo para realizar pedidos del artículo'
       ],
       'iva' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => null,
         'comment' => 'IVA del artículo'
       ],
       'fecha_caducidad' => [
-        'type'    => Base::DATE,
+        'type'    => OCore::DATE,
         'nullable' => true,
         'default' => null,
         'comment' => 'Fecha de caducidad del artículo'
       ],
       'mostrar_feccad' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'comment' => 'Mostrar fecha de caducidad 0 no 1 si'
       ],
       'observaciones' => [
-        'type'    => Base::LONGTEXT,
+        'type'    => OCore::LONGTEXT,
         'nullable' => true,
         'default' => null,
         'comment' => 'Observaciones o notas sobre el artículo'
       ],
       'mostrar_obs_pedidos' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'comment' => 'Mostrar observaciones en pedidos 0 no 1 si'
       ],
       'mostrar_obs_ventas' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
       ],
       'referencia' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => true,
         'default' => null,
         'size' => 50,
         'comment' => 'Referencia original del proveedor'
       ],
       'venta_online' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'comment' => 'Indica si el producto está disponible desde la web 1 o no 0'
       ],
       'mostrar_en_web' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'comment' => 'Indica si debe ser mostrado en la web 1 o no 0'
       ],
       'id_categoria' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => null,
         'comment' => 'Id de la categoría en la que se engloba el artículo'
       ],
       'desc_corta' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => true,
         'default' => null,
         'size' => 250,
         'comment' => 'Descripción corta para la web'
       ],
       'desc' => [
-        'type'    => Base::LONGTEXT,
+        'type'    => OCore::LONGTEXT,
         'nullable' => true,
         'default' => null,
         'comment' => 'Descripción larga para la web'
       ],
       'activo' => [
-        'type'    => Base::BOOL,
+        'type'    => OCore::BOOL,
         'default' => true,
         'comment' => 'Indica si el artículo está en alta 1 o dado de baja 0'
       ],
       'created_at' => [
-        'type'    => Base::CREATED,
+        'type'    => OCore::CREATED,
         'comment' => 'Fecha de creación del registro'
       ],
       'updated_at' => [
-        'type'    => Base::UPDATED,
+        'type'    => OCore::UPDATED,
         'nullable' => true,
         'default' => null,
         'comment' => 'Fecha de última modificación del registro'

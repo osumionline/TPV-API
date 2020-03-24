@@ -18,8 +18,8 @@ class generalService extends OService{
   }
   
   public function getAppData(){
-    $c = $this->getController()->getConfig();
-    $app_data_file = $c->getDir('app_cache').'app_data.json';
+    global $core;
+    $app_data_file = $core->config->getDir('app_cache').'app_data.json';
     if (file_exists($app_data_file)){
       return file_get_contents($app_data_file);
     }
@@ -29,8 +29,8 @@ class generalService extends OService{
   }
   
   public function saveAppData($tipo_iva, $iva_list, $margin_list, $venta_online, $fecha_cad){
-    $c = $this->getController()->getConfig();
-    $app_data_file = $c->getDir('app_cache').'app_data.json';
+    global $core;
+    $app_data_file = $core->config->getDir('app_cache').'app_data.json';
     
     $data = [
       'tipoIva'     => $tipo_iva,

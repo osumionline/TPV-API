@@ -1,31 +1,31 @@
 <?php
-class PagoCaja extends OBase{
+class PagoCaja extends OModel{
   function __construct(){
     $table_name  = 'pago_caja';
     $model = [
       'id' => [
-        'type'    => Base::PK,
+        'type'    => OCore::PK,
         'comment' => 'Id único para cada pago de caja'
       ],
       'concepto' => [
-        'type'    => Base::TEXT,
+        'type'    => OCore::TEXT,
         'nullable' => false,
         'default' => null,
         'size' => 250,
         'comment' => 'Concepto del pago'
       ],
       'importe' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Importe de dinero sacado de la caja para realizar el pago'
       ],
       'created_at' => [
-        'type'    => Base::CREATED,
+        'type'    => OCore::CREATED,
         'comment' => 'Fecha de creación del registro'
       ],
       'updated_at' => [
-        'type'    => Base::UPDATED,
+        'type'    => OCore::UPDATED,
         'nullable' => true,
         'default' => null,
         'comment' => 'Fecha de última modificación del registro'

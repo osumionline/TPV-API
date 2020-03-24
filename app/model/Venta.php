@@ -1,43 +1,43 @@
 <?php
-class Venta extends OBase{
+class Venta extends OModel{
   function __construct(){
     $table_name  = 'venta';
     $model = [
       'id' => [
-        'type'    => Base::PK,
+        'type'    => OCore::PK,
         'comment' => 'Id único de cada venta'
       ],
       'id_cliente' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => true,
         'default' => null,
         'ref' => 'cliente.id',
         'comment' => 'Id del cliente'
       ],
       'total' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Importe total de la venta'
       ],
       'entregado' => [
-        'type'    => Base::FLOAT,
+        'type'    => OCore::FLOAT,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Importe entregado por el cliente'
       ],
       'tipo_pago' => [
-        'type'    => Base::NUM,
+        'type'    => OCore::NUM,
         'nullable' => false,
         'default' => '0',
         'comment' => 'Tipo de pago 0 metálico 1 tarjeta 2 web'
       ],
       'created_at' => [
-        'type'    => Base::CREATED,
+        'type'    => OCore::CREATED,
         'comment' => 'Fecha de creación del registro'
       ],
       'updated_at' => [
-        'type'    => Base::UPDATED,
+        'type'    => OCore::UPDATED,
         'nullable' => true,
         'default' => null,
         'comment' => 'Fecha de última modificación del registro'

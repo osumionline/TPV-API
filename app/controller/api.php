@@ -13,7 +13,7 @@ class api extends OController{
    */
   function checkStart($req){
     $status = 'ok';
-    $date = Base::getParam('date', $req['url_params'], false);
+    $date = OTools::getParam('date', $req['params'], false);
     $opened   = 'false';
     $app_data = 'null';
 
@@ -36,11 +36,11 @@ class api extends OController{
    */
   function saveInstallation($req){
     $status = 'ok';
-    $tipo_iva     = Base::getParam('tipoIva',     $req['url_params'], false);
-    $iva_list     = Base::getParam('ivaList',     $req['url_params'], false);
-    $margin_list  = Base::getParam('marginList',  $req['url_params'], false);
-    $venta_online = Base::getParam('ventaOnline', $req['url_params'], false);
-    $fecha_cad    = Base::getParam('fechaCad',    $req['url_params'], false);
+    $tipo_iva     = OTools::getParam('tipoIva',     $req['params'], false);
+    $iva_list     = OTools::getParam('ivaList',     $req['params'], false);
+    $margin_list  = OTools::getParam('marginList',  $req['params'], false);
+    $venta_online = OTools::getParam('ventaOnline', $req['params'], false);
+    $fecha_cad    = OTools::getParam('fechaCad',    $req['params'], false);
 
     if ($tipo_iva===false || $iva_list===false || $margin_list===false){
       $status = 'error';
@@ -129,7 +129,7 @@ class api extends OController{
    */
   function disableProduct($req){
     $status = 'ok';
-    $id     = Base::getParam('id', $req['url_params'], false);
+    $id     = OTools::getParam('id', $req['params'], false);
     
     if ($id===false){
       $status = 'error';
@@ -154,12 +154,12 @@ class api extends OController{
    */
   function saveMarca($req){
     $status = 'ok';
-    $id            = Base::getParam('id',            $req['url_params'], false);
-    $nombre        = Base::getParam('nombre',        $req['url_params'], false);
-    $telefono      = Base::getParam('telefono',      $req['url_params'], false);
-    $email         = Base::getParam('email',         $req['url_params'], false);
-    $web           = Base::getParam('web',           $req['url_params'], false);
-    $observaciones = Base::getParam('observaciones', $req['url_params'], false);
+    $id            = OTools::getParam('id',            $req['params'], false);
+    $nombre        = OTools::getParam('nombre',        $req['params'], false);
+    $telefono      = OTools::getParam('telefono',      $req['params'], false);
+    $email         = OTools::getParam('email',         $req['params'], false);
+    $web           = OTools::getParam('web',           $req['params'], false);
+    $observaciones = OTools::getParam('observaciones', $req['params'], false);
 
     if ($nombre===false){
       $status = 'error';
@@ -192,14 +192,14 @@ class api extends OController{
   function saveProveedor($req){
     $status = 'ok';
 
-    $id            = Base::getParam('id',            $req['url_params'], false);
-    $nombre        = Base::getParam('nombre',        $req['url_params'], false);
-    $direccion     = Base::getParam('direccion',     $req['url_params'], false);
-    $telefono      = Base::getParam('telefono',      $req['url_params'], false);
-    $email         = Base::getParam('email',         $req['url_params'], false);
-    $web           = Base::getParam('web',           $req['url_params'], false);
-    $observaciones = Base::getParam('observaciones', $req['url_params'], false);
-    $marcas        = Base::getParam('marcas',        $req['url_params'], false);
+    $id            = OTools::getParam('id',            $req['params'], false);
+    $nombre        = OTools::getParam('nombre',        $req['params'], false);
+    $direccion     = OTools::getParam('direccion',     $req['params'], false);
+    $telefono      = OTools::getParam('telefono',      $req['params'], false);
+    $email         = OTools::getParam('email',         $req['params'], false);
+    $web           = OTools::getParam('web',           $req['params'], false);
+    $observaciones = OTools::getParam('observaciones', $req['params'], false);
+    $marcas        = OTools::getParam('marcas',        $req['params'], false);
 
     if ($nombre===false){
       $status = 'error';
@@ -234,33 +234,33 @@ class api extends OController{
    */
   function saveArticulo($req){
     $status = 'ok';
-    $id                 = Base::getParam('id',                $req['url_params'], false);
-    $localizador         = Base::getParam('localizador',       $req['url_params'], false);
-    $nombre              = Base::getParam('nombre',            $req['url_params'], false);
-    $puc                 = Base::getParam('puc',               $req['url_params'], false);
-    $pvp                 = Base::getParam('pvp',               $req['url_params'], false);
-    $margen              = Base::getParam('margen',            $req['url_params'], false);
-    $palb                = Base::getParam('palb',              $req['url_params'], false);
-    $id_marca            = Base::getParam('idMarca',           $req['url_params'], false);
-    $id_proveedor        = Base::getParam('idProveedor',       $req['url_params'], false);
-    $stock               = Base::getParam('stock',             $req['url_params'], false);
-    $stock_min           = Base::getParam('stockMin',          $req['url_params'], false);
-    $stock_max           = Base::getParam('stockMax',          $req['url_params'], false);
-    $lote_optimo         = Base::getParam('loteOptimo',        $req['url_params'], false);
-    $iva                 = Base::getParam('iva',               $req['url_params'], false);
-    $fecha_caducidad     = Base::getParam('fechaCaducidad',    $req['url_params'], false);
-    $mostrar_feccad      = Base::getParam('mostrarFecCad',     $req['url_params'], false);
-    $observaciones       = Base::getParam('observaciones',     $req['url_params'], false);
-    $mostrar_obs_pedidos = Base::getParam('mostrarObsPedidos', $req['url_params'], false);
-    $mostrar_obs_ventas  = Base::getParam('mostrarObsVentas',  $req['url_params'], false);
-    $referencia          = Base::getParam('referencia',        $req['url_params'], false);
-    $venta_online        = Base::getParam('ventaOnline',       $req['url_params'], false);
-    $mostrar_en_web      = Base::getParam('mostrarEnWeb',      $req['url_params'], false);
-    $id_categoria        = Base::getParam('idCategoria',       $req['url_params'], false);
-    $desc_corta          = Base::getParam('descCorta',         $req['url_params'], false);
-    $desc                = Base::getParam('desc',              $req['url_params'], false);
-    $codigos_barras      = Base::getParam('codigosBarras',     $req['url_params'], false);
-    $activo              = Base::getParam('activo',            $req['url_params'], false);
+    $id                 = OTools::getParam('id',                $req['params'], false);
+    $localizador         = OTools::getParam('localizador',       $req['params'], false);
+    $nombre              = OTools::getParam('nombre',            $req['params'], false);
+    $puc                 = OTools::getParam('puc',               $req['params'], false);
+    $pvp                 = OTools::getParam('pvp',               $req['params'], false);
+    $margen              = OTools::getParam('margen',            $req['params'], false);
+    $palb                = OTools::getParam('palb',              $req['params'], false);
+    $id_marca            = OTools::getParam('idMarca',           $req['params'], false);
+    $id_proveedor        = OTools::getParam('idProveedor',       $req['params'], false);
+    $stock               = OTools::getParam('stock',             $req['params'], false);
+    $stock_min           = OTools::getParam('stockMin',          $req['params'], false);
+    $stock_max           = OTools::getParam('stockMax',          $req['params'], false);
+    $lote_optimo         = OTools::getParam('loteOptimo',        $req['params'], false);
+    $iva                 = OTools::getParam('iva',               $req['params'], false);
+    $fecha_caducidad     = OTools::getParam('fechaCaducidad',    $req['params'], false);
+    $mostrar_feccad      = OTools::getParam('mostrarFecCad',     $req['params'], false);
+    $observaciones       = OTools::getParam('observaciones',     $req['params'], false);
+    $mostrar_obs_pedidos = OTools::getParam('mostrarObsPedidos', $req['params'], false);
+    $mostrar_obs_ventas  = OTools::getParam('mostrarObsVentas',  $req['params'], false);
+    $referencia          = OTools::getParam('referencia',        $req['params'], false);
+    $venta_online        = OTools::getParam('ventaOnline',       $req['params'], false);
+    $mostrar_en_web      = OTools::getParam('mostrarEnWeb',      $req['params'], false);
+    $id_categoria        = OTools::getParam('idCategoria',       $req['params'], false);
+    $desc_corta          = OTools::getParam('descCorta',         $req['params'], false);
+    $desc                = OTools::getParam('desc',              $req['params'], false);
+    $codigos_barras      = OTools::getParam('codigosBarras',     $req['params'], false);
+    $activo              = OTools::getParam('activo',            $req['params'], false);
     
     if ($nombre===false || $id_marca===false || $iva===false){
       $status = 'error';
@@ -342,7 +342,7 @@ class api extends OController{
    */
   function loadArticulo($req){
     $status = 'ok';
-    $localizador = Base::getParam('localizador', $req['url_params'], false);
+    $localizador = OTools::getParam('localizador', $req['params'], false);
     $articulo    = null;
 
     if ($localizador===false){
