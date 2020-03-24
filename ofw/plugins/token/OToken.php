@@ -31,9 +31,9 @@ class OToken{
       return $this->token;
     }
     $header = ["alg"=> "HS256", "typ"=>"JWT"];
-    $header_64 = base64_encode(json_encode($header));
+    $header_64 = OTools::base64urlEncode(json_encode($header));
     $payload = $this->params;
-    $payload_64 = base64_encode(json_encode($payload));
+    $payload_64 = OTools::base64urlEncode(json_encode($payload));
 
     $signature = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
 
@@ -51,7 +51,7 @@ class OToken{
     $signature_check = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
 
     if ($signature === $signature_check){
-      $this->params = json_decode(base64_decode($payload_64), true);
+      $this->params = json_decode(OTools::base64urlDecode($payload_64), true);
       return true;
     }
     return false;
