@@ -1,13 +1,19 @@
 {
-  "file_name": "OEmail.php",
-  "version": "1.0.0",
-  "description": "Clase para realizar envíos de emails.",
-  "updates": {
-    "1.0.0": {
-      "message": "1.0.0 - Versión inicial del plugin OEmail",
-      "files": [
-        "OEmail.php"
-      ]
-    }
-  }
+	"file_name": "OEmail.php",
+	"version": "1.0.1",
+	"description": "Clase para realizar envíos de emails.",
+	"updates": {
+		"1.0.1": {
+			"message": "1.0.1 - Cambios por OFW 5 y añado logs internos",
+			"files": [
+				"OEmail.php"
+			]
+		},
+		"1.0.0": {
+			"message": "1.0.0 - Versión inicial del plugin OEmail",
+			"files": [
+				"OEmail.php"
+			]
+		}
+	}
 }

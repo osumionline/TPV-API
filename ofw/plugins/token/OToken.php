@@ -1,59 +1,62 @@
 <?php
-class OToken{
-  private $secret = null;
-  private $params = [];
-  private $token = null;
+class OToken {
+	private $secret = null;
+	private $params = [];
+	private $token = null;
 
-  function __construct($secret) {
-    $this->secret = $secret;
-  }
+	function __construct($secret) {
+		$this->secret = $secret;
+	}
 
-  public function setParams($params){
-    $this->params = $params;
-  }
-  public function addParam($key, $value){
-    $this->params[$key] = $value;
-  }
-  public function getParams(){
-    return $this->params;
-  }
-  public function getParam($key){
-    if (array_key_exists($key, $this->params)){
-      return $this->params[$key];
-    }
-    else{
-      return false;
-    }
-  }
+	public function setParams($params) {
+		$this->params = $params;
+	}
 
-  public function getToken(){
-    if (!is_null($this->token)){
-      return $this->token;
-    }
-    $header = ["alg"=> "HS256", "typ"=>"JWT"];
-    $header_64 = OTools::base64urlEncode(json_encode($header));
-    $payload = $this->params;
-    $payload_64 = OTools::base64urlEncode(json_encode($payload));
+	public function addParam($key, $value) {
+		$this->params[$key] = $value;
+	}
 
-    $signature = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
+	public function getParams() {
+		return $this->params;
+	}
 
-    $this->token = $header_64.'.'.$payload_64.'.'.$signature;
+	public function getParam($key) {
+		if (array_key_exists($key, $this->params)) {
+			return $this->params[$key];
+		}
+		else {
+			return false;
+		}
+	}
 
-    return $this->token;
-  }
+	public function getToken() {
+		if (!is_null($this->token)) {
+			return $this->token;
+		}
+		$header = ['alg'=> 'HS256', 'typ'=>'JWT'];
+		$header_64 = OTools::base64urlEncode(json_encode($header));
+		$payload = $this->params;
+		$payload_64 = OTools::base64urlEncode(json_encode($payload));
 
-  public function checkToken($token){
-    $pieces = explode('.', $token);
-    $header_64  = $pieces[0];
-    $payload_64 = $pieces[1];
-    $signature  = $pieces[2];
+		$signature = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
 
-    $signature_check = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
+		$this->token = $header_64.'.'.$payload_64.'.'.$signature;
 
-    if ($signature === $signature_check){
-      $this->params = json_decode(OTools::base64urlDecode($payload_64), true);
-      return true;
-    }
-    return false;
-  }
+		return $this->token;
+	}
+
+	public function checkToken($token) {
+		$pieces = explode('.', $token);
+		$header_64  = $pieces[0];
+		$payload_64 = $pieces[1];
+		$signature  = $pieces[2];
+
+		$signature_check = hash_hmac('sha256', $header_64.'.'.$payload_64, $this->secret);
+
+		if ($signature === $signature_check) {
+			$this->params = json_decode(OTools::base64urlDecode($payload_64), true);
+			return true;
+		}
+		return false;
+	}
 }
