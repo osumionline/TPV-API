@@ -1,11 +1,11 @@
 <?php
 class articulosService extends OService{
-  function __construct($controller=null){
-    $this->setController($controller);
+  function __construct(){
+    $this->loadService();
   }
   
   public function getMarcas(){
-    $db = $this->getController()->getDB();
+    $db = new ODB();
     $sql = "SELECT * FROM `marca` ORDER BY `nombre`";
     $db->query($sql);
     $list = [];
@@ -20,7 +20,7 @@ class articulosService extends OService{
   }
   
   public function getProveedores(){
-    $db = $this->getController()->getDB();
+    $db = new ODB();
     $sql = "SELECT * FROM `proveedor` ORDER BY `nombre`";
     $db->query($sql);
     $list = [];
@@ -35,7 +35,7 @@ class articulosService extends OService{
   }
   
   public function updateProveedoresMarcas($id_proveedor, $marcas){
-    $db = $this->getController()->getDB();
+    $db = new ODB();
     $sql = "DELETE FROM `proveedor_marca` WHERE `id_proveedor` = ?";
     $db->query($sql, [$id_proveedor]);
     
@@ -48,7 +48,7 @@ class articulosService extends OService{
   }
   
   public function getCategories($id_parent){
-    $db = $this->getController()->getDB();
+    $db = new ODB();
     $sql = "SELECT * FROM `categoria`";
     if ($id_parent!==-1){
       $sql .= " WHERE `id_padre` ".( is_null($id_parent) ? "IS NULL" : "= ".$id_parent );

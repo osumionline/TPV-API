@@ -1,11 +1,11 @@
 <?php
 class generalService extends OService{
-  function __construct($controller=null){
-    $this->setController($controller);
+  function __construct(){
+    $this->loadService();
   }
   
   public function getOpened($date){
-    $db = $this->getController()->getDB();
+    $db = new ODB();
     $sql = "SELECT * FROM `caja` WHERE DATE(`apertura`) = ?";
     $db->query($sql, [$date]);
     
@@ -18,8 +18,7 @@ class generalService extends OService{
   }
   
   public function getAppData(){
-    global $core;
-    $app_data_file = $core->config->getDir('app_cache').'app_data.json';
+    $app_data_file = $this->getConfig()->getDir('app_cache').'app_data.json';
     if (file_exists($app_data_file)){
       return file_get_contents($app_data_file);
     }
@@ -29,8 +28,7 @@ class generalService extends OService{
   }
   
   public function saveAppData($tipo_iva, $iva_list, $margin_list, $venta_online, $fecha_cad){
-    global $core;
-    $app_data_file = $core->config->getDir('app_cache').'app_data.json';
+    $app_data_file = $this->getConfig()->getDir('app_cache').'app_data.json';
     
     $data = [
       'tipoIva'     => $tipo_iva,

@@ -4,8 +4,8 @@ class api extends OController{
   private $articulos_service;
 
   function __construct(){
-    $this->general_service   = new generalService($this);
-    $this->articulos_service = new articulosService($this);
+    $this->general_service   = new generalService();
+    $this->articulos_service = new articulosService();
   }
 
   /*
