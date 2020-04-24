@@ -1,8 +1,20 @@
 {
 	"file_name": "OEmail.php",
-	"version": "1.0.1",
+	"version": "1.1.1",
 	"description": "Clase para realizar envíos de emails.",
 	"updates": {
+		"1.1.1": {
+			"message": "1.1.1 - Correcciones tras pruebas",
+			"files": [
+				"OEmail.php"
+			]
+		},
+		"1.1.0": {
+			"message": "1.1.0 - Añado PHPdoc, funciones para añadir adjuntos y refactorizaciones",
+			"files": [
+				"OEmail.php"
+			]
+		},
 		"1.0.1": {
 			"message": "1.0.1 - Cambios por OFW 5 y añado logs internos",
 			"files": [
