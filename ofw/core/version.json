@@ -1,6 +1,50 @@
 {
-	"version": "5.5.2",
+	"version": "5.6.4",
 	"updates": {
+		"5.6.4": {
+			"message": "5.6.4 - Corrección en OModel-getModel",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OModel.php"
+			]
+		},
+		"5.6.3": {
+			"message": "5.6.3 - Corrección en OTools-updateUrls",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OTools.php"
+			]
+		},
+		"5.6.2": {
+			"message": "5.6.2 - Corrección en OModel",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OModel.php"
+			]
+		},
+		"5.6.1": {
+			"message": "5.6.1 - Correcciones por ORequest y para tasks",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OCore.php",
+				"ofw/core/OTools.php"
+			]
+		},
+		"5.6.0": {
+			"message": "5.6.0 - Nuevo ORequest",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OCore.php",
+				"ofw/core/OSession.php",
+				"ofw/core/OTools.php",
+				"ofw/core/ORequest.php"
+			]
+		},
 		"5.5.2": {
 			"message": "5.5.2 - Corrección en parámetros de entrada y en código de ejemplo",
 			"files": [

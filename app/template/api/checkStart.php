@@ -1,5 +1,5 @@
 {
-  "status": "{{status}}",
-  "opened": {{opened}},
-  "appData": {{appData}}
+	"status": "{{status}}",
+	"opened": {{opened}},
+	"appData": {{appData}}
 }

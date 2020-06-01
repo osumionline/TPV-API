@@ -82,7 +82,7 @@ class OModel {
 	 *
 	 * @return array Whole model (array of arrays) or field model (single array)
 	 */
-	public function getModel(string $key=null): array {
+	public function getModel(string $key=null): ?array {
 		if (is_null($key)) {
 			return $this->model;
 		}
@@ -91,7 +91,7 @@ class OModel {
 				return $this->model[$key];
 			}
 			else {
-				return false;
+				return null;
 			}
 		}
 	}
@@ -124,7 +124,7 @@ class OModel {
 	 */
 	public function get(string $key, $extra=null) {
 		$field = $this->getModel($key);
-		if ($field) {
+		if (!is_null($field)) {
 			if (is_null($field['value'])) {
 				return null;
 			}
@@ -261,7 +261,7 @@ class OModel {
 
 		// Set every field in the model as saved (original = current)
 		foreach($this->model as $field_name=>$field){
-			$this->model[$field_name]['original'] = $model[$field_name]['value'];
+			$this->model[$field_name]['original'] = $this->model[$field_name]['value'];
 		}
 
 		return true;

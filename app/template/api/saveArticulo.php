@@ -1,4 +1,4 @@
 {
-  "status": "{{status}}",
-  "localizador": {{localizador}}
+	"status": "{{status}}",
+	"localizador": {{localizador}}
 }

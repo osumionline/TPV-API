@@ -1,13 +1,13 @@
 {
-  "db": {
-    "host": "localhost",
-    "user": "apitpv",
-    "pass": "Uhn94&9j",
-    "name": "apitpv"
-  },
-  "base_url": "https://apitpv.osumi.es",
-  "default_title": "API TPV",
-  "dir": {
-    "fotos": "fotos/"
-  }
+	"db": {
+		"host": "localhost",
+		"user": "apitpv",
+		"pass": "Uhn94&9j",
+		"name": "apitpv"
+	},
+	"base_url": "https://apitpv.osumi.es",
+	"default_title": "API TPV",
+	"dir": {
+		"fotos": "fotos/"
+	}
 }
