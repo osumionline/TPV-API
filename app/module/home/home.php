@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-class home extends OController {
+class home extends OModule {
 	/**
 	 * Home pública
 	 *
