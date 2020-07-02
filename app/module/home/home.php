@@ -7,5 +7,5 @@ class home extends OModule {
 	 *
 	 * @return void
 	 */
-	function index(ORequest $req): void {}
+	public function index(ORequest $req): void {}
 }

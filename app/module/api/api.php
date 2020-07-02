@@ -15,7 +15,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function checkStart(ORequest $req): void {
+	public function checkStart(ORequest $req): void {
 		$status   = 'ok';
 		$date     = $req->getParamString('date');
 		$opened   = 'false';
@@ -42,7 +42,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function saveInstallation(ORequest $req): void {
+	public function saveInstallation(ORequest $req): void {
 		$status = 'ok';
 		$tipo_iva     = $req->getParamString('tipoIva');
 		$iva_list     = $req->getParam('ivaList');
@@ -68,7 +68,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function openBox(ORequest $req): void {
+	public function openBox(ORequest $req): void {
 		$status = 'ok';
 
 		$caja = new Caja();
@@ -116,7 +116,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function getMarcas(ORequest $req): void {
+	public function getMarcas(ORequest $req): void {
 		$list = $this->articulos_service->getMarcas();
 
 		$this->getTemplate()->addPartial('list', 'api/marcas_list', ['list'=>$list, 'extra'=>'nourlencode']);
@@ -129,7 +129,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function getProveedores(ORequest $req): void {
+	public function getProveedores(ORequest $req): void {
 		$list = $this->articulos_service->getProveedores();
 
 		$this->getTemplate()->addPartial('list', 'api/proveedores_list', ['list'=>$list, 'extra'=>'nourlencode']);
@@ -142,7 +142,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function getCategorias(ORequest $req): void {
+	public function getCategorias(ORequest $req): void {
 		$list = $this->articulos_service->getCategoryTree([]);
 
 		$this->getTemplate()->addPartial('list', 'api/categorias_list', ['list'=>$list, 'extra'=>'nourlencode']);
@@ -155,7 +155,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function disableProduct(ORequest $req): void {
+	public function disableProduct(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
 
@@ -184,7 +184,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function saveMarca(ORequest $req): void {
+	public function saveMarca(ORequest $req): void {
 		$status = 'ok';
 		$id            = $req->getParamInt('id');
 		$nombre        = $req->getParamString('nombre');
@@ -225,7 +225,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function saveProveedor(ORequest $req): void {
+	public function saveProveedor(ORequest $req): void {
 		$status = 'ok';
 
 		$id            = $req->getParamInt('id');
@@ -272,7 +272,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function saveArticulo(ORequest $req): void {
+	public function saveArticulo(ORequest $req): void {
 		$status = 'ok';
 		$id                  = $req->getParamInt('id');
 		$localizador         = $req->getParamInt('localizador');
@@ -384,7 +384,7 @@ class api extends OModule {
 	 *
 	 * @return void
 	 */
-	function loadArticulo(ORequest $req): void {
+	public function loadArticulo(ORequest $req): void {
 		$status = 'ok';
 		$localizador = $req->getParamInt('localizador');
 		$articulo    = null;
