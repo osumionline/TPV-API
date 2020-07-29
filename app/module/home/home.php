@@ -3,8 +3,8 @@ class home extends OModule {
 	/**
 	 * Home pública
 	 *
+	 * @url /
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function index(ORequest $req): void {}

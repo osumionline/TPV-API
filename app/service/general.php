@@ -33,7 +33,7 @@ class generalService extends OService {
 	 * @return string Datos de configuración generales
 	 */
 	public function getAppData(): string {
-		$app_data_file = $this->getConfig()->getDir('app_cache').'app_data.json';
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
 		if (file_exists($app_data_file)) {
 			return file_get_contents($app_data_file);
 		}
@@ -58,7 +58,7 @@ class generalService extends OService {
 	 * @return void
 	 */
 	public function saveAppData(string $tipo_iva, array $iva_list, array $margin_list, bool $venta_online, bool $fecha_cad): void {
-		$app_data_file = $this->getConfig()->getDir('app_cache').'app_data.json';
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
 
 		$data = [
 			'tipoIva'     => $tipo_iva,

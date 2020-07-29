@@ -1,4 +1,8 @@
 <?php declare(strict_types=1);
+/**
+ * @type json
+ * @prefix /api
+*/
 class api extends OModule {
 	private ?generalService $general_service = null;
 	private ?articulosService $articulos_service = null;
@@ -11,8 +15,8 @@ class api extends OModule {
 	/**
 	 * Función para obtener los datos iniciales de configuración y comprobar el cierre de caja
 	 *
+	 * @url /checkStart
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function checkStart(ORequest $req): void {
@@ -38,8 +42,8 @@ class api extends OModule {
 	/**
 	 * Función guardar los datos iniciales de configuración
 	 *
+	 * @url /saveInstallation
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function saveInstallation(ORequest $req): void {
@@ -64,8 +68,8 @@ class api extends OModule {
 	/**
 	 * Función para abrir la caja
 	 *
+	 * @url /openBox
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function openBox(ORequest $req): void {
@@ -112,8 +116,8 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de marcas
 	 *
+	 * @url /getMarcas
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function getMarcas(ORequest $req): void {
@@ -125,8 +129,8 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de proveedores
 	 *
+	 * @url /getProveedores
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function getProveedores(ORequest $req): void {
@@ -138,8 +142,8 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de categorías
 	 *
+	 * @url /getCategorias
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function getCategorias(ORequest $req): void {
@@ -151,8 +155,8 @@ class api extends OModule {
 	/**
 	 * Función para dar de baja un artículo
 	 *
+	 * @url /disableProduct
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function disableProduct(ORequest $req): void {
@@ -180,8 +184,8 @@ class api extends OModule {
 	/**
 	 * Función para guardar una marca
 	 *
+	 * @url /saveMarca
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function saveMarca(ORequest $req): void {
@@ -221,8 +225,8 @@ class api extends OModule {
 	/**
 	 * Función para guardar un proveedor
 	 *
+	 * @url /saveProveedor
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function saveProveedor(ORequest $req): void {
@@ -268,8 +272,8 @@ class api extends OModule {
 	/**
 	 * Función para guardar un artículo
 	 *
+	 * @url /saveArticulo
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function saveArticulo(ORequest $req): void {
@@ -380,8 +384,8 @@ class api extends OModule {
 	/**
 	 * Función para obtener los datos de un artículo
 	 *
+	 * @url /loadArticulo
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
-	 *
 	 * @return void
 	 */
 	public function loadArticulo(ORequest $req): void {
