@@ -123,7 +123,7 @@ class api extends OModule {
 	public function getMarcas(ORequest $req): void {
 		$list = $this->articulos_service->getMarcas();
 
-		$this->getTemplate()->addPartial('list', 'api/marcas_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'api/marcas_list', ['list'=>$list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -136,7 +136,7 @@ class api extends OModule {
 	public function getProveedores(ORequest $req): void {
 		$list = $this->articulos_service->getProveedores();
 
-		$this->getTemplate()->addPartial('list', 'api/proveedores_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'api/proveedores_list', ['list'=>$list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -149,7 +149,7 @@ class api extends OModule {
 	public function getCategorias(ORequest $req): void {
 		$list = $this->articulos_service->getCategoryTree([]);
 
-		$this->getTemplate()->addPartial('list', 'api/categorias_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'api/categorias_list', ['list'=>$list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -409,6 +409,6 @@ class api extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addPartial('articulo', 'api/articulo', ['articulo'=>$articulo, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('articulo', 'api/articulo', ['articulo'=>$articulo, 'extra'=>'nourlencode']);
 	}
 }
