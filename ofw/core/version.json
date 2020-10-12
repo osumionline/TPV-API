@@ -1,6 +1,39 @@
 {
-	"version": "6.2.0",
+	"version": "6.3.3",
 	"updates": {
+		"6.3.3": {
+			"message": "6.3.3 - Corrección en ORequest para enteros con valor cero",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/ORequest.php"
+			]
+		},
+		"6.3.2": {
+			"message": "6.3.2 - Corrección en ORequest para valores nulos en int",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/ORequest.php"
+			]
+		},
+		"6.3.1": {
+			"message": "6.3.1 - Corrección en ORequest para valores booleanos",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/ORequest.php"
+			]
+		},
+		"6.3.0": {
+			"message": "6.3.0 - Datos de sesión en core",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/core/version.json",
+				"ofw/core/OCore.php",
+				"ofw/core/OModule.php"
+			]
+		},
 		"6.2.0": {
 			"message": "6.2.0 - Funcion getEnvironment en OConfig",
 			"files": [

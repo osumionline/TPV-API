@@ -121,7 +121,7 @@ class ORequest {
 	 */
 	public function getParamInt(string $key, $default=null): ?int {
 		$param = $this->getParam($key, $default);
-		return !is_null($param) ? intval($param) : null;
+		return (!is_null($param) && $param!=='null') ? intval($param) : null;
 	}
 
 	/**
@@ -149,7 +149,7 @@ class ORequest {
 	 */
 	public function getParamBool(string $key, $default=null): ?bool {
 		$param = $this->getParam($key, $default);
-		return !is_null($param) ? boolval($param) : null;
+		return !is_null($param) ? filter_var($param, FILTER_VALIDATE_BOOLEAN) : null;
 	}
 
 	/**
