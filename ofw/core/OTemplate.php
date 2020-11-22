@@ -3,6 +3,7 @@
  * OTemplate - Class used by the controllers to show the required template and its data
  */
 class OTemplate {
+	private string      $environment   = '';
 	private bool        $debug         = false;
 	private ?OLog       $l             = null;
 	private string      $component_dir = '';
@@ -33,6 +34,7 @@ class OTemplate {
 	 */
 	function __construct() {
 		global $core;
+		$this->environment = $core->config->getEnvironment();
 		$this->debug = ($core->config->getLog('level') == 'ALL');
 		if ($this->debug) {
 			$this->l = new OLog('OTemplate');
@@ -272,9 +274,9 @@ class OTemplate {
 	 *
 	 * @param string $where Key value in the template that will get substituted (eg {{users}})
 	 *
-	 * @param string $name Name of the partial file that will be loaded
+	 * @param string $name Name of the component file that will be loaded
 	 *
-	 * @param array $values Array of information that will be loaded into the partial
+	 * @param array $values Array of information that will be loaded into the component
 	 *
 	 * @return void
 	 */
@@ -303,7 +305,7 @@ class OTemplate {
 		$output = OTools::getPartial($component_file, $values);
 
 		if (is_null($output)) {
-			$output = 'ERROR: No existe el archivo '.$name;
+			$output = 'ERROR: File '.$name.' not found';
 		}
 		$this->add($where, $output, array_key_exists('extra', $values) ? $values['extra'] : null);
 	}
@@ -421,6 +423,11 @@ class OTemplate {
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		}
+		// If the request is a JSON and we are in production environment, minify it before sending
+		if ($this->environment=='prod' && $this->type=='json') {
+			$layout = OTools::minifyJSON($layout);
+		}
+
 		header('Content-type: '.$this->return_types[$this->type]);
 
 		return $layout;
