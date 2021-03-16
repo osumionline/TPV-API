@@ -1,8 +1,22 @@
 <?php declare(strict_types=1);
-/**
- * @type json
- * @prefix /api
-*/
+
+namespace OsumiFramework\App\Module;
+
+use OsumiFramework\OFW\Core\OModule;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\OFW\Routing\ORoute;
+use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Model\Proveedor;
+use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\Caja;
+use OsumiFramework\App\Model\Marca;
+use OsumiFramework\App\Service\generalService;
+use OsumiFramework\App\Service\articulosService;
+
+#[ORoute(
+	type: 'json',
+	prefix: '/api'
+)]
 class api extends OModule {
 	private ?generalService $general_service = null;
 	private ?articulosService $articulos_service = null;
@@ -15,10 +29,10 @@ class api extends OModule {
 	/**
 	 * Función para obtener los datos iniciales de configuración y comprobar el cierre de caja
 	 *
-	 * @url /checkStart
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/checkStart')]
 	public function checkStart(ORequest $req): void {
 		$status   = 'ok';
 		$date     = $req->getParamString('date');
@@ -42,10 +56,10 @@ class api extends OModule {
 	/**
 	 * Función guardar los datos iniciales de configuración
 	 *
-	 * @url /saveInstallation
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/saveInstallation')]
 	public function saveInstallation(ORequest $req): void {
 		$status = 'ok';
 		$tipo_iva     = $req->getParamString('tipoIva');
@@ -68,15 +82,15 @@ class api extends OModule {
 	/**
 	 * Función para abrir la caja
 	 *
-	 * @url /openBox
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/openBox')]
 	public function openBox(ORequest $req): void {
 		$status = 'ok';
 
 		$caja = new Caja();
-		$caja->set('apertura',        date('Y-m-d H:i:s', mktime()));
+		$caja->set('apertura',        date('Y-m-d H:i:s', time()));
 		$caja->set('cierre',          null);
 		$caja->set('diferencoa',      null);
 		$caja->set('ventas',          null);
@@ -116,10 +130,10 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de marcas
 	 *
-	 * @url /getMarcas
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/getMarcas')]
 	public function getMarcas(ORequest $req): void {
 		$list = $this->articulos_service->getMarcas();
 
@@ -129,10 +143,10 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de proveedores
 	 *
-	 * @url /getProveedores
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/getProveedores')]
 	public function getProveedores(ORequest $req): void {
 		$list = $this->articulos_service->getProveedores();
 
@@ -142,10 +156,10 @@ class api extends OModule {
 	/**
 	 * Función para obtener la lista de categorías
 	 *
-	 * @url /getCategorias
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/getCategorias')]
 	public function getCategorias(ORequest $req): void {
 		$list = $this->articulos_service->getCategoryTree([]);
 
@@ -155,10 +169,10 @@ class api extends OModule {
 	/**
 	 * Función para dar de baja un artículo
 	 *
-	 * @url /disableProduct
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/disableProduct')]
 	public function disableProduct(ORequest $req): void {
 		$status = 'ok';
 		$id     = $req->getParamInt('id');
@@ -184,10 +198,10 @@ class api extends OModule {
 	/**
 	 * Función para guardar una marca
 	 *
-	 * @url /saveMarca
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/saveMarca')]
 	public function saveMarca(ORequest $req): void {
 		$status = 'ok';
 		$id            = $req->getParamInt('id');
@@ -225,10 +239,10 @@ class api extends OModule {
 	/**
 	 * Función para guardar un proveedor
 	 *
-	 * @url /saveProveedor
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/saveProveedor')]
 	public function saveProveedor(ORequest $req): void {
 		$status = 'ok';
 
@@ -272,10 +286,10 @@ class api extends OModule {
 	/**
 	 * Función para guardar un artículo
 	 *
-	 * @url /saveArticulo
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/saveArticulo')]
 	public function saveArticulo(ORequest $req): void {
 		$status = 'ok';
 		$id                  = $req->getParamInt('id');
@@ -384,10 +398,10 @@ class api extends OModule {
 	/**
 	 * Función para obtener los datos de un artículo
 	 *
-	 * @url /loadArticulo
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
+	#[ORoute('/loadArticulo')]
 	public function loadArticulo(ORequest $req): void {
 		$status = 'ok';
 		$localizador = $req->getParamInt('localizador');

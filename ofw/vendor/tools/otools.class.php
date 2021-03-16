@@ -1,32 +1,18 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Tools;
+
+use \ReflectionClass;
+use \ReflectionMethod;
+use \ReflectionObject;
+use OsumiFramework\OFW\Cache\OCache;
+use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\Routing\ORoute;
+
 /**
  * OTools - Utility class with auxiliary tools
  */
 class OTools {
-	/**
-	 * Shortcut function to load a json cache file into a OCache class object
-	 *
-	 * @param string $key Name of the json cache file
-	 *
-	 * @param bool $raw Sets if the cache file has expiration date and if it has to be checked
-	 *
-	 * @return OCache|null Returns loaded OCache class object or null if there was an error
-	 */
-	public static function getCache(string $key, bool $raw=false): ?OCache {
-		global $core;
-		if (!is_null($core->cacheContainer->get($key))) {
-			return $core->cacheContainer->get($key);
-		}
-
-		$cache = new OCache($key, $raw);
-		if ($cache->getStatus()!='ok') {
-			return null;
-		}
-
-		$core->cacheContainer->set($key, $cache);
-		return $cache;
-	}
-
 	/**
 	 * Get a string with a random number of characters (letters, numbers or special characters)
 	 *
@@ -407,10 +393,10 @@ class OTools {
 			'TH','th','DH','dh','ss','OE','oe','AE','ae','u',
 			'','','','','','','','-','','',''];
 
-		// convert special characters
+		// Convert special characters
 		$text = str_replace($bad, $good, $text);
 
-		// convert special characters
+		// Convert special characters
 		$text = utf8_decode($text);
 		$text = htmlentities($text);
 		$text = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $text);
@@ -418,13 +404,13 @@ class OTools {
 
 		$text = strtolower($text);
 
-		// strip all non word chars
+		// Strip all non word chars
 		$text = preg_replace('/\W/', ' ', $text);
 
-		// replace all white space sections with a separator
+		// Replace all white space sections with a separator
 		$text = preg_replace('/\ +/', $separator, $text);
 
-		// trim separators
+		// Trim separators
 		$text = trim($text, $separator);
 
 		return $text;
@@ -442,7 +428,7 @@ class OTools {
 		if ($model = opendir($core->config->getDir('app_model'))) {
 			while (false !== ($entry = readdir($model))) {
 				if ($entry != '.' && $entry != '..') {
-					$table = str_ireplace('.php','',$entry);
+					$table = "\\OsumiFramework\\App\\Model\\".str_ireplace('.php','',$entry);
 					array_push($ret, new $table());
 				}
 			}
@@ -490,7 +476,7 @@ class OTools {
 	}
 
 	/**
-	 * Creates or updates cache file of flattened URLs based on user configured urls.json. Also calls to generate new modules/actions/templates that are new.
+	 * Creates or updates cache file of flattened URLs based on user configured module routes. Also calls to generate new modules/actions/templates that are new.
 	 *
 	 * @param bool $silent If set to true echoes messages about the update process
 	 *
@@ -500,38 +486,25 @@ class OTools {
 		global $core;
 		$urls = self::getModuleUrls();
 
-		$urls_cache_file = $core->config->getDir('ofw_cache').'urls.cache.json';
-		if (file_exists($urls_cache_file)) {
-			unlink($urls_cache_file);
-		}
-
-		file_put_contents($urls_cache_file, json_encode($urls, JSON_UNESCAPED_UNICODE ));
+		$urls_cache_file = $core->cacheContainer->getItem('urls');
+		$urls_cache_file->set(json_encode($urls, JSON_UNESCAPED_UNICODE));
+		$urls_cache_file->save();
 
 		return self::updateControllers($silent);
 	}
 
-	public static function getModuleDocumentation(string $module): ?string {
-		global $core;
-
-		require_once $core->config->getDir('app_module').$module.'/'.$module.'.php';
-		$class = new ReflectionClass($module);
-		$class_doc = $class->getDocComment();
-		if ($class_doc !== false) {
-			return $class_doc;
-		}
-
-		return null;
-	}
-
 	/**
-	 * Get module methods phpDoc information
+	 * Get module method's phpDoc information
 	 *
 	 * @param string $inspectclass Module name
 	 *
 	 * @return array List of items with module name, method name and associated phpDoc information
 	 */
 	public static function getDocumentation(string $inspectclass): array {
-		$class = new ReflectionClass($inspectclass);
+		$class_name = "\\OsumiFramework\\App\Module\\".$inspectclass;
+		$class = new $class_name;		
+		$reflector = new ReflectionClass($class::class);
+		$reflector->getAttributes();
 
 		$class_params = [
 			'module' => $inspectclass,
@@ -539,73 +512,54 @@ class OTools {
 			'type'   => 'html',
 			'prefix' => null,
 			'filter' => null,
-			'doc'    => null
+			'layout' => null
 		];
-		$class_doc = self::getModuleDocumentation($inspectclass);
-		if (!is_null($class_doc)) {
-			$class_params['doc'] = $class_doc;
-			$class_params = self::parseAnnotations($class_params);
+
+		foreach ($reflector->getAttributes() as $attr) {
+			if ($attr->getName()==='OsumiFramework\OFW\Routing\ORoute') {
+				$class_route = $attr->newInstance();
+				$class_params['type']   = !is_null($class_route->getType())   ? $class_route->getType()   : $class_params['type'];
+				$class_params['prefix'] = !is_null($class_route->getPrefix()) ? $class_route->getPrefix() : $class_params['prefix'];
+				$class_params['filter'] = !is_null($class_route->getFilter()) ? $class_route->getFilter() : $class_params['filter'];
+				$class_params['layout'] = !is_null($class_route->getLayout()) ? $class_route->getLayout() : $class_params['layout'];
+				break;
+			}
 		}
 
 		$methods = [];
-		foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-			if ($method->class == $class->getName() && $method->name != '__construct') {
+		foreach ($reflector->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+			if ($method->class==$reflector->getName() && $method->name != '__construct') {
 				 array_push($methods, $method->name);
 			}
 		}
 
 		$arr = [];
 		foreach($methods as $method) {
-			$ref = new ReflectionMethod($inspectclass, $method);
-			array_push($arr, [
+			$ref = new ReflectionMethod("\\OsumiFramework\\App\Module\\".$inspectclass, $method);
+			$method_params = [
 				'module' => $class_params['module'],
 				'action' => $method,
 				'type'   => $class_params['type'],
 				'prefix' => $class_params['prefix'],
 				'filter' => $class_params['filter'],
-				'doc' => $ref->getDocComment()
-			]);
-		}
-		return $arr;
-	}
-
-	/**
-	 * Get OFW annotations from a method's phpDoc information block
-	 *
-	 * @param array $item getDocumentation return element with name of the module, name of the method and associated phpDoc information
-	 *
-	 * @return array Received method information and new information gathered from the phpDoc block
-	 */
-	function parseAnnotations(array $item): array {
-		$docs = explode("\n", $item['doc']);
-		$info = [
-			'module' => $item['module'],
-			'action' => $item['action'],
-			'type'   => $item['type'],
-			'prefix' => $item['prefix'],
-			'filter' => $item['filter']
-		];
-		foreach ($docs as $line) {
-			$line = trim($line);
-			if ($line!='/**' && $line!='*' && $line!='*/') {
-				if (substr($line, 0, 2)=='* ') {
-					$line = substr($line, 2);
-				}
-				if (substr($line, 0, 1)!='@') {
-					$info['comment'] = $line;
-				}
-				else {
-					$words = explode(' ', $line);
-					$command = substr(array_shift($words), 1);
-					$command_list = ['url', 'type', 'prefix', 'filter'];
-					if (in_array($command, $command_list)) {
-						$info[$command] = implode(' ', $words);
-					}
+				'layout' => $class_params['layout'],
+				'url'    => null
+			];
+			foreach ($ref->getAttributes() as $attr) {
+				if ($attr->getName()==='OsumiFramework\OFW\Routing\ORoute') {
+					$method_route = $attr->newInstance();
+					$method_params['url']    = !is_null($method_route->getUrl())    ? $method_route->getUrl()    : $method_params['url'];
+					$method_params['type']   = !is_null($method_route->getType())   ? $method_route->getType()   : $method_params['type'];
+					$method_params['prefix'] = !is_null($method_route->getPrefix()) ? $method_route->getPrefix() : $method_params['prefix'];
+					$method_params['filter'] = !is_null($method_route->getFilter()) ? $method_route->getFilter() : $method_params['filter'];
+					$method_params['layout'] = !is_null($method_route->getLayout()) ? $method_route->getLayout() : $method_params['layout'];
+					break;
 				}
 			}
+			array_push($arr, $method_params);
 		}
 
-		return $info;
+		return $arr;
 	}
 
 	/**
@@ -632,12 +586,11 @@ class OTools {
 		foreach ($modules as $module) {
 			$methods = self::getDocumentation($module);
 			foreach ($methods as $method) {
-				$info = self::parseAnnotations($method);
-				if (!is_null($info['prefix'])) {
-					$info['url'] = $info['prefix'].$info['url'];
+				if (!is_null($method['prefix'])) {
+					$method['url'] = $method['prefix'].$method['url'];
 				}
-				unset($info['prefix']);
-				array_push($list, $info);
+				unset($method['prefix']);
+				array_push($list, $method);
 			}
 		}
 
@@ -663,7 +616,11 @@ class OTools {
 		}
 		mkdir($module_path);
 		mkdir($module_templates);
-		$str_module = "<"."?php declare(strict_types=1);\n";
+		$str_module = "<"."?php declare(strict_types=1);\n\n";
+		$str_module .= "namespace OsumiFramework\App\Module;\n\n";
+		$str_module .= "use OsumiFramework\OFW\Core\OModule;\n";
+		$str_module .= "use OsumiFramework\OFW\Web\ORequest;\n";
+		$str_module .= "use OsumiFramework\OFW\Routing\ORoute;\n\n";
 		$str_module .= "class ".$name." extends OModule {}";
 		file_put_contents($module_file, $str_module);
 
@@ -681,9 +638,11 @@ class OTools {
 	 *
 	 * @param string $type Type of the return the new action will make
 	 *
+	 * @param string $layout Layout of the new action
+	 *
 	 * @return array Status of the operation (status, module name, action name, action url and action type)
 	 */
-	public static function addAction(string $module, string $action, string $url, string $type=null): array {
+	public static function addAction(string $module, string $action, string $url, string $type=null, string $layout=null): array {
 		global $core;
 
 		$module_path      = $core->config->getDir('app_module').$module;
@@ -694,7 +653,8 @@ class OTools {
 			'module' => $module,
 			'action' => $action,
 			'url'    => $url,
-			'type'   => $type
+			'type'   => $type,
+			'layout' => $layout
 		];
 
 		if (!file_exists($module_path) || !file_exists($module_file)) {
@@ -708,7 +668,8 @@ class OTools {
 		}
 
 		$module_type = false;
-		$class_doc = self::getModuleDocumentation($module);
+		require_once $module_file;
+		$class_doc = self::getDocumentation($module);
 		if (!is_null($class_doc)) {
 			$class_params = [
 				'module' => $module,
@@ -716,9 +677,8 @@ class OTools {
 				'type'   => $type,
 				'prefix' => null,
 				'filter' => null,
-				'doc'    => $class_doc
+				'layout' => null
 			];
-			$class_params = self::parseAnnotations($class_params);
 			if (!is_null($class_params['prefix'])) {
 				if (stripos($url, $class_params['prefix'])!==false) {
 					$url = str_ireplace($class_params['prefix'], '', $url);
@@ -733,6 +693,10 @@ class OTools {
 			$type = 'html';
 		}
 		$status['type'] = $type;
+		if (is_null($layout)) {
+			$layout = 'default';
+		}
+		$status['layout'] = $layout;
 
 		$action_template  = $module_templates.'/'.$action.'.'.$type;
 		if (file_exists($action_template)) {
@@ -745,13 +709,17 @@ class OTools {
 		$str_action = "\n	/**\n";
 		$str_action .= "	 * ".self::getMessage('TASK_ADD_ACTION_MESSAGE', [$action])."\n";
 		$str_action .= "	 *\n";
-		$str_action .= "	 * @url ".$url."\n";
-		if (!$module_type) {
-			$str_action .= "	 * @type ".$type."\n";
-		}
 		$str_action .= "	 * @param ORequest $"."req Request object with method, headers, parameters and filters used\n";
 		$str_action .= "	 * @return void\n";
 		$str_action .= "	 */\n";
+		$str_action .= "	#[ORoute('".$url."'";
+		if (!$module_type) {
+			$str_action .= ", type: '".$type."'";
+		}
+		if (!is_null($layout) && $layout != 'default') {
+			$str_action .= ", layout: '".$layout."'";
+		}
+		$str_action .= ")]\n";
 		$str_action .= "	public function ".$action."(ORequest $"."req): void {}\n";
 		$str_action .= "}";
 
@@ -824,6 +792,104 @@ class OTools {
 	}
 
 	/**
+	 * Creates a model component file and a component for lists of such model
+	 *
+	 * @param array $values Information about the files that have to be created
+	 *
+	 * @return string Status of the operation 
+	 */
+	public static function addModelComponent(array $values): string {
+		if (file_exists($values['list_folder'])) {
+			return 'list-folder-exists';
+		}
+		if (file_exists($values['list_folder'].$values['list_file'])) {
+			return 'list-file-exists';
+		}
+		if (file_exists($values['component_folder'])) {
+			return 'component-folder-exists';
+		}
+		if (file_exists($values['component_folder'].$values['component_file'])) {
+			return 'component-file-exists';
+		}
+		if (!mkdir($values['list_folder'], 0755, true)) {
+			return 'list-folder-cant-create';
+		}
+		if (!mkdir($values['component_folder'], 0755, true)) {
+			return 'component-folder-cant-create';
+		}
+
+		$text_fields      = [OModel::PK_STR, OModel::TEXT, OModel::LONGTEXT];
+		$urlencode_fields = [OModel::TEXT, OModel::LONGTEXT];
+		$date_fields      = [OModel::CREATED, OModel::UPDATED, OModel::DATE];
+		$cont             = 0;
+
+		$list_content = "<"."?php\n";
+		$list_content .= "foreach ($"."values['list'] as $"."i => $".strtolower($values['model_name']).") {\n";
+		$list_content .= "	echo OTools::getComponent('model/".strtolower($values['model_name'])."', [ '".strtolower($values['model_name'])."' => $".strtolower($values['model_name'])." ]);\n";
+		$list_content .= "	if ($"."i<count($"."values['list'])-1) {\n";
+		$list_content .= "		echo \",\\n\";\n";
+		$list_content .= "	}\n";
+		$list_content .= "}\n";
+
+		if (file_put_contents($values['list_folder'].$values['list_file'], $list_content)===false) {
+			return 'list-file-cant-create';
+		}
+
+		$content = '';
+		$content .= "<"."?php if (is_null($"."values['".strtolower($values['model_name'])."'])): ?>\n";
+		$content .= "null\n";
+		$content .= "<"."?php else: ?>\n";
+		$content .= "{\n";
+		foreach ($values['model'] as $field_name => $field) {
+			$cont++;
+			$content .= "	\"".OTools::underscoresToCamelCase($field_name)."\": ";
+			if (in_array($field['type'], $text_fields) || in_array($field['type'], $date_fields)) {
+				$content .= "\"";
+			}
+
+			if ($field['type']===OModel::BOOL) {
+				$content .= "<"."?php echo $"."values['".strtolower($values['model_name'])."']->get('".$field_name."') ? 'true' : 'false' ?>";
+			}
+			elseif ($field['nullable'] && in_array($field['type'], $date_fields)) {
+				$content .= "<"."?php echo is_null($"."values['".strtolower($values['model_name'])."']->get('".$field_name."')) ? 'null' : $"."values['".strtolower($values['model_name'])."']->get('".$field_name."', 'd/m/Y H:i:s') ?>";
+			}
+			elseif (!$field['nullable'] && in_array($field['type'], $date_fields)) {
+				$content .= "<"."?php echo $"."values['".strtolower($values['model_name'])."']->get('".$field_name."', 'd/m/Y H:i:s') ?>";
+			}
+			elseif ($field['nullable'] && !in_array($field['type'], $urlencode_fields)) {
+				$content .= "<"."?php echo is_null($"."values['".strtolower($values['model_name'])."']->get('".$field_name."')) ? 'null' : $"."values['".strtolower($values['model_name'])."']->get('".$field_name."') ?>";
+			}
+			elseif (!$field['nullable'] && !in_array($field['type'], $urlencode_fields)) {
+				$content .= "<"."?php echo $"."values['".strtolower($values['model_name'])."']->get('".$field_name."') ?>";
+			}
+			elseif ($field['nullable'] && in_array($field['type'], $urlencode_fields)) {
+				$content .= "<"."?php echo is_null($"."values['".strtolower($values['model_name'])."']->get('".$field_name."')) ? 'null' : urlencode($"."values['".strtolower($values['model_name'])."']->get('".$field_name."')) ?>";
+			}
+			elseif (!$field['nullable'] && in_array($field['type'], $urlencode_fields)) {
+				$content .= "<"."?php echo urlencode($"."values['".strtolower($values['model_name'])."']->get('".$field_name."')) ?>";
+			}
+
+			if (in_array($field['type'], $text_fields) || in_array($field['type'], $date_fields)) {
+				$content .= "\"";
+			}
+
+			if ($cont<count($values['model'])) {
+				$content .= ",";
+			}
+
+			$content .= "\n";
+		}
+		$content .= "}\n";
+		$content .= "<"."?php endif ?>";
+
+		if (file_put_contents($values['component_folder'].$values['component_file'], $content)===false) {
+			return 'component-file-cant-create';
+		}
+
+		return 'ok';
+	}
+
+	/**
 	 * Update the controllers based on cached-flattened urls.json file. Creates the modules/controllers/templates that are configured but are not found.
 	 *
 	 * @param bool $silent If true doesn't give an output and performs the actions silently
@@ -833,7 +899,8 @@ class OTools {
 	public static function updateControllers(bool $silent=false): ?string {
 		global $core;
 		$ret = null;
-		$urls   = json_decode( file_get_contents($core->config->getDir('ofw_cache').'urls.cache.json'), true);
+		$urls_cache_file = $core->cacheContainer->getItem('urls');
+		$urls   = json_decode($urls_cache_file->get(), true);
 		$errors = false;
 		$all_updated = true;
 
@@ -880,7 +947,7 @@ class OTools {
 
 			}
 
-			$status = self::addAction($url['module'], $url['action'], $url['url'], $url['type']);
+			$status = self::addAction($url['module'], $url['action'], $url['url'], $url['type'], $url['layout']);
 			if ($status=='ok') {
 				$all_updated = false;
 				if (!$silent) {
@@ -925,8 +992,8 @@ class OTools {
 		}
 
 		require_once $task_file;
-		$task_name .= 'Task';
-		$task = new $task_name();
+		$task_name = "\\OsumiFramework\\App\\Task\\".$task_name."Task";
+		$task = new $task_name;
 		$task->loadTask();
 		$task->run($params);
 
@@ -957,7 +1024,7 @@ class OTools {
 		}
 
 		require_once $task_file;
-		$task_name .= 'Task';
+		$task_name = "\\OsumiFramework\\OFW\\Task\\".$task_name."Task";
 		$task = new $task_name();
 		$task->loadTask();
 		if (!$return) {
@@ -980,7 +1047,7 @@ class OTools {
 	 */
 	public static function getVersion(): string {
 		global $core;
-		$version_file = $core->config->getDir('ofw_core').'version.json';
+		$version_file = $core->config->getDir('ofw_vendor').'version.json';
 		$version = json_decode( file_get_contents($version_file), true );
 		return $version['version'];
 	}
@@ -992,7 +1059,7 @@ class OTools {
 	 */
 	public static function getVersionInformation(): string {
 		global $core;
-		$version_file = $core->config->getDir('ofw_core').'version.json';
+		$version_file = $core->config->getDir('ofw_vendor').'version.json';
 		$version = json_decode( file_get_contents($version_file), true );
 
 		$current_version = $version['version'];
@@ -1053,5 +1120,24 @@ class OTools {
 		}
 		array_push($new_str, preg_replace("/(\n|\r|\s)*/" ,"", $rc));
 		return implode("", $new_str);
+	}
+
+	/**
+	 * Convert underscore notation to camel case (eg id_user -> idUser)
+	 *
+	 * @param string $string Text string to convert
+	 *
+	 * @param bool $capitalizeFirstCharacter Should first letter be capitalized or not, defaults to no
+	 *
+	 * @return string Converted text string
+	 */
+	public static function underscoresToCamelCase(string $string, bool $capitalizeFirstCharacter = false): string {
+		$str = str_replace('_', '', ucwords($string, '_'));
+
+		if (!$capitalizeFirstCharacter) {
+			$str = lcfirst($str);
+		}
+
+		return $str;
 	}
 }

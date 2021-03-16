@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Web;
+
+use OsumiFramework\OFW\Log\OLog;
+use OsumiFramework\OFW\Core\OConfig;
+
 /**
  * OCookie - Class with methods to create/modify/delete cookies on clients
  */

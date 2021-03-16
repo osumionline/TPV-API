@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Tools;
+
 /**
  * OForm - Class with methods to validate user sent forms
  */

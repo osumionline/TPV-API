@@ -1,8 +1,38 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\DB;
+
+use OsumiFramework\OFW\Log\Olog;
+
 /**
  * OModel - Base class for the model classes with all the methods necessary to interact with the database.
  */
 class OModel {
+	// Field types
+	const PK       = 1;
+	const PK_STR   = 10;
+	const CREATED  = 2;
+	const UPDATED  = 3;
+	const NUM      = 4;
+	const TEXT     = 5;
+	const DATE     = 6;
+	const BOOL     = 7;
+	const LONGTEXT = 8;
+	const FLOAT    = 9;
+
+	const DEFAULT_MODEL = [
+		self::PK       => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>true,  'size'=>11, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::PK_STR   => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>50, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::CREATED  => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::UPDATED  => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>0,  'nullable'=>true,  'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::NUM      => ['default'=>0,     'original'=>0,     'value'=>0,     'incr'=>false, 'size'=>11, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::TEXT     => ['default'=>'',    'original'=>'',    'value'=>'',    'incr'=>false, 'size'=>50, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::DATE     => ['default'=>null,  'original'=>null,  'value'=>'',    'incr'=>false, 'size'=>0,  'nullable'=>true,  'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::BOOL     => ['default'=>false, 'original'=>false, 'value'=>false, 'incr'=>false, 'size'=>1,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::LONGTEXT => ['default'=>'',    'original'=>'',    'value'=>'',    'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
+		self::FLOAT    => ['default'=>0,     'original'=>0,     'value'=>0,     'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>'']
+	];
+
 	private   bool    $debug      = false;
 	private   ?OLog   $l          = null;
 	protected ?ODB    $db         = null;
@@ -36,17 +66,17 @@ class OModel {
 
 		$full_model = [];
 		foreach ($model as $field_name => $row) {
-			if ($row['type']===OCore::PK || $row['type']===OCore::PK_STR) {
+			if ($row['type']===self::PK || $row['type']===self::PK_STR) {
 				array_push($this->pk, $field_name);
 			}
-			if ($row['type']===OCore::CREATED) {
+			if ($row['type']===self::CREATED) {
 				$this->created = $field_name;
 			}
-			if ($row['type']===OCore::UPDATED) {
+			if ($row['type']===self::UPDATED) {
 				$this->updated = $field_name;
 			}
 
-			$temp = OCore::DEFAULT_MODEL[$row['type']];
+			$temp = self::DEFAULT_MODEL[$row['type']];
 			$temp['type']     = $row['type'];
 			$temp['default']  = array_key_exists('default',  $row) ? $row['default']  : $temp['default'];
 			$temp['original'] = array_key_exists('original', $row) ? $row['original'] : $temp['default'];
@@ -128,10 +158,10 @@ class OModel {
 			if (is_null($field['value'])) {
 				return null;
 			}
-			if ( !is_null($extra) && in_array($field['type'], [OCore::CREATED, OCore::UPDATED, OCore::DATE]) ) {
+			if ( !is_null($extra) && in_array($field['type'], [self::CREATED, self::UPDATED, self::DATE]) ) {
 				return date($extra, strtotime($field['value']));
 			}
-			if ( !is_null($extra) && ($field['type']==OCore::TEXT || $field['type']==OCore::LONGTEXT) ) {
+			if ( !is_null($extra) && ($field['type']==self::TEXT || $field['type']==self::LONGTEXT) ) {
 				if (strlen($field['value'])>$extra) {
 					return substr($field['value'], 0, $extra).'...';
 				}
@@ -139,13 +169,13 @@ class OModel {
 					return $field['value'];
 				}
 			}
-			if ($field['type']==OCore::NUM || $field['type']==OCore::PK) {
+			if ($field['type']==self::NUM || $field['type']==self::PK) {
 				return intval($field['value']);
 			}
-			if ($field['type']==OCore::BOOL) {
+			if ($field['type']==self::BOOL) {
 				return ( ( intval($field['value']) )==1 );
 			}
-			if ($field['type']==OCore::FLOAT) {
+			if ($field['type']==self::FLOAT) {
 				return floatval($field['value']);
 			}
 			return $field['value'];
@@ -164,7 +194,7 @@ class OModel {
 		$ret = [];
 
 		foreach ($this->model as $field_name => $row) {
-			if ($row['type']===OCore::PK || $row['type']===OCore::PK_STR) {
+			if ($row['type']===self::PK || $row['type']===self::PK_STR) {
 				array_push($ret, $field_name);
 			}
 		}
@@ -191,7 +221,7 @@ class OModel {
 			$updated_fields = [];
 			foreach ($this->model as $field_name => $field) {
 				$value  = $field['value'];
-				if ($field['type']!=OCore::PK && $field['type']!=OCore::PK_STR && $field['original']!==$value) {
+				if ($field['type']!=self::PK && $field['type']!=self::PK_STR && $field['original']!==$value) {
 					$str = "`".$field_name."` = ?";
 					array_push($updated_fields, $str);
 					array_push($query_params, $value);
@@ -201,7 +231,7 @@ class OModel {
 			if (count($updated_fields)==0){
 				return false;
 			}
-			$sql .= implode($updated_fields, ", ");
+			$sql .= implode(", ", $updated_fields);
 			$sql .= " WHERE ";
 			foreach ($this->pk as $i => $pk_ind) {
 				if ($i!=0) {
@@ -222,20 +252,20 @@ class OModel {
 			foreach ($this->model as $field_name => $field) {
 				array_push($insert_fields, "`".$field_name."`");
 			}
-			$sql .= implode($insert_fields, ",");
+			$sql .= implode(",", $insert_fields);
 			$sql .= ") VALUES (";
 			$insert_fields = [];
 			foreach ($this->model as $field) {
 				$value  = $field['value'];
 				array_push($insert_fields, "?");
-				if ($field['type']==OCore::PK && $field['incr']) {
+				if ($field['type']==self::PK && $field['incr']) {
 					array_push($query_params, null);
 				}
 				else {
 					array_push($query_params, $value);
 				}
 			}
-			$sql .= implode($insert_fields, ",");
+			$sql .= implode(",", $insert_fields);
 			$sql .= ")";
 
 			$save_type = 'i';
@@ -283,7 +313,7 @@ class OModel {
 		foreach ($opt as $key => $value) {
 			array_push($search_fields, "`".$key."` = '".$value."' ");
 		}
-		$sql .= implode($search_fields, "AND ");
+		$sql .= implode("AND ", $search_fields);
 
 		$this->log('find - Query: '.$sql);
 
@@ -314,17 +344,17 @@ class OModel {
 				}
 				else{
 					switch($field['type']) {
-						case OCore::NUM: {
+						case self::NUM: {
 							$this->model[$field_name]['original'] = intval($res[$field_name]);
 							$this->model[$field_name]['value']    = intval($res[$field_name]);
 						}
 						break;
-						case OCore::FLOAT: {
+						case self::FLOAT: {
 							$this->model[$field_name]['original'] = floatval($res[$field_name]);
 							$this->model[$field_name]['value']    = floatval($res[$field_name]);
 						}
 						break;
-						case OCore::BOOL: {
+						case self::BOOL: {
 							$this->model[$field_name]['original'] = ($res[$field_name]==1);
 							$this->model[$field_name]['value']    = ($res[$field_name]==1);
 						}
@@ -350,7 +380,7 @@ class OModel {
 		foreach ($this->pk as $pk_field) {
 			array_push($delete_fields, "`".$pk_field."` = '".$this->model[$pk_field]['value']."' ");
 		}
-		$sql .= implode('AND ', $delete_fields);
+		$sql .= implode("AND ", $delete_fields);
 
 		$this->db->query($sql);
 
@@ -383,7 +413,7 @@ class OModel {
 					if (in_array($field_name, $empty)) {
 						$value = null;
 					}
-					if (!is_null($value) && ($field['type']==OCore::TEXT || $field['type']==OCore::LONGTEXT)) {
+					if (!is_null($value) && ($field['type']==self::TEXT || $field['type']==self::LONGTEXT)) {
 						$value = urlencode($value);
 					}
 					$ret[$field_name] =  $value;
@@ -400,7 +430,7 @@ class OModel {
 					if (in_array($field_name, $empty)) {
 						$value = null;
 					}
-					if (!is_null($value) && ($field['type']==OCore::TEXT || $field['type']==OCore::LONGTEXT)) {
+					if (!is_null($value) && ($field['type']==self::TEXT || $field['type']==self::LONGTEXT)) {
 						$value = urlencode($value);
 					}
 					$fields[$field_name] =  $value;
@@ -413,22 +443,22 @@ class OModel {
 				foreach ($this->model as $field_name => $field) {
 					$sql .= "  `".$field_name."` ";
 					switch ($field['type']) {
-						case OCore::PK: {
+						case self::PK: {
 							$sql .= "INT(11)";
 						}
 						break;
-						case OCore::CREATED:
-						case OCore::UPDATED:
-						case OCore::DATE: {
+						case self::CREATED:
+						case self::UPDATED:
+						case self::DATE: {
 							$sql .= "DATETIME";
 						}
 						break;
-						case OCore::NUM: {
+						case self::NUM: {
 							$sql .= "INT(11)";
 						}
 						break;
-						case OCore::PK_STR:
-						case OCore::TEXT: {
+						case self::PK_STR:
+						case self::TEXT: {
 							if ($field['size']<256) {
 								$sql .= "VARCHAR(" . $field['size'] . ") COLLATE " . $core->config->getDb('collate');
 							}
@@ -437,15 +467,15 @@ class OModel {
 							}
 						}
 						break;
-						case OCore::BOOL: {
+						case self::BOOL: {
 							$sql .= "TINYINT(1)";
 						}
 						break;
-						case OCore::LONGTEXT: {
+						case self::LONGTEXT: {
 							$sql .= "TEXT COLLATE " . $core->config->getDb('collate');
 						}
 						break;
-						case OCore::FLOAT:{
+						case self::FLOAT:{
 							$sql .= "FLOAT";
 						}
 						break;
@@ -458,7 +488,7 @@ class OModel {
 						$sql .= " AUTO_INCREMENT";
 					}
 					if (!$field['nullable'] && !is_null($field['default']) && $field['ref']=='') {
-						if ($field['type']!=OCore::BOOL) {
+						if ($field['type']!=self::BOOL) {
 							$sql .= " DEFAULT '".$field['default']."'";
 						}
 						else {
@@ -473,7 +503,7 @@ class OModel {
 					}
 					$sql .= ",\n";
 				}
-				$sql .= "  PRIMARY KEY (`".implode('`,`',$this->pk)."`)\n";
+				$sql .= "  PRIMARY KEY (`".implode('`,`', $this->pk)."`)\n";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=" . $core->config->getDb('charset') . " COLLATE=" . $core->config->getDb('collate') . ";\n";
 
 				$ret = $sql;

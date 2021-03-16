@@ -1,33 +1,19 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
+use \PDO;
+use OsumiFramework\OFW\DB\ODBContainer;
+use OsumiFramework\OFW\Cache\OCacheContainer;
+use OsumiFramework\OFW\Web\OSession;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\OFW\Routing\OUrl;
+use OsumiFramework\OFW\Tools\OTools;
+
 /**
  * OCore - Base class for the framework with methods to load required files and start the application
  */
 class OCore {
-	// Field types
-	const PK       = 1;
-	const PK_STR   = 10;
-	const CREATED  = 2;
-	const UPDATED  = 3;
-	const NUM      = 4;
-	const TEXT     = 5;
-	const DATE     = 6;
-	const BOOL     = 7;
-	const LONGTEXT = 8;
-	const FLOAT    = 9;
-
-	const DEFAULT_MODEL = [
-		self::PK       => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>true,  'size'=>11, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::PK_STR   => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>50, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::CREATED  => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::UPDATED  => ['default'=>null,  'original'=>null,  'value'=>null,  'incr'=>false, 'size'=>0,  'nullable'=>true,  'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::NUM      => ['default'=>0,     'original'=>0,     'value'=>0,     'incr'=>false, 'size'=>11, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::TEXT     => ['default'=>'',    'original'=>'',    'value'=>'',    'incr'=>false, 'size'=>50, 'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::DATE     => ['default'=>null,  'original'=>null,  'value'=>'',    'incr'=>false, 'size'=>0,  'nullable'=>true,  'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::BOOL     => ['default'=>false, 'original'=>false, 'value'=>false, 'incr'=>false, 'size'=>1,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::LONGTEXT => ['default'=>'',    'original'=>'',    'value'=>'',    'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>''],
-		self::FLOAT    => ['default'=>0,     'original'=>0,     'value'=>0,     'incr'=>false, 'size'=>0,  'nullable'=>false, 'comment'=>'', 'ref'=>'', 'by'=>'']
-	];
-
 	public ?ODBContainer    $dbContainer = null;
 	public ?OCacheContainer $cacheContainer = null;
 	public ?OConfig         $config = null;
@@ -54,9 +40,9 @@ class OCore {
 		date_default_timezone_set('Europe/Madrid');
 
 		$basedir = realpath(dirname(__FILE__));
-		$basedir = str_ireplace('ofw/core','',$basedir);
+		$basedir = str_ireplace('ofw/vendor/core','',$basedir);
 
-		require $basedir.'ofw/core/OConfig.php';
+		require $basedir.'ofw/vendor/core/oconfig.class.php';
 		$this->config = new OConfig($basedir);
 
 		// Check locale file
@@ -67,29 +53,43 @@ class OCore {
 		}
 
 		// Core
-		require $this->config->getDir('ofw_core').'OModel.php';
-		require $this->config->getDir('ofw_core').'OModule.php';
-		require $this->config->getDir('ofw_core').'OService.php';
-		require $this->config->getDir('ofw_core').'ODB.php';
-		require $this->config->getDir('ofw_core').'OLog.php';
-		require $this->config->getDir('ofw_core').'OUrl.php';
-		require $this->config->getDir('ofw_core').'OCache.php';
-		require $this->config->getDir('ofw_core').'OForm.php';
-		require $this->config->getDir('ofw_core').'OPlugin.php';
-		require $this->config->getDir('ofw_core').'OTools.php';
-		require $this->config->getDir('ofw_core').'OTask.php';
+		require $this->config->getDir('ofw_vendor').'log/olog.class.php';
+		require $this->config->getDir('ofw_vendor').'cache/ocache.container.class.php';
+		require $this->config->getDir('ofw_vendor').'cache/ocache.class.php';
+		require $this->config->getDir('ofw_vendor').'core/omodule.class.php';
+		require $this->config->getDir('ofw_vendor').'core/oservice.class.php';
+		require $this->config->getDir('ofw_vendor').'core/oplugin.class.php';
+		require $this->config->getDir('ofw_vendor').'core/otask.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/oroute.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/oroutecheck.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/ourl.class.php';
+		require $this->config->getDir('ofw_vendor').'tools/oform.class.php';
+		require $this->config->getDir('ofw_vendor').'tools/otools.class.php';
+
+		// If there is a DB connection configured, check drivers and load required classes
+		if ($this->config->getDB('user')!=='' || $this->config->getDB('pass')!=='' || $this->config->getDB('host')!=='' || $this->config->getDB('name')!=='') {
+			$pdo_drivers = PDO::getAvailableDrivers();
+			if (!in_array($this->config->getDB('driver'), $pdo_drivers)) {
+				echo "ERROR: El sistema no dispone del driver ".$this->config->getDB('driver')." solicitado para realizar la conexión a la base de datos.\n";
+				exit;
+			}
+			require $this->config->getDir('ofw_vendor').'db/odb.container.class.php';
+			require $this->config->getDir('ofw_vendor').'db/odb.class.php';
+			require $this->config->getDir('ofw_vendor').'db/omodel.class.php';
+			$this->dbContainer = new ODBContainer();
+		}
 
 		if (!$from_cli) {
-			require $this->config->getDir('ofw_core').'OTemplate.php';
-			require $this->config->getDir('ofw_core').'OSession.php';
-			require $this->config->getDir('ofw_core').'OCookie.php';
-			require $this->config->getDir('ofw_core').'ORequest.php';
+			require $this->config->getDir('ofw_vendor').'core/otemplate.class.php';
+			require $this->config->getDir('ofw_vendor').'web/osession.class.php';
+			require $this->config->getDir('ofw_vendor').'web/ocookie.class.php';
+			require $this->config->getDir('ofw_vendor').'web/orequest.class.php';
 
 			$this->session  = new OSession();
 		}
 		else {
-			require $this->config->getDir('ofw_core').'OColors.php';
-			require $this->config->getDir('ofw_core').'OUpdate.php';
+			require $this->config->getDir('ofw_vendor').'tools/ocolors.class.php';
+			require $this->config->getDir('ofw_vendor').'core/oupdate.class.php';
 		}
 
 		// Plugins
@@ -159,16 +159,6 @@ class OCore {
 			}
 		}
 
-		// If there is a DB connection configured, check drivers
-		if ($this->config->getDB('user')!=='' || $this->config->getDB('pass')!=='' || $this->config->getDB('host')!=='' || $this->config->getDB('name')!=='') {
-			$pdo_drivers = PDO::getAvailableDrivers();
-			if (!in_array($this->config->getDB('driver'), $pdo_drivers)) {
-				echo "ERROR: El sistema no dispone del driver ".$this->config->getDB('driver')." solicitado para realizar la conexión a la base de datos.\n";
-				exit;
-			}
-			$this->dbContainer = new ODBContainer();
-		}
-
 		// Set up an empty cache container
 		$this->cacheContainer = new OCacheContainer();
 	}
@@ -199,7 +189,11 @@ class OCore {
 
 			// If there is a filter defined, apply it before the controller
 			if (array_key_exists('filter', $url_result) && !is_null($url_result['filter'])) {
-				$url_result[$url_result['filter']] = call_user_func($url_result['filter'], $url_result['params'], $url_result['headers']);
+				$url_result[$url_result['filter']] = call_user_func(
+					"\\OsumiFramework\\App\\Filter\\".$url_result['filter'],
+					$url_result['params'],
+					$url_result['headers']
+				);
 
 				// If status is 'error', return 403 Forbidden
 				if ($url_result[$url_result['filter']]['status']=='error') {
@@ -216,7 +210,8 @@ class OCore {
 
 			if (file_exists($module_path)) {
 				require_once $module_path;
-				$module = new $url_result['module']();
+				$module_name = "\\OsumiFramework\\App\\Module\\".$url_result['module'];
+				$module = new $module_name;
 
 				if (method_exists($module, $url_result['action'])) {
 					$module->loadModule($url_result);

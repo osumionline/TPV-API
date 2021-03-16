@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
+use OsumiFramework\OFW\Tools\OColors;
+use OsumiFramework\OFW\Tools\OTools;
+
 /**
  * Utilities for the update process
  */

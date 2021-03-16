@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Web;
+
+use OsumiFramework\OFW\Log\OLog;
+
 /**
  * OSession - Class with methods to get/set information into the users session
  */

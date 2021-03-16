@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
+use OsumiFramework\OFW\Tools\OColors;
+use OsumiFramework\OFW\Log\OLog;
+
 /**
  * OTask - Base class for the task classes
  */
@@ -14,8 +20,7 @@ class OTask {
 	 */
 	public final function loadTask(): void {
 		global $core;
-
-		if (class_exists('OColors')) {
+		if (class_exists('\OsumiFramework\OFW\Tools\OColors')) {
 			$this->colors = new OColors();
 		}
 		$this->config = $core->config;

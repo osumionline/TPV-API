@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
+use OsumiFramework\OFW\Log\OLog;
+
 /**
  * OService - Base class for the service classes
  */

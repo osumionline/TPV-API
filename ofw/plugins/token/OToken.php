@@ -1,4 +1,12 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Plugins;
+
+use OsumiFramework\OFW\Tools\OTools;
+
+/**
+ * Utility class with tools to create JWT tokens, check if they are valid and get information from them
+ */
 class OToken {
 	private ?string $secret = null;
 	private array $params = [];

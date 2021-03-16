@@ -1,4 +1,11 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
+use OsumiFramework\OFW\Log\Olog;
+use OsumiFramework\OFW\Tools\OTools;
+use OsumiFramework\Plugins\Translate\OTranslate;
+
 /**
  * OTemplate - Class used by the controllers to show the required template and its data
  */
@@ -100,12 +107,12 @@ class OTemplate {
 	/**
 	 * Set the content of the layout of a requested page or call
 	 *
-	 * @param string|bool $l Content of the layout or false if there is no layout
+	 * @param string $l Content of the layout or false if there is no layout
 	 *
 	 * @return void
 	 */
-	public function setLayout($l): void {
-		if ($l === false) {
+	public function setLayout(string $l=null): void {
+		if (is_null($l)) {
 			$l = '';
 		}
 		$this->layout = $l;
@@ -118,7 +125,10 @@ class OTemplate {
 	 *
 	 * @return void
 	 */
-	public function loadLayout(string $layout): void {
+	public function loadLayout(string $layout=null): void {
+		if (is_null($layout)) {
+			$layout = 'default';
+		}
 		$this->setLayout( file_get_contents($this->layout_dir.$layout.'.php') );
 	}
 

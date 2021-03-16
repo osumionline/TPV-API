@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Tools;
+
 /**
  * OColors - Class to show colored messages on the CLI
  */

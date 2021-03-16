@@ -1,4 +1,9 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Model;
+
+use OsumiFramework\OFW\DB\OModel;
+
 class ProveedorMarca extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
@@ -7,23 +12,23 @@ class ProveedorMarca extends OModel {
 		$table_name  = 'proveedor_marca';
 		$model = [
 			'id_proveedor' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'proveedor.id',
 				'comment' => 'Id del proveedor'
 			],
 			'id_marca' => [
-				'type'    => OCore::PK,
+				'type'    => OModel::PK,
 				'incr' => false,
 				'ref' => 'marca.id',
 				'comment' => 'Id de la marca'
 			],
 			'created_at' => [
-				'type'    => OCore::CREATED,
+				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
 			],
 			'updated_at' => [
-				'type'    => OCore::UPDATED,
+				'type'    => OModel::UPDATED,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'

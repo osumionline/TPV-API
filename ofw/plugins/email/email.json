@@ -1,8 +1,14 @@
 {
 	"file_name": "OEmail.php",
-	"version": "1.1.1",
+	"version": "2.0.0",
 	"description": "Clase para realizar envíos de emails.",
 	"updates": {
+		"2.0.0": {
+			"message": "2.0.0 - Añado nombre de espacios para OFW 7.0",
+			"files": [
+				"OEmail.php"
+			]
+		},
 		"1.1.1": {
 			"message": "1.1.1 - Correcciones tras pruebas",
 			"files": [

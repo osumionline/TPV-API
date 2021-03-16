@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
 /**
  * OConfig - Class with all the configuration info for the framework
  */
@@ -354,7 +357,7 @@ class OConfig {
 		$this->setDir('app_task',       $bd.'app/task/');
 		$this->setDir('ofw',            $bd.'ofw/');
 		$this->setDir('ofw_cache',      $bd.'ofw/cache/');
-		$this->setDir('ofw_core',       $bd.'ofw/core/');
+		$this->setDir('ofw_vendor',     $bd.'ofw/vendor/');
 		$this->setDir('ofw_lib',        $bd.'ofw/lib/');
 		$this->setDir('ofw_locale',     $bd.'ofw/locale/');
 		$this->setDir('ofw_plugins',    $bd.'ofw/plugins/');

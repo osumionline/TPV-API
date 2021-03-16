@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Routing;
+
+use OsumiFramework\OFW\Core\OConfig;
+use OsumiFramework\OFW\Tools\OTools;
+
 /**
  * OUrl - Class with methods to check required URL, get its data, generate new URLs or redirect the user to a new one
  */
@@ -6,7 +12,6 @@ class OUrl {
 	private ?OConfig $config      = null;
 	private ?array   $urls        = null;
 	private string   $check_url   = '';
-	private string   $routing_dir = '';
 	private array    $url_params  = [];
 	private string   $method      = '';
 
@@ -19,10 +24,7 @@ class OUrl {
 		global $core;
 		$this->config = $core->config;
 		$this->method = $method;
-		$this->urls = $this->loadUrls();
-
-		// Routing lib dir
-		$this->routing_dir = $this->config->getDir('ofw_lib').'routing/';
+		$this->urls   = $this->loadUrls();
 	}
 
 	/**
@@ -32,16 +34,17 @@ class OUrl {
 	 */
 	public function loadUrls(): array {
 		global $core;
-		$urls_cache_file = $core->config->getDir('ofw_cache').'urls.cache.json';
+		$urls_cache_file = $core->cacheContainer->getItem('urls');
 
 		// If it doesn't exist, generate it
-		if (!file_exists($urls_cache_file)){
+		if (!$urls_cache_file->isHit() || $urls_cache_file->get()===null){
 			OTools::updateUrls(true);
+			$urls_cache_file->reload();
 		}
 
 		// App urls
 		if (is_null($core->config->getUrlList())) {
-			$core->config->setUrlList(json_decode(file_get_contents($urls_cache_file), true));
+			$core->config->setUrlList(json_decode($urls_cache_file->get(), true));
 		}
 		return $core->config->getUrlList();
 	}
@@ -113,14 +116,12 @@ class OUrl {
 			'res'     => false
 		];
 
-		// Include Symfony routing
-		require_once $this->routing_dir.'sfRoute.class.php';
 		while (!$found && $i<count($this->urls)) {
-			$route = new sfRoute($this->urls[$i]['url']);
+			$route = new ORouteCheck($this->urls[$i]['url']);
 			$chk = $route->matchesUrl($this->check_url);
 
 			// If there is a match, return urls.json values plus the parameters in the route
-			if ($chk !== false) {
+			if (!is_null($chk)) {
 				$found         = true;
 				$ret['module'] = $this->urls[$i]['module'];
 				$ret['action'] = $this->urls[$i]['action'];

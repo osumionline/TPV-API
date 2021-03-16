@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Web;
+
+/**
+ * ORequest - Container class with information about a user made request (method, headers, parameters and filters)
+ */
 class ORequest {
 	private ?string $method = null;
 	private array $headers = [];

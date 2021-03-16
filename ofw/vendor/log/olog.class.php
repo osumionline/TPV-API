@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Log;
+
 /**
  * OLog - Class to log information to a debug log file
  */
@@ -6,7 +9,7 @@ class OLog {
 	private ?string $class_name = null;
 	private string  $log_dir  = '';
 	private string  $log_level = 'ALL';
-	private array   $levels = ['ALL',	'DEBUG', 'INFO', 'ERROR'];
+	private array   $levels = ['ALL', 'DEBUG', 'INFO', 'ERROR'];
 
 	/**
 	 * Start up the object by getting the logging configuration from the global config

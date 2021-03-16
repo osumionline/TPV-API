@@ -1,4 +1,7 @@
 <?php declare(strict_types=1);
+
+namespace OsumiFramework\OFW\Core;
+
 /**
  * OPlugin - Base class for the plugins with methods to load the required plugin
  */
