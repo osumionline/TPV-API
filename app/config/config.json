@@ -1,4 +1,5 @@
 {
+	"name": "Osumi TPV",
 	"db": {
 		"host": "localhost",
 		"user": "apitpv",
@@ -9,5 +10,6 @@
 	"default_title": "API TPV",
 	"dir": {
 		"fotos": "fotos/"
-	}
+	},
+	"log_level": "ERROR"
 }
