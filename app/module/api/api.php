@@ -137,7 +137,7 @@ class api extends OModule {
 	public function getMarcas(ORequest $req): void {
 		$list = $this->articulos_service->getMarcas();
 
-		$this->getTemplate()->addComponent('list', 'api/marcas_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/marca_list', ['list' => $list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class api extends OModule {
 	public function getProveedores(ORequest $req): void {
 		$list = $this->articulos_service->getProveedores();
 
-		$this->getTemplate()->addComponent('list', 'api/proveedores_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'model/proveedor_list', ['list' => $list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -163,7 +163,7 @@ class api extends OModule {
 	public function getCategorias(ORequest $req): void {
 		$list = $this->articulos_service->getCategoryTree([]);
 
-		$this->getTemplate()->addComponent('list', 'api/categorias_list', ['list'=>$list, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('list', 'api/categorias_list', ['list' => $list, 'extra'=>'nourlencode']);
 	}
 
 	/**
@@ -423,6 +423,31 @@ class api extends OModule {
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->addComponent('articulo', 'api/articulo', ['articulo'=>$articulo, 'extra'=>'nourlencode']);
+		$this->getTemplate()->addComponent('articulo', 'model/articulo', ['articulo' => $articulo, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para buscar artículos
+	 *
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	#[ORoute('/searchArticulos')]
+	public function searchArticulos(ORequest $req): void {
+		$status = 'ok';
+		$name = $req->getParamString('name');
+		$id_marca = $req->getParamInt('idMarca');
+		$list = [];
+
+		if (is_null($name)) {
+			$status = 'error';
+		}
+
+		if ($status == 'ok') {
+			
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'model/articulo_list', ['list' => $list, 'extra' => 'nourlencode']);
 	}
 }
