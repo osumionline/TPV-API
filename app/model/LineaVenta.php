@@ -47,11 +47,11 @@ class LineaVenta extends OModel {
 				'default' => '0',
 				'comment' => 'IVA del artículo en el momento de su venta'
 			],
-			'tipo_descuento' => [
+			're' => [
 				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => '0',
-				'comment' => 'Tipo de descuento 0 ninguno 1 porcentaje 2 importe'
+				'comment' => 'Recargo de equivalencia del artículo en el momento de su venta'
 			],
 			'descuento' => [
 				'type'    => OModel::NUM,
@@ -59,7 +59,13 @@ class LineaVenta extends OModel {
 				'default' => '0',
 				'comment' => 'Porcentaje de descuento aplicado'
 			],
-			'cantidad' => [
+			'devuelto' => [
+				'type'    => OModel::NUM,
+				'nullable' => false,
+				'default' => '0',
+				'comment' => 'Cantidad de artículos devueltos'
+			],
+			'unidades' => [
 				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => '0',

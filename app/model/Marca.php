@@ -22,6 +22,20 @@ class Marca extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre de la marca'
 			],
+			'id_foto' => [
+				'type'    => OModel::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Foto/logo de la marca',
+				'ref' => 'foto.id'
+			],
+			'direccion' => [
+				'type'    => OModel::TEXT,
+				'nullable' => true,
+				'default' => null,
+				'size' => 200,
+				'comment' => 'Dirección física de la marca'
+			],
 			'telefono' => [
 				'type'    => OModel::TEXT,
 				'nullable' => true,

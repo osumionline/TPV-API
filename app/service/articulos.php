@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\OFW\Tools\OTools;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Proveedor;
 use OsumiFramework\App\Model\Categoria;
@@ -165,5 +166,42 @@ class articulosService extends OService {
 		else {
 			return $loc;
 		}
+	}
+
+	/**
+	 * Busca entre los artículos existentes
+	 *
+	 * @param string $name Nombre del artículo a buscar
+	 *
+	 * @param int $id_marca Id de la marca en la que buscar
+	 *
+	 * @return array Lista de artículos encontrados
+	 */
+	public function searchArticulos(string $name, int $id_marca): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `articulo`";
+		$ret = [];
+
+		$where = false;
+		if (!empty($name)) {
+			$sql .= " WHERE `slug` LIKE '%".OTools::slugify($name)."%'";
+			$where = true;
+		}
+		if ($id_marca !== -1) {
+			if (!$where) {
+				$sql .= " WHERE ";
+			}
+			$sql .= "`id_marca` = ".$id_marca;
+		}
+		$sql .= " ORDER BY `nombre` ASC";
+		$db->query($sql);
+
+		while ($res = $db->next()) {
+			$articulo = new Articulo();
+			$articulo->update($res);
+			array_push($ret, $articulo);
+		}
+
+		return $ret;
 	}
 }

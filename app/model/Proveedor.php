@@ -3,6 +3,7 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\ODB;
 
 class Proveedor extends OModel {
 	/**
@@ -22,11 +23,18 @@ class Proveedor extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre del proveedor'
 			],
+			'id_foto' => [
+				'type'    => OModel::NUM,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Foto del proveedor',
+				'ref' => 'foto.id'
+			],
 			'direccion' => [
 				'type'    => OModel::TEXT,
 				'nullable' => true,
 				'default' => null,
-				'size' => 100,
+				'size' => 200,
 				'comment' => 'Dirección física del proveedor'
 			],
 			'telefono' => [
@@ -69,5 +77,66 @@ class Proveedor extends OModel {
 		];
 
 		parent::load($table_name, $model);
+	}
+	
+	private ?array $marcas = null;
+	
+	/**
+	 * Obtiene el listado de marcas de un proveedor
+	 *
+	 * @return array Listado de marcas
+	 */
+	public function getMarcas(): array {
+		if (is_null($this->marcas)) {
+			$this->loadMarcas();
+		}
+		return $this->marcas;
+	}
+
+	/**
+	 * Guarda la lista de marcas
+	 *
+	 * @param array $m Lista de marcas
+	 *
+	 * @return void
+	 */
+	public function setMarcas(array $m): void {
+		$this->marcas = $m;
+	}
+
+	/**
+	 * Carga la lista de marcas de un proveedor
+	 *
+	 * @return void
+	 */
+	public function loadMarcas(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `marca` WHERE `id` IN (SELECT `id_marca` FROM `proveedor_marca` WHERE `id_proveedor` = ?)";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$m = new Marca();
+			$m->update($res);
+			array_push($list, $m);
+		}
+
+		$this->setMarcas($list);
+	}
+
+	/**
+	 * Obtiene la lista de ids de las marcas del proveedor
+	 *
+	 * @return array Lista de ids de las marcas
+	 */
+	public function getMarcasList(): array {
+		$list = $this->getMarcas();
+		$ret = [];
+
+		foreach ($list as $marca) {
+			array_push($ret, $marca->get('id'));
+		}
+
+		return $ret;
 	}
 }

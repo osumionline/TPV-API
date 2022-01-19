@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\App\Model\Tarjeta;
 
 class generalService extends OService {
 	/**
@@ -77,5 +78,20 @@ class generalService extends OService {
 		$data_str = json_encode($data);
 
 		file_put_contents($app_data_file, $data_str);
+	}
+
+	public function getTarjetas(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `tarjeta` ORDER BY `por_defecto` DESC, `nombre` ASC";
+		$db->query($sql);
+		$list = [];
+
+		while ($res = $db->next()) {
+			$tarjeta = new Tarjeta();
+			$tarjeta->update($res);
+			array_push($list, $tarjeta);
+		}
+
+		return $list;
 	}
 }

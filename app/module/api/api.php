@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Core\OModule;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\OFW\Routing\ORoute;
+use OsumiFramework\OFW\Tools\OTools;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Proveedor;
 use OsumiFramework\App\Model\CodigoBarras;
@@ -38,6 +39,7 @@ class api extends OModule {
 		$date     = $req->getParamString('date');
 		$opened   = 'false';
 		$app_data = 'null';
+		$tarjetas = [];
 
 		if (is_null($date)) {
 			$status = 'error';
@@ -46,11 +48,13 @@ class api extends OModule {
 		if ($status=='ok') {
 			$opened   = $this->general_service->getOpened($date) ? 'true' : 'false';
 			$app_data = $this->general_service->getAppData();
+			$tarjetas = $this->general_service->getTarjetas();
 		}
 
 		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('opened',  $opened);
 		$this->getTemplate()->add('appData', $app_data, 'nourlencode');
+		$this->getTemplate()->addComponent('tarjetas', 'model/tarjeta_list', ['list' => $tarjetas, 'extra' => 'nourlencode']);
 	}
 
 	/**
@@ -92,7 +96,7 @@ class api extends OModule {
 		$caja = new Caja();
 		$caja->set('apertura',        date('Y-m-d H:i:s', time()));
 		$caja->set('cierre',          null);
-		$caja->set('diferencoa',      null);
+		$caja->set('diferencia',      null);
 		$caja->set('ventas',          null);
 		$caja->set('beneficios',      null);
 		$caja->set('venta_efectivo',  null);
@@ -206,6 +210,7 @@ class api extends OModule {
 		$status = 'ok';
 		$id            = $req->getParamInt('id');
 		$nombre        = $req->getParamString('nombre');
+		$direccion     = $req->getParamString('direccion');
 		$telefono      = $req->getParamString('telefono');
 		$email         = $req->getParamString('email');
 		$web           = $req->getParamString('web');
@@ -222,6 +227,7 @@ class api extends OModule {
 			}
 
 			$marca->set('nombre',        $nombre);
+			$marca->set('direccion',     $direccion);
 			$marca->set('telefono',      $telefono);
 			$marca->set('email',         $email);
 			$marca->set('web',           $web);
@@ -339,6 +345,7 @@ class api extends OModule {
 			}
 			$art->set('localizador',         $localizador);
 			$art->set('nombre',              $nombre);
+			$art->set('slug',                OTools::slugify($nombre));
 			$art->set('puc',                 $puc);
 			$art->set('pvp',                 $pvp);
 			$art->set('margen',              $margen);
@@ -439,12 +446,12 @@ class api extends OModule {
 		$id_marca = $req->getParamInt('idMarca');
 		$list = [];
 
-		if (is_null($name)) {
+		if (is_null($name) || is_null($id_marca)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
-			
+			$list = $this->articulos_service->searchArticulos($name, $id_marca);
 		}
 
 		$this->getTemplate()->add('status', $status);

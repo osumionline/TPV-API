@@ -40,6 +40,13 @@ class Venta extends OModel {
 				'default' => '0',
 				'comment' => 'Tipo de pago 0 metálico 1 tarjeta 2 web'
 			],
+			'id_tarjeta' => [
+				'type'    => OModel::NUM,
+				'nullable' => true,
+				'default' => null,
+				'ref' => 'tarjeta.id',
+				'comment' => 'Id del tipo de tarjeta usada en el pago'
+			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'

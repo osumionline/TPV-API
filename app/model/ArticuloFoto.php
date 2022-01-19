@@ -4,16 +4,30 @@ namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
 
-class Foto extends OModel {
+class ArticuloFoto extends OModel {
 	/**
 	 * Configures current model object based on data-base table structure
 	 */
 	function __construct() {
-		$table_name  = 'foto';
+		$table_name  = 'articulo_foto';
 		$model = [
-			'id' => [
+			'id_foto' => [
 				'type'    => OModel::PK,
+				'ref' => 'foto.id',
 				'comment' => 'Id único para cada foto'
+			],
+			'id_articulo' => [
+				'type'    => OModel::PK,
+				'nullable' => false,
+				'default' => null,
+				'ref' => 'articulo.id',
+				'comment' => 'Id del artículo al que pertenece la foto'
+			],
+			'orden' => [
+				'type'    => OModel::NUM,
+				'nullable' => false,
+				'default' => '0',
+				'comment' => 'Orden de la foto entre todas las fotos de un artículo'
 			],
 			'created_at' => [
 				'type'    => OModel::CREATED,

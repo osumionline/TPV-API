@@ -5,28 +5,29 @@ null
 	"id": <?php echo $values['articulo']->get('id') ?>,
 	"localizador": <?php echo $values['articulo']->get('localizador') ?>,
 	"nombre": "<?php echo urlencode($values['articulo']->get('nombre')) ?>",
-	"puc": <?php echo $values['articulo']->get('puc') ?>,
-	"pvp": <?php echo $values['articulo']->get('pvp') ?>,
-	"margen": <?php echo $values['articulo']->get('margen') ?>,
-	"palb": <?php echo $values['articulo']->get('palb') ?>,
+	"idCategoria": <?php echo $values['articulo']->get('id_categoria') ?>,
 	"idMarca": <?php echo $values['articulo']->get('id_marca') ?>,
 	"idProveedor": <?php echo $values['articulo']->get('id_proveedor') ?>,
+	"referencia": "<?php echo is_null($values['articulo']->get('referencia')) ? 'null' : urlencode($values['articulo']->get('referencia')) ?>",
+	"puc": <?php echo $values['articulo']->get('puc') ?>,
+	"pvp": <?php echo $values['articulo']->get('pvp') ?>,
+	"palb": <?php echo $values['articulo']->get('palb') ?>,
+	"iva": <?php echo $values['articulo']->get('iva') ?>,
+	"re": <?php echo $values['articulo']->get('re') ?>,
+	"margen": <?php echo $values['articulo']->get('margen') ?>,
 	"stock": <?php echo $values['articulo']->get('stock') ?>,
 	"stockMin": <?php echo $values['articulo']->get('stock_min') ?>,
 	"stockMax": <?php echo $values['articulo']->get('stock_max') ?>,
 	"loteOptimo": <?php echo $values['articulo']->get('lote_optimo') ?>,
-	"iva": <?php echo $values['articulo']->get('iva') ?>,
-	"fechaCaducidad": "<?php echo is_null($values['articulo']->get('fecha_caducidad')) ? 'null' : $values['articulo']->get('fecha_caducidad', 'd/m/Y H:i:s') ?>",
+	"ventaOnline": <?php echo $values['articulo']->get('venta_online') ? 'true' : 'false' ?>,
 	"mostrarFecCad": <?php echo $values['articulo']->get('mostrar_feccad') ? 'true' : 'false' ?>,
+	"fechaCaducidad": <?php echo is_null($values['articulo']->get('fecha_caducidad')) ? 'null' : '"'.$values['articulo']->get('fecha_caducidad', 'd/m/Y H:i:s').'"' ?>,
 	"observaciones": "<?php echo is_null($values['articulo']->get('observaciones')) ? 'null' : urlencode($values['articulo']->get('observaciones')) ?>",
 	"mostrarObsPedidos": <?php echo $values['articulo']->get('mostrar_obs_pedidos') ? 'true' : 'false' ?>,
 	"mostrarObsVentas": <?php echo $values['articulo']->get('mostrar_obs_ventas') ? 'true' : 'false' ?>,
-	"referencia": "<?php echo is_null($values['articulo']->get('referencia')) ? 'null' : urlencode($values['articulo']->get('referencia')) ?>",
-	"ventaOnline": <?php echo $values['articulo']->get('venta_online') ? 'true' : 'false' ?>,
 	"mostrarEnWeb": <?php echo $values['articulo']->get('mostrar_en_web') ? 'true' : 'false' ?>,
-	"idCategoria": <?php echo $values['articulo']->get('id_categoria') ?>,
 	"descCorta": "<?php echo is_null($values['articulo']->get('desc_corta')) ? 'null' : urlencode($values['articulo']->get('desc_corta')) ?>",
-	"desc": "<?php echo is_null($values['articulo']->get('desc')) ? 'null' : urlencode($values['articulo']->get('desc')) ?>",
+	"descripcion": "<?php echo is_null($values['articulo']->get('descripcion')) ? 'null' : urlencode($values['articulo']->get('descripcion')) ?>",
 	"codigosBarras": [
 <?php foreach ($values['articulo']->getCodigosBarras() as $i => $cod_barras): ?>
 		{
@@ -36,6 +37,7 @@ null
 		}<?php if ($i < count($values['articulo']->getCodigosBarras()) -1): ?>,<?php endif ?>
 <?php endforeach ?>
 	],
+	"fotos": [<?php echo implode(',', $values['articulo']->getFotosList()) ?>],
 	"activo": <?php echo $values['articulo']->get('activo') ? 'true' : 'false' ?>
 }
 <?php endif ?>

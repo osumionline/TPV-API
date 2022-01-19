@@ -29,29 +29,18 @@ class Articulo extends OModel {
 				'size'     => 100,
 				'comment'  => 'Nombre del artículo'
 			],
-			'puc' => [
-				'type'     => OModel::FLOAT,
+			'slug' => [
+				'type'     => OModel::TEXT,
 				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio Unitario de Compra del artículo'
+				'default'  => null,
+				'size'     => 100,
+				'comment'  => 'Slug del nombre del artículo'
 			],
-			'pvp' => [
-				'type'     => OModel::FLOAT,
+			'id_categoria' => [
+				'type'     => OModel::NUM,
 				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio de Venta al Público del artículo'
-			],
-			'margen' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Margen de beneficio del artículo'
-			],
-			'palb' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio del artículo en el albarán'
+				'default'  => null,
+				'comment'  => 'Id de la categoría en la que se engloba el artículo'
 			],
 			'id_marca' => [
 				'type'     => OModel::NUM,
@@ -66,6 +55,49 @@ class Articulo extends OModel {
 				'default'  => null,
 				'ref'      => 'proveedor.id',
 				'comment'  => 'Id del proveedor del artículo'
+			],
+			'referencia' => [
+				'type'     => OModel::TEXT,
+				'nullable' => true,
+				'default'  => null,
+				'size'     => 50,
+				'comment'  => 'Referencia original del proveedor'
+			],
+			'puc' => [
+				'type'     => OModel::FLOAT,
+				'nullable' => false,
+				'default'  => '0',
+				'comment'  => 'Precio Unitario de Compra del artículo'
+			],
+			'pvp' => [
+				'type'     => OModel::FLOAT,
+				'nullable' => false,
+				'default'  => '0',
+				'comment'  => 'Precio de Venta al Público del artículo'
+			],
+			'palb' => [
+				'type'     => OModel::FLOAT,
+				'nullable' => false,
+				'default'  => '0',
+				'comment'  => 'Precio del artículo en el albarán'
+			],
+			'iva' => [
+				'type'     => OModel::NUM,
+				'nullable' => false,
+				'default'  => null,
+				'comment'  => 'IVA del artículo'
+			],
+			're' => [
+				'type'     => OModel::NUM,
+				'nullable' => false,
+				'default'  => null,
+				'comment'  => 'Recargo de equivalencia'
+			],
+			'margen' => [
+				'type'     => OModel::FLOAT,
+				'nullable' => false,
+				'default'  => '0',
+				'comment'  => 'Margen de beneficio del artículo'
 			],
 			'stock' => [
 				'type'     => OModel::NUM,
@@ -91,21 +123,19 @@ class Articulo extends OModel {
 				'default'  => '0',
 				'comment'  => 'Lote óptimo para realizar pedidos del artículo'
 			],
-			'iva' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'IVA del artículo'
+			'venta_online' => [
+				'type'    => OModel::BOOL,
+				'comment' => 'Indica si el producto está disponible desde la web 1 o no 0'
+			],
+			'mostrar_feccad' => [
+				'type'    => OModel::BOOL,
+				'comment' => 'Mostrar fecha de caducidad 0 no 1 si'
 			],
 			'fecha_caducidad' => [
 				'type'     => OModel::DATE,
 				'nullable' => true,
 				'default'  => null,
 				'comment'  => 'Fecha de caducidad del artículo'
-			],
-			'mostrar_feccad' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar fecha de caducidad 0 no 1 si'
 			],
 			'observaciones' => [
 				'type'     => OModel::LONGTEXT,
@@ -121,26 +151,9 @@ class Articulo extends OModel {
 				'type'    => OModel::BOOL,
 				'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
 			],
-			'referencia' => [
-				'type'     => OModel::TEXT,
-				'nullable' => true,
-				'default'  => null,
-				'size'     => 50,
-				'comment'  => 'Referencia original del proveedor'
-			],
-			'venta_online' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Indica si el producto está disponible desde la web 1 o no 0'
-			],
 			'mostrar_en_web' => [
 				'type'    => OModel::BOOL,
 				'comment' => 'Indica si debe ser mostrado en la web 1 o no 0'
-			],
-			'id_categoria' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Id de la categoría en la que se engloba el artículo'
 			],
 			'desc_corta' => [
 				'type'     => OModel::TEXT,
@@ -149,7 +162,7 @@ class Articulo extends OModel {
 				'size'     => 250,
 				'comment'  => 'Descripción corta para la web'
 			],
-			'desc' => [
+			'descripcion' => [
 				'type'     => OModel::LONGTEXT,
 				'nullable' => true,
 				'default'  => null,
@@ -218,5 +231,66 @@ class Articulo extends OModel {
 		}
 
 		$this->setCodigosBarras($list);
+	}
+	
+	private ?array $fotos = null;
+	
+	/**
+	 * Obtiene el listado de fotos de un artículo
+	 *
+	 * @return array Listado de fotos
+	 */
+	public function getFotos(): array {
+		if (is_null($this->fotos)) {
+			$this->loadFotos();
+		}
+		return $this->fotos;
+	}
+
+	/**
+	 * Guarda la lista de fotos
+	 *
+	 * @param array $f Lista de fotos
+	 *
+	 * @return void
+	 */
+	public function setFotos(array $f): void {
+		$this->fotos = $f;
+	}
+
+	/**
+	 * Carga la lista de fotos de un artículo
+	 *
+	 * @return void
+	 */
+	public function loadFotos(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `foto` WHERE `id` IN (SELECT `id_foto` FROM `articulo_foto` WHERE `id_articulo` = ?)";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$f = new Foto();
+			$f->update($res);
+			array_push($list, $f);
+		}
+
+		$this->setFotos($list);
+	}
+
+	/**
+	 * Obtiene la lista de ids de las fotos del artículo
+	 *
+	 * @return array Lista de ids de las fotos
+	 */
+	public function getFotosList(): array {
+		$list = $this->getFotos();
+		$ret = [];
+
+		foreach ($list as $foto) {
+			array_push($ret, $foto->get('id'));
+		}
+
+		return $ret;
 	}
 }
