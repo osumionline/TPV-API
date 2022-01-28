@@ -11,5 +11,8 @@
 	"dir": {
 		"fotos": "fotos/"
 	},
-	"log_level": "ERROR"
+	"log_level": "ERROR",
+	"extra": {
+		"fotos": "/var/www/vhosts/osumi.es/apitpv.osumi.es/web/fotos"
+	}
 }

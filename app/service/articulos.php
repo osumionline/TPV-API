@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\Proveedor;
 use OsumiFramework\App\Model\Categoria;
 use OsumiFramework\App\Model\ProveedorMarca;
 use OsumiFramework\App\Model\Marca;
+use OsumiFramework\App\Model\Foto;
 
 class articulosService extends OService {
 	/**
@@ -203,5 +204,33 @@ class articulosService extends OService {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Actualiza las fotos de un artículo
+	 *
+	 * @param Articulo $art Artículo al que actualizar las fotos
+	 *
+	 * @param array $fotos_list Lista de fotos a guardar
+	 *
+	 * @return void
+	 */
+	public function updateFotos(Articulo $art, array $fotos_list): void {
+		$db = new ODB();
+		foreach ($fotos_list as $foto) {
+			if ($foto['status'] == 'ok') {
+				continue;
+			}
+			if ($foto['status'] == 'deleted') {
+				$sql = "DELETE FROM `articulo_foto` WHERE `id_articulo` = ? AND `id_foto` = ?";
+				$db->query($sql, [$art->get('id'), $foto['id']]);
+				$foto = new Foto();
+				$foto->find(['id' => $foto['id']]);
+				$foto->deleteFull();
+			}
+			if ($foto['status'] == 'new') {
+				
+			}
+		}
 	}
 }

@@ -1,0 +1,37 @@
+{
+	"file_name": "OImage.php",
+	"version": "2.1.0",
+	"description": "Clase para manipular imágenes (redimensionar, cambiar de formato, crear nuevas...).",
+	"updates": {
+		"2.1.0": {
+			"message": "2.1.0 - Añado soporte para WebP",
+			"files": [
+				"OImage.php"
+			]
+		},
+		"2.0.0": {
+			"message": "2.0.0 - Añado nombre de espacios para OFW 7.0",
+			"files": [
+				"OImage.php"
+			]
+		},
+		"1.1.0": {
+			"message": "1.1.0 - Añado tipado fuerte",
+			"files": [
+				"OImage.php"
+			]
+		},
+		"1.0.1": {
+			"message": "1.0.1 - Refactorizaciones",
+			"files": [
+				"OImage.php"
+			]
+		},
+		"1.0.0": {
+			"message": "1.0.0 - Versión inicial del plugin OImage",
+			"files": [
+				"OImage.php"
+			]
+		}
+	}
+}

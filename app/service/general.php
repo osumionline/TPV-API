@@ -56,6 +56,8 @@ class generalService extends OService {
 	 *
 	 * @param array $iva_list Lista de posibles valores de IVA
 	 *
+	 * @param array $re_list Lista de posibles valores de Recargo de equivalencia
+	 *
 	 * @param array $margin_list Lista de posibles márgenes de beneficio
 	 *
 	 * @param bool $venta_online Indica si está habilitada la venta online
@@ -64,12 +66,13 @@ class generalService extends OService {
 	 *
 	 * @return void
 	 */
-	public function saveAppData(string $tipo_iva, array $iva_list, array $margin_list, bool $venta_online, bool $fecha_cad): void {
+	public function saveAppData(string $tipo_iva, array $iva_list, array $re_list, array $margin_list, bool $venta_online, bool $fecha_cad): void {
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
 
 		$data = [
 			'tipoIva'     => $tipo_iva,
 			'ivaList'     => $iva_list,
+			'reList'      => $re_list,
 			'marginList'  => $margin_list,
 			'ventaOnline' => $venta_online,
 			'fechaCad'    => $fecha_cad

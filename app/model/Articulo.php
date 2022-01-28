@@ -88,7 +88,7 @@ class Articulo extends OModel {
 				'comment'  => 'IVA del artículo'
 			],
 			're' => [
-				'type'     => OModel::NUM,
+				'type'     => OModel::FLOAT,
 				'nullable' => false,
 				'default'  => null,
 				'comment'  => 'Recargo de equivalencia'
@@ -232,9 +232,9 @@ class Articulo extends OModel {
 
 		$this->setCodigosBarras($list);
 	}
-	
+
 	private ?array $fotos = null;
-	
+
 	/**
 	 * Obtiene el listado de fotos de un artículo
 	 *

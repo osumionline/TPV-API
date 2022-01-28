@@ -68,16 +68,17 @@ class api extends OModule {
 		$status = 'ok';
 		$tipo_iva     = $req->getParamString('tipoIva');
 		$iva_list     = $req->getParam('ivaList');
+		$re_list      = $req->getParam('reList');
 		$margin_list  = $req->getParam('marginList');
 		$venta_online = $req->getParamBool('ventaOnline', false);
 		$fecha_cad    = $req->getParamBool('fechaCad', false);
 
-		if (is_null($tipo_iva) || is_null($iva_list) || is_null($margin_list)){
+		if (is_null($tipo_iva) || is_null($iva_list) || is_null($re_list) || is_null($margin_list)){
 			$status = 'error';
 		}
 
 		if ($status=='ok'){
-			$this->general_service->saveAppData($tipo_iva, $iva_list, $margin_list, $venta_online, $fecha_cad);
+			$this->general_service->saveAppData($tipo_iva, $iva_list, $re_list, $margin_list, $venta_online, $fecha_cad);
 		}
 
 		$this->getTemplate()->add('status', $status);
@@ -322,8 +323,9 @@ class api extends OModule {
 		$mostrar_en_web      = $req->getParamBool('mostrarEnWeb');
 		$id_categoria        = $req->getParamInt('idCategoria');
 		$desc_corta          = $req->getParamString('descCorta');
-		$desc                = $req->getParamString('desc');
+		$descripcion         = $req->getParamString('descripcion');
 		$codigos_barras      = $req->getParam('codigosBarras');
+		$fotos_list          = $req->getParam('fotosList');
 		$activo              = $req->getParamBool('activo');
 
 		if (is_null($nombre) || is_null($id_marca) || is_null($iva)) {
@@ -344,8 +346,8 @@ class api extends OModule {
 				$feccad = $arr_feccad[1] . '-' . $arr_feccad[0]. '-01 00:00:00';
 			}
 			$art->set('localizador',         $localizador);
-			$art->set('nombre',              $nombre);
-			$art->set('slug',                OTools::slugify($nombre));
+			$art->set('nombre',              urldecode($nombre));
+			$art->set('slug',                OTools::slugify(urldecode($nombre)));
 			$art->set('puc',                 $puc);
 			$art->set('pvp',                 $pvp);
 			$art->set('margen',              $margen);
@@ -359,15 +361,15 @@ class api extends OModule {
 			$art->set('iva',                 $iva);
 			$art->set('fecha_caducidad',     $feccad);
 			$art->set('mostrar_feccad',      $mostrar_feccad);
-			$art->set('observaciones',       $observaciones);
+			$art->set('observaciones',       urldecode($observaciones));
 			$art->set('mostrar_obs_pedidos', $mostrar_obs_pedidos);
 			$art->set('mostrar_obs_ventas',  $mostrar_obs_ventas);
 			$art->set('referencia',          $referencia);
 			$art->set('venta_online',        $venta_online);
 			$art->set('mostrar_en_web',      $mostrar_en_web);
 			$art->set('id_categoria',        $id_categoria);
-			$art->set('desc_corta',          $desc_corta);
-			$art->set('desc',                $desc);
+			$art->set('desc_corta',          urldecode($desc_corta));
+			$art->set('descripcion',         urldecode($descripcion));
 			$art->set('activo',              $activo);
 
 			$art->save();
@@ -396,6 +398,8 @@ class api extends OModule {
 				$cb->set('por_defecto', true);
 				$cb->save();
 			}
+			
+			$this->articulos_service->updateFotos($art, $fotos_list);
 		}
 
 		$this->getTemplate()->add('status', $status);
