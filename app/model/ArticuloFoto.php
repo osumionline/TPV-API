@@ -14,12 +14,13 @@ class ArticuloFoto extends OModel {
 			'id_foto' => [
 				'type'    => OModel::PK,
 				'ref' => 'foto.id',
+				'incr' => false,
 				'comment' => 'Id único para cada foto'
 			],
 			'id_articulo' => [
 				'type'    => OModel::PK,
 				'nullable' => false,
-				'default' => null,
+				'incr' => false,
 				'ref' => 'articulo.id',
 				'comment' => 'Id del artículo al que pertenece la foto'
 			],

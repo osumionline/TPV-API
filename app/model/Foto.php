@@ -29,4 +29,19 @@ class Foto extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	/**
+	 * Función para borrar una foto, el archivo, y luego su registro
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		global $core;
+		$ruta = $core->config->getExtra('fotos').$this->get('id').'.webp';
+		if (file_exists($ruta)){
+			unlink($ruta);
+		}
+
+		$this->delete();
+	}
 }

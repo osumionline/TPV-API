@@ -265,7 +265,7 @@ class Articulo extends OModel {
 	 */
 	public function loadFotos(): void {
 		$db = new ODB();
-		$sql = "SELECT * FROM `foto` WHERE `id` IN (SELECT `id_foto` FROM `articulo_foto` WHERE `id_articulo` = ?)";
+		$sql = "SELECT f.* FROM `foto` f, `articulo_foto` af WHERE f.`id` = af.`id_foto` AND af.`id_articulo` = ? ORDER BY af.`orden`";
 		$db->query($sql, [$this->get('id')]);
 		$list = [];
 
