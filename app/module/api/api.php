@@ -159,6 +159,17 @@ class api extends OModule {
 	}
 
 	/**
+	 * Función para obtener las estadísticas de ventas o web
+	 *
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	#[ORoute('/getStatistics')]
+	public function getStatistics(ORequest $req): void {
+
+	}
+
+	/**
 	 * Función para obtener la lista de categorías
 	 *
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
@@ -398,7 +409,7 @@ class api extends OModule {
 				$cb->set('por_defecto', true);
 				$cb->save();
 			}
-			
+
 			$this->articulos_service->updateFotos($art, $fotos_list);
 		}
 
