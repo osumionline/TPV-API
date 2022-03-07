@@ -2,7 +2,7 @@
 	"status": "{{status}}",
 	"opened": {{opened}},
 	"appData": {{appData}},
-	"tarjetas": [
-{{tarjetas}}	
+	"tiposPago": [
+{{tiposPago}}	
 	]
 }

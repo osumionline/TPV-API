@@ -73,14 +73,20 @@ class Proveedor extends OModel {
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'
+			],
+			'deleted_at' => [
+				'type'    => OModel::DATE,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Fecha de borrado del proveedor'
 			]
 		];
 
 		parent::load($table_name, $model);
 	}
-	
+
 	private ?array $marcas = null;
-	
+
 	/**
 	 * Obtiene el listado de marcas de un proveedor
 	 *
@@ -138,5 +144,50 @@ class Proveedor extends OModel {
 		}
 
 		return $ret;
+	}
+
+	private ?array $comerciales = null;
+
+	/**
+	 * Obtiene el listado de comerciales de un proveedor
+	 *
+	 * @return array Listado de comerciales
+	 */
+	public function getComerciales(): array {
+		if (is_null($this->comerciales)) {
+			$this->loadComerciales();
+		}
+		return $this->comerciales;
+	}
+
+	/**
+	 * Guarda la lista de comerciales
+	 *
+	 * @param array $c Lista de comerciales
+	 *
+	 * @return void
+	 */
+	public function setComerciales(array $c): void {
+		$this->comerciales = $c;
+	}
+
+	/**
+	 * Carga la lista de comerciales de un proveedor
+	 *
+	 * @return void
+	 */
+	public function loadComerciales(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `comercial` WHERE `id_proveedor` = ?";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$c = new Comercial();
+			$c->update($res);
+			array_push($list, $c);
+		}
+
+		$this->setComerciales($list);
 	}
 }

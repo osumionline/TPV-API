@@ -42,4 +42,40 @@ class Categoria extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?Categoria $padre = null;
+
+	/**
+	 * Obtiene la categoría padre de la actual categoría
+	 *
+	 * @return Categoria Categoría padre de la actual categoría
+	 */
+	public function getPadre(): ?Categoria {
+		if ($this->get('id_padre') != 0 && is_null($this->padre)) {
+			$this->loadPadre();
+		}
+		return $this->padre;
+	}
+
+	/**
+	 * Guarda la categoría padre de la actual categoría
+	 *
+	 * @param Categoria $c Categoría padre de la actual categoría
+	 *
+	 * @return void
+	 */
+	public function setPadre(Categoria $c): void {
+		$this->padre = $c;
+	}
+
+	/**
+	 * Carga la categoría padre de la actual categoría
+	 *
+	 * @return void
+	 */
+	public function loadPadre(): void {
+		$c = new Categoria();
+		$c->find(['id' => $this->get('id_padre')]);
+		$this->setPadre($c);
+	}
 }

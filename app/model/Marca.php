@@ -72,9 +72,57 @@ class Marca extends OModel {
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'
+			],
+			'deleted_at' => [
+				'type'    => OModel::DATE,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Fecha de borrado de la marca'
 			]
 		];
 
 		parent::load($table_name, $model);
+	}
+
+	private ?Proveedor $proveedor = null;
+
+	/**
+	 * Obtiene el proveedor al que pertenece la marca
+	 *
+	 * @return Proveedor Proveedor al que pertenece la marca
+	 */
+	public function getProveedor(): Proveedor {
+		if (is_null($this->proveedor)) {
+			$this->loadProveedor();
+		}
+		return $this->proveedor;
+	}
+
+	/**
+	 * Guarda el proveedor al que pertenece la marca
+	 *
+	 * @param Proveedor $p Proveedor al que pertenece la marca
+	 *
+	 * @return void
+	 */
+	public function setProveedor(Proveedor $p): void {
+		$this->proveedor = $p;
+	}
+
+	/**
+	 * Carga el proveedor al que pertenece la marca
+	 *
+	 * @return void
+	 */
+	public function loadProveedor(): void {
+		$db = new ODB();
+		$sql = "SELECT p.* FROM `proveedor` p, `proveedor_marca` pm WHERE p.`id` = pm.`id_proveedor` AND pm.`id_marca` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$p = new Proveedor();
+		if ($res = $db->next()) {
+			$p->update($res);
+		}
+		$this->setProveedor($p);
 	}
 }

@@ -63,6 +63,12 @@ class Articulo extends OModel {
 				'size'     => 50,
 				'comment'  => 'Referencia original del proveedor'
 			],
+			'palb' => [
+				'type'     => OModel::FLOAT,
+				'nullable' => false,
+				'default'  => '0',
+				'comment'  => 'Precio del artículo en el albarán'
+			],
 			'puc' => [
 				'type'     => OModel::FLOAT,
 				'nullable' => false,
@@ -74,12 +80,6 @@ class Articulo extends OModel {
 				'nullable' => false,
 				'default'  => '0',
 				'comment'  => 'Precio de Venta al Público del artículo'
-			],
-			'palb' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio del artículo en el albarán'
 			],
 			'iva' => [
 				'type'     => OModel::NUM,
@@ -127,29 +127,11 @@ class Articulo extends OModel {
 				'type'    => OModel::BOOL,
 				'comment' => 'Indica si el producto está disponible desde la web 1 o no 0'
 			],
-			'mostrar_feccad' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar fecha de caducidad 0 no 1 si'
-			],
 			'fecha_caducidad' => [
 				'type'     => OModel::DATE,
 				'nullable' => true,
 				'default'  => null,
 				'comment'  => 'Fecha de caducidad del artículo'
-			],
-			'observaciones' => [
-				'type'     => OModel::LONGTEXT,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Observaciones o notas sobre el artículo'
-			],
-			'mostrar_obs_pedidos' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar observaciones en pedidos 0 no 1 si'
-			],
-			'mostrar_obs_ventas' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
 			],
 			'mostrar_en_web' => [
 				'type'    => OModel::BOOL,
@@ -168,10 +150,19 @@ class Articulo extends OModel {
 				'default'  => null,
 				'comment'  => 'Descripción larga para la web'
 			],
-			'activo' => [
+			'observaciones' => [
+				'type'     => OModel::LONGTEXT,
+				'nullable' => true,
+				'default'  => null,
+				'comment'  => 'Observaciones o notas sobre el artículo'
+			],
+			'mostrar_obs_pedidos' => [
 				'type'    => OModel::BOOL,
-				'default' => true,
-				'comment' => 'Indica si el artículo está en alta 1 o dado de baja 0'
+				'comment' => 'Mostrar observaciones en pedidos 0 no 1 si'
+			],
+			'mostrar_obs_ventas' => [
+				'type'    => OModel::BOOL,
+				'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
 			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
@@ -182,6 +173,12 @@ class Articulo extends OModel {
 				'nullable' => true,
 				'default'  => null,
 				'comment'  => 'Fecha de última modificación del registro'
+			],
+			'deleted_at' => [
+				'type'     => OModel::DATE,
+				'nullable' => true,
+				'default'  => null,
+				'comment'  => 'Fecha de borrado del artículo'
 			]
 		];
 
@@ -292,5 +289,113 @@ class Articulo extends OModel {
 		}
 
 		return $ret;
+	}
+
+	private ?Marca $marca = null;
+
+	/**
+	 * Obtiene la marca a la que pertenece el artículo
+	 *
+	 * @return Marca Marca a la que pertenece el artículo
+	 */
+	public function getMarca(): Marca {
+		if (is_null($this->marca)) {
+			$this->loadMarca();
+		}
+		return $this->marca;
+	}
+
+	/**
+	 * Guarda la marca a la que pertenece el artículo
+	 *
+	 * @param Marca $m Marca a la que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function setMarca(Marca $m): void {
+		$this->marca = $m;
+	}
+
+	/**
+	 * Carga la marca a la que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function loadMarca(): void {
+		$m = new Marca();
+		$m->find(['id' => $this->get('id_marca')]);
+		$this->setMarca($m);
+	}
+
+	private ?Categoria $categoria = null;
+
+	/**
+	 * Obtiene la categoría a la que pertenece el artículo
+	 *
+	 * @return Categoria Categoria a la que pertenece el artículo
+	 */
+	public function getCategoria(): Categoria {
+		if (is_null($this->categoria)) {
+			$this->loadCategoria();
+		}
+		return $this->categoria;
+	}
+
+	 /**
+	 * Guarda la categoría a la que pertenece el artículo
+	 *
+	 * @param Categoria $c Categoría a la que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function setCategoria(Categoria $c): void {
+		$this->categoria = $c;
+	}
+
+	/**
+	 * Carga la categoría a la que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function loadCategoria(): void {
+		$c = new Categoria();
+		$c->find(['id' => $this->get('id_categoria')]);
+		$this->setCategoria($c);
+	}
+
+	private ?Proveedor $proveedor = null;
+
+	/**
+	 * Obtiene el proveedor al que pertenece el artículo
+	 *
+	 * @return Proveedor Proveedor al que pertenece el artículo
+	 */
+	public function getProveedor(): Proveedor {
+		if (is_null($this->proveedor)) {
+			$this->loadProveedor();
+		}
+		return $this->proveedor;
+	}
+
+	/**
+	 * Guarda el proveedor al que pertenece el artículo
+	 *
+	 * @param Proveedor $p Proveedor al que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function setProveedor(Proveedor $p): void {
+		$this->proveedor = $p;
+	}
+
+	/**
+	 * Carga el proveedor al que pertenece el artículo
+	 *
+	 * @return void
+	 */
+	public function loadProveedor(): void {
+		$p = new Proveedor();
+		$p->find(['id' => $this->get('id_proveedor')]);
+		$this->setProveedor($p);
 	}
 }

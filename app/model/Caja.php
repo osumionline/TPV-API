@@ -27,12 +27,6 @@ class Caja extends OModel {
 				'default' => null,
 				'comment' => 'Fecha de cierre de la caja'
 			],
-			'diferencia' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Diferencia entre el importe que debería haber y el que realmente hay'
-			],
 			'ventas' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
@@ -51,113 +45,23 @@ class Caja extends OModel {
 				'default' => '0',
 				'comment' => 'Importe total vendido en efectivo'
 			],
-			'venta_tarjetas' => [
+			'venta_otros' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => '0',
-				'comment' => 'Importe total vendido mediante tarjetas'
+				'comment' => 'Importe total vendido mediante tipos de pago alternativos'
 			],
-			'efectivo_apertura' => [
+			'importe_apertura' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => '0',
 				'comment' => 'Importe total en efectivo en la caja al momento de la apertura'
 			],
-			'efectivo_cierre' => [
+			'importe_cierre' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => '0',
 				'comment' => 'Importe total en efectivo en la caja al momento del cierre'
-			],
-			'1c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de un centimo'
-			],
-			'2c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de dos centimos'
-			],
-			'5c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de cinco centimos'
-			],
-			'10c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de diez centimos'
-			],
-			'20c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de veinte centimos'
-			],
-			'50c' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de cincuenta centimos'
-			],
-			'1e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de un euro'
-			],
-			'2e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de monedas de dos euros'
-			],
-			'5e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de cinco euros'
-			],
-			'10e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de diez euros'
-			],
-			'20e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de veinte euros'
-			],
-			'50e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de cincuenta euros'
-			],
-			'100e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de cien euros'
-			],
-			'200e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de doscientos euros'
-			],
-			'500e' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => '0',
-				'comment' => 'Cantidad de billetes de quinientos euros'
 			],
 			'created_at' => [
 				'type'    => OModel::CREATED,

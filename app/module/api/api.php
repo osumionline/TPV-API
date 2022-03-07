@@ -11,20 +11,29 @@ use OsumiFramework\App\Model\Proveedor;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\Caja;
 use OsumiFramework\App\Model\Marca;
+use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Service\generalService;
 use OsumiFramework\App\Service\articulosService;
+use OsumiFramework\App\Service\clientesService;
+use OsumiFramework\App\DTO\InstallationDTO;
+use OsumiFramework\App\DTO\MarcaDTO;
+use OsumiFramework\App\DTO\ProveedorDTO;
+use OsumiFramework\App\DTO\ArticuloDTO;
+use OsumiFramework\App\DTO\ClienteDTO;
 
 #[ORoute(
 	type: 'json',
 	prefix: '/api'
 )]
 class api extends OModule {
-	private ?generalService $general_service = null;
+	private ?generalService   $general_service   = null;
 	private ?articulosService $articulos_service = null;
+	private ?clientesService  $clientes_service  = null;
 
 	function __construct() {
 		$this->general_service   = new generalService();
 		$this->articulos_service = new articulosService();
+		$this->clientes_service  = new clientesService();
 	}
 
 	/**
@@ -39,46 +48,40 @@ class api extends OModule {
 		$date     = $req->getParamString('date');
 		$opened   = 'false';
 		$app_data = 'null';
-		$tarjetas = [];
+		$tipos_pago = [];
 
 		if (is_null($date)) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
-			$opened   = $this->general_service->getOpened($date) ? 'true' : 'false';
-			$app_data = $this->general_service->getAppData();
-			$tarjetas = $this->general_service->getTarjetas();
+			$opened     = $this->general_service->getOpened($date) ? 'true' : 'false';
+			$app_data   = $this->general_service->getAppData();
+			$tipos_pago = $this->general_service->getTiposPago();
 		}
 
 		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('opened',  $opened);
 		$this->getTemplate()->add('appData', $app_data, 'nourlencode');
-		$this->getTemplate()->addComponent('tarjetas', 'model/tarjeta_list', ['list' => $tarjetas, 'extra' => 'nourlencode']);
+		$this->getTemplate()->addComponent('tiposPago', 'model/tipo_pago_list', ['list' => $tipos_pago, 'extra' => 'nourlencode']);
 	}
 
 	/**
 	 * Función guardar los datos iniciales de configuración
 	 *
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @param InstallationDTO $data Objeto con la información sobre la instalación
 	 * @return void
 	 */
 	#[ORoute('/saveInstallation')]
-	public function saveInstallation(ORequest $req): void {
+	public function saveInstallation(InstallationDTO $data): void {
 		$status = 'ok';
-		$tipo_iva     = $req->getParamString('tipoIva');
-		$iva_list     = $req->getParam('ivaList');
-		$re_list      = $req->getParam('reList');
-		$margin_list  = $req->getParam('marginList');
-		$venta_online = $req->getParamBool('ventaOnline', false);
-		$fecha_cad    = $req->getParamBool('fechaCad', false);
 
-		if (is_null($tipo_iva) || is_null($iva_list) || is_null($re_list) || is_null($margin_list)){
+		if (!$data->isValid()) {
 			$status = 'error';
 		}
 
-		if ($status=='ok'){
-			$this->general_service->saveAppData($tipo_iva, $iva_list, $re_list, $margin_list, $venta_online, $fecha_cad);
+		if ($status=='ok') {
+			$this->general_service->saveAppData($data);
 		}
 
 		$this->getTemplate()->add('status', $status);
@@ -95,37 +98,36 @@ class api extends OModule {
 		$status = 'ok';
 
 		$caja = new Caja();
-		$caja->set('apertura',        date('Y-m-d H:i:s', time()));
-		$caja->set('cierre',          null);
-		$caja->set('diferencia',      null);
-		$caja->set('ventas',          null);
-		$caja->set('beneficios',      null);
-		$caja->set('venta_efectivo',  null);
-		$caja->set('venta_tarjetas',  null);
-		$caja->set('efectivo_cierre', null);
-
-		$caja->set('1c',   null);
-		$caja->set('2c',   null);
-		$caja->set('5c',   null);
-		$caja->set('10c',  null);
-		$caja->set('20c',  null);
-		$caja->set('50c',  null);
-		$caja->set('1e',   null);
-		$caja->set('2e',   null);
-		$caja->set('5e',   null);
-		$caja->set('10e',  null);
-		$caja->set('20e',  null);
-		$caja->set('50e',  null);
-		$caja->set('100e', null);
-		$caja->set('200e', null);
-		$caja->set('500e', null);
+		$caja->set('apertura',         date('Y-m-d H:i:s', time()));
+		$caja->set('cierre',           null);
+		$caja->set('ventas',           null);
+		$caja->set('beneficios',       null);
+		$caja->set('venta_efectivo',   null);
+		$caja->set('venta_otros',      null);
+		$caja->set('importe_apertura', null);
+		$caja->set('importe_cierre',   null);
 
 		$caja->save();
 
 		$previous_id = $caja->get('id') -1;
 		$previous_caja = new Caja();
 		if ($previous_caja->find(['id'=>$previous_id])) {
-			$caja->set('efectivo_apertura', $previous_caja->get('efectivo_cierre'));
+			// La anterior caja se cierra en el momento en que la nueva se abre
+			$previous_caja->set('cierre', $caja->get('apertura', 'Y-m-d H:i:s'));
+
+			// Al cerrar la anterior caja actualizamos los valores comprobando las ventas
+			$datos = $this->general_service->getVentasDia($previous_caja);
+
+			$previous_caja->set('ventas', $datos['ventas']);
+			$previous_caja->set('beneficios', $datos['beneficios'] - $this->general_service->getPagosCajaDia($previous_caja));
+			$previous_caja->set('venta_efectivo', $datos['venta_efectivo']);
+			$previous_caja->set('venta_otros', $datos['venta_otros']);
+			$previous_caja->set('importe_cierre', $previous_caja->get('importe_apertura') + $datos['venta_efectivo']);
+
+			$previous_caja->save();
+
+			// Al abrir una caja nueva el importe que debería haber en caja es el que había al cerrar la anterior
+			$caja->set('importe_apertura', $previous_caja->get('importe_cierre'));
 			$caja->save();
 		}
 
@@ -200,7 +202,7 @@ class api extends OModule {
 		if ($status=='ok') {
 			$art = new Articulo();
 			if ($art->find(['id' => $id])) {
-				$art->set('active', false);
+				$art->set('deleted_at', date('Y-m-d H:i:s', time()));
 				$art->save();
 			}
 			else {
@@ -214,186 +216,143 @@ class api extends OModule {
 	/**
 	 * Función para guardar una marca
 	 *
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @param MarcaDTO $data Objeto con toda la información sobre una marca
 	 * @return void
 	 */
 	#[ORoute('/saveMarca')]
-	public function saveMarca(ORequest $req): void {
+	public function saveMarca(MarcaDTO $data): void {
 		$status = 'ok';
-		$id            = $req->getParamInt('id');
-		$nombre        = $req->getParamString('nombre');
-		$direccion     = $req->getParamString('direccion');
-		$telefono      = $req->getParamString('telefono');
-		$email         = $req->getParamString('email');
-		$web           = $req->getParamString('web');
-		$observaciones = $req->getParamString('observaciones');
 
-		if (is_null($nombre)) {
+		if (!$data->isValid()) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
 			$marca = new Marca();
-			if (!is_null($id)) {
-				$marca->find(['id'=>$id]);
+			if (!is_null($data->getId())) {
+				$marca->find(['id' => $data->getId()]);
 			}
 
-			$marca->set('nombre',        $nombre);
-			$marca->set('direccion',     $direccion);
-			$marca->set('telefono',      $telefono);
-			$marca->set('email',         $email);
-			$marca->set('web',           $web);
-			$marca->set('observaciones', $observaciones);
+			$marca->set('nombre',        urldecode($data->getNombre()));
+			$marca->set('direccion',     urldecode($data->getDireccion()));
+			$marca->set('telefono',      urldecode($data->getTelefono()));
+			$marca->set('email',         urldecode($data->getEmail()));
+			$marca->set('web',           urldecode($data->getWeb()));
+			$marca->set('observaciones', urldecode($data->getObservaciones()));
 
 			$marca->save();
 
-			$id = $marca->get('id');
+			$data->setId( $marca->get('id') );
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('id', empty($id) ? 'null' : $id);
+		$this->getTemplate()->add('id', empty($data->getId()) ? 'null' : $data->getId());
 	}
 
 	/**
 	 * Función para guardar un proveedor
 	 *
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @param ProveedorDTO $data Objeto con toda la información sobre un proveedor
 	 * @return void
 	 */
 	#[ORoute('/saveProveedor')]
-	public function saveProveedor(ORequest $req): void {
+	public function saveProveedor(ProveedorDTO $data): void {
 		$status = 'ok';
 
-		$id            = $req->getParamInt('id');
-		$nombre        = $req->getParamString('nombre');
-		$direccion     = $req->getParamString('direccion');
-		$telefono      = $req->getParamString('telefono');
-		$email         = $req->getParamString('email');
-		$web           = $req->getParamString('web');
-		$observaciones = $req->getParamString('observaciones');
-		$marcas        = $req->getParam('marcas');
-
-		if (is_null($nombre)) {
+		if (!$data->isValid()) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
 			$proveedor = new Proveedor();
-			if (!is_null($id)) {
-				$proveedor->find(['id'=>$id]);
+			if (!is_null($data->getId())) {
+				$proveedor->find(['id' => $data->getId()]);
 			}
 
-			$proveedor->set('nombre',        $nombre);
-			$proveedor->set('direccion',     $direccion);
-			$proveedor->set('telefono',      $telefono);
-			$proveedor->set('email',         $email);
-			$proveedor->set('web',           $web);
-			$proveedor->set('observaciones', $observaciones);
+			$proveedor->set('nombre',        urldecode($data->getNombre()));
+			$proveedor->set('direccion',     urldecode($data->getDireccion()));
+			$proveedor->set('telefono',      urldecode($data->getTelefono()));
+			$proveedor->set('email',         urldecode($data->getEmail()));
+			$proveedor->set('web',           urldecode($data->getWeb()));
+			$proveedor->set('observaciones', urldecode($data->getObservaciones()));
 
 			$proveedor->save();
 
-			$this->articulos_service->updateProveedoresMarcas($proveedor->get('id'), $marcas);
+			$this->articulos_service->updateProveedoresMarcas($proveedor->get('id'), $data->getMarcas());
 
-			$id = $proveedor->get('id');
+			$data->setId( $proveedor->get('id') );
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('id', empty($id) ? 'null' : $id);
+		$this->getTemplate()->add('id', empty($data->getId()) ? 'null' : $data->getId());
 	}
 
 	/**
 	 * Función para guardar un artículo
 	 *
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @param ArticuloDTO $data Objeto con toda la información sobre un artículo
 	 * @return void
 	 */
 	#[ORoute('/saveArticulo')]
-	public function saveArticulo(ORequest $req): void {
+	public function saveArticulo(ArticuloDTO $data): void {
 		$status = 'ok';
-		$id                  = $req->getParamInt('id');
-		$localizador         = $req->getParamInt('localizador');
-		$nombre              = $req->getParamString('nombre');
-		$puc                 = $req->getParamFloat('puc');
-		$pvp                 = $req->getParamFloat('pvp');
-		$margen              = $req->getParamFloat('margen');
-		$palb                = $req->getParamFloat('palb');
-		$id_marca            = $req->getParamInt('idMarca');
-		$id_proveedor        = $req->getParamInt('idProveedor');
-		$stock               = $req->getParamInt('stock');
-		$stock_min           = $req->getParamInt('stockMin');
-		$stock_max           = $req->getParamInt('stockMax');
-		$lote_optimo         = $req->getParamInt('loteOptimo');
-		$iva                 = $req->getParamInt('iva');
-		$fecha_caducidad     = $req->getParamString('fechaCaducidad');
-		$mostrar_feccad      = $req->getParamBool('mostrarFecCad');
-		$observaciones       = $req->getParamString('observaciones');
-		$mostrar_obs_pedidos = $req->getParamBool('mostrarObsPedidos');
-		$mostrar_obs_ventas  = $req->getParamBool('mostrarObsVentas');
-		$referencia          = $req->getParamString('referencia');
-		$venta_online        = $req->getParamBool('ventaOnline');
-		$mostrar_en_web      = $req->getParamBool('mostrarEnWeb');
-		$id_categoria        = $req->getParamInt('idCategoria');
-		$desc_corta          = $req->getParamString('descCorta');
-		$descripcion         = $req->getParamString('descripcion');
-		$codigos_barras      = $req->getParam('codigosBarras');
-		$fotos_list          = $req->getParam('fotosList');
-		$activo              = $req->getParamBool('activo');
 
-		if (is_null($nombre) || is_null($id_marca) || is_null($iva)) {
+		if (!$data->isValid()) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
 			$art = new Articulo();
-			if (!is_null($id)) {
-				$art->find(['id'=>$id]);
+			if (!is_null($data->getId())) {
+				$art->find(['id' => $data->getId()]);
 			}
 			else {
-				$localizador = $this->articulos_service->getNewLocalizador();
+				$data->setLocalizador( intval($this->articulos_service->getNewLocalizador()) );
+				$this->getLog()->debug(var_export($data, true));
 			}
-			$feccad = null;
-			if ($mostrar_feccad) {
-				$arr_feccad = explode('/', $fecha_caducidad);
-				$feccad = $arr_feccad[1] . '-' . $arr_feccad[0]. '-01 00:00:00';
+			$fecha_caducidad = null;
+			if (!is_null($data->getFechaCaducidad())) {
+				$fec_cad_data = explode('-', $data->getFechaCaducidad());
+				$time = mktime(0, 0, 0, intval($fec_cad_data[0]), 1, (2000 + intval($fec_cad_data[1])));
+				$fecha_caducidad = date('Y-m-d H:i:s', $time);
 			}
-			$art->set('localizador',         $localizador);
-			$art->set('nombre',              urldecode($nombre));
-			$art->set('slug',                OTools::slugify(urldecode($nombre)));
-			$art->set('puc',                 $puc);
-			$art->set('pvp',                 $pvp);
-			$art->set('margen',              $margen);
-			$art->set('palb',                $palb);
-			$art->set('id_marca',            $id_marca);
-			$art->set('id_proveedor',        $id_proveedor);
-			$art->set('stock',               $stock);
-			$art->set('stock_min',           $stock_min);
-			$art->set('stock_max',           $stock_max);
-			$art->set('lote_optimo',         $lote_optimo);
-			$art->set('iva',                 $iva);
-			$art->set('fecha_caducidad',     $feccad);
-			$art->set('mostrar_feccad',      $mostrar_feccad);
-			$art->set('observaciones',       urldecode($observaciones));
-			$art->set('mostrar_obs_pedidos', $mostrar_obs_pedidos);
-			$art->set('mostrar_obs_ventas',  $mostrar_obs_ventas);
-			$art->set('referencia',          $referencia);
-			$art->set('venta_online',        $venta_online);
-			$art->set('mostrar_en_web',      $mostrar_en_web);
-			$art->set('id_categoria',        $id_categoria);
-			$art->set('desc_corta',          urldecode($desc_corta));
-			$art->set('descripcion',         urldecode($descripcion));
-			$art->set('activo',              $activo);
+			$art->set('localizador',         $data->getLocalizador());
+			$art->set('nombre',              urldecode($data->getNombre()));
+			$art->set('slug',                OTools::slugify(urldecode($data->getNombre())));
+			$art->set('id_categoria',        $data->getIdCategoria());
+			$art->set('id_marca',            $data->getIdMarca());
+			$art->set('id_proveedor',        $data->getIdProveedor());
+			$art->set('referencia',          $data->getReferencia());
+			$art->set('palb',                $data->getPalb());
+			$art->set('puc',                 $data->getPuc());
+			$art->set('pvp',                 $data->getPvp());
+			$art->set('iva',                 $data->getIva());
+			$art->set('re',                  $data->getRe());
+			$art->set('margen',              $data->getMargen());
+			$art->set('stock',               $data->getStock());
+			$art->set('stock_min',           $data->getStockMin());
+			$art->set('stock_max',           $data->getStockMax());
+			$art->set('lote_optimo',         $data->getLoteOptimo());
+			$art->set('venta_online',        $data->getVentaOnline());
+			$art->set('fecha_caducidad',     $fecha_caducidad);
+			$art->set('mostrar_en_web',      $data->getMostrarEnWeb());
+			$art->set('desc_corta',          urldecode($data->getDescCorta()));
+			$art->set('descripcion',         urldecode($data->getDescripcion()));
+			$art->set('observaciones',       urldecode($data->getObservaciones()));
+			$art->set('mostrar_obs_pedidos', $data->getMostrarObsPedidos());
+			$art->set('mostrar_obs_ventas',  $data->getMostrarObsVentas());
 
 			$art->save();
-			$id = $art->get('id');
+			$data->setId( $art->get('id') );
 
 			$cod_barras_por_defecto = false;
-			foreach ($codigos_barras as $cod) {
+			foreach ($data->getCodigosBarras() as $cod) {
 				if (!empty($cod['codigoBarras'])) {
 					$cb = new CodigoBarras();
 					if (!empty($cod['id'])) {
 						$cb->find(['id'=>$cod['id']]);
 					}
-					$cb->set('id_articulo', $id);
+					$cb->set('id_articulo', $data->getId());
 					$cb->set('codigo_barras', $cod['codigoBarras']);
 					if ($cb->get('por_defecto')) {
 						$cod_barras_por_defecto = true;
@@ -404,17 +363,17 @@ class api extends OModule {
 
 			if (!$cod_barras_por_defecto) {
 				$cb = new CodigoBarras();
-				$cb->set('id_articulo', $id);
-				$cb->set('codigo_barras', $localizador);
+				$cb->set('id_articulo', $data->getId());
+				$cb->set('codigo_barras', $data->getLocalizador());
 				$cb->set('por_defecto', true);
 				$cb->save();
 			}
 
-			$this->articulos_service->updateFotos($art, $fotos_list);
+			$this->articulos_service->updateFotos($art, $data->getFotosList());
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('localizador', $localizador);
+		$this->getTemplate()->add('localizador', $data->getLocalizador());
 	}
 
 	/**
@@ -437,7 +396,7 @@ class api extends OModule {
 			$cb = new CodigoBarras();
 			if ($cb->find(['codigo_barras'=>$localizador])) {
 				$articulo = new Articulo();
-				$articulo->find(['id'=>$cb->get('id_articulo')]);
+				$articulo->find(['id' => $cb->get('id_articulo')]);
 			}
 			else {
 				$status = 'error';
@@ -471,5 +430,75 @@ class api extends OModule {
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->addComponent('list', 'model/articulo_list', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para buscar clientes
+	 *
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	#[ORoute('/searchClientes')]
+	public function searchClientes(ORequest $req): void {
+		$status = 'ok';
+		$name = $req->getParamString('name');
+		$list = [];
+
+		if (is_null($name)) {
+			$status = 'error';
+		}
+
+		if ($status == 'ok') {
+			$list = $this->clientes_service->searchClientes($name);
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->addComponent('list', 'model/cliente_list', ['list' => $list, 'extra' => 'nourlencode']);
+	}
+
+	/**
+	 * Función para guardar un cliente
+	 *
+	 * @param ClienteDTO $data Objeto con toda la información sobre un cliente
+	 * @return void
+	 */
+	#[ORoute('/saveCliente')]
+	public function saveCliente(ClienteDTO $data): void {
+		$status = 'ok';
+
+		if (!$data->isValid()) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$cliente = new Cliente();
+			if (!is_null($data->getId())) {
+				$cliente->find(['id' => $data->getId()]);
+			}
+
+			$cliente->set('nombre_apellidos',      urldecode($data->getNombreApellidos()));
+			$cliente->set('dni_cif',               urldecode($data->getDniCif()));
+			$cliente->set('telefono',              urldecode($data->getTelefono()));
+			$cliente->set('email',                 urldecode($data->getEmail()));
+			$cliente->set('direccion',             urldecode($data->getDireccion()));
+			$cliente->set('poblacion',             urldecode($data->getPoblacion()));
+			$cliente->set('provincia',             $data->getProvincia());
+			$cliente->set('fact_igual',            $data->getFactIgual());
+			$cliente->set('fact_nombre_apellidos', urldecode($data->getFactNombreApellidos()));
+			$cliente->set('fact_dni_cif',          urldecode($data->getFactDniCif()));
+			$cliente->set('fact_telefono',         urldecode($data->getFactTelefono()));
+			$cliente->set('fact_email',            urldecode($data->getFactEmail()));
+			$cliente->set('fact_direccion',        urldecode($data->getFactDireccion()));
+			$cliente->set('fact_poblacion',        urldecode($data->getFactPoblacion()));
+			$cliente->set('fact_provincia',        $data->getFactProvincia());
+			$cliente->set('observaciones',         urldecode($data->getObservaciones()));
+
+			$cliente->save();
+
+			$data->setId( $cliente->get('id') );
+		}
+
+		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('id', empty($data->getId()) ? 'null' : $data->getId());
 	}
 }

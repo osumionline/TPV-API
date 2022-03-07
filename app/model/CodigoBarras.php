@@ -46,4 +46,40 @@ class CodigoBarras extends OModel {
 
 		parent::load($table_name, $model);
 	}
+
+	private ?Articulo $articulo = null;
+
+	/**
+	 * Obtiene el artículo al que pertenece el código de barras
+	 *
+	 * @return Articulo Artículo al que pertenece el código de barras
+	 */
+	public function getArticulo(): Articulo {
+		if (is_null($this->articulo)) {
+			$this->loadArticulo();
+		}
+		return $this->articulo;
+	}
+
+	/**
+	 * Guarda el artículo al que pertenece el código de barras
+	 *
+	 * @param Articulo $p Artículo al que pertenece el código de barras
+	 *
+	 * @return void
+	 */
+	public function setArticulo(Articulo $a): void {
+		$this->articulo = $a;
+	}
+
+	/**
+	 * Carga el artículo al que pertenece el código de barras
+	 *
+	 * @return void
+	 */
+	public function loadArticulo(): void {
+		$a = new Articulo();
+		$a->find(['id' => $this->get('id_articulo')]);
+		$this->setArticulo($a);
+	}
 }

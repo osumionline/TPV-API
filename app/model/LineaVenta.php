@@ -32,32 +32,44 @@ class LineaVenta extends OModel {
 			'puc' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => false,
-				'default' => '0',
+				'default' => 0,
 				'comment' => 'Precio Unitario de Compra del artículo en el momento de su venta'
 			],
 			'pvp' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => false,
-				'default' => '0',
+				'default' => 0,
 				'comment' => 'Precio de Venta al Público del artículo en el momento de su venta'
 			],
 			'iva' => [
 				'type'    => OModel::NUM,
 				'nullable' => false,
-				'default' => '0',
+				'default' => 0,
 				'comment' => 'IVA del artículo en el momento de su venta'
 			],
 			're' => [
-				'type'    => OModel::NUM,
+				'type'    => OModel::FLOAT,
 				'nullable' => false,
-				'default' => '0',
+				'default' => 0,
 				'comment' => 'Recargo de equivalencia del artículo en el momento de su venta'
+			],
+			'importe' => [
+				'type'    => OModel::FLOAT,
+				'nullable' => false,
+				'default' => 0,
+				'comment' => 'Importe total de la línea'
 			],
 			'descuento' => [
 				'type'    => OModel::NUM,
 				'nullable' => false,
 				'default' => '0',
 				'comment' => 'Porcentaje de descuento aplicado'
+			],
+			'importe_descuento' => [
+				'type'    => OModel::FLOAT,
+				'nullable' => false,
+				'default' => 0,
+				'comment' => 'Importe directo en descuento'
 			],
 			'devuelto' => [
 				'type'    => OModel::NUM,
@@ -84,5 +96,41 @@ class LineaVenta extends OModel {
 		];
 
 		parent::load($table_name, $model);
+	}
+
+	private ?Venta $venta = null;
+
+	/**
+	 * Obtiene la venta a la que pertenece la línea
+	 *
+	 * @return Venta Venta a la que pertenece la línea
+	 */
+	public function getVenta(): Venta {
+		if (is_null($this->venta)) {
+			$this->loadVenta();
+		}
+		return $this->venta;
+	}
+
+	/**
+	 * Guarda la venta a la que pertenece la línea
+	 *
+	 * @param Venta $v Venta a la que pertenece la línea
+	 *
+	 * @return void
+	 */
+	public function setVenta(Venta $v): void {
+		$this->venta = $v;
+	}
+
+	/**
+	 * Carga la venta a la que pertenece la línea
+	 *
+	 * @return void
+	 */
+	public function loadVenta(): void {
+		$v = new Venta();
+		$v->find(['id' => $this->get('id_venta')]);
+		$this->setVenta($v);
 	}
 }

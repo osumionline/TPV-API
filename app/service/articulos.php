@@ -29,7 +29,7 @@ class articulosService extends OService {
 	 */
 	public function getMarcas(): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `marca` ORDER BY `nombre`";
+		$sql = "SELECT * FROM `marca` WHERE `deleted_at` IS NULL ORDER BY `nombre`";
 		$db->query($sql);
 		$list = [];
 
@@ -49,7 +49,7 @@ class articulosService extends OService {
 	 */
 	public function getProveedores(): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `proveedor` ORDER BY `nombre`";
+		$sql = "SELECT * FROM `proveedor` WHERE `deleted_at` IS NULL ORDER BY `nombre`";
 		$db->query($sql);
 		$list = [];
 
@@ -160,10 +160,10 @@ class articulosService extends OService {
 	 * @return string Nuevo localizador
 	 */
 	public function getNewLocalizador(): string {
-		$loc = date('y', time()) . str_pad(rand(1, 9999), 4, STR_PAD_LEFT);
+		$loc = date('y', time()) . str_pad(strval(rand(1, 9999)), 4, '0', STR_PAD_LEFT);
 		$art = new Articulo();
 
-		if ($art->check(['localizador'=>$loc])) {
+		if ($art->find(['localizador' => $loc])) {
 			return $this->getNewLocalizador();
 		}
 		else {

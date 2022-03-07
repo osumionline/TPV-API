@@ -58,9 +58,51 @@ class Comercial extends OModel {
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'
+			],
+			'deleted_at' => [
+				'type'    => OModel::DATE,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Fecha de borrado del comercial'
 			]
 		];
 
 		parent::load($table_name, $model);
+	}
+
+	private ?Proveedor $proveedor = null;
+
+	/**
+	 * Obtiene el proveedor al que pertenece el comercial
+	 *
+	 * @return Proveedor Proveedor al que pertenece el comercial
+	 */
+	public function getProveedor(): Proveedor {
+		if (is_null($this->proveedor)) {
+			$this->loadProveedor();
+		}
+		return $this->proveedor;
+	}
+
+	/**
+	 * Guarda el proveedor al que pertenece el comercial
+	 *
+	 * @param Proveedor $p Proveedor al que pertenece el comercial
+	 *
+	 * @return void
+	 */
+	public function setProveedor(Proveedor $p): void {
+		$this->proveedor = $p;
+	}
+
+	/**
+	 * Carga el proveedor al que pertenece el comercial
+	 *
+	 * @return void
+	 */
+	public function loadProveedor(): void {
+		$p = new Proveedor();
+		$p->find(['id' => $this->get('id_proveedor')]);
+		$this->setProveedor($p);
 	}
 }
