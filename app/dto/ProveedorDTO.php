@@ -21,43 +21,43 @@ class ProveedorDTO implements ODTO{
 	public function setId(?int $id): void {
 		$this->id = $id;
 	}
-  public function getNombre(): string {
+	public function getNombre(): string {
 		return $this->nombre;
 	}
 	private function setNombre(string $nombre): void {
 		$this->nombre = $nombre;
 	}
-  public function getDireccion(): string {
+	public function getDireccion(): string {
 		return $this->direccion;
 	}
 	private function setDireccion(string $direccion): void {
 		$this->direccion = $direccion;
 	}
-  public function getTelefono(): string {
+	public function getTelefono(): string {
 		return $this->telefono;
 	}
 	private function setTelefono(string $telefono): void {
 		$this->telefono = $telefono;
 	}
-  public function getEmail(): string {
+	public function getEmail(): string {
 		return $this->email;
 	}
 	private function setEmail(string $email): void {
 		$this->email = $email;
 	}
-  public function getWeb(): string {
+	public function getWeb(): string {
 		return $this->web;
 	}
 	private function setWeb(string $web): void {
 		$this->web = $web;
 	}
-  public function getObservaciones(): string {
+	public function getObservaciones(): string {
 		return $this->observaciones;
 	}
 	private function setObservaciones(string $observaciones): void {
 		$this->observaciones = $observaciones;
 	}
-  public function getMarcas(): array {
+	public function getMarcas(): array {
 		return $this->marcas;
 	}
 	private function setMarcas(array $marcas): void {
@@ -69,7 +69,7 @@ class ProveedorDTO implements ODTO{
 	}
 
 	public function load(ORequest $req): void {
-    $this->setId( $req->getParamInt('id') );
+    	$this->setId( $req->getParamInt('id') );
 		$this->setNombre( $req->getParamString('nombre') );
 		$this->setDireccion( $req->getParamString('direccion') );
 		$this->setTelefono( $req->getParamString('telefono') );

@@ -101,4 +101,22 @@ class Empleado extends OModel {
 
 		$this->setVentas($list);
 	}
+
+	/**
+	 * Comprueba el inicio de sesión de un empleado
+	 *
+	 * @param int $id Id del usuario
+	 *
+	 * @param string $pass Contraseña introducida por el empleado
+	 *
+	 * @return bool Comprobación de contraseña correcta o incorrecta
+	 */
+	public function login(int $id, string $pass): bool {
+		if ($this->find(['id'=>$id])) {
+			if (password_verify($pass, $this->get('pass'))) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
