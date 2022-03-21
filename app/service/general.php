@@ -6,6 +6,8 @@ use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Caja;
+use OsumiFramework\App\Model\Empleado;
+use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\DTO\InstallationDTO;
 
 class generalService extends OService {
@@ -47,17 +49,11 @@ class generalService extends OService {
 			$data = json_decode(file_get_contents($app_data_file), true);
 			return json_encode([
 				'nombre'      => $data['nombre'],
-				'cif'         => $data['cif'],
-				'telefono'    => $data['telefono'],
-				'direccion'   => $data['direccion'],
-				'email'       => $data['email'],
-				'pass'        => '',
 				'tipoIva'     => $data['tipoIva'],
 				'ivaList'     => $data['ivaList'],
 				'reList'      => $data['reList'],
 				'marginList'  => $data['marginList'],
 				'ventaOnline' => $data['ventaOnline'],
-				'urlApi'      => '',
 				'fechaCad'    => $data['fechaCad'],
 				'empleados'   => $data['empleados']
 			]);
@@ -77,13 +73,16 @@ class generalService extends OService {
 	public function saveAppData(InstallationDTO $data): void {
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
 
-		$data = [
+		$app_data = [
 			'nombre'      => $data->getNombre(),
 			'cif'         => $data->getCif(),
 			'telefono'    => $data->getTelefono(),
 			'direccion'   => $data->getDireccion(),
 			'email'       => $data->getEmail(),
-			'pass'        => password_hash($data->getPass(), PASSWORD_BCRYPT),
+			'twitter'     => $data->getTwitter(),
+			'facebook'    => $data->getFacebook(),
+			'instagram'   => $data->getInstagram(),
+			'web'         => $data->getWeb(),
 			'tipoIva'     => $data->getTipoIva(),
 			'ivaList'     => $data->getIvaList(),
 			'reList'      => $data->getReList(),
@@ -94,9 +93,15 @@ class generalService extends OService {
 			'empleados'   => $data->getEmpleados()
 		];
 
-		$data_str = json_encode($data);
+		$data_str = json_encode($app_data);
 
 		file_put_contents($app_data_file, $data_str);
+
+		$empleado = new Empleado();
+		$empleado->set('nombre', $data->getNombreEmpleado());
+		$empleado->set('pass', password_hash($data->getPass(), PASSWORD_BCRYPT));
+		$empleado->set('color', str_ireplace('#', '', $data->getColor()));
+		$empleado->save();
 	}
 
 	/**

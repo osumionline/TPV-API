@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\App\Model\Venta;
+use OsumiFramework\App\Utils\PDF;
 
 class ticketService extends OService {
 	/**
@@ -13,8 +14,16 @@ class ticketService extends OService {
 		$this->loadService();
 	}
 
+	/**
+		* Función para generar el ticket de una venta
+		*
+		* @param Venta $venta Objeto venta con todos los datos de la venta
+		*
+		* @return void
+		*/
 	public function generateTicket(Venta $venta): void {
 		require_once($this->getConfig()->getDir('ofw_lib').'fpdf/fpdf.php');
+		require_once($this->getConfig()->getDir('app_utils').'PDF.php');
 		echo "Creo ticket de venta ".$venta->get('id')."\n";
 
 		// Cargo archivo de configuración
@@ -29,16 +38,15 @@ class ticketService extends OService {
 			exit();
 		}
 
-		$ruta = $this->getConfig()->getDir('ofw_export').'prueba.pdf';
-		if (file_exists($ruta)) {
-			unlink($ruta);
+		$route = $this->getConfig()->getDir('ofw_export').'prueba.pdf';
+		if (file_exists($route)) {
+			unlink($route);
 		}
-		echo "RUTA: ".$ruta."\n";
+		echo "RUTA: ".$route."\n";
 
-		$pdf = new \FPDF();
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','B',16);
-		$pdf->Cell(40,10,iconv('UTF-8', 'windows-1252', '¡Hola, Mundo!'));
-		$pdf->Output('F', $ruta, true);
+		$size_ticket = [79, 200];
+
+		$pdf = new PDF('P', 'mm', $size_ticket);
+		$pdf->ticket($venta, $route);
 	}
 }

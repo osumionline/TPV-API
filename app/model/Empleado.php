@@ -22,14 +22,14 @@ class Empleado extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre del empleado'
 			],
-      'pass' => [
+			'pass' => [
 				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
 				'size' => 200,
 				'comment' => 'Contraseña cifrada del empleado'
 			],
-      'color' => [
+			'color' => [
 				'type'    => OModel::TEXT,
 				'nullable' => false,
 				'default' => null,
@@ -46,8 +46,8 @@ class Empleado extends OModel {
 				'default' => null,
 				'comment' => 'Fecha de última modificación del registro'
 			],
-      'deleted_at' => [
-				'type'    => OModel::UPDATED,
+			'deleted_at' => [
+				'type'    => OModel::DATE,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de baja del empleado'

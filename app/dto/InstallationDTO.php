@@ -12,6 +12,12 @@ class InstallationDTO implements ODTO{
 	private string $direccion = '';
 	private string $email = '';
 	private string $pass = '';
+	private string $nombre_empleado = '';
+	private string $color = '';
+	private string $twitter = '';
+	private string $facebook = '';
+	private string $instagram = '';
+	private string $web = '';
 	private string $tipo_iva = '';
 	private array $iva_list = [];
 	private array $re_list = [];
@@ -56,6 +62,42 @@ class InstallationDTO implements ODTO{
 	}
 	private function setPass(string $pass): void {
 		$this->pass = $pass;
+	}
+	public function getNombreEmpleado(): string {
+		return $this->nombre_empleado;
+	}
+	private function setNombreEmpleado(string $nombre_empleado): void {
+		$this->nombre_empleado = $nombre_empleado;
+	}
+	public function getColor(): string {
+		return $this->color;
+	}
+	private function setColor(string $color): void {
+		$this->color = $color;
+	}
+	public function getTwitter(): string {
+		return $this->twitter;
+	}
+	private function setTwitter(string $twitter): void {
+		$this->twitter = $twitter;
+	}
+	public function getFacebook(): string {
+		return $this->facebook;
+	}
+	private function setFacebook(string $facebook): void {
+		$this->facebook = $facebook;
+	}
+	public function getInstagram(): string {
+		return $this->instagram;
+	}
+	private function setInstagram(string $instagram): void {
+		$this->instagram = $instagram;
+	}
+	public function getWeb(): string {
+		return $this->web;
+	}
+	private function setWeb(string $web): void {
+		$this->web = $web;
 	}
 	public function getTipoIva(): string {
 		return $this->tipo_iva;
@@ -110,6 +152,9 @@ class InstallationDTO implements ODTO{
 		return (
 			$this->getNombre() != '' &&
 			$this->getCif() != '' &&
+			$this->getPass() != '' &&
+			$this->getNombreEmpleado() != '' &&
+			$this->getColor() != '' &&
 			$this->getTipoIva() != '' &&
 			count($this->getIvaList()) > 0 &&
 			(!$this->getVentaOnline() || ($this->getVentaOnline() && $this->getUrlApi() != ''))
@@ -123,6 +168,12 @@ class InstallationDTO implements ODTO{
 		$this->setDireccion( $req->getParamString('direccion') );
 		$this->setEmail( $req->getParamString('email') );
 		$this->setPass( $req->getParamString('pass') );
+		$this->setNombreEmpleado( $req->getParamString('nombreEmpleado') );
+		$this->setColor( $req->getParamString('color') );
+		$this->setTwitter( $req->getParamString('twitter') );
+		$this->setFacebook( $req->getParamString('facebook') );
+		$this->setInstagram( $req->getParamString('instagram') );
+		$this->setWeb( $req->getParamString('web') );
 		$this->setTipoIva( $req->getParamString('tipoIva') );
 		$this->setIvaList( $req->getParam('ivaList') );
 		$this->setReList( $req->getParam('reList') );
