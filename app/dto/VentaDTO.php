@@ -9,6 +9,7 @@ class VentaDTO implements ODTO{
 	private ?float $efectivo = null;
 	private ?float $cambio = null;
 	private ?float $tarjeta = null;
+	private ?int $id_empleado = null;
 	private ?int $id_tipo_pago = null;
 	private ?int $id_cliente = null;
 	private ?float $total = null;
@@ -33,6 +34,12 @@ class VentaDTO implements ODTO{
 	}
 	private function setTarjeta(?float $tarjeta): void {
 		$this->tarjeta = $tarjeta;
+	}
+	public function getIdEmpleado(): ?int {
+		return $this->id_empleado;
+	}
+	private function setIdEmpleado(?int $id_empleado): void {
+		$this->id_empleado = $id_empleado;
 	}
 	public function getIdTipoPago(): ?int {
 		return $this->id_tipo_pago;
@@ -79,6 +86,7 @@ class VentaDTO implements ODTO{
 		$this->setEfectivo( $req->getParamFloat('efectivo') );
 		$this->setCambio( $req->getParamFloat('cambio') );
 		$this->setTarjeta( $req->getParamFloat('tarjeta') );
+		$this->setIdEmpleado( $req->getParamInt('idEmpleado') );
 		$this->setIdTipoPago( $req->getParamInt('idTipoPago') );
 		$this->setIdCliente( $req->getParamInt('idCliente') );
 		$this->setTotal( $req->getParamFloat('total') );

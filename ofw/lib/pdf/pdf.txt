@@ -1,1 +1,0 @@
-In case of needing PDF file creation, TCPDF library (https://github.com/tecnickcom/tcpdf) needs to be included in this folder. Plugin OPDF also needs to be loaded.

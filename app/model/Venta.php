@@ -54,6 +54,12 @@ class Venta extends OModel {
 				'ref' => 'tipo_pago.id',
 				'comment' => 'Id del tipo de pago'
 			],
+			'entregado_otro' => [
+				'type'    => OModel::FLOAT,
+				'nullable' => true,
+				'default' => null,
+				'comment' => 'Cantidad pagada mediante tipo de pago alternativo'
+			],
 			'saldo' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
@@ -71,7 +77,7 @@ class Venta extends OModel {
 				'comment' => 'Fecha de última modificación del registro'
 			],
 			'deleted_at' => [
-				'type'    => OModel::UPDATED,
+				'type'    => OModel::DATE,
 				'nullable' => true,
 				'default' => null,
 				'comment' => 'Fecha de borrado de la venta'

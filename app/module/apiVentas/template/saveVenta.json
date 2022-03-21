@@ -1,3 +1,6 @@
 {
-	"status": "{{status}}"
+	"status": "{{status}}",
+	"id": {{id}},
+	"importe": {{importe}},
+	"cambio": {{cambio}}
 }
