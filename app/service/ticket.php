@@ -15,12 +15,12 @@ class ticketService extends OService {
 	}
 
 	/**
-		* Función para generar el ticket de una venta
-		*
-		* @param Venta $venta Objeto venta con todos los datos de la venta
-		*
-		* @return void
-		*/
+	 * Función para generar el ticket de una venta
+	 *
+	 * @param Venta $venta Objeto venta con todos los datos de la venta
+	 *
+	 * @return void
+	 */
 	public function generateTicket(Venta $venta): void {
 		require_once($this->getConfig()->getDir('ofw_lib').'fpdf/fpdf.php');
 		require_once($this->getConfig()->getDir('app_utils').'PDF.php');
@@ -47,6 +47,8 @@ class ticketService extends OService {
 		$size_ticket = [79, 200];
 
 		$pdf = new PDF('P', 'mm', $size_ticket);
+		$pdf->setLogo($this->getConfig()->getDir('web').'logo.jpeg');
+		$pdf->setRutaIconos($this->getConfig()->getDir('web').'iconos/');
 		$pdf->ticket($venta, $route);
 	}
 }
