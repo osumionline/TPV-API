@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\OFW\Plugins\OImage;
 use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Caja;
 use OsumiFramework\App\Model\Empleado;
@@ -94,9 +95,13 @@ class generalService extends OService {
 		];
 
 		$data_str = json_encode($app_data);
-
 		file_put_contents($app_data_file, $data_str);
 
+		// Logo
+		$ext  = OImage::getImageExtension($data->getLogo());
+		$ruta = OImage::saveImage($this->getConfig()->getDir('web'), $data->getLogo(), 'logo', $ext);
+
+		// Empleado
 		$empleado = new Empleado();
 		$empleado->set('nombre', $data->getNombreEmpleado());
 		$empleado->set('pass', password_hash($data->getPass(), PASSWORD_BCRYPT));

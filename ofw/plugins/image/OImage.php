@@ -12,6 +12,51 @@ class OImage {
 	private ?int     $image_type = null;
 
 	/**
+	 * Get Base64 encoded image file's extension
+	 *
+	 * @param string $data Base64 encoded image file
+	 *
+	 * @return string Image extension
+	 */
+	public static function getImageExtension(string $data): string {
+		$arr_data = explode(';', $data);
+		$arr_data = explode(':', $arr_data[0]);
+		$arr_data = explode('/', $arr_data[1]);
+
+		return $arr_data[1];
+	}
+
+	/**
+	 * Save a Base64 encoded image file on given location
+	 *
+	 * @param string $path Path where the file should be saved
+	 *
+	 * @param string $base64_string Base64 encoded image file
+	 *
+	 * @param string $name Name of the resulting image file
+	 *
+	 * @param string $ext Extension of the resulting image file
+	 *
+	 * @param bool $overwrite Overwrite if image found on given location (default true)
+	 *
+	 * @return string Full path of the resulting image file
+	 */
+	public static function saveImage(string $path, string $base64_string, string $name, string $ext, bool $overwrite=true): string {
+		$full_path = $path.$name.'.'.$ext;
+
+		if (file_exists($full_path)) {
+			unlink($full_path);
+		}
+
+		$ifp = fopen($full_path, "wb");
+		$data = explode(',', $base64_string);
+		fwrite($ifp, base64_decode($data[1]));
+		fclose($ifp);
+
+		return $full_path;
+	}
+
+	/**
 	 * Get loaded files image type
 	 *
 	 * @return int Image type constant of the loaded file (or null if file hasn't been loaded yet)

@@ -125,8 +125,8 @@ class articulosService extends OService {
 	 * @return void
 	 */
 	public function saveFoto(string $base64_string, int $id): void {
-		$ext = $this->getFotoExt($base64_string);
-		$ruta = $this->saveImage($this->getConfig()->getDir('ofw_tmp'), $base64_string, $id, $ext);
+		$ext = OImage::getImageExtension($base64_string);
+		$ruta = OImage::saveImage($this->getConfig()->getDir('ofw_tmp'), $base64_string, strval($id), $ext);
 		$this->getLog()->debug('nueva foto: '.$ruta);
 		$im = new OImage();
 		$im->load($ruta);

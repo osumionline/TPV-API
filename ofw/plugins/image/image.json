@@ -1,8 +1,14 @@
 {
 	"file_name": "OImage.php",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Clase para manipular imágenes (redimensionar, cambiar de formato, crear nuevas...).",
 	"updates": {
+		"2.2.0": {
+			"message": "2.2.0 - Funciones auxiliares para trabajar con imagenes en Base64",
+			"files": [
+				"OImage.php"
+			]
+		},
 		"2.1.0": {
 			"message": "2.1.0 - Añado soporte para WebP",
 			"files": [

@@ -11,8 +11,9 @@ class InstallationDTO implements ODTO{
 	private string $telefono = '';
 	private string $direccion = '';
 	private string $email = '';
-	private string $pass = '';
+	private string $logo = '';
 	private string $nombre_empleado = '';
+	private string $pass = '';
 	private string $color = '';
 	private string $twitter = '';
 	private string $facebook = '';
@@ -57,17 +58,23 @@ class InstallationDTO implements ODTO{
 	private function setEmail(string $email): void {
 		$this->email = $email;
 	}
-	public function getPass(): string {
-		return $this->pass;
+	public function getLogo(): string {
+		return $this->logo;
 	}
-	private function setPass(string $pass): void {
-		$this->pass = $pass;
+	private function setLogo(string $logo): void {
+		$this->logo = $logo;
 	}
 	public function getNombreEmpleado(): string {
 		return $this->nombre_empleado;
 	}
 	private function setNombreEmpleado(string $nombre_empleado): void {
 		$this->nombre_empleado = $nombre_empleado;
+	}
+	public function getPass(): string {
+		return $this->pass;
+	}
+	private function setPass(string $pass): void {
+		$this->pass = $pass;
 	}
 	public function getColor(): string {
 		return $this->color;
@@ -152,8 +159,9 @@ class InstallationDTO implements ODTO{
 		return (
 			$this->getNombre() != '' &&
 			$this->getCif() != '' &&
-			$this->getPass() != '' &&
+			$this->getLogo() != '' &&
 			$this->getNombreEmpleado() != '' &&
+			$this->getPass() != '' &&
 			$this->getColor() != '' &&
 			$this->getTipoIva() != '' &&
 			count($this->getIvaList()) > 0 &&
@@ -167,8 +175,9 @@ class InstallationDTO implements ODTO{
 		$this->setTelefono( $req->getParamString('telefono') );
 		$this->setDireccion( $req->getParamString('direccion') );
 		$this->setEmail( $req->getParamString('email') );
-		$this->setPass( $req->getParamString('pass') );
+		$this->setLogo( $req->getParamString('logo') );
 		$this->setNombreEmpleado( $req->getParamString('nombreEmpleado') );
+		$this->setPass( $req->getParamString('pass') );
 		$this->setColor( $req->getParamString('color') );
 		$this->setTwitter( $req->getParamString('twitter') );
 		$this->setFacebook( $req->getParamString('facebook') );
