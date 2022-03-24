@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\Caja;
 use OsumiFramework\App\Model\Empleado;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\DTO\InstallationDTO;
+use OsumiFramework\App\Utils\AppData;
 
 class generalService extends OService {
 	/**
@@ -17,6 +18,7 @@ class generalService extends OService {
 	 */
 	function __construct() {
 		$this->loadService();
+		require $this->getConfig()->getDir('app_utils').'AppData.php';
 	}
 
 	/**
@@ -46,18 +48,9 @@ class generalService extends OService {
 	 */
 	public function getAppData(): string {
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
-		if (file_exists($app_data_file)) {
-			$data = json_decode(file_get_contents($app_data_file), true);
-			return json_encode([
-				'nombre'      => $data['nombre'],
-				'tipoIva'     => $data['tipoIva'],
-				'ivaList'     => $data['ivaList'],
-				'reList'      => $data['reList'],
-				'marginList'  => $data['marginList'],
-				'ventaOnline' => $data['ventaOnline'],
-				'fechaCad'    => $data['fechaCad'],
-				'empleados'   => $data['empleados']
-			]);
+		$app_data = new AppData($app_data_file);
+		if ($app_data->getLoaded()) {
+			return $app_data->getJSON();
 		}
 		else {
 			return 'null';
@@ -73,29 +66,8 @@ class generalService extends OService {
 	 */
 	public function saveAppData(InstallationDTO $data): void {
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
-
-		$app_data = [
-			'nombre'      => $data->getNombre(),
-			'cif'         => $data->getCif(),
-			'telefono'    => $data->getTelefono(),
-			'direccion'   => $data->getDireccion(),
-			'email'       => $data->getEmail(),
-			'twitter'     => $data->getTwitter(),
-			'facebook'    => $data->getFacebook(),
-			'instagram'   => $data->getInstagram(),
-			'web'         => $data->getWeb(),
-			'tipoIva'     => $data->getTipoIva(),
-			'ivaList'     => $data->getIvaList(),
-			'reList'      => $data->getReList(),
-			'marginList'  => $data->getMarginList(),
-			'ventaOnline' => $data->getVentaOnline(),
-			'urlApi'      => $data->getUrlApi(),
-			'fechaCad'    => $data->getFechaCad(),
-			'empleados'   => $data->getEmpleados()
-		];
-
-		$data_str = json_encode($app_data);
-		file_put_contents($app_data_file, $data_str);
+		$app_data = new AppData($app_data_file);
+		file_put_contents($app_data_file, $app_data->getArray());
 
 		// Logo
 		$ext  = OImage::getImageExtension($data->getLogo());
