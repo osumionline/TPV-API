@@ -27,24 +27,26 @@ class AppData {
 	function __construct(string $path) {
 		if (file_exists($path)) {
 			$data = json_decode(file_get_contents($path), true);
-			$this->setNombre($data['nombre']);
-			$this->setCif($data['cif']);
-			$this->setTelefono($data['telefono']);
-			$this->setDireccion($data['direccion']);
-			$this->setEmail($data['email']);
-			$this->setTwitter($data['twitter']);
-			$this->setFacebook($data['facebook']);
-			$this->setInstagram($data['instagram']);
-			$this->setWeb($data['web']);
-			$this->setTipoIva($data['tipoIva']);
-			$this->setIvaList($data['ivaList']);
-			$this->setReList($data['reList']);
-			$this->setMarginList($data['marginList']);
-			$this->setVentaOnline($data['ventaOnline']);
-			$this->setUrlApi($data['urlApi']);
-			$this->setFechaCad($data['fechaCad']);
-			$this->setEmpleados($data['empleados']);
-			$this->setLoaded(true);
+			if ($data !== null) {
+				$this->setNombre($data['nombre']);
+				$this->setCif($data['cif']);
+				$this->setTelefono($data['telefono']);
+				$this->setDireccion($data['direccion']);
+				$this->setEmail($data['email']);
+				$this->setTwitter($data['twitter']);
+				$this->setFacebook($data['facebook']);
+				$this->setInstagram($data['instagram']);
+				$this->setWeb($data['web']);
+				$this->setTipoIva($data['tipoIva']);
+				$this->setIvaList($data['ivaList']);
+				$this->setReList($data['reList']);
+				$this->setMarginList($data['marginList']);
+				$this->setVentaOnline($data['ventaOnline']);
+				$this->setUrlApi($data['urlApi']);
+				$this->setFechaCad($data['fechaCad']);
+				$this->setEmpleados($data['empleados']);
+				$this->setLoaded(true);
+			}
 		}
 	}
 

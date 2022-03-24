@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Service;
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Utils\PDF;
+use OsumiFramework\App\Utils\AppData;
 
 class ticketService extends OService {
 	/**
@@ -22,19 +23,17 @@ class ticketService extends OService {
 	 * @return void
 	 */
 	public function generateTicket(Venta $venta): void {
-		require_once($this->getConfig()->getDir('ofw_lib').'fpdf/fpdf.php');
-		require_once($this->getConfig()->getDir('app_utils').'PDF.php');
+		require_once $this->getConfig()->getDir('ofw_lib').'fpdf/fpdf.php';
+		require_once $this->getConfig()->getDir('app_utils').'PDF.php';
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
+
 		echo "Creo ticket de venta ".$venta->get('id')."\n";
 
 		// Cargo archivo de configuración
-		$config_file = $this->getConfig()->getDir('ofw_cache')."app_data.json";
-		if (!file_exists($config_file)) {
-			echo "ERROR: No se encuentra el archivo de configuración del sitio.\n";
-			exit();
-		}
-		$config = json_decode( file_get_contents($config_file), true);
-		if (is_null($config)) {
-			echo "ERROR: El archivo de configuración no está bien formado.\n";
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+		$app_data = new AppData($app_data_file);
+		if (!$app_data->getLoaded()) {
+			echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
 			exit();
 		}
 
@@ -49,6 +48,6 @@ class ticketService extends OService {
 		$pdf = new PDF('P', 'mm', $size_ticket);
 		$pdf->setLogo($this->getConfig()->getDir('web').'logo.jpeg');
 		$pdf->setRutaIconos($this->getConfig()->getDir('web').'iconos/');
-		$pdf->ticket($venta, $route);
+		$pdf->ticket($venta, $route, $app_data);
 	}
 }

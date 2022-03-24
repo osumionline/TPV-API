@@ -3,6 +3,9 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\App\Model\LineaVenta;
+use OsumiFramework\App\Model\TipoPago;
 
 class Venta extends OModel {
 	/**
