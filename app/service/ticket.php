@@ -37,7 +37,7 @@ class ticketService extends OService {
 			exit();
 		}
 
-		$route = $this->getConfig()->getDir('ofw_export').'prueba.pdf';
+		$route = $this->getConfig()->getDir('web').'prueba.pdf';
 		if (file_exists($route)) {
 			unlink($route);
 		}

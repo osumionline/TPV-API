@@ -6,6 +6,7 @@ use OsumiFramework\OFW\DB\OModel;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\TipoPago;
+use OsumiFramework\App\Model\Cliente;
 
 class Venta extends OModel {
 	/**
@@ -229,5 +230,41 @@ class Venta extends OModel {
 		$tp = new TipoPago();
 		$tp->find(['id' => $this->get('id_tipo_pago')]);
 		$this->setTipoPago($tp);
+	}
+
+	private ?Cliente $cliente = null;
+
+	/**
+	 * Obtiene el cliente de la venta
+	 *
+	 * @return Cliente Cliente de la venta
+	 */
+	public function getCliente(): ?Cliente {
+		if (is_null($this->cliente) && !is_null($this->get('id_cliente'))) {
+			$this->loadCliente();
+		}
+		return $this->cliente;
+	}
+
+	/**
+	 * Guarda el cliente de la venta
+	 *
+	 * @param Cliente $c Cliente de la venta
+	 *
+	 * @return void
+	 */
+	public function setCliente(Cliente $c): void {
+		$this->cliente = $c;
+	}
+
+	/**
+	 * Carga el cliente de la venta
+	 *
+	 * @return void
+	 */
+	public function loadCliente(): void {
+		$c = new Cliente();
+		$c->find(['id' => $this->get('id_cliente')]);
+		$this->setCliente($c);
 	}
 }

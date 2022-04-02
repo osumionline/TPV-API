@@ -92,4 +92,26 @@ class apiVentas extends OModule {
 		$this->getTemplate()->add('importe', $importe);
 		$this->getTemplate()->add('cambio',  $cambio);
 	}
+
+	/**
+	 * Función para obtener el detalle de una venta
+	 *
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	#[ORoute('/get-venta')]
+	public function getVenta(ORequest $req): void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status ==  'ok') {
+			
+		}
+
+		$this->getTemplate()->add('status',  $status);
+	}
 }

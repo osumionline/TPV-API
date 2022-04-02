@@ -100,7 +100,88 @@ class PDF extends \FPDF {
 	 * @return string Número formateado y con el símbolo del euro
 	 */
 	public function formatNumber(float $num): string {
-		return str_ireplace('.', ',', strval($num)).chr(128);
+		return str_ireplace('.', ',', strval($num)).' '.chr(128);
+	}
+
+	/**
+	 * Función para añadir el apartado de redes sociales / web
+	 *
+	 * @return void
+	 */
+	private function addSocial(): void {
+		$this->SetFont('Arial', '', 7);
+		$this->SetY(31);
+		$this->SetX(0);
+
+		$social = [];
+		if ($this->getAppData()->getTwitter() != '') {
+			array_push($social, ['twitter', $this->getAppData()->getTwitter()]);
+		}
+		if ($this->getAppData()->getFacebook() != '') {
+			array_push($social, ['facebook', $this->getAppData()->getFacebook()]);
+		}
+		if ($this->getAppData()->getInstagram() != '') {
+			array_push($social, ['instagram', $this->getAppData()->getInstagram()]);
+		}
+		if ($this->getAppData()->getWeb() != '') {
+			array_push($social, ['web', $this->getAppData()->getWeb()]);
+		}
+
+		$num_char = 0;
+		$gaps = 0;
+		switch (count($social)) {
+			case 4: {
+				$num_char = 11.5;
+				$gaps = 5;
+			}
+			break;
+			case 3: {
+				$num_char = 16.3;
+				$gaps = 4;
+			}
+			break;
+			case 2: {
+				$num_char = 26;
+				$gaps = 3;
+			}
+			break;
+			case 1: {
+				$num_char = 55;
+				$gaps = 2;
+			}
+			break;
+		}
+
+		$free_gap = 0;
+		foreach ($social as $item) {
+		  if (strlen($item[1]) < $num_char) {
+			$free_gap += $num_char - strlen($item[1]);
+			}
+		}
+
+		$space_in_gaps = ceil($free_gap / $gaps);
+		$data = [];
+		foreach ($social as $item) {
+			array_push($data, ['gap']);
+			array_push($data, ['item', $item[0], $item[1]]);
+		}
+
+		$x = 0;
+
+		foreach ($data as $item) {
+		  if ($item[0] == 'gap') {
+			$x += $space_in_gaps;
+			}
+		  if ($item[0] == 'item') {
+			$this->SetX($x+2);
+			$this->Image($this->getRutaIconos().'icono_'.$item[1].'.png', null, 32.5, 3);
+			$this->SetX($x);
+			$this->SetFillColor(183, 183, ($x*5));
+			//$this->Cell(20, 6, '_______'.$item[2], 0, 0, 'C', true);
+			$this->Write(6, '____'.$item[2]);
+			$x += strlen('____'.$item[2]);
+			}
+		}
 	}
 
 	/**
@@ -118,29 +199,11 @@ class PDF extends \FPDF {
 		$this->SetY(26);
 		$this->SetX(0);
 		$this->Cell(0, 6, 'Tel: '.$this->getAppData()->getTelefono().' - NIF: '.$this->getAppData()->getCif(), 0, 0, 'C');
-		$this->SetFont('Arial', '', 7);
-		$this->SetY(31);
-		$this->SetX(0);
 
-		$redes = [];
-		if ($this->getAppData()->getTwitter() != '') {
-			array_push($redes, ['twitter', $this->getAppData()->getTwitter()]);
-		}
-		if ($this->getAppData()->getFacebook() != '') {
-			array_push($redes, ['facebook', $this->getAppData()->getFacebook()]);
-		}
-		if ($this->getAppData()->getInstagram() != '') {
-			array_push($redes, ['instagram', $this->getAppData()->getInstagram()]);
-		}
-		if ($this->getAppData()->getWeb() != '') {
-			array_push($redes, ['web', $this->getAppData()->getWeb()]);
-		}
-
-		foreach ($redes as $i => $red) {
-			$this->SetX($i * 20);
-			$this->Cell(20, 6, '      '.$red[1], 0, 0, 'L');
-			$this->Image($this->getRutaIconos().'icono_'.$red[0].'.png', (1 + ($i * 20)), 32, 3.5);
-		}
+//$this->SetFont('Courier', '', 8);
+//$this->SetX(0);
+//$this->Cell(0, 6, '', 0, 0, 'C');
+		$this->addSocial();
 
 		$this->SetY(28);
 		$this->SetX(0);
@@ -166,6 +229,7 @@ class PDF extends \FPDF {
 	 * @return void
 	 */
 	private function addData(): void {
+		// Líneas de venta
 		$lineas = $this->getVenta()->getLineas();
 		foreach ($lineas as $linea) {
 			$this->SetX(0);
@@ -176,10 +240,11 @@ class PDF extends \FPDF {
 			$this->Cell(9, 3, 'TOT:', 0);
 			$this->Cell(13, 3, $this->formatNumber($linea->get('importe')), 0, '', 'R');
 			$this->Ln(4);
-			$this->Cell(47, 3, ucfirst(mb_strtolower(utf8_decode(mb_substr($linea->getArticulo()->get('nombre'), 0, 45, 'utf-8')))), 0);
+			$this->Cell(47, 3, utf8_decode(mb_substr($linea->getArticulo()->get('nombre'), 0, 45, 'utf-8')), 0);
 			$this->Ln(7);
 		}
 
+		// Total
 		$this->SetX(0);
 		$this->Cell(0, 1, '', 'T');
 		$this->Ln(2);
@@ -188,13 +253,75 @@ class PDF extends \FPDF {
 		$this->SetFont('Arial', 'B', 11);
 		$this->Cell(14, 2, 'T0TAL:', 0);
 		$this->Cell(22, 2, $this->formatNumber($this->getVenta()->get('total')), 0, '', 'R');
+		$this->Ln(6);
+		$this->SetFont('Arial','',8);
+		$this->SetX(34);
+
+		// Tipo de pago
+		if (!$this->getVenta()->get('pago_mixto')) {
+			if (is_null($this->getVenta()->get('id_tipo_pago'))) {
+				$this->Cell(16, 2, 'Efectivo:', 0, '', 'R');
+				$this->Cell(21, 2, $this->formatNumber($this->getVenta()->get('entregado')), 0, '', 'R');
+				$this->Ln(3);
+				$this->SetX(34);
+				$this->Cell(16, 2, 'CAMBIO:', 0, '', 'R');
+				$this->Cell(21, 2, $this->formatNumber($this->getVenta()->get('total') - $this->getVenta()->get('efectivo')), 0, '', 'R');
+			}
+			else {
+				$this->Cell(16, 2, 'Forma Pago:', 0, '', 'R');
+				$this->Cell(21, 2, 'Tarjeta', 0, '', 'R');
+			}
+		}
+		else {
+			$this->Cell(16, 2, 'Forma Pago:', 0, '', 'R');
+			$this->Cell(21, 2, 'Mixto', 0, '', 'R');
+		}
+
+		// Cliente
+		if (!is_null($this->getVenta()->get('id_cliente'))) {
+			$this->Ln(8);
+			$this->SetFont('Arial', 'B', 8);
+			$this->Cell(70, 3, 'Cliente: '.mb_convert_encoding($this->getVenta()->getCliente()->get('nombre_apellidos'), 'iso-8859-1', 'utf-8'), 0, '', 'C');
+		}
 	}
 
 	/**
 	 * Función para crear el pie del ticket
 	 */
 	private function addFooter(): void {
-
+		$this->SetFont('Arial', '', 7);
+		$this->Ln(6);
+		$this->SetX(0);
+		$this->Cell(0, 2, utf8_decode('I.V.A Incluído'), 0, '', 'C');
+		$this->Ln(5);
+		$this->SetX(0);
+		$this->Cell(0, 2, utf8_decode('No se admitirán cambios ni devoluciones sin ticket o sin caja'), 0, '', 'C');
+		$this->Ln(3);
+		$this->SetX(0);
+		$this->Cell(0, 2, utf8_decode('Plazo máximo de 15 días para devoluciones'), 0, '', 'C');
+		$this->Ln(3);
+		$this->SetX(0);
+		$this->Cell(0, 2, utf8_decode('No se admitirán devoluciones de complementos'), 0, '', 'C');
+		$this->Ln(3);
+		$this->SetX(0);
+		$this->Cell(0, 2, utf8_decode('Resto de condiciones en tienda'), 0, '', 'C');
+		$this->Ln(4);
+		$this->SetX(0);
+		// 14 Diciembre - 7 Enero
+		if (
+			(date('n', time()) == 12 && date('j', time())>14) ||
+			(date('n', time()) == 1  && date('j', time())<7)
+		) {
+			$this->Cell(0, 2, utf8_decode('¡FELICES FIESTAS!'), 0, '', 'C');
+			$this->Ln(4);
+			$this->Cell(0, 2, utf8_decode('GABON ZORIONTSUAK!'), 0, '', 'C');
+		}
+		else {
+			$this->Cell(0, 2, utf8_decode('GRACIAS POR SU VISITA'), 0, '', 'C');
+			$this->Ln(4);
+			$this->Cell(0, 2, utf8_decode('ESKERRIK ASKO ETORTZEAGATIK'), 0, '', 'C');
+		}
+		$this->Ln(2);
 	}
 
 	/**
