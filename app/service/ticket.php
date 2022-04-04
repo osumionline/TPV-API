@@ -16,6 +16,34 @@ class ticketService extends OService {
 	}
 
 	/**
+	 *  Función para obtener los datos de una venta
+	 *
+	 * @param int $id Id de la venta de la que obtener datos
+	 *
+	 * @return array Datos de la venta
+	 */
+	public function getVenta(int $id): array {
+		$venta = new Venta();
+		if ($venta->find(['id' => $id])) {
+			return [
+				'efectivo' => $venta->get('entregado'),
+				'cambio' =>  $venta->getCambio(),
+				'tarjeta' => $venta->get('entregado_otro'),
+				'idEmpleado' => $venta->get('id_empleado'),
+				'idTipoPago' => $venta->get('id_tipo_pago'),
+				'idCliente' => $venta->get('id_cliente'),
+				'total' => $venta->get('total'),
+				'lineas' => $venta->getLineas(),
+				'pagoMixto' => $venta->get('pago_mixto'),
+				'factura' => true
+			];
+		}
+		else {
+			return [];
+		}
+	}
+
+	/**
 	 * Función para generar el ticket de una venta
 	 *
 	 * @param Venta $venta Objeto venta con todos los datos de la venta

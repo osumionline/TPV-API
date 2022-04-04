@@ -8,6 +8,7 @@ use OsumiFramework\OFW\Routing\ORoute;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Service\ticketService;
 use OsumiFramework\App\DTO\VentaDTO;
 
 #[ORoute(
@@ -15,6 +16,12 @@ use OsumiFramework\App\DTO\VentaDTO;
 	prefix: '/api-ventas'
 )]
 class apiVentas extends OModule {
+	private ?ticketService $ticket_service = null;
+
+	function __construct() {
+		$this->ticket_service = new ticketService();
+	}
+
 	/**
 	 * Función para guardar una venta
 	 *
@@ -71,20 +78,7 @@ class apiVentas extends OModule {
 
 			$id = $venta->get('id');
 			$importe = $venta->get('total');
-			// Si no tiene tipo de pago alternativo el cambio es total - entregado
-			if (is_null($venta->get('id_tipo_pago'))) {
-				$cambio = $venta->get('total') - $venta->get('entregado');
-			}
-			else {
-				// Si el pago es mixto el cambio será el total - pagado con tipo de pago alternativo - entregado
-				if ($venta->get('pago_mixto')) {
-					$cambio = $venta->get('total') - $venta->get('entregado_otro') - $venta->get('entregado');
-				}
-				// Si no tiene pago mixto el cambio es 0 por que ha pagado todo usando un tipo de pago alternativo
-				else {
-					$cambio = 0;
-				}
-			}
+			$cambio = $venta->getCambio();
 		}
 
 		$this->getTemplate()->add('status',  $status);
@@ -103,15 +97,17 @@ class apiVentas extends OModule {
 	public function getVenta(ORequest $req): void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
+		$datos = [];
 
 		if (is_null($id)) {
 			$status = 'error';
 		}
 
 		if ($status ==  'ok') {
-			
+			$datos = $this->ticket_service->getVenta($id);
 		}
 
 		$this->getTemplate()->add('status',  $status);
+		$this->getTemplate()->addComponent('factura', 'api/factura', ['datos' => $datos, 'extra' => 'nourlencode']);
 	}
 }

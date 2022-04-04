@@ -16,11 +16,11 @@ use OsumiFramework\App\DTO\ArticuloDTO;
 	prefix: '/api-articulos'
 )]
 class apiArticulos extends OModule {
-  private ?articulosService $articulos_service = null;
+	private ?articulosService $articulos_service = null;
 
-  function __construct() {
+	function __construct() {
 		$this->articulos_service = new articulosService();
-  }
+	}
 
 	/**
 	 * Función para obtener las estadísticas de ventas o web de un artículo

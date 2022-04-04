@@ -151,6 +151,28 @@ class Venta extends OModel {
 		return 0;
 	}
 
+	/**
+	 * Obtiene el cambio de la venta
+	 *
+	 * @return float Cantidad en concepto de cambio
+	 */
+	public function getCambio(): float {
+		// Si no tiene tipo de pago alternativo el cambio es total - entregado
+		if (is_null($this->get('id_tipo_pago'))) {
+			return $this->get('total') - $this->get('entregado');
+		}
+		else {
+			// Si el pago es mixto el cambio será el total - pagado con tipo de pago alternativo - entregado
+			if ($this->get('pago_mixto')) {
+				return $this->get('total') - $this->get('entregado_otro') - $this->get('entregado');
+			}
+			// Si no tiene pago mixto el cambio es 0 por que ha pagado todo usando un tipo de pago alternativo
+			else {
+				return 0;
+			}
+		}
+	}
+
 	private ?array $lineas = null;
 
 	/**
