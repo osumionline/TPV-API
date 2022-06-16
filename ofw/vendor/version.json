@@ -1,6 +1,30 @@
 {
-	"version": "7.9.2",
+	"version": "7.9.5",
 	"updates": {
+		"7.9.5": {
+			"message": "7.9.5 - Corrección en OUpdate",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/vendor/version.json",
+				"ofw/vendor/core/oupdate.class.php"
+			]
+		},
+		"7.9.4": {
+			"message": "7.9.4 - Corrección en OUpdate",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/vendor/version.json",
+				"ofw/vendor/core/oupdate.class.php"
+			]
+		},
+		"7.9.3": {
+			"message": "7.9.3 - Corrección en OUpdate",
+			"files": [
+				"CHANGELOG.md",
+				"ofw/vendor/version.json",
+				"ofw/vendor/core/oupdate.class.php"
+			]
+		},
 		"7.9.2": {
 			"message": "7.9.2 - Corrección en OModel (booleanos)",
 			"files": [
