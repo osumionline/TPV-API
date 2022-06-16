@@ -4,12 +4,14 @@ namespace OsumiFramework\OFW\Core;
 
 use \PDO;
 use \ReflectionParameter;
+use \ReflectionClass;
 use OsumiFramework\OFW\DB\ODBContainer;
 use OsumiFramework\OFW\Cache\OCacheContainer;
 use OsumiFramework\OFW\Web\OSession;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\OFW\Routing\OUrl;
 use OsumiFramework\OFW\Tools\OTools;
+use OsumiFramework\OFW\Log\OLog;
 
 /**
  * OCore - Base class for the framework with methods to load required files and start the application
@@ -58,12 +60,14 @@ class OCore {
 		require $this->config->getDir('ofw_vendor').'cache/ocache.container.class.php';
 		require $this->config->getDir('ofw_vendor').'cache/ocache.class.php';
 		require $this->config->getDir('ofw_vendor').'core/odto.interface.php';
-		require $this->config->getDir('ofw_vendor').'core/omodule.class.php';
+		require $this->config->getDir('ofw_vendor').'core/ocomponent.class.php';
 		require $this->config->getDir('ofw_vendor').'core/oservice.class.php';
 		require $this->config->getDir('ofw_vendor').'core/oplugin.class.php';
 		require $this->config->getDir('ofw_vendor').'core/otask.class.php';
 		require $this->config->getDir('ofw_vendor').'core/otranslate.class.php';
-		require $this->config->getDir('ofw_vendor').'routing/oroute.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/omodule.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/omoduleaction.class.php';
+		require $this->config->getDir('ofw_vendor').'routing/oaction.class.php';
 		require $this->config->getDir('ofw_vendor').'routing/oroutecheck.class.php';
 		require $this->config->getDir('ofw_vendor').'routing/ourl.class.php';
 		require $this->config->getDir('ofw_vendor').'tools/oform.class.php';
@@ -145,32 +149,6 @@ class OCore {
 			}
 		}
 
-		// User services
-		if (file_exists($this->config->getDir('app_service'))) {
-			if ($model = opendir($this->config->getDir('app_service'))) {
-				while (false !== ($entry = readdir($model))) {
-					if ($entry != '.' && $entry != '..') {
-						require $this->config->getDir('app_service').$entry;
-					}
-				}
-				closedir($model);
-			}
-		}
-
-		// Filters
-		if (!$from_cli) {
-			if (file_exists($this->config->getDir('app_filter'))) {
-				if ($model = opendir($this->config->getDir('app_filter'))) {
-					while (false !== ($entry = readdir($model))) {
-						if ($entry != '.' && $entry != '..') {
-							require $this->config->getDir('app_filter').$entry;
-						}
-					}
-					closedir($model);
-				}
-			}
-		}
-
 		// Database model classes
 		if (file_exists($this->config->getDir('app_model'))) {
 			if ($model = opendir($this->config->getDir('app_model'))) {
@@ -213,20 +191,29 @@ class OCore {
 
 			// If there is a filter defined, apply it before the controller
 			if (array_key_exists('filter', $url_result) && !is_null($url_result['filter'])) {
-				$url_result[$url_result['filter']] = call_user_func(
-					"\\OsumiFramework\\App\\Filter\\".$url_result['filter'],
-					$url_result['params'],
-					$url_result['headers']
-				);
+				// Check if the filter's file exist as it is loaded per request
+				$filter_route = $this->config->getDir('app_filter').$url_result['filter'].'.filter.php';
+				if (file_exists($filter_route)) {
+					require_once $filter_route;
 
-				// If status is 'error', return 403 Forbidden
-				if ($url_result[$url_result['filter']]['status']=='error') {
-					if (array_key_exists('return', $url_result[$url_result['filter']])) {
-						OUrl::goToUrl($url_result[$url_result['filter']]['return']);
+					$url_result[$url_result['filter']] = call_user_func(
+						"\\OsumiFramework\\App\\Filter\\".$url_result['filter']."Filter",
+						$url_result['params'],
+						$url_result['headers']
+					);
+
+					// If status is 'error', return 403 Forbidden
+					if ($url_result[$url_result['filter']]['status']=='error') {
+						if (array_key_exists('return', $url_result[$url_result['filter']])) {
+							OUrl::goToUrl($url_result[$url_result['filter']]['return']);
+						}
+						else {
+							OTools::showErrorPage($url_result, '403');
+						}
 					}
-					else {
-						OTools::showErrorPage($url_result, '403');
-					}
+				}
+				else {
+					OTools::showErrorPage($url_result, '403');
 				}
 			}
 
@@ -241,28 +228,40 @@ class OCore {
 				}
 			}
 
-			$module_path = $this->config->getDir('app_module').'/'.$url_result['module'].'/'.$url_result['module'].'.php';
+			$module_path = $this->config->getDir('app_module').$url_result['module'].'/'.$url_result['module'].'.module.php';
 
 			if (file_exists($module_path)) {
 				require_once $module_path;
-				$module_name = "\\OsumiFramework\\App\\Module\\".$url_result['module'];
+				$module_name = "\\OsumiFramework\\App\\Module\\".$url_result['module'].'Module';
 				$module = new $module_name;
+				$module_attributes = OTools::getClassAttributes($module);
 
-				if (method_exists($module, $url_result['action'])) {
-					$reflection_param = new ReflectionParameter([$module_name, $url_result['action']], 0);
-					$reflection_param_type = $reflection_param->getType()->getName();
-					$req = new ORequest($url_result);
-					if (str_starts_with($reflection_param_type, 'OsumiFramework\App\DTO')) {
-						$param = new $reflection_param_type;
-						$param->load($req);
+				if (in_array($url_result['action'], $module_attributes->getActionList())) {
+					$action_path = $this->config->getDir('app_module').$url_result['module'].'/actions/'.$url_result['action'].'/'.$url_result['action'].'.action.php';
+					if (file_exists($action_path)) {
+						require_once $action_path;
+						$action_name = "\\OsumiFramework\\App\\Module\\Action\\".$url_result['action'].'Action';
+
+						$action = new $action_name;
+						$action_attributes = OTools::getClassAttributes($action);
+						$reflection_param = new ReflectionParameter([$action_name, 'run'], 0);
+						$reflection_param_type = $reflection_param->getType()->getName();
+						$req = new ORequest($url_result);
+						if (str_starts_with($reflection_param_type, 'OsumiFramework\App\DTO')) {
+							$param = new $reflection_param_type;
+							$param->load($req);
+						}
+						else {
+							$param = $req;
+						}
+
+						$action->loadAction($url_result, $action_attributes);
+						call_user_func([$action, 'run'], $param);
+						echo $action->getTemplate()->process();
 					}
 					else {
-						$param = $req;
+						OTools::showErrorPage($url_result, 'action');
 					}
-
-					$module->loadModule($url_result);
-					call_user_func([$module, $url_result['action']], $param);
-					echo $module->getTemplate()->process();
 				}
 				else {
 					OTools::showErrorPage($url_result, 'action');
@@ -279,5 +278,27 @@ class OCore {
 		if (!is_null($this->dbContainer)) {
 			$this->dbContainer->closeAllConnections();
 		}
+	}
+
+
+	public function errorHandler(\Throwable $ex): void {
+		$log = new OLog(get_class($this));
+		$params = ['message' => OTools::getMessage('ERROR_500_LABEL')];
+		if ($this->config->getEnvironment()!='prod') {
+			$params['message'] = "<strong>Error:</strong> \"".$ex->getMessage()."\"\n<strong>File:</strong> \"".$ex->getFile()."\" (Line: ".$ex->getLine().")\n\n<strong>Trace:</strong> \n";
+			foreach ($ex->getTrace() as $trace) {
+				if (array_key_exists('file', $trace)) {
+					$params['message'] .= "  <strong>File:</strong> \"".$trace['file']." (Line: ".$trace['line'].")\"\n";
+				}
+				if (array_key_exists('class', $trace)) {
+					$params['message'] .= "  <strong>Class:</strong> \"".$trace['class']."\"\n";
+				}
+				if (array_key_exists('function', $trace)) {
+					$params['message'] .= "  <strong>Function:</strong> \"".$trace['function']."\"\n\n";
+				}
+			}
+		}
+		$log->error( str_ireplace('</strong>', '', str_ireplace('<strong>', '', $params['message'])) );
+		OTools::showErrorPage($params, '500');
 	}
 }

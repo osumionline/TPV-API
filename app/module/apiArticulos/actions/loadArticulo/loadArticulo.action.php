@@ -1,0 +1,47 @@
+<?php declare(strict_types=1);
+
+namespace OsumiFramework\App\Module\Action;
+
+use OsumiFramework\OFW\Routing\OModuleAction;
+use OsumiFramework\OFW\Routing\OAction;
+use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Component\ArticuloComponent;
+
+#[OModuleAction(
+	url: '/load-articulo',
+	components: ['model/articulo']
+)]
+class loadArticuloAction extends OAction {
+	/**
+	 * Función para obtener los datos de un artículo
+	 *
+	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @return void
+	 */
+	public function run(ORequest $req):void {
+		$status = 'ok';
+		$localizador = $req->getParamInt('localizador');
+		$articulo_component = new ArticuloComponent(['articulo' => null]);
+
+		if (is_null($localizador)) {
+			$status = 'error';
+		}
+
+		if ($status=='ok') {
+			$cb = new CodigoBarras();
+			if ($cb->find(['codigo_barras'=>$localizador])) {
+				$articulo = new Articulo();
+				$articulo->find(['id' => $cb->get('id_articulo')]);
+				$articulo_component->setValue('articulo', $articulo);
+			}
+			else {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status',   $status);
+		$this->getTemplate()->add('articulo', $articulo_component);
+	}
+}
