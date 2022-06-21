@@ -5,5 +5,5 @@ namespace OsumiFramework\App\Component;
 use OsumiFramework\OFW\Core\OComponent;
 
 class MarcaListComponent extends OComponent {
-  private string $depends = 'model/marca';
+	public array $depends = ['model/marca'];
 }

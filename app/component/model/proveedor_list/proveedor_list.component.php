@@ -5,5 +5,5 @@ namespace OsumiFramework\App\Component;
 use OsumiFramework\OFW\Core\OComponent;
 
 class ProveedorListComponent extends OComponent {
-  private string $depends = 'model/proveedor';
+	public array $depends = ['model/proveedor'];
 }
