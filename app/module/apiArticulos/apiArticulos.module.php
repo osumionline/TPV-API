@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: 'getStatistics, deleteArticulo, saveArticulo, loadArticulo, searchArticulos',
+	actions: ['getStatistics', 'deleteArticulo', 'saveArticulo', 'loadArticulo', 'searchArticulos'],
 	type: 'json',
 	prefix: '/api-articulos'
 )]

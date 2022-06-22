@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: 'getCategorias',
+	actions: ['getCategorias'],
 	type: 'json',
 	prefix: '/api-categorias'
 )]
