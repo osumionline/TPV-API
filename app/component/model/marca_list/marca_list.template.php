@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\MarcaComponent;
+use OsumiFramework\App\Component\Model\MarcaComponent;
 
 foreach ($values['list'] as $i => $marca) {
 	$marca_component = new MarcaComponent([ 'marca' => $marca ]);

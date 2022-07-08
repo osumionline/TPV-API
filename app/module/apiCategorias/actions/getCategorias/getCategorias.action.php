@@ -5,12 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\CategoriasListComponent;
+use OsumiFramework\App\Component\Api\CategoriasListComponent;
 
 #[OModuleAction(
 	url: '/get-categorias',
-	services: ['categorias'],
-	components: ['api/categorias_list']
+	services: ['categorias']
 )]
 class getCategoriasAction extends OAction {
 	/**

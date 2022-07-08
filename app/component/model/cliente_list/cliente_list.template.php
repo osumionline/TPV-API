@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\ClienteComponent;
+use OsumiFramework\App\Component\Model\ClienteComponent;
 
 foreach ($values['list'] as $i => $cliente) {
 	$cliente_component = new ClienteComponent([ 'cliente' => $cliente ]);

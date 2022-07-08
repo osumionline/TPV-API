@@ -7,11 +7,10 @@ use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\Articulo;
-use OsumiFramework\App\Component\ArticuloComponent;
+use OsumiFramework\App\Component\Model\ArticuloComponent;
 
 #[OModuleAction(
-	url: '/load-articulo',
-	components: ['model/articulo']
+	url: '/load-articulo'
 )]
 class loadArticuloAction extends OAction {
 	/**

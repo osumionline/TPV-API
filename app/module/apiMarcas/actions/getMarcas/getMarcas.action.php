@@ -5,12 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\MarcaListComponent;
+use OsumiFramework\App\Component\Model\MarcaListComponent;
 
 #[OModuleAction(
 	url: '/get-marcas',
-	services: ['marcas'],
-	components: ['model/marca_list']
+	services: ['marcas']
 )]
 class getMarcasAction extends OAction {
 	/**

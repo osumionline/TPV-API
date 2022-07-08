@@ -5,13 +5,12 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\UltimasVentasComponent;
-use OsumiFramework\App\Component\TopVentasComponent;
+use OsumiFramework\App\Component\Api\UltimasVentasComponent;
+use OsumiFramework\App\Component\Api\TopVentasComponent;
 
 #[OModuleAction(
 	url: '/get-estadisticas-cliente',
-	services: ['clientes'],
-	components: ['api/ultimas_ventas', 'api/top_ventas']
+	services: ['clientes']
 )]
 class getEstadisticasClienteAction extends OAction {
 	/**

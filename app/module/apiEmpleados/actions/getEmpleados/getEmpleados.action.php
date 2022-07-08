@@ -5,12 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\EmpleadoListComponent;
+use OsumiFramework\App\Component\Model\EmpleadoListComponent;
 
 #[OModuleAction(
 	url: '/get-empleados',
-	services: ['empleados'],
-	components: ['model/empleado_list']
+	services: ['empleados']
 )]
 class getEmpleadosAction extends OAction {
 	/**

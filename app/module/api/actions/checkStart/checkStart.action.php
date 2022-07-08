@@ -5,12 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\TipoPagoListComponent;
+use OsumiFramework\App\Component\Model\TipoPagoListComponent;
 
 #[OModuleAction(
 	url: '/check-start',
-	services: ['general'],
-	components: ['model/tipo_pago_list']
+	services: ['general']
 )]
 class checkStartAction extends OAction {
 	/**

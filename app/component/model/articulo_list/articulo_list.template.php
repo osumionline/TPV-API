@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\ArticuloComponent;
+use OsumiFramework\App\Component\Model\ArticuloComponent;
 
 foreach ($values['list'] as $i => $articulo) {
 	$articulo_component = new ArticuloComponent([ 'articulo' => $articulo ]);

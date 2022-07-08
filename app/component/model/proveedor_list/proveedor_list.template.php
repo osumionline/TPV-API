@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\ProveedorComponent;
+use OsumiFramework\App\Component\Model\ProveedorComponent;
 
 foreach ($values['list'] as $i => $proveedor) {
 	$proveedor_component = new ProveedorComponent([ 'proveedor' => $proveedor ]);

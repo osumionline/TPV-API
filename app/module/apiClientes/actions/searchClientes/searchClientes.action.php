@@ -5,12 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\ClienteListComponent;
+use OsumiFramework\App\Component\Model\ClienteListComponent;
 
 #[OModuleAction(
 	url: '/search-clientes',
-	services: ['clientes'],
-	components: ['model/cliente_list']
+	services: ['clientes']
 )]
 class searchClientesAction extends OAction {
 	/**

@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\TipoPagoComponent;
+use OsumiFramework\App\Component\Model\TipoPagoComponent;
 
 foreach ($values['list'] as $i => $tipopago) {
 	$tipo_pago_component = new TipoPagoComponent([ 'tipo_pago' => $tipopago ]);
