@@ -87,4 +87,21 @@ class clientesService extends OService {
 
 		return $list;
 	}
+
+	/**
+	 * Función para borrar un cliente y limpiar sus ventas asociadas
+	 *
+	 * @param int $id_cliente Id del cliente a borrar
+	 *
+	 * @return bool Devuelve si el cliente se ha encontrado y la operación ha sido correcta
+	 */
+	public function deleteCliente(int $id_cliente): bool {
+		$cliente = new Cliente();
+		if ($cliente->find(['id' => $id_cliente])) {
+			$cliente->set('deleted_at', date('Y-m-d H:i:s', time()));
+			$cliente->save();
+			return true;
+		}
+		return false;
+	}
 }

@@ -253,7 +253,7 @@ class Venta extends OModel {
 	private ?Cliente $cliente = null;
 
 	/**
-	 * Obtiene el cliente de la venta
+	 * Obtiene el cliente de la venta. Si el cliente existe pero ha sido borrado devuelvo null para indicar que la venta no tiene cliente.
 	 *
 	 * @return Cliente Cliente de la venta
 	 */
@@ -261,7 +261,10 @@ class Venta extends OModel {
 		if (is_null($this->cliente) && !is_null($this->get('id_cliente'))) {
 			$this->loadCliente();
 		}
-		return $this->cliente;
+		if (!is_null($this->cliente->get('deleted_at'))) {
+			return $this->cliente;
+		}
+		return null;
 	}
 
 	/**

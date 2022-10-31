@@ -8,14 +8,29 @@ use OsumiFramework\OFW\Web\ORequest;
 
 #[OModuleAction(
 	url: '/delete-cliente',
-	type: 'json'
+	services: ['clientes']
 )]
 class deleteClienteAction extends OAction {
 	/**
-	 * ¡La nueva acción <strong>deleteCliente</strong> funciona!
+	 * Función para borrar un cliente
 	 *
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
 	 */
-	public function run(ORequest $req):void {}
+	public function run(ORequest $req):void {
+		$status = 'ok';
+		$id = $req->getParamInt('id');
+
+		if (is_null($id)) {
+			$status = 'error';
+		}
+
+		if ($status == 'ok') {
+			if (!$this->clientes_service->deleteCliente($id)) {
+				$status = 'error';
+			}
+		}
+
+		$this->getTemplate()->add('status', $status);
+	}
 }
