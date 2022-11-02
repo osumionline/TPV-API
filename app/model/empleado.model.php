@@ -3,6 +3,7 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\ODB;
 
 class Empleado extends OModel {
 	function __construct() {
@@ -20,7 +21,7 @@ class Empleado extends OModel {
 			],
 			'pass' => [
 				'type'    => OModel::TEXT,
-				'nullable' => false,
+				'nullable' => true,
 				'default' => null,
 				'size' => 200,
 				'comment' => 'Contraseña cifrada del empleado'
@@ -114,5 +115,48 @@ class Empleado extends OModel {
 			}
 		}
 		return false;
+	}
+
+	private ?array $roles = null;
+
+	/**
+	 * Obtiene el listado de roles de un empleado
+	 *
+	 * @return array Listado de roles
+	 */
+	public function getRoles(): array {
+		if (is_null($this->roles)) {
+			$this->loadRoles();
+		}
+		return $this->roles;
+	}
+
+	/**
+	 * Guarda la lista de roles
+	 *
+	 * @param array $r Lista de roles
+	 *
+	 * @return void
+	 */
+	public function setRoles(array $r): void {
+		$this->roles = $r;
+	}
+
+	/**
+	 * Carga la lista de roles de un empleado
+	 *
+	 * @return void
+	 */
+	public function loadRoles(): void {
+		$db = new ODB();
+		$sql = "SELECT `id_rol` FROM `empleado_rol` WHERE `id_empleado` = ?";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			array_push($list, $res['id_rol']);
+		}
+
+		$this->setRoles($list);
 	}
 }

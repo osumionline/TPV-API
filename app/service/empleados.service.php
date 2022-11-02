@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Service;
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\Empleado;
+use OsumiFramework\App\Model\EmpleadoRol;
 
 class empleadosService extends OService {
 	/**
@@ -28,9 +29,32 @@ class empleadosService extends OService {
 		while ($res=$db->next()) {
 			$empleado = new Empleado();
 			$empleado->update($res);
+			$empleado->loadRoles();
 			array_push($list, $empleado);
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Función para actualizar la lista de permisos de un empleado
+	 *
+	 * @param Empleado Empleado al que hay que actualizar la lista de permisos
+	 *
+	 * @param array Lista de permisos nueva del empleado
+	 *
+	 * @return void
+	 */
+	public function updateRoles(Empleado $empleado, array $roles): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `empleado_rol` WHERE `id_empleado` = ?";
+		$db->query($sql, [$empleado->get('id')]);
+
+		foreach ($roles as $id_rol) {
+			$er = new EmpleadoRol();
+			$er->set('id_empleado', $empleado->get('id'));
+			$er->set('id_rol', $id_rol);
+			$er->save();
+		}
 	}
 }

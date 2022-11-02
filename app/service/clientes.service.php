@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Service;
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\Cliente;
+use OsumiFramework\App\Model\Venta;
 
 class clientesService extends OService {
 	/**
@@ -65,9 +66,26 @@ class clientesService extends OService {
 	 */
 	public function getUltimasVentas(int $id_cliente): array {
 		$db = new ODB();
-		//$sql = "";
-		//$db->query($sql);
+		$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
+		$db->query($sql, [$id_cliente]);
 		$list = [];
+
+		while ($res = $db->next()) {
+			$venta = new Venta();
+			$venta->update($res);
+
+			$lineas = $venta->getLineas();
+			foreach ($lineas as $linea) {
+				array_push($list, [
+					'fecha' => $linea->get('created_at', 'd/m/Y'),
+					'localizador' => $linea->getArticulo()->get('localizador'),
+					'nombre' => $linea->getArticulo()->get('nombre'),
+					'unidades' => $linea->get('unidades'),
+					'pvp' => $linea->get('pvp'),
+					'importe' => $linea->get('importe')
+				]);
+			}
+		}
 
 		return $list;
 	}
@@ -80,10 +98,20 @@ class clientesService extends OService {
 	 * @return array Lista de los artículos más vendidos
 	 */
 	public function getTopVentas(int $id_cliente): array {
-		$db = new ODB();
-		//$sql = "";
-		//$db->query($sql);
+		$lineas = $this->getUltimasVentas($id_cliente);
 		$list = [];
+
+		foreach ($lineas as $linea) {
+			if (!array_key_exists($linea['localizador'], $list)) {
+				$list[$linea['localizador']] = [
+					'localizador' => $linea['localizador'],
+					'nombre' => $linea['nombre'],
+					'importe' => 0
+				];
+			}
+			$list[$linea['localizador']]['importe'] += $linea['importe'];
+		}
+		array_multisort(array_column($list, 'importe'), $list);
 
 		return $list;
 	}

@@ -142,7 +142,7 @@ class ClienteDTO implements ODTO{
 	}
 
 	public function isValid(): bool {
-		return (!is_null($this->getNombreApellidos()) && !is_null($this->getDniCif()));
+		return (!is_null($this->getNombreApellidos()));
 	}
 
 	public function load(ORequest $req): void {
