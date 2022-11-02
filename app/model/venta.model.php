@@ -288,4 +288,43 @@ class Venta extends OModel {
 		$c->find(['id' => $this->get('id_cliente')]);
 		$this->setCliente($c);
 	}
+
+	private ?Empleado $empleado = null;
+
+	/**
+	 * Obtiene el empleado de la venta. Si el empleado existe pero ha sido borrado devuelvo null para indicar que la venta no tiene empleado.
+	 *
+	 * @return Empleado Empleado de la venta
+	 */
+	public function getEmpleado(): ?Empleado {
+		if (is_null($this->empleado) && !is_null($this->get('id_empleado'))) {
+			$this->loadEmpleado();
+		}
+		if (!is_null($this->empleado->get('deleted_at'))) {
+			return $this->empleado;
+		}
+		return null;
+	}
+
+	/**
+	 * Guarda el empleado de la venta
+	 *
+	 * @param Empleado $e Empleado de la venta
+	 *
+	 * @return void
+	 */
+	public function setEmpleado(Empleado $e): void {
+		$this->empleado = $e;
+	}
+
+	/**
+	 * Carga el empleado de la venta
+	 *
+	 * @return void
+	 */
+	public function loadEmpleado(): void {
+		$e = new Empleado();
+		$e->find(['id' => $this->get('id_empleado')]);
+		$this->setEmpleado($e);
+	}
 }

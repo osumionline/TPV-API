@@ -57,4 +57,21 @@ class empleadosService extends OService {
 			$er->save();
 		}
 	}
+
+	/**
+	 * Función para borrar un empleado y limpiar sus ventas asociadas
+	 *
+	 * @param int $id_empleado Id del empleado a borrar
+	 *
+	 * @return bool Devuelve si el empleado se ha encontrado y la operación ha sido correcta
+	 */
+	public function deleteEmpleado(int $id_empleado): bool {
+		$empleado = new Empleado();
+		if ($empleado->find(['id' => $id_empleado])) {
+			$empleado->set('deleted_at', date('Y-m-d H:i:s', time()));
+			$empleado->save();
+			return true;
+		}
+		return false;
+	}
 }
