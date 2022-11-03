@@ -18,13 +18,6 @@ class Marca extends OModel {
 				'size' => 50,
 				'comment' => 'Nombre de la marca'
 			],
-			'id_foto' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Foto/logo de la marca',
-				'ref' => 'foto.id'
-			],
 			'direccion' => [
 				'type'    => OModel::TEXT,
 				'nullable' => true,
@@ -120,5 +113,29 @@ class Marca extends OModel {
 			$p->update($res);
 		}
 		$this->setProveedor($p);
+	}
+
+	/**
+	 * Función para obtener la url de la imagen del logo
+	 *
+	 * @return string Url de la imagen o null si no tiene
+	 */
+	public function getFoto(): ?string {
+		global $core;
+		$ruta_foto = $this->getRutaFoto();
+		if (!file_exists($ruta_foto)) {
+			return null;
+		}
+		return $core->config->getUrl('base').'/marcas/'.$this->get('id').'.webp';
+	}
+
+	/**
+	 * Obtiene la ruta física a la imagen del logo
+	 *
+	 * @return string Ruta del archivo de la imagen
+	 */
+	public function getRutaFoto(): string {
+		global $core;
+		return $core->config->getDir('web').'marcas/'.$this->get('id').'.webp';
 	}
 }

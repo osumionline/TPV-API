@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\OFW\Plugins\OImage;
 use OsumiFramework\App\Model\Marca;
 
 class marcasService extends OService {
@@ -32,5 +33,38 @@ class marcasService extends OService {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Guarda una imagen en Base64. Si no tiene formato WebP se convierte
+	 *
+	 * @param string $base64_string Imagen en formato Base64
+	 *
+	 * @param Marca $marca Marca a la que guardar la imagen
+	 *
+	 * @return void
+	 */
+	public function saveFoto(string $base64_string, Marca $marca): void {
+		$ext = OImage::getImageExtension($base64_string);
+		$ruta = OImage::saveImage($this->getConfig()->getDir('ofw_tmp'), $base64_string, strval($marca->get('id')), $ext);
+		$this->getLog()->debug('nueva foto: '.$ruta);
+		$im = new OImage();
+		$im->load($ruta);
+		$this->getLog()->debug('foto cargada en oimage');
+		// Compruebo tamaño inicial
+		$this->getLog()->debug('tamaño inicial: '.$im->getWidth());
+		if ($im->getWidth() > 1000) {
+			$this->getLog()->debug('redimensiono');
+			$im->resizeToWidth(1000);
+			$im->save($ruta, $im->getImageType());
+		}
+
+		// Guardo la imagen ya modificada como WebP
+		$im->save($marca->getRutaFoto(), IMAGETYPE_WEBP);
+		$this->getLog()->debug('Guardo nueva imagen en '.$marca->getRutaFoto());
+
+		// Borro la imagen temporal
+		$this->getLog()->debug('borro imagen temporal');
+		unlink($ruta);
 	}
 }

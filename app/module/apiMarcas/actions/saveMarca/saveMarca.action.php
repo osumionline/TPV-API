@@ -8,7 +8,8 @@ use OsumiFramework\App\DTO\MarcaDTO;
 use OsumiFramework\App\Model\Marca;
 
 #[OModuleAction(
-	url: '/save-marca'
+	url: '/save-marca',
+	services: ['marcas']
 )]
 class saveMarcaAction extends OAction {
 	/**
@@ -38,6 +39,15 @@ class saveMarcaAction extends OAction {
 			$marca->set('observaciones', urldecode($data->getObservaciones()));
 
 			$marca->save();
+
+			if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http')) {
+				$ruta = $marca->getRutaFoto();
+				// Si ya tenía una imagen, primero la borro
+				if (file_exists($ruta)) {
+					unlink($ruta);
+				}
+				$this->marcas_service->saveFoto($data->getFoto(), $marca);
+			}
 
 			$data->setId( $marca->get('id') );
 		}
