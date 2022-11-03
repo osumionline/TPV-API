@@ -24,8 +24,8 @@ class AppData {
 	private bool $fecha_cad = false;
 	private bool $empleados = false;
 
-	function __construct(string $path) {
-		if (file_exists($path)) {
+	function __construct(string $path = null) {
+		if (!is_null($path) && file_exists($path)) {
 			$data = json_decode(file_get_contents($path), true);
 			if ($data !== null) {
 				$this->setNombre($data['nombre']);
@@ -162,7 +162,7 @@ class AppData {
 		return $this->venta_online;
 	}
 	private function setUrlApi(string $url_api): void {
-		$this->urlApi = $url_api;
+		$this->url_api = $url_api;
 	}
 	public function getUrlApi(): string {
 		return $this->url_api;

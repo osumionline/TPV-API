@@ -160,8 +160,6 @@ class InstallationDTO implements ODTO{
 			$this->getNombre() != '' &&
 			$this->getCif() != '' &&
 			$this->getLogo() != '' &&
-			$this->getNombreEmpleado() != '' &&
-			$this->getPass() != '' &&
 			$this->getColor() != '' &&
 			$this->getTipoIva() != '' &&
 			count($this->getIvaList()) > 0 &&

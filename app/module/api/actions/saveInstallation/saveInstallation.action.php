@@ -7,7 +7,7 @@ use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\App\DTO\InstallationDTO;
 
 #[OModuleAction(
-	url: '/saveInstallation',
+	url: '/save-installation',
 	services: ['general']
 )]
 class saveInstallationAction extends OAction {

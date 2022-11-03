@@ -50,7 +50,7 @@ class generalService extends OService {
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
 		$app_data = new AppData($app_data_file);
 		if ($app_data->getLoaded()) {
-			return $app_data->getJSON();
+			return $app_data->getArray();
 		}
 		else {
 			return 'null';
@@ -65,20 +65,43 @@ class generalService extends OService {
 	 * @return void
 	 */
 	public function saveAppData(InstallationDTO $data): void {
+		// Ruta del archivo de configuración
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
-		$app_data = new AppData($app_data_file);
+
+		// Logo (si viene una imagen en lugar de datos, lo ignoro)
+		if (!str_starts_with($data->getLogo(), 'http')) {
+			$ext  = OImage::getImageExtension($data->getLogo());
+			// Creo una imagen temporal con lo que haya mandado
+			$ruta = OImage::saveImage($this->getConfig()->getDir('web'), $data->getLogo(), 'logo_temp', $ext);
+			$ruta_def = $this->getConfig()->getDir('web').'logo.jpg';
+
+			// Si se ha guardado correctamente, convierto la imagen que sea a formato jpg (a no ser que ya sea jpg)
+			if ($ext == 'jpg' || $ext == 'jpeg') {
+				rename($ruta, $ruta_def);
+			}
+			else {
+				if (file_exists($ruta)) {
+					$im = new OImage();
+					$im->load($ruta);
+					$im->save($ruta_def, IMAGETYPE_JPEG);
+					unlink($ruta);
+				}
+			}
+		}
+
+		// Empleado (si ya existe el archivo de configuración es que se están editando sus datos y no hay que crear ningún empleado nuevo)
+		if (!file_exists($app_data_file)) {
+			$empleado = new Empleado();
+			$empleado->set('nombre', $data->getNombreEmpleado());
+			$empleado->set('pass', password_hash($data->getPass(), PASSWORD_BCRYPT));
+			$empleado->set('color', str_ireplace('#', '', $data->getColor()));
+			$empleado->save();
+		}
+
+		// Guardo datos de configuración
+		$app_data = new AppData();
+		$app_data->fromDTO($data);
 		file_put_contents($app_data_file, $app_data->getArray());
-
-		// Logo
-		$ext  = OImage::getImageExtension($data->getLogo());
-		$ruta = OImage::saveImage($this->getConfig()->getDir('web'), $data->getLogo(), 'logo', $ext);
-
-		// Empleado
-		$empleado = new Empleado();
-		$empleado->set('nombre', $data->getNombreEmpleado());
-		$empleado->set('pass', password_hash($data->getPass(), PASSWORD_BCRYPT));
-		$empleado->set('color', str_ireplace('#', '', $data->getColor()));
-		$empleado->save();
 	}
 
 	/**
