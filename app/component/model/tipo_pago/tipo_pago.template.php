@@ -7,6 +7,6 @@ null
 	"slug": "<?php echo urlencode($values['tipo_pago']->get('slug')) ?>",
 	"afectaCaja": <?php echo $values['tipo_pago']->get('afecta_caja') ? 'true' : 'false' ?>,
 	"orden": <?php echo $values['tipo_pago']->get('orden') ?>,
-	"fisico": <?php echo $values['tipo_pago']->get('fisico') ? 'true' : 'false' ?>,
+	"fisico": <?php echo $values['tipo_pago']->get('fisico') ? 'true' : 'false' ?>
 }
 <?php endif ?>

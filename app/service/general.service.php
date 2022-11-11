@@ -203,7 +203,7 @@ class generalService extends OService {
 				$ret['operaciones_otros']++;
 				$ret['descuento_otros']+= $venta->getVentaDescuento();
 			}
-			if (!is_null($venta->get('id_tipo_pago')) {
+			if (!is_null($venta->get('id_tipo_pago'))) {
 				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['operaciones']++;
 				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_total'] += $venta->getVentaOtros();
 				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_descuento'] += $venta->getVentaDescuento();;

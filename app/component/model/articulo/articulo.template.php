@@ -27,6 +27,7 @@ null
 	"observaciones": "<?php echo is_null($values['articulo']->get('observaciones')) ? 'null' : urlencode($values['articulo']->get('observaciones')) ?>",
 	"mostrarObsPedidos": <?php echo $values['articulo']->get('mostrar_obs_pedidos') ? 'true' : 'false' ?>,
 	"mostrarObsVentas": <?php echo $values['articulo']->get('mostrar_obs_ventas') ? 'true' : 'false' ?>,
+	"accesoDirecto": <?php echo is_null($values['articulo']->get('acceso_directo')) ? 'null' : $values['articulo']->get('acceso_directo') ?>,
 	"codigosBarras": [
 	<?php foreach ($values['articulo']->getCodigosBarras() as $i => $cod_barras): ?>
 			{

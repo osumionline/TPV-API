@@ -160,6 +160,12 @@ class Articulo extends OModel {
 				'type'    => OModel::BOOL,
 				'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
 			],
+			'acceso_directo' => [
+				'type'     => OModel::NUM,
+				'nullable' => true,
+				'default'  => null,
+				'comment'  => 'Acceso directo al artículo'
+			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
