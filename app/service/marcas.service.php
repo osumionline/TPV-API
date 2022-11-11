@@ -67,4 +67,21 @@ class marcasService extends OService {
 		$this->getLog()->debug('borro imagen temporal');
 		unlink($ruta);
 	}
+
+	/**
+	 * Función para borrar una marca
+	 *
+	 * @param int $id_marca Id de la marca a borrar
+	 *
+	 * @return bool Devuelve si la marca se ha encontrado y la operación ha sido correcta
+	 */
+	public function deleteMarca(int $id_marca): bool {
+		$marca = new Marca();
+		if ($marca->find(['id' => $id_marca])) {
+			$marca->set('deleted_at', date('Y-m-d H:i:s', time()));
+			$marca->save();
+			return true;
+		}
+		return false;
+	}
 }

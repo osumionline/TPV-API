@@ -292,11 +292,14 @@ class Articulo extends OModel {
 	/**
 	 * Obtiene la marca a la que pertenece el artículo
 	 *
-	 * @return Marca Marca a la que pertenece el artículo
+	 * @return Marca Marca a la que pertenece el artículo, a no ser que se haya borrado
 	 */
-	public function getMarca(): Marca {
+	public function getMarca(): ?Marca {
 		if (is_null($this->marca)) {
 			$this->loadMarca();
+		}
+		if (is_null($this->marca->get('deleted_at'))){
+			return null;
 		}
 		return $this->marca;
 	}
@@ -364,11 +367,14 @@ class Articulo extends OModel {
 	/**
 	 * Obtiene el proveedor al que pertenece el artículo
 	 *
-	 * @return Proveedor Proveedor al que pertenece el artículo
+	 * @return Proveedor Proveedor al que pertenece el artículo, a no ser que se haya borrado
 	 */
-	public function getProveedor(): Proveedor {
+	public function getProveedor(): ?Proveedor {
 		if (is_null($this->proveedor)) {
 			$this->loadProveedor();
+		}
+		if (is_null($this->proveedor->get('deleted_at'))){
+			return null;
 		}
 		return $this->proveedor;
 	}

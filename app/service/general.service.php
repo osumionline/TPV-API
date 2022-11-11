@@ -129,21 +129,25 @@ class generalService extends OService {
 	 *
 	 * @param Caja $caja Caja de la que obtener el período a comprobar
 	 *
-	 * @return float Importe total sacado de caja en el período indicado
+	 * @return array Importe total y número de retiradas de caja en el período indicado
 	 */
-	public function getPagosCajaDia(Caja $caja): float {
+	public function getPagosCajaDia(Caja $caja): array {
 		$db = new ODB();
 		$sql = "SELECT * FROM `pago_caja` WHERE `created_at` BETWEEN ? AND ?";
 		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $caja->get('cierre', 'Y-m-d H:i:s')]);
-		$importe = 0;
+		$ret = [
+			'importe' => 0,
+			'num' => 0
+		];
 
 		while ($res = $db->next()) {
 			$pc = new PagoCaja();
 			$pc->update($res);
-			$importe += $pc->get('importe');
+			$ret['importe'] += $pc->get('importe');
+			$ret['num']++;
 		}
 
-		return $importe;
+		return $ret;
 	}
 
 	/**
@@ -165,17 +169,45 @@ class generalService extends OService {
 			array_push($list, $venta);
 		}
 
+		$tipos_pago = $this->getTiposPago();
+
 		$ret = [
 			'ventas' => 0,
 			'beneficios' => 0,
 			'venta_efectivo' => 0,
-			'venta_otros' => 0
+			'operaciones_efectivo' => 0,
+			'descuento_efectivo' => 0,
+			'venta_otros' => 0,
+			'operaciones_otros' => 0,
+			'descuento_otros' => 0,
+			'tipos_pago' => []
 		];
+		foreach ($tipos_pago as $tp) {
+			$ret['tipos_pago']['tipo_pago_'.$tp->get('id')] = [
+				'id' => $tp->get('id'),
+				'operaciones' => 0,
+				'importe_total' => 0,
+				'importe_descuento' => 0
+			];
+		}
 		foreach ($list as $venta) {
 			$ret['ventas'] += $venta->get('total');
 			$ret['beneficios'] += $venta->getBeneficio();
 			$ret['venta_efectivo'] += $venta->getVentaEfectivo();
 			$ret['venta_otros'] += $venta->getVentaOtros();
+			if ($venta->getVentaEfectivo() != 0) {
+				$ret['operaciones_efectivo']++;
+				$ret['descuento_efectivo']+= $venta->getVentaDescuento();
+			}
+			if ($venta->getVentaOtros() != 0) {
+				$ret['operaciones_otros']++;
+				$ret['descuento_otros']+= $venta->getVentaDescuento();
+			}
+			if (!is_null($venta->get('id_tipo_pago')) {
+				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['operaciones']++;
+				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_total'] += $venta->getVentaOtros();
+				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_descuento'] += $venta->getVentaDescuento();;
+			}
 		}
 
 		return $ret;

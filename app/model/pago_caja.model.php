@@ -24,6 +24,12 @@ class PagoCaja extends OModel {
 				'default' => '0',
 				'comment' => 'Importe de dinero sacado de la caja para realizar el pago'
 			],
+			'descripcion' => [
+				'type'     => OModel::LONGTEXT,
+				'nullable' => true,
+				'default'  => null,
+				'comment' => 'Descripción larga del concepto del pago'
+			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'

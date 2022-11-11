@@ -20,7 +20,7 @@ null
 	"stockMax": <?php echo $values['articulo']->get('stock_max') ?>,
 	"loteOptimo": <?php echo $values['articulo']->get('lote_optimo') ?>,
 	"ventaOnline": <?php echo $values['articulo']->get('venta_online') ? 'true' : 'false' ?>,
-	"fechaCaducidad": <?php echo is_null($values['articulo']->get('fecha_caducidad')) ? 'null' : '"'.$values['articulo']->get('fecha_caducidad', 'm-y').'"' ?>,
+	"fechaCaducidad": <?php echo is_null($values['articulo']->get('fecha_caducidad')) ? 'null' : '"'.$values['articulo']->get('fecha_caducidad', 'm/y').'"' ?>,
 	"mostrarEnWeb": <?php echo $values['articulo']->get('mostrar_en_web') ? 'true' : 'false' ?>,
 	"descCorta": "<?php echo is_null($values['articulo']->get('desc_corta')) ? 'null' : urlencode($values['articulo']->get('desc_corta')) ?>",
 	"descripcion": "<?php echo is_null($values['articulo']->get('descripcion')) ? 'null' : urlencode($values['articulo']->get('descripcion')) ?>",

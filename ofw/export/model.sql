@@ -1,5 +1,27 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
+CREATE TABLE `articulo_foto` (
+  `id_foto` INT(11) NOT NULL COMMENT 'Id único para cada foto',
+  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece la foto',
+  `orden` INT(11) NOT NULL DEFAULT '0' COMMENT 'Orden de la foto entre todas las fotos de un artículo',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id_foto`,`id_articulo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `empleado` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada empleado',
+  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre del empleado',
+  `pass` VARCHAR(200) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Contraseña cifrada del empleado',
+  `color` VARCHAR(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Código de color hexadecimal para distinguir a cada empleado',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  `deleted_at` DATETIME NULL COMMENT 'Fecha de baja del empleado',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE `empleado_rol` (
   `id_empleado` INT(11) NOT NULL COMMENT 'Id del empleado',
   `id_rol` INT(11) NOT NULL COMMENT 'Id del permiso que se le otorga al empleado',
@@ -9,13 +31,26 @@ CREATE TABLE `empleado_rol` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `articulo_foto` (
-  `id_foto` INT(11) NOT NULL COMMENT 'Id único para cada foto',
-  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece la foto',
-  `orden` INT(11) NOT NULL DEFAULT '0' COMMENT 'Orden de la foto entre todas las fotos de un artículo',
+CREATE TABLE `caja` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada cierre de caja',
+  `apertura` DATETIME NOT NULL COMMENT 'Fecha de apertura de la caja',
+  `cierre` DATETIME NULL COMMENT 'Fecha de cierre de la caja',
+  `ventas` FLOAT NULL COMMENT 'Importe total de ventas para el período de la caja',
+  `beneficios` FLOAT NULL COMMENT 'Importe total de beneficios para el período de la caja',
+  `venta_efectivo` FLOAT NULL COMMENT 'Importe total vendido en efectivo',
+  `operaciones_efectivo` INT(11) NOT NULL DEFAULT '0' COMMENT 'Número de operaciones hechas en efectivo',
+  `descuento_efectivo` FLOAT NULL COMMENT 'Descuento total de las ventas en efectivo',
+  `venta_otros` FLOAT NULL COMMENT 'Importe total vendido mediante tipos de pago alternativos',
+  `operaciones_otros` INT(11) NOT NULL DEFAULT '0' COMMENT 'Número de operaciones hechas mediante tipos de pago alternativos',
+  `descuento_otros` FLOAT NULL COMMENT 'Descuento total de las ventas hechas mediante tipos de pago alternativos',
+  `importe_pagos_caja` FLOAT NULL COMMENT 'Importe total en pagos de caja',
+  `num_pagos_caja` INT(11) NOT NULL DEFAULT '0' COMMENT 'Número de pagos de caja',
+  `importe_apertura` FLOAT NULL COMMENT 'Importe total en efectivo en la caja al momento de la apertura',
+  `importe_cierre` FLOAT NULL COMMENT 'Importe total en efectivo en la caja al momento del cierre',
+  `importe_cierre_real` FLOAT NULL COMMENT 'Importe real en efectivo en la caja al momento del cierre',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id_foto`,`id_articulo`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -30,15 +65,12 @@ CREATE TABLE `codigo_barras` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `empleado` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada empleado',
-  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre del empleado',
-  `pass` VARCHAR(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Contraseña cifrada del empleado',
-  `color` VARCHAR(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Código de color hexadecimal para distinguir a cada empleado',
+CREATE TABLE `proveedor_marca` (
+  `id_proveedor` INT(11) NOT NULL COMMENT 'Id del proveedor',
+  `id_marca` INT(11) NOT NULL COMMENT 'Id de la marca',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  `deleted_at` DATETIME NULL COMMENT 'Fecha de baja del empleado',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id_proveedor`,`id_marca`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -46,22 +78,6 @@ CREATE TABLE `categoria` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada categoría',
   `id_padre` INT(11) NULL COMMENT 'Id de la categoría padre en caso de ser una subcategoría',
   `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre de la categoría',
-  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
-  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-CREATE TABLE `caja` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada cierre de caja',
-  `apertura` DATETIME NOT NULL COMMENT 'Fecha de apertura de la caja',
-  `cierre` DATETIME NULL COMMENT 'Fecha de cierre de la caja',
-  `ventas` FLOAT NULL COMMENT 'Importe total de ventas para el período de la caja',
-  `beneficios` FLOAT NULL COMMENT 'Importe total de beneficios para el período de la caja',
-  `venta_efectivo` FLOAT NULL COMMENT 'Importe total vendido en efectivo',
-  `venta_otros` FLOAT NULL COMMENT 'Importe total vendido mediante tipos de pago alternativos',
-  `importe_apertura` FLOAT NULL COMMENT 'Importe total en efectivo en la caja al momento de la apertura',
-  `importe_cierre` FLOAT NULL COMMENT 'Importe total en efectivo en la caja al momento del cierre',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id`)
@@ -82,12 +98,16 @@ CREATE TABLE `comercial` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `proveedor_marca` (
-  `id_proveedor` INT(11) NOT NULL COMMENT 'Id del proveedor',
-  `id_marca` INT(11) NOT NULL COMMENT 'Id de la marca',
+CREATE TABLE `caja_tipo` (
+  `id_caja` INT(11) NOT NULL COMMENT 'Id de la caja del desglose',
+  `id_tipo_pago` INT(11) NOT NULL COMMENT 'Id del tipo de pago',
+  `operaciones` INT(11) NOT NULL DEFAULT '0' COMMENT 'Numero de operaciones por tipo de pago',
+  `importe_total` FLOAT NULL COMMENT 'Importe del tipo de pago',
+  `importe_real` FLOAT NULL COMMENT 'Importe real del tipo de pago',
+  `importe_descuento` FLOAT NULL COMMENT 'Importe total de descuentos para un tipo de pago',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id_proveedor`,`id_marca`)
+  PRIMARY KEY (`id_caja`,`id_tipo_pago`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -210,6 +230,7 @@ CREATE TABLE `tipo_pago` (
   `slug` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Slug del nombre del tipo de pago',
   `afecta_caja` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Indica si el tipo de pago afecta a la caja',
   `orden` INT(11) NOT NULL COMMENT 'Orden del tipo de pago en la lista completa',
+  `fisico` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Indica si el tipo de pago es para tienda física',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   `deleted_at` DATETIME NULL COMMENT 'Fecha de borrado del tipo de pago',
@@ -228,7 +249,6 @@ CREATE TABLE `foto` (
 CREATE TABLE `marca` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada marca',
   `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre de la marca',
-  `id_foto` INT(11) NOT NULL COMMENT 'Foto/logo de la marca',
   `direccion` VARCHAR(200) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Dirección física de la marca',
   `telefono` VARCHAR(15) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Teléfono de la marca',
   `email` VARCHAR(100) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Dirección de email de la marca',
@@ -245,15 +265,11 @@ CREATE TABLE `pago_caja` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada pago de caja',
   `concepto` VARCHAR(250) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Concepto del pago',
   `importe` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe de dinero sacado de la caja para realizar el pago',
+  `descripcion` TEXT COLLATE utf8mb4_unicode_ci NULL COMMENT 'Descripción larga del concepto del pago',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-ALTER TABLE `empleado_rol`
-  ADD KEY `fk_empleado_rol_empleado_idx` (`id_empleado`),
-  ADD CONSTRAINT `fk_empleado_rol_empleado` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `articulo_foto`
@@ -263,14 +279,14 @@ ALTER TABLE `articulo_foto`
   ADD CONSTRAINT `fk_articulo_foto_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
+ALTER TABLE `empleado_rol`
+  ADD KEY `fk_empleado_rol_empleado_idx` (`id_empleado`),
+  ADD CONSTRAINT `fk_empleado_rol_empleado` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
 ALTER TABLE `codigo_barras`
   ADD KEY `fk_codigo_barras_articulo_idx` (`id_articulo`),
   ADD CONSTRAINT `fk_codigo_barras_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-
-ALTER TABLE `comercial`
-  ADD KEY `fk_comercial_proveedor_idx` (`id_proveedor`),
-  ADD CONSTRAINT `fk_comercial_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `proveedor_marca`
@@ -278,6 +294,18 @@ ALTER TABLE `proveedor_marca`
   ADD KEY `fk_proveedor_marca_marca_idx` (`id_marca`),
   ADD CONSTRAINT `fk_proveedor_marca_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_proveedor_marca_marca` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+ALTER TABLE `comercial`
+  ADD KEY `fk_comercial_proveedor_idx` (`id_proveedor`),
+  ADD CONSTRAINT `fk_comercial_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+ALTER TABLE `caja_tipo`
+  ADD KEY `fk_caja_tipo_caja_idx` (`id_caja`),
+  ADD KEY `fk_caja_tipo_tipo_pago_idx` (`id_tipo_pago`),
+  ADD CONSTRAINT `fk_caja_tipo_caja` FOREIGN KEY (`id_caja`) REFERENCES `caja` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_caja_tipo_tipo_pago` FOREIGN KEY (`id_tipo_pago`) REFERENCES `tipo_pago` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `venta`
@@ -306,11 +334,6 @@ ALTER TABLE `linea_venta`
   ADD KEY `fk_linea_venta_articulo_idx` (`id_articulo`),
   ADD CONSTRAINT `fk_linea_venta_venta` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_linea_venta_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-
-ALTER TABLE `marca`
-  ADD KEY `fk_marca_foto_idx` (`id_foto`),
-  ADD CONSTRAINT `fk_marca_foto` FOREIGN KEY (`id_foto`) REFERENCES `foto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

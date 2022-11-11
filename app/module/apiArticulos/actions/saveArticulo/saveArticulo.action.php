@@ -37,7 +37,7 @@ class saveArticuloAction extends OAction {
 			}
 			$fecha_caducidad = null;
 			if (!is_null($data->getFechaCaducidad())) {
-				$fec_cad_data = explode('-', $data->getFechaCaducidad());
+				$fec_cad_data = explode('/', $data->getFechaCaducidad());
 				$time = mktime(0, 0, 0, intval($fec_cad_data[0]), 1, (2000 + intval($fec_cad_data[1])));
 				$fecha_caducidad = date('Y-m-d H:i:s', $time);
 			}

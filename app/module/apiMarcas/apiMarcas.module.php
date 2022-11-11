@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['getMarcas', 'saveMarca'],
+	actions: ['getMarcas', 'saveMarca', 'deleteMarca'],
 	type: 'json',
 	prefix: '/api-marcas'
 )]

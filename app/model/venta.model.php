@@ -126,6 +126,19 @@ class Venta extends OModel {
 	}
 
 	/**
+	 * Obtiene la cantidad descontada en la venta
+	 *
+	 * @return float Cantidad descontada en la venta
+	 */
+	public function getVentaDescuento(): float {
+		$descuento = 0;
+		foreach ($this->getLineas() as $linea) {
+			$descuento += ($linea->get('pvp') * $linea->get('descuento')) + $linea->get('importe_descuento');
+		}
+		return $descuento;
+	}
+
+	/**
 	 * Obtiene la cantidad pagada con otros tipos de pago en la venta
 	 *
 	 * @return float Cantidad pagada con otros tipos de pago en la venta

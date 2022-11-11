@@ -37,6 +37,12 @@ class TipoPago extends OModel {
 				'default'  => null,
 				'comment'  => 'Orden del tipo de pago en la lista completa'
 			],
+			'fisico' => [
+				'type'    => OModel::BOOL,
+				'nullable' => false,
+				'default' => true,
+				'comment' => 'Indica si el tipo de pago es para tienda física'
+			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
