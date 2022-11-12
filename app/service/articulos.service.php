@@ -202,4 +202,29 @@ class articulosService extends OService {
 			}
 		}
 	}
+
+	/**
+	 * Función para obtener la lista de accesos directos
+	 *
+	 * @return array Lista de accesos directos
+	 */
+	public function getAccesosDirectos(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `articulo` WHERE `acceso_directo` IS NOT NULL ORDER BY `acceso_directo` ASC";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res = $db->next()) {
+			$articulo = new Articulo();
+			$articulo->update($res);
+
+			array_push($ret, [
+				'id' => $articulo->get('id'),
+				'acceso_directo' => $articulo->get('acceso_directo'),
+				'nombre' => $articulo->get('nombre')
+			]);
+		}
+
+		return $ret;
+	}
 }

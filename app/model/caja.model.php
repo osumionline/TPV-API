@@ -25,19 +25,19 @@ class Caja extends OModel {
 			],
 			'ventas' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total de ventas para el período de la caja'
 			],
 			'beneficios' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total de beneficios para el período de la caja'
 			],
 			'venta_efectivo' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total vendido en efectivo'
 			],
@@ -49,13 +49,13 @@ class Caja extends OModel {
 			],
 			'descuento_efectivo' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Descuento total de las ventas en efectivo'
 			],
 			'venta_otros' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total vendido mediante tipos de pago alternativos'
 			],
@@ -67,13 +67,13 @@ class Caja extends OModel {
 			],
 			'descuento_otros' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Descuento total de las ventas hechas mediante tipos de pago alternativos'
 			],
 			'importe_pagos_caja' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total en pagos de caja'
 			],
@@ -85,19 +85,19 @@ class Caja extends OModel {
 			],
 			'importe_apertura' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total en efectivo en la caja al momento de la apertura'
 			],
 			'importe_cierre' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe total en efectivo en la caja al momento del cierre'
 			],
 			'importe_cierre_real' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => true,
+				'nullable' => false,
 				'default' => 0,
 				'comment' => 'Importe real en efectivo en la caja al momento del cierre'
 			],

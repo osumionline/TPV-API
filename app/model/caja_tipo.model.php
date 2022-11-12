@@ -9,33 +9,35 @@ class CajaTipo extends OModel {
 		$model = [
 			'id_caja' => [
 				'type'    => OModel::PK,
-        'ref'     => 'caja.id',
+        		'ref'     => 'caja.id',
+				'incr'    => false,
 				'comment' => 'Id de la caja del desglose'
 			],
 			'id_tipo_pago' => [
-        'type'    => OModel::PK,
-        'ref'     => 'tipo_pago.id',
+        		'type'    => OModel::PK,
+        		'ref'     => 'tipo_pago.id',
+				'incr'    => false,
 				'comment' => 'Id del tipo de pago'
 			],
-      'operaciones' => [
+			'operaciones' => [
 				'type'     => OModel::NUM,
 				'nullable' => false,
 				'default'  => 0,
 				'comment'  => 'Numero de operaciones por tipo de pago'
 			],
-      'importe_total' => [
+			'importe_total' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => 0,
 				'comment' => 'Importe del tipo de pago'
 			],
-      'importe_real' => [
+			'importe_real' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => 0,
 				'comment' => 'Importe real del tipo de pago'
 			],
-      'importe_descuento' => [
+			'importe_descuento' => [
 				'type'    => OModel::FLOAT,
 				'nullable' => true,
 				'default' => 0,

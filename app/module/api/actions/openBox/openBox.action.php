@@ -76,7 +76,7 @@ class openBoxAction extends OAction {
 				foreach ($datos['tipos_pago'] as $tp) {
 					$ct = new CajaTipo();
 					$ct->set('id_caja', $previous_caja->get('id'));
-					$ct->set('id_tipo_caja', $tp['id']);
+					$ct->set('id_tipo_pago', $tp['id']);
 					$ct->set('operaciones', $tp['operaciones']);
 					$ct->set('importe_total', $tp['importe_total']);
 					$ct->set('importe_descuento', $tp['importe_descuento']);
