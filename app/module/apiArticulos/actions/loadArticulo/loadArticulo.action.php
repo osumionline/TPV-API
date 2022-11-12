@@ -29,14 +29,19 @@ class loadArticuloAction extends OAction {
 		}
 
 		if ($status=='ok') {
-			$cb = new CodigoBarras();
-			if ($cb->find(['codigo_barras'=>$localizador])) {
-				$articulo = new Articulo();
-				$articulo->find(['id' => $cb->get('id_articulo')]);
+			$articulo = new Articulo();
+			if ($articulo->find(['acceso_directo' => $localizador])) {
 				$articulo_component->setValue('articulo', $articulo);
 			}
 			else {
-				$status = 'error';
+				$cb = new CodigoBarras();
+				if ($cb->find(['codigo_barras'=>$localizador])) {
+					$articulo->find(['id' => $cb->get('id_articulo')]);
+					$articulo_component->setValue('articulo', $articulo);
+				}
+				else {
+					$status = 'error';
+				}
 			}
 		}
 
