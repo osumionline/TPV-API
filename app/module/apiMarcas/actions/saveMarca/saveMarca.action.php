@@ -6,6 +6,8 @@ use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\App\DTO\MarcaDTO;
 use OsumiFramework\App\Model\Marca;
+use OsumiFramework\App\Model\Proveedor;
+use OsumiFramework\App\Model\ProveedorMarca;
 
 #[OModuleAction(
 	url: '/save-marca',
@@ -47,6 +49,33 @@ class saveMarcaAction extends OAction {
 					unlink($ruta);
 				}
 				$this->marcas_service->saveFoto($data->getFoto(), $marca);
+			}
+
+			// Si tiene el check de crear proveedor, creo uno nuevo con los mismos datos de la marca
+			if ($data->getCrearProveeddor()) {
+				$proveedor = new Proveedor();
+				$proveedor->set('nombre',        urldecode($data->getNombre()));
+				$proveedor->set('direccion',     urldecode($data->getDireccion()));
+				$proveedor->set('telefono',      urldecode($data->getTelefono()));
+				$proveedor->set('email',         urldecode($data->getEmail()));
+				$proveedor->set('web',           urldecode($data->getWeb()));
+				$proveedor->set('observaciones', urldecode($data->getObservaciones()));
+
+				$proveedor->save();
+
+				// Si la marca tiene foto, se la copio al proveedor
+				if (file_exists($marca->getRutaFoto())) {
+					if (file_exists($proveedor->getRutaFoto())) {
+						unlink($proveedor->getRutaFoto());
+					}
+					copy($marca->getRutaFoto(), $proveedor->getRutaFoto());
+				}
+
+				// Asocio la marca al proveedor recien creaddo
+				$pm = new ProveedorMarca();
+				$pm->set('id_proveedor', $proveedor->get('id'));
+				$pm->set('id_marca',     $marca->get('id'));
+				$pm->save();
 			}
 
 			$data->setId( $marca->get('id') );

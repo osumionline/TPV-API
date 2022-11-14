@@ -40,6 +40,15 @@ class saveProveedorAction extends OAction {
 
 			$proveedor->save();
 
+			if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http') && !str_starts_with($data->getFoto(), '/')) {
+				$ruta = $proveedor->getRutaFoto();
+				// Si ya tenía una imagen, primero la borro
+				if (file_exists($ruta)) {
+					unlink($ruta);
+				}
+				$this->proveedores_service->saveFoto($data->getFoto(), $proveedor);
+			}
+
 			$this->proveedores_service->updateProveedoresMarcas($proveedor->get('id'), $data->getMarcas());
 
 			$data->setId( $proveedor->get('id') );

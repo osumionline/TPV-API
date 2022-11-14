@@ -113,7 +113,7 @@ function __construct() {
 	 */
 	public function loadMarcas(): void {
 		$db = new ODB();
-		$sql = "SELECT * FROM `marca` WHERE `id` IN (SELECT `id_marca` FROM `proveedor_marca` WHERE `id_proveedor` = ?)";
+		$sql = "SELECT * FROM `marca` WHERE `id` IN (SELECT `id_marca` FROM `proveedor_marca` WHERE `id_proveedor` = ?) AND `deleted_at` IS NULL";
 		$db->query($sql, [$this->get('id')]);
 		$list = [];
 
@@ -174,7 +174,7 @@ function __construct() {
 	 */
 	public function loadComerciales(): void {
 		$db = new ODB();
-		$sql = "SELECT * FROM `comercial` WHERE `id_proveedor` = ?";
+		$sql = "SELECT * FROM `comercial` WHERE `id_proveedor` = ? AND `deleted_at` IS NULL";
 		$db->query($sql, [$this->get('id')]);
 		$list = [];
 
@@ -185,5 +185,29 @@ function __construct() {
 		}
 
 		$this->setComerciales($list);
+	}
+
+	/**
+	 * Función para obtener la url de la imagen del logo
+	 *
+	 * @return string Url de la imagen o null si no tiene
+	 */
+	public function getFoto(): ?string {
+		global $core;
+		$ruta_foto = $this->getRutaFoto();
+		if (!file_exists($ruta_foto)) {
+			return null;
+		}
+		return $core->config->getUrl('base').'/proveedores/'.$this->get('id').'.webp';
+	}
+
+	/**
+	 * Obtiene la ruta física a la imagen del logo
+	 *
+	 * @return string Ruta del archivo de la imagen
+	 */
+	public function getRutaFoto(): string {
+		global $core;
+		return $core->config->getDir('web').'proveedores/'.$this->get('id').'.webp';
 	}
 }

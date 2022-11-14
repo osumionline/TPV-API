@@ -15,6 +15,7 @@ class MarcaDTO implements ODTO{
   private ?string $email = '';
   private ?string $web = '';
   private ?string $observaciones = '';
+  private ?bool $crear_proveedor = false;
 
 	public function getId(): ?int {
 		return $this->id;
@@ -22,53 +23,59 @@ class MarcaDTO implements ODTO{
 	public function setId(?int $id): void {
 		$this->id = $id;
 	}
-  public function getNombre(): string {
+	public function getNombre(): string {
 		return $this->nombre;
 	}
 	private function setNombre(string $nombre): void {
 		$this->nombre = $nombre;
 	}
-  public function getIdFoto(): ?int {
+	public function getIdFoto(): ?int {
 		return $this->id_foto;
 	}
 	public function setIdFoto(?int $id_foto): void {
 		$this->id_foto = $id_foto;
 	}
-  public function getFoto(): ?string {
+	public function getFoto(): ?string {
 		return $this->foto;
 	}
 	private function setFoto(?string $foto): void {
 		$this->foto = $foto;
 	}
-  public function getDireccion(): ?string {
+	public function getDireccion(): ?string {
 		return $this->direccion;
 	}
 	private function setDireccion(?string $direccion): void {
 		$this->direccion = $direccion;
 	}
-  public function getTelefono(): ?string {
+	public function getTelefono(): ?string {
 		return $this->telefono;
 	}
 	private function setTelefono(?string $telefono): void {
 		$this->telefono = $telefono;
 	}
-  public function getEmail(): ?string {
+	public function getEmail(): ?string {
 		return $this->email;
 	}
 	private function setEmail(?string $email): void {
 		$this->email = $email;
 	}
-  public function getWeb(): ?string {
+	public function getWeb(): ?string {
 		return $this->web;
 	}
 	private function setWeb(?string $web): void {
 		$this->web = $web;
 	}
-  public function getObservaciones(): ?string {
+	public function getObservaciones(): ?string {
 		return $this->observaciones;
 	}
 	private function setObservaciones(?string $observaciones): void {
 		$this->observaciones = $observaciones;
+	}
+	public function getCrearProveeddor(): ?bool {
+		return $this->crear_proveedor;
+	}
+	private function setCrearProveeddor(?bool $crear_proveedor): void {
+		$this->crear_proveedor = $crear_proveedor;
 	}
 
 	public function isValid(): bool {
@@ -76,14 +83,15 @@ class MarcaDTO implements ODTO{
 	}
 
 	public function load(ORequest $req): void {
-    $this->setId( $req->getParamInt('id') );
+		$this->setId( $req->getParamInt('id') );
 		$this->setNombre( $req->getParamString('nombre') );
-    $this->setIdFoto( $req->getParamInt('idFoto') );
-    $this->setFoto( $req->getParamString('foto') );
+		$this->setIdFoto( $req->getParamInt('idFoto') );
+		$this->setFoto( $req->getParamString('foto') );
 		$this->setDireccion( $req->getParamString('direccion') );
 		$this->setTelefono( $req->getParamString('telefono') );
 		$this->setEmail( $req->getParamString('email') );
 		$this->setWeb( $req->getParamString('web') );
 		$this->setObservaciones( $req->getParamString('observaciones') );
+		$this->setCrearProveeddor( $req->getParamBool('crearProveedor', false) );
 	}
 }

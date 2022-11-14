@@ -8,6 +8,8 @@ use OsumiFramework\OFW\Web\ORequest;
 class ProveedorDTO implements ODTO{
   private ?int $id = null;
   private string $nombre = '';
+  private ?int $id_foto = null;
+  private ?string $foto = null;
   private string $direccion = '';
   private string $telefono = '';
   private string $email = '';
@@ -26,6 +28,18 @@ class ProveedorDTO implements ODTO{
 	}
 	private function setNombre(string $nombre): void {
 		$this->nombre = $nombre;
+	}
+  public function getIdFoto(): ?int {
+		return $this->id_foto;
+	}
+	public function setIdFoto(?int $id_foto): void {
+		$this->id_foto = $id_foto;
+	}
+	public function getFoto(): ?string {
+		return $this->foto;
+	}
+	private function setFoto(?string $foto): void {
+		$this->foto = $foto;
 	}
 	public function getDireccion(): string {
 		return $this->direccion;
@@ -69,8 +83,10 @@ class ProveedorDTO implements ODTO{
 	}
 
 	public function load(ORequest $req): void {
-    	$this->setId( $req->getParamInt('id') );
+    $this->setId( $req->getParamInt('id') );
 		$this->setNombre( $req->getParamString('nombre') );
+    $this->setIdFoto( $req->getParamInt('idFoto') );
+		$this->setFoto( $req->getParamString('foto') );
 		$this->setDireccion( $req->getParamString('direccion') );
 		$this->setTelefono( $req->getParamString('telefono') );
 		$this->setEmail( $req->getParamString('email') );
