@@ -108,4 +108,28 @@ class TipoPago extends OModel {
 
 		$this->setVentas($list);
 	}
+
+	/**
+	 * Función para obtener la url de la imagen del logo
+	 *
+	 * @return string Url de la imagen o null si no tiene
+	 */
+	public function getFoto(): ?string {
+		global $core;
+		$ruta_foto = $this->getRutaFoto();
+		if (!file_exists($ruta_foto)) {
+			return null;
+		}
+		return $core->config->getUrl('base').'/tipos-pago/icon-'.$this->get('slug').'.webp';
+	}
+
+	/**
+	 * Obtiene la ruta física a la imagen del logo
+	 *
+	 * @return string Ruta del archivo de la imagen
+	 */
+	public function getRutaFoto(): string {
+		global $core;
+		return $core->config->getDir('web').'tipos-pago/icon-'.$this->get('slug').'.webp';
+	}
 }

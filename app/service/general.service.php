@@ -111,7 +111,7 @@ class generalService extends OService {
 	 */
 	public function getTiposPago(): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `tipo_pago` ORDER BY `orden` ASC";
+		$sql = "SELECT * FROM `tipo_pago` WHERE `deleted_at` IS NULL ORDER BY `orden` ASC";
 		$db->query($sql);
 		$list = [];
 
@@ -122,6 +122,57 @@ class generalService extends OService {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Función para marcar un tipo de pago como borrado
+	 *
+	 * @param int $id_tipo_pago Id del tipo de pago a borrar
+	 *
+	 * @return bool Devuelve si el tipo de pago se ha encontrado y la operación ha sido correcta
+	 */
+	public function deleteTipoPago(int $id_tipo_pago): bool {
+		$tp = new TipoPago();
+		if ($tp->find(['id' => $id_tipo_pago])) {
+			$tp->set('deleted_at', date('Y-m-d H:i:s', time()));
+			$tp->save();
+
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Guarda una imagen en Base64. Si no tiene formato WebP se convierte
+	 *
+	 * @param string $base64_string Imagen en formato Base64
+	 *
+	 * @param TipoPago $tp Tipo de pago al que guardar la imagen
+	 *
+	 * @return void
+	 */
+	public function saveFoto(string $base64_string, TipoPago $tp): void {
+		$ext = OImage::getImageExtension($base64_string);
+		$ruta = OImage::saveImage($this->getConfig()->getDir('ofw_tmp'), $base64_string, strval($tp->get('id')), $ext);
+		$this->getLog()->debug('nueva foto: '.$ruta);
+		$im = new OImage();
+		$im->load($ruta);
+		$this->getLog()->debug('foto cargada en oimage');
+		// Compruebo tamaño inicial
+		$this->getLog()->debug('tamaño inicial: '.$im->getWidth());
+		if ($im->getWidth() > 1000) {
+			$this->getLog()->debug('redimensiono');
+			$im->resizeToWidth(1000);
+			$im->save($ruta, $im->getImageType());
+		}
+
+		// Guardo la imagen ya modificada como WebP
+		$im->save($tp->getRutaFoto(), IMAGETYPE_WEBP);
+		$this->getLog()->debug('Guardo nueva imagen en '.$tp->getRutaFoto());
+
+		// Borro la imagen temporal
+		$this->getLog()->debug('borro imagen temporal');
+		unlink($ruta);
 	}
 
 	/**
