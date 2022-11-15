@@ -304,7 +304,7 @@ class Articulo extends OModel {
 		if (is_null($this->marca)) {
 			$this->loadMarca();
 		}
-		if (is_null($this->marca->get('deleted_at'))){
+		if (!is_null($this->marca->get('deleted_at'))){
 			return null;
 		}
 		return $this->marca;

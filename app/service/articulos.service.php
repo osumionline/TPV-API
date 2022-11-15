@@ -46,19 +46,14 @@ class articulosService extends OService {
 	 */
 	public function searchArticulos(string $name, int $id_marca): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `articulo`";
+		$sql = "SELECT * FROM `articulo` WHERE `deleted_at` IS NULL";
 		$ret = [];
 
-		$where = false;
 		if (!empty($name)) {
-			$sql .= " WHERE `slug` LIKE '%".OTools::slugify($name)."%'";
-			$where = true;
+			$sql .= " AND `slug` LIKE '%".OTools::slugify($name)."%'";
 		}
 		if ($id_marca !== -1) {
-			if (!$where) {
-				$sql .= " WHERE ";
-			}
-			$sql .= "`id_marca` = ".$id_marca;
+			$sql .= " AND `id_marca` = ".$id_marca;
 		}
 		$sql .= " ORDER BY `nombre` ASC";
 		$db->query($sql);
@@ -67,6 +62,30 @@ class articulosService extends OService {
 			$articulo = new Articulo();
 			$articulo->update($res);
 			array_push($ret, $articulo);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Buscador para el apartado de ventas
+	 *
+	 * @param string $name Nombre del artículo a buscar
+	 *
+	 * @return array Lista de artículos encontrados
+	 */
+	public function searchArticulosVentas(string $name): array {
+		$list = $this->searchArticulos($name, -1);
+		$ret = [];
+
+		foreach ($list as $item) {
+			array_push($ret, [
+				'localizador' => $item->get('localizador'),
+				'nombre' => $item->get('nombre'),
+				'marca'  => $item->getMarca()->get('nombre'),
+				'pvp'    => $item->get('pvp'),
+				'stock'  => $item->get('stock')
+			]);
 		}
 
 		return $ret;
