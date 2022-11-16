@@ -263,6 +263,20 @@ class Venta extends OModel {
 		$this->setTipoPago($tp);
 	}
 
+	/**
+	 * Obtiene el nombre del tipo de pago, o "Efectivo" si se ha hecho en efectivo
+	 *
+	 * @return string Devuelve el nombre del tipo de pago
+	 */
+	public function getNombreTipoPago(): string {
+		if (is_null($this->get('id_tipo_pago'))) {
+			return "Efectivo";
+		}
+		else {
+			return $this->getTipoPago()->get('nombre');
+		}
+	}
+
 	private ?Cliente $cliente = null;
 
 	/**
@@ -274,7 +288,7 @@ class Venta extends OModel {
 		if (is_null($this->cliente) && !is_null($this->get('id_cliente'))) {
 			$this->loadCliente();
 		}
-		if (!is_null($this->cliente->get('deleted_at'))) {
+		if (is_null($this->cliente->get('deleted_at'))) {
 			return $this->cliente;
 		}
 		return null;

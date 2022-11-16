@@ -57,14 +57,14 @@ class LineaVenta extends OModel {
 			],
 			'descuento' => [
 				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => '0',
+				'nullable' => true,
+				'default' => null,
 				'comment' => 'Porcentaje de descuento aplicado'
 			],
 			'importe_descuento' => [
 				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
+				'nullable' => true,
+				'default' => null,
 				'comment' => 'Importe directo en descuento'
 			],
 			'devuelto' => [

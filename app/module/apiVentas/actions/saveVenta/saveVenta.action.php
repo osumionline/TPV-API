@@ -42,28 +42,37 @@ class saveVentaAction extends OAction {
 			$venta->save();
 
 			foreach ($data->getLineas() as $linea) {
-				$lv = new LineaVenta();
 				$art = new Articulo();
 				$art->find(['id' => $linea['idArticulo']]);
 
+				$lv = new LineaVenta();
 				$lv->set('id_venta', $venta->get('id'));
 				$lv->set('id_articulo', $linea['idArticulo']);
 				$lv->set('puc', $art->get('puc'));
 				$lv->set('pvp', $art->get('pvp'));
 				$lv->set('iva', $art->get('iva'));
 				$lv->set('re', $art->get('re'));
-				$lv->set('importe', $linea['importe']);
+				$importe = $linea['importe'];
+
 				if (!$linea['descuentoManual']) {
 					$lv->set('descuento', $linea['descuento']);
 					$lv->set('importe_descuento', null);
+					$importe = ( $importe * (1 - ($linea['descuento'] / 100) ) );
 				}
 				else {
 					$lv->set('descuento', null);
 					$lv->set('importe_descuento', $linea['descuento']);
+					$importe = $importe - $linea['descuento'];
 				}
+
+				$lv->set('importe', $importe);
 				$lv->set('devuelto', 0);
 				$lv->set('unidades', $linea['cantidad']);
 				$lv->save();
+
+				// Reduzco el stock
+				$art->set('stock', $art->get('stock') -1);
+				$art->save();
 			}
 
 			$id = $venta->get('id');
