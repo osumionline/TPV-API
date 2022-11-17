@@ -31,8 +31,8 @@ class ventasService extends OService {
 			$db->query($sql, [$fecha]);
 		}
 		if ($modo == 'rango') {
-			$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y') AND STR_TO_DATE(?,'%d/%m/%Y') AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
-			$db->query($sql, [$desde, $hasta]);
+			$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
+			$db->query($sql, [$desde.' 00:00:00', $hasta.' 23:59:59']);
 		}
 		$ret = [];
 

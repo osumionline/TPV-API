@@ -8,6 +8,7 @@ null
 else { ?>
 {
 	"id": <?php echo $values['venta']->get('id') ?>,
+	"editable": <?php echo $values['venta']->getEditable() ? 'true' : 'false' ?>,
 	"idEmpleado": <?php echo is_null($values['venta']->get('id_empleado')) ? 'null' : $values['venta']->get('id_empleado') ?>,
 	"idCliente": <?php echo is_null($values['venta']->get('id_cliente')) ? 'null' : $values['venta']->get('id_cliente') ?>,
 	"cliente": <?php echo is_null($values['venta']->get('id_cliente')) ? 'null' : '"'.urlencode($values['venta']->getCliente()->get('nombre_apellidos')).'"' ?>,

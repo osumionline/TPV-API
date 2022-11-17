@@ -7,6 +7,7 @@ use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Cliente;
+use OsumiFramework\App\Model\Caja;
 
 class Venta extends OModel {
 	function __construct() {
@@ -353,5 +354,23 @@ class Venta extends OModel {
 		$e = new Empleado();
 		$e->find(['id' => $this->get('id_empleado')]);
 		$this->setEmpleado($e);
+	}
+
+	/**
+	 * Función que comprueba si la venta pertenece a una caja abierta. Si la caja está cerrada la venta no se puede editar.
+	 *
+	 * @return bool Devuelve si la venta se puede editar o no
+	 */
+	public function getEditable(): bool {
+		$db = new ODB();
+		$sql = "SELECT * FROM `caja` WHERE `apertura` < ? AND (`cierre` > ? OR `cierre` IS NULL)";
+		$db->query($sql, [$this->get('created_at', 'Y-m-d H:i:s'), $this->get('created_at', 'Y-m-d H:i:s')]);
+		if ($res = $db->next()) {
+			$caja = new Caja();
+			$caja->update($res);
+			return is_null($caja->get('cierre'));
+		}
+
+		return false;
 	}
 }

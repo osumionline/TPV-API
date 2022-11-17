@@ -26,7 +26,7 @@ class getHistoricoAction extends OAction {
 		$hasta  = $req->getParamString('hasta');
 		$venta_list_component = new VentaListComponent(['list' => []]);
 
-		if (is_null($fecha) && is_null($rango_desde) && is_null($rango_hasta)) {
+		if (is_null($fecha) && is_null($desde) && is_null($hasta)) {
 			$status = 'error';
 		}
 
