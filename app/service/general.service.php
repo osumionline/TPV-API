@@ -30,15 +30,35 @@ class generalService extends OService {
 	 * @return bool Devuelve si la caja está abierta o no para la fecha indicada
 	 */
 	public function getOpened(string $date): bool {
+		$c = $this->getCaja($date);
+		if (is_null($c)) {
+			return false;
+		}
+		if (is_null($c->get('cierre'))) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Función para obtener la caja de una fecha
+	 *
+	 * @param string Fecha de la caja a obtener
+	 *
+	 * @return Caja Caja obtenida o null si no existe
+	 */
+	public function getCaja(string $date): ?Caja {
 		$db = new ODB();
 		$sql = "SELECT * FROM `caja` WHERE DATE(`apertura`) = ?";
 		$db->query($sql, [$date]);
 
 		if ($res = $db->next()) {
-			return true;
+			$c = new Caja();
+			$c->update($res);
+			return $c;
 		}
 		else {
-			return false;
+			return null;
 		}
 	}
 
@@ -185,8 +205,12 @@ class generalService extends OService {
 	 */
 	public function getPagosCajaDia(Caja $caja): array {
 		$db = new ODB();
+		$cierre = $caja->get('cierre', 'Y-m-d H:i:s');
+		if (is_null($caja->get('cierre'))) {
+			$cierre = $caja->get('apertura', 'Y-m-d').' 23:59:59';
+		}
 		$sql = "SELECT * FROM `pago_caja` WHERE `created_at` BETWEEN ? AND ?";
-		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $caja->get('cierre', 'Y-m-d H:i:s')]);
+		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $cierre]);
 		$ret = [
 			'importe' => 0,
 			'num' => 0
@@ -211,8 +235,12 @@ class generalService extends OService {
 	 */
 	public function getVentasDia(Caja $caja): array {
 		$db = new ODB();
+		$cierre = $caja->get('cierre', 'Y-m-d H:i:s');
+		if (is_null($caja->get('cierre'))) {
+			$cierre = $caja->get('apertura', 'Y-m-d').' 23:59:59';
+		}
 		$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN ? AND ?";
-		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $caja->get('cierre', 'Y-m-d H:i:s')]);
+		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $cierre]);
 		$list = [];
 
 		while ($res = $db->next()) {
