@@ -9,6 +9,7 @@ use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Caja;
 use OsumiFramework\App\Model\Empleado;
 use OsumiFramework\App\Model\Venta;
+use OsumiFramework\App\Model\PagoCaja;
 use OsumiFramework\App\DTO\InstallationDTO;
 use OsumiFramework\App\Utils\AppData;
 
@@ -259,6 +260,40 @@ class generalService extends OService {
 				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_total'] += $venta->getVentaOtros();
 				$ret['tipos_pago']['tipo_pago_'.$venta->get('id_tipo_pago')]['importe_descuento'] += $venta->getVentaDescuento();;
 			}
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Obtiene el listado de salidas de caja de una fecha o un rango dados
+	 *
+	 * @param string $modo Indica si se deben obtener las salidas de caja de un día ("fecha") o entre dos fechas ("rango")
+	 *
+	 * @param string $fecha Indica la fecha de la que obtener las salidas de caja si el modo es "fecha"
+	 *
+	 * @param string $desde Indica la fecha inicial del rango del que obtener las salidas de caja en el modo "rango"
+	 *
+	 * @param string $hasta Indica la fecha final del rango del que obtener las salidas de caja en el modo "rango"
+	 *
+	 * @return array Lista de salidas de caja obtenidas
+	 */
+	public function getSalidasCaja(string $modo, ?string $fecha, ?string $desde, ?string $hasta): array {
+		$db = new ODB();
+		if ($modo == 'fecha') {
+			$sql = "SELECT * FROM `pago_caja` WHERE DATE_FORMAT(`created_at`, '%d/%m/%Y') = ? ORDER BY `created_at` DESC";
+			$db->query($sql, [$fecha]);
+		}
+		if ($modo == 'rango') {
+			$sql = "SELECT * FROM `pago_caja` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') ORDER BY `created_at` DESC";
+			$db->query($sql, [$desde.' 00:00:00', $hasta.' 23:59:59']);
+		}
+		$ret = [];
+
+		while ($res = $db->next()) {
+			$pago_caja = new PagoCaja();
+			$pago_caja->update($res);
+			array_push($ret, $pago_caja);
 		}
 
 		return $ret;

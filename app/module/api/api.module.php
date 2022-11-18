@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['checkStart', 'saveInstallation', 'openBox', 'getTiposPago', 'deleteTipoPago', 'saveTipoPago', 'saveTipoPagoOrden'],
+	actions: ['checkStart', 'saveInstallation', 'openBox', 'getTiposPago', 'deleteTipoPago', 'saveTipoPago', 'saveTipoPagoOrden', 'getSalidasCaja', 'saveSalidaCaja', 'deleteSalidaCaja'],
 	type: 'json',
 	prefix: '/api'
 )]

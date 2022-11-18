@@ -3,6 +3,7 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\ODB;
 
 class PagoCaja extends OModel {
 	function __construct() {
@@ -43,5 +44,23 @@ class PagoCaja extends OModel {
 		];
 
 		parent::load($model);
+	}
+
+	/**
+	 * Función que comprueba si la salida de caja pertenece a una caja abierta. Si la caja está cerrada la salida no se puede editar.
+	 *
+	 * @return bool Devuelve si la salida de caja se puede editar o no
+	 */
+	public function getEditable(): bool {
+		$db = new ODB();
+		$sql = "SELECT * FROM `caja` WHERE `apertura` < ? AND (`cierre` > ? OR `cierre` IS NULL)";
+		$db->query($sql, [$this->get('created_at', 'Y-m-d H:i:s'), $this->get('created_at', 'Y-m-d H:i:s')]);
+		if ($res = $db->next()) {
+			$caja = new Caja();
+			$caja->update($res);
+			return is_null($caja->get('cierre'));
+		}
+
+		return false;
 	}
 }

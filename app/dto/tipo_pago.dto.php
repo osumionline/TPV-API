@@ -25,13 +25,13 @@ class TipoPagoDTO implements ODTO{
 	private function setNombre(string $nombre): void {
 		$this->nombre = $nombre;
 	}
-  public function getFoto(): ?string {
+	public function getFoto(): ?string {
 		return $this->foto;
 	}
 	private function setFoto(?string $foto): void {
 		$this->foto = $foto;
 	}
-  public function getAfectaCaja(): ?bool {
+	public function getAfectaCaja(): ?bool {
 		return $this->afecta_caja;
 	}
 	public function setAfectaCaja(?bool $afecta_caja): void {
@@ -55,10 +55,10 @@ class TipoPagoDTO implements ODTO{
 	}
 
 	public function load(ORequest $req): void {
-    $this->setId( $req->getParamInt('id') );
+		$this->setId( $req->getParamInt('id') );
 		$this->setNombre( $req->getParamString('nombre') );
-    $this->setFoto( $req->getParamString('foto') );
-    $this->setAfectaCaja( $req->getParamBool('afectaCaja', false) );
+		$this->setFoto( $req->getParamString('foto') );
+		$this->setAfectaCaja( $req->getParamBool('afectaCaja', false) );
 		$this->setOrden( $req->getParamInt('orden') );
 		$this->setFisico( $req->getParamBool('fisico', true) );
 	}
