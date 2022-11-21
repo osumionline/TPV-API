@@ -13,6 +13,7 @@
 	},
 	"log_level": "ALL",
 	"extra": {
+		"num_por_pag": 20,
 		"fotos": "/var/www/vhosts/osumi.es/apitpv.osumi.es/web/fotos"
 	}
 }

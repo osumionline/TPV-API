@@ -49,7 +49,7 @@ class generalService extends OService {
 	 */
 	public function getCaja(string $date): ?Caja {
 		$db = new ODB();
-		$sql = "SELECT * FROM `caja` WHERE DATE(`apertura`) = ?";
+		$sql = "SELECT * FROM `caja` WHERE DATE(`apertura`) = ? AND `cierre` IS NULL";
 		$db->query($sql, [$date]);
 
 		if ($res = $db->next()) {
