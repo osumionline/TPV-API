@@ -4,6 +4,4 @@ namespace OsumiFramework\App\Component\Model;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class PagocajaListComponent extends OComponent {
-	private string $depends = 'model/pagocaja';
-}
+class PagocajaListComponent extends OComponent {}

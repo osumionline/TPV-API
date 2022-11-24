@@ -16,6 +16,7 @@ class VentaDTO implements ODTO{
 	private array $lineas = [];
 	private bool $pago_mixto = false;
 	private bool $factura = false;
+	private bool $regalo = false;
 
 	public function getEfectivo(): ?float {
 		return $this->efectivo;
@@ -77,6 +78,12 @@ class VentaDTO implements ODTO{
 	private function setFactura(bool $factura): void {
 		$this->factura = $factura;
 	}
+	public function getRegalo(): bool {
+		return $this->regalo;
+	}
+	private function setRegalo(bool $regalo): void {
+		$this->regalo = $regalo;
+	}
 
 	public function isValid(): bool {
 		return (count($this->getLineas()) > 0);
@@ -93,5 +100,6 @@ class VentaDTO implements ODTO{
 		$this->setLineas( $req->getParam('lineas') );
 		$this->setPagoMixto( $req->getParamBool('pagoMixto') );
 		$this->setFactura( $req->getParamBool('factura') );
+		$this->setRegalo( $req->getParamBool('regalo') );
 	}
 }

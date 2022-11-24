@@ -10,6 +10,7 @@ class CierreCajaDTO implements ODTO {
   private ?float $importe_efectivo = null;
   private ?float $importe_total = null;
   private ?float $importe_real = null;
+  private ?float $importe_retirado = null;
   private ?float $saldo_inicial = null;
   private ?array $tipos = null;
 
@@ -36,6 +37,12 @@ class CierreCajaDTO implements ODTO {
 	}
 	private function setImporteReal(?float $importe_real): void {
 		$this->importe_real = $importe_real;
+	}
+  public function getImporteRetirado(): ?float {
+		return $this->importe_retirado;
+	}
+	private function setImporteRetirado(?float $importe_retirado): void {
+		$this->importe_retirado = $importe_retirado;
 	}
   public function getSaldoInicial(): ?float {
 		return $this->saldo_inicial;

@@ -4,6 +4,4 @@ namespace OsumiFramework\App\Component\Model;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class VentaComponent extends OComponent {
-  private string $depends = 'model/lineaventa_list';
-}
+class VentaComponent extends OComponent {}

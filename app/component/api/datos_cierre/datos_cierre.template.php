@@ -4,7 +4,8 @@ null
   {
     "saldoInicial": <?php echo $values['datos']['saldo_inicial'] ?>,
     "importeEfectivo": <?php echo $values['datos']['importe_efectivo'] ?>,
-    "importeTotal": <?php echo $values['datos']['importe_total'] ?>,
+    "salidasCaja": <?php echo $values['datos']['salidas_caja'] ?>,
+    "saldoFinal": <?php echo $values['datos']['saldo_final'] ?>,
     "tipos": [
 <?php foreach ($values['datos']['tipos'] as $i => $tipo): ?>
       {

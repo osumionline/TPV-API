@@ -37,8 +37,9 @@ class getCierreCajaAction extends OAction {
 
 				$datos_cierre['saldo_inicial']    = $c->get('importe_apertura');
 				$datos_cierre['importe_efectivo'] = $datos['venta_efectivo'];
-				$datos_cierre['importe_total']    = $datos['ventas'] - $pagos_caja['importe'];
-				$datos_cierre['tipos'] = [];
+				$datos_cierre['salidas_caja']     = $pagos_caja['importe'];
+				$datos_cierre['saldo_final']      = $datos['ventas'] - $pagos_caja['importe'];
+				$datos_cierre['tipos']            = [];
 
 				foreach ($datos['tipos_pago'] as $tipo) {
 					$tp = new TipoPago();

@@ -38,6 +38,7 @@ class openBoxAction extends OAction {
 		$caja->set('importe_apertura',     0);
 		$caja->set('importe_cierre',       0);
 		$caja->set('importe_cierre_real',  0);
+		$caja->set('importe_retirado',     0);
 
 		$caja->save();
 
@@ -69,6 +70,8 @@ class openBoxAction extends OAction {
 				$previous_caja->set('importe_cierre', $previous_caja->get('importe_apertura') + $datos['venta_efectivo']);
 				// Si se cierra automáticamente no tenemos forma de saber el importe de cierre real, por lo que asumimos que es correcto
 				$previous_caja->set('importe_cierre_real', $previous_caja->get('importe_cierre'));
+				// Si se cierra automáticamente no tenemos forma de saber si se ha retirado dinero de la caja, por lo que asumimos que no se ha retirado nada
+				$previous_caja->set('importe_retirado', 0);
 
 				$previous_caja->save();
 

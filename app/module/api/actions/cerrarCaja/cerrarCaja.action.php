@@ -46,6 +46,7 @@ class cerrarCajaAction extends OAction {
 
 				$c->set('importe_cierre',       $c->get('importe_apertura') + $datos['venta_efectivo']);
 				$c->set('importe_cierre_real',  $data->getImporteReal());
+				$c->set('importe_retirado',     $data->getImporteRetirado());
 
 				$c->save();
 

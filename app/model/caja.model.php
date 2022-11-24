@@ -101,6 +101,12 @@ class Caja extends OModel {
 				'default' => 0,
 				'comment' => 'Importe real en efectivo en la caja al momento del cierre'
 			],
+			'importe_retirado' => [
+				'type'    => OModel::FLOAT,
+				'nullable' => false,
+				'default' => 0,
+				'comment' => 'Importe retirado de la caja al momento del cierre'
+			],
 			'created_at' => [
 				'type'    => OModel::CREATED,
 				'comment' => 'Fecha de creación del registro'
