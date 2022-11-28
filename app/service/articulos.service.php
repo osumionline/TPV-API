@@ -9,6 +9,7 @@ use OsumiFramework\OFW\Plugins\OImage;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Foto;
 use OsumiFramework\App\Model\ArticuloFoto;
+use OsumiFramework\App\Model\CodigoBarras;
 
 class articulosService extends OService {
 	/**
@@ -33,6 +34,75 @@ class articulosService extends OService {
 		else {
 			return $loc;
 		}
+	}
+
+	/**
+	 * Función para comprobar si un nombre de artículo ya está usado
+	 *
+	 * @param string $name Nombre de artículo a comprobar
+	 *
+	 * @param int $id_articulo Articulo al que pertenece el nombre, para descartarlo
+	 *
+	 * @return array Resultado de la comprobación
+	 */
+	public function checkNombre(string $name, int $id_articulo): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `id` != ? AND `deleted_at` IS NULL";
+		$db->query($sql, [$id_articulo]);
+		if ($res = $db->next()) {
+			$art = new Articulo();
+			$art->update($res);
+
+			return ['status' => 'nombre-used', 'message' => $art->getMarca()->get('nombre')];
+		}
+		return ['status' => 'ok', 'message' => ''];
+	}
+
+	/**
+	 * Función para comprobar si una referencia de artículo ya está usado
+	 *
+	 * @param string $referencia Referencia de un artículo a comprobar
+	 *
+	 * @param int $id_articulo Articulo al que pertenece la referencia, para descartarlo
+	 *
+	 * @return array Resultado de la comprobación
+	 */
+	public function checkReferencia(string $referencia, int $id_articulo): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `id` != ? AND `deleted_at` IS NULL";
+		$db->query($sql, [$referencia, $id_articulo]);
+		if ($res = $db->next()) {
+			$art = new Articulo();
+			$art->update($res);
+
+			return ['status' => 'referencia-used', 'message' => $art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+		}
+		return ['status' => 'ok', 'message' => ''];
+	}
+
+	/**
+	 * Función para comprobar si un código de barras de un artículo ya está usado
+	 *
+	 * @param array $list Lista de códigos de barras a comprobar
+	 *
+	 * @param int $id_articulo Articulo al que pertenece el código de barras, para descartarlo
+	 *
+	 * @return array Resultado de la comprobación
+	 */
+	public function checkCodigosBarras(array $list, int $id_articulo): array {
+		$db = new ODB();
+		foreach ($list as $cb) {
+			$sql = "SELECT * FROM `codigo_barras` WHERE `codigo_barras` = ? AND `id_articulo` != ?";
+			$db->query($sql, [$cb['codigoBarras'], $id_articulo]);
+			if ($res = $db->next()) {
+				$cod = new CodigoBarras();
+				$cod->update($res);
+				$art = $cod->getArticulo();
+
+				return ['status' => 'cb-used', 'message' => $cb['codigoBarras'].'/'.$art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+			}
+		}
+		return ['status' => 'ok', 'message' => ''];
 	}
 
 	/**

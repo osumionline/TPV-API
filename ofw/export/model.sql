@@ -1,10 +1,16 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
-CREATE TABLE `empleado` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada empleado',
-  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre del empleado',
-  `pass` VARCHAR(200) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Contraseña cifrada del empleado',
-  `color` VARCHAR(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Código de color hexadecimal para distinguir a cada empleado',
+CREATE TABLE `factura` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada factura',
+  `id_cliente` INT(11) NOT NULL COMMENT 'Id del cliente al que se le emite la factura',
+  `nombre_apellidos` VARCHAR(150) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre y apellidos del cliente',
+  `dni_cif` VARCHAR(10) COLLATE utf8mb4_unicode_ci NULL COMMENT 'DNI/CIF del cliente',
+  `telefono` VARCHAR(15) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Teléfono del cliente',
+  `email` VARCHAR(100) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Email del cliente',
+  `direccion` VARCHAR(100) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Dirección del cliente',
+  `codigo_postal` VARCHAR(10) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Código postal del cliente',
+  `poblacion` VARCHAR(50) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Población del cliente',
+  `provincia` INT(11) NULL COMMENT 'Id de la provincia del cliente',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   `deleted_at` DATETIME NULL COMMENT 'Fecha de baja del empleado',
@@ -12,12 +18,24 @@ CREATE TABLE `empleado` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `empleado_rol` (
-  `id_empleado` INT(11) NOT NULL COMMENT 'Id del empleado',
-  `id_rol` INT(11) NOT NULL COMMENT 'Id del permiso que se le otorga al empleado',
+CREATE TABLE `codigo_barras` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada código de barras',
+  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece el código de barras',
+  `codigo_barras` INT(11) NOT NULL COMMENT 'Código de barras del artículo',
+  `por_defecto` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Indica si es el código de barras asignado por defecto por el TPV 1 o añadido a mano 1',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id_empleado`,`id_rol`)
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `categoria` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada categoría',
+  `id_padre` INT(11) NULL COMMENT 'Id de la categoría padre en caso de ser una subcategoría',
+  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre de la categoría',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -38,19 +56,22 @@ CREATE TABLE `caja` (
   `importe_apertura` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe total en efectivo en la caja al momento de la apertura',
   `importe_cierre` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe total en efectivo en la caja al momento del cierre',
   `importe_cierre_real` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe real en efectivo en la caja al momento del cierre',
+  `importe_retirado` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe retirado de la caja al momento del cierre',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `codigo_barras` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada código de barras',
-  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece el código de barras',
-  `codigo_barras` INT(11) NOT NULL COMMENT 'Código de barras del artículo',
-  `por_defecto` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Indica si es el código de barras asignado por defecto por el TPV 1 o añadido a mano 1',
+CREATE TABLE `pedido` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada pedido',
+  `id_proveedor` INT(11) NOT NULL COMMENT 'Id del proveedor del pedido',
+  `albaran` VARCHAR(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Albarán del pedido',
+  `importe` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe total del pedido',
+  `recepcionado` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Indica si se ha recepcionado el pedido 1 o si está pendiente 0',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  `deleted_at` DATETIME NULL COMMENT 'Fecha de borrado de la marca',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -61,16 +82,6 @@ CREATE TABLE `proveedor_marca` (
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
   PRIMARY KEY (`id_proveedor`,`id_marca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-CREATE TABLE `categoria` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada categoría',
-  `id_padre` INT(11) NULL COMMENT 'Id de la categoría padre en caso de ser una subcategoría',
-  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre de la categoría',
-  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
-  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -88,16 +99,13 @@ CREATE TABLE `comercial` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `pedido` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada pedido',
-  `id_proveedor` INT(11) NOT NULL COMMENT 'Id del proveedor del pedido',
-  `albaran` VARCHAR(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Albarán del pedido',
-  `importe` FLOAT NOT NULL DEFAULT '0' COMMENT 'Importe total del pedido',
-  `recepcionado` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Indica si se ha recepcionado el pedido 1 o si está pendiente 0',
+CREATE TABLE `articulo_foto` (
+  `id_foto` INT(11) NOT NULL COMMENT 'Id único para cada foto',
+  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece la foto',
+  `orden` INT(11) NOT NULL DEFAULT '0' COMMENT 'Orden de la foto entre todas las fotos de un artículo',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  `deleted_at` DATETIME NULL COMMENT 'Fecha de borrado de la marca',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id_foto`,`id_articulo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -215,13 +223,33 @@ CREATE TABLE `linea_venta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE `articulo_foto` (
-  `id_foto` INT(11) NOT NULL COMMENT 'Id único para cada foto',
-  `id_articulo` INT(11) NOT NULL COMMENT 'Id del artículo al que pertenece la foto',
-  `orden` INT(11) NOT NULL DEFAULT '0' COMMENT 'Orden de la foto entre todas las fotos de un artículo',
+CREATE TABLE `empleado` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada empleado',
+  `nombre` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre del empleado',
+  `pass` VARCHAR(200) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Contraseña cifrada del empleado',
+  `color` VARCHAR(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Código de color hexadecimal para distinguir a cada empleado',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
-  PRIMARY KEY (`id_foto`,`id_articulo`)
+  `deleted_at` DATETIME NULL COMMENT 'Fecha de baja del empleado',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `factura_venta` (
+  `id_factura` INT(11) NOT NULL COMMENT 'Id de la factura',
+  `id_venta` INT(11) NOT NULL COMMENT 'Id de la venta',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id_factura`,`id_venta`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `empleado_rol` (
+  `id_empleado` INT(11) NOT NULL COMMENT 'Id del empleado',
+  `id_rol` INT(11) NOT NULL COMMENT 'Id del permiso que se le otorga al empleado',
+  `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
+  `updated_at` DATETIME NULL COMMENT 'Fecha de última modificación del registro',
+  PRIMARY KEY (`id_empleado`,`id_rol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -286,14 +314,19 @@ CREATE TABLE `pago_caja` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-ALTER TABLE `empleado_rol`
-  ADD KEY `fk_empleado_rol_empleado_idx` (`id_empleado`),
-  ADD CONSTRAINT `fk_empleado_rol_empleado` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `factura`
+  ADD KEY `fk_factura_cliente_idx` (`id_cliente`),
+  ADD CONSTRAINT `fk_factura_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `codigo_barras`
   ADD KEY `fk_codigo_barras_articulo_idx` (`id_articulo`),
   ADD CONSTRAINT `fk_codigo_barras_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+ALTER TABLE `pedido`
+  ADD KEY `fk_pedido_proveedor_idx` (`id_proveedor`),
+  ADD CONSTRAINT `fk_pedido_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `proveedor_marca`
@@ -308,9 +341,11 @@ ALTER TABLE `comercial`
   ADD CONSTRAINT `fk_comercial_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
-ALTER TABLE `pedido`
-  ADD KEY `fk_pedido_proveedor_idx` (`id_proveedor`),
-  ADD CONSTRAINT `fk_pedido_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `articulo_foto`
+  ADD KEY `fk_articulo_foto_foto_idx` (`id_foto`),
+  ADD KEY `fk_articulo_foto_articulo_idx` (`id_articulo`),
+  ADD CONSTRAINT `fk_articulo_foto_foto` FOREIGN KEY (`id_foto`) REFERENCES `foto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_articulo_foto_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `venta`
@@ -341,11 +376,16 @@ ALTER TABLE `linea_venta`
   ADD CONSTRAINT `fk_linea_venta_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
-ALTER TABLE `articulo_foto`
-  ADD KEY `fk_articulo_foto_foto_idx` (`id_foto`),
-  ADD KEY `fk_articulo_foto_articulo_idx` (`id_articulo`),
-  ADD CONSTRAINT `fk_articulo_foto_foto` FOREIGN KEY (`id_foto`) REFERENCES `foto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_articulo_foto_articulo` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `factura_venta`
+  ADD KEY `fk_factura_venta_factura_idx` (`id_factura`),
+  ADD KEY `fk_factura_venta_venta_idx` (`id_venta`),
+  ADD CONSTRAINT `fk_factura_venta_factura` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_factura_venta_venta` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+ALTER TABLE `empleado_rol`
+  ADD KEY `fk_empleado_rol_empleado_idx` (`id_empleado`),
+  ADD CONSTRAINT `fk_empleado_rol_empleado` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 ALTER TABLE `caja_tipo`

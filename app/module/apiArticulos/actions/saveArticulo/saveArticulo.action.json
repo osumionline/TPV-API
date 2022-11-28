@@ -1,4 +1,5 @@
 {
 	"status": "{{status}}",
-	"localizador": {{localizador}}
+	"localizador": {{localizador}},
+	"message": "{{message}}"
 }

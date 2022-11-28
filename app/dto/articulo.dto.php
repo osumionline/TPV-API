@@ -33,6 +33,7 @@ class ArticuloDTO implements ODTO{
 	private bool $mostrar_obs_ventas = false;
 	private array $codigos_barras = [];
 	private array $fotos_list = [];
+	private string $nombre_status = 'ok';
 
 	public function getId(): ?int {
 		return $this->id;
@@ -196,6 +197,12 @@ class ArticuloDTO implements ODTO{
 	private function setFotosList(array $fotos_list): void {
 		$this->fotos_list = $fotos_list;
 	}
+	public function getNombreStatus(): string {
+		return $this->nombre_status;
+	}
+	private function setNombreStatus(string $nombre_status): void {
+		$this->nombre_status = $nombre_status;
+	}
 
 	public function isValid(): bool {
 		return (
@@ -236,5 +243,6 @@ class ArticuloDTO implements ODTO{
 		$this->setMostrarObsVentas( $req->getParamBool('mostrarObsVentas') );
 		$this->setCodigosBarras( $req->getParam('codigosBarras') );
 		$this->setFotosList( $req->getParam('fotosList') );
+		$this->setNombreStatus( $req->getParamString('nombreStatus') );
 	}
 }
