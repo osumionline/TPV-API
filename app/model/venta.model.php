@@ -289,7 +289,7 @@ class Venta extends OModel {
 		if (is_null($this->cliente) && !is_null($this->get('id_cliente'))) {
 			$this->loadCliente();
 		}
-		if (is_null($this->cliente->get('deleted_at'))) {
+		if (!is_null($this->cliente) && is_null($this->cliente->get('deleted_at'))) {
 			return $this->cliente;
 		}
 		return null;

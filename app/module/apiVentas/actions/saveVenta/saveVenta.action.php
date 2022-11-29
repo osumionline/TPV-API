@@ -10,7 +10,8 @@ use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
 
 #[OModuleAction(
-	url: '/save-venta'
+	url: '/save-venta',
+	services: ['ticket']
 )]
 class saveVentaAction extends OAction {
 	/**
@@ -74,6 +75,8 @@ class saveVentaAction extends OAction {
 				$art->set('stock', $art->get('stock') -1);
 				$art->save();
 			}
+
+			$this->ticket_service->generateTicket($venta);
 
 			$id = $venta->get('id');
 			$importe = $venta->get('total');

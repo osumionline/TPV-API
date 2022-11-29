@@ -3,9 +3,11 @@
 namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
+use OsumiFramework\OFW\Tools\OTools;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Utils\PDF;
 use OsumiFramework\App\Utils\AppData;
+use OsumiFramework\App\Component\Ticket\TicketComponent;
 
 class ticketService extends OService {
 	/**
@@ -50,12 +52,13 @@ class ticketService extends OService {
 	 *
 	 * @return void
 	 */
-	public function generateTicket(Venta $venta): void {
-		require_once $this->getConfig()->getDir('ofw_lib').'fpdf/fpdf.php';
-		require_once $this->getConfig()->getDir('app_utils').'PDF.php';
+	public function generateTicket(Venta $venta, bool $silent = true): void {
+		require_once $this->getConfig()->getDir('ofw_lib').'dompdf/autoload.inc.php';
 		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 
-		echo "Creo ticket de venta ".$venta->get('id')."\n";
+		if (!$silent) {
+			echo "Creo ticket de venta ".$venta->get('id')."\n";
+		}
 
 		// Cargo archivo de configuración
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
@@ -65,17 +68,78 @@ class ticketService extends OService {
 			exit();
 		}
 
-		$route = $this->getConfig()->getDir('web').'prueba.pdf';
+		if ($silent) {
+			$route = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.html';
+			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.pdf';
+		}
+		else {
+			$route = $this->getConfig()->getDir('web').'ticket.html';
+			$route_pdf = $this->getConfig()->getDir('web').'ticket.pdf';
+		}
 		if (file_exists($route)) {
 			unlink($route);
 		}
-		echo "RUTA: ".$route."\n";
+		if (file_exists($route_pdf)) {
+			unlink($route_pdf);
+		}
+		if (!$silent) {
+			echo "RUTA HTML: ".$route."\n";
+			echo "RUTA PDF: ".$route_pdf."\n";
+		}
 
-		$size_ticket = [79, 200];
+		$social = $app_data->getSocial();
+		for ($i=0; $i<count($social); $i++) {
+			$social[$i][0] = OTools::fileToBase64($this->getConfig()->getDir('web').'/iconos/icono_'.$social[$i][0].'.png');
+		}
 
-		$pdf = new PDF('P', 'mm', $size_ticket);
-		$pdf->setLogo($this->getConfig()->getDir('web').'logo.jpeg');
-		$pdf->setRutaIconos($this->getConfig()->getDir('web').'iconos/');
-		$pdf->ticket($venta, $route, $app_data);
+		$ticket_data = [
+			'url_base'   => $this->getConfig()->getUrl('base'),
+			'logo'       => OTools::fileToBase64($this->getConfig()->getDir('web').'/logo.jpg'),
+			'direccion'  => $app_data->getDireccion(),
+			'telefono'   => $app_data->getTelefono(),
+			'nif'        => $app_data->getCif(),
+			'social'     => $social,
+			'id'         => $venta->get('id'),
+			'date'       => $venta->get('created_at', 'd/m/Y H:i'),
+			'lineas'     => $venta->getLineas(),
+			'total'      => $venta->get('total'),
+			'forma_pago' => $venta->getNombreTipoPago(),
+			'cliente'    => $venta->getCliente()
+		];
+
+		$ticket = new TicketComponent(['data' => $ticket_data]);
+		$html = strval($ticket);
+		file_put_contents($route, $html);
+
+		$dompdf = new \Dompdf\Dompdf();
+		$dompdf->setPaper([0.0, 0.0, 147.40, 209.76]);
+
+		$GLOBALS['bodyHeight'] = 0;
+
+		$dompdf->setCallbacks(
+			[
+				'myCallbacks' => [
+					'event' => 'end_frame', 'f' => function ($infos) {
+						$frame = $infos->get_frame();
+						if (strtolower($frame->get_node()->nodeName) === "body") {
+							$padding_box = $frame->get_padding_box();
+							$GLOBALS['bodyHeight'] += $padding_box['h'];
+						}
+					}
+				]
+			]
+		);
+
+		$dompdf->loadHtml($html);
+		$dompdf->render();
+		unset($dompdf);
+
+		$dompdf = new \Dompdf\Dompdf();
+		$dompdf->set_paper([0, 0, 147.40, $GLOBALS['bodyHeight'] + 10]);
+		$dompdf->loadHtml($html);
+		$dompdf->render();
+
+		$output = $dompdf->output();
+		file_put_contents($route_pdf, $output);
 	}
 }

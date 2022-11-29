@@ -180,6 +180,23 @@ class AppData {
 		return $this->empleados;
 	}
 
+	public function getSocial(): array {
+		$social = [];
+		if ($this->getTwitter() != '') {
+			array_push($social, ['twitter', $this->getTwitter()]);
+		}
+		if ($this->getFacebook() != '') {
+			array_push($social, ['facebook', $this->getFacebook()]);
+		}
+		if ($this->getInstagram() != '') {
+			array_push($social, ['instagram', $this->getInstagram()]);
+		}
+		if ($this->getWeb() != '') {
+			array_push($social, ['web', $this->getWeb()]);
+		}
+		return $social;
+	}
+
 	public function getJSON(): ?string {
 		if (!$this->getLoaded()) {
 			return null;

@@ -32,6 +32,6 @@ class ticketTask extends OTask {
 			exit();
 		}
 
-		$this->ticket_service->generateTicket($venta);
+		$this->ticket_service->generateTicket($venta, false);
 	}
 }
