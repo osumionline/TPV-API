@@ -3,10 +3,10 @@
 	"db": {
 		"host": "localhost",
 		"user": "apitpv",
-		"pass": "Uhn94&9j",
+		"pass": "f2*6S5yb1",
 		"name": "apitpv"
 	},
-	"base_url": "https://apitpv.osumi.es",
+	"base_url": "https://apitpv.osumi.dev",
 	"default_title": "API TPV",
 	"dir": {
 		"fotos": "fotos/"
@@ -14,6 +14,6 @@
 	"log_level": "ALL",
 	"extra": {
 		"num_por_pag": 20,
-		"fotos": "/var/www/vhosts/osumi.es/apitpv.osumi.es/web/fotos"
+		"fotos": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/web/fotos"
 	}
 }
