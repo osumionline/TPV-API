@@ -1,5 +1,5 @@
 <?php
-use OsumiFramework\App\Component\Model\LineaventaListComponent;
+use OsumiFramework\App\Component\Model\LineaVentaListComponent;
 
 if (is_null($values['venta'])) { ?>
 null
@@ -20,7 +20,7 @@ else { ?>
 	"entregadoOtro": <?php echo is_null($values['venta']->get('entregado_otro')) ? 'null' : $values['venta']->get('entregado_otro') ?>,
 	"saldo": <?php echo is_null($values['venta']->get('saldo')) ? 'null' : $values['venta']->get('saldo') ?>,
 	"fecha": "<?php echo $values['venta']->get('created_at', 'd/m/Y H:i') ?>",
-	"lineas": [<?php echo new LineaventaListComponent(['list' => $values['venta']->getLineas()]) ?>]
+	"lineas": [<?php echo new LineaVentaListComponent(['list' => $values['venta']->getLineas()]) ?>]
 }
 <?php
 }

@@ -94,7 +94,7 @@ class Pedido extends OModel {
 		parent::load($model);
 	}
 
-  private ?Proveedor $proveedor = null;
+	private ?Proveedor $proveedor = null;
 
 	/**
 	 * Obtiene el proveedor al que pertenece el pedido
@@ -176,5 +176,50 @@ class Pedido extends OModel {
 		}
 
 		$this->setLineas($list);
+	}
+	
+	private ?array $pdfs = null;
+
+	/**
+	 * Obtiene el listado de PDFs de un pedido
+	 *
+	 * @return array Listado de PDFs
+	 */
+	public function getPdfs(): array {
+		if (is_null($this->pdfs)) {
+			$this->loadPdfs();
+		}
+		return $this->pdfs;
+	}
+
+	/**
+	 * Guarda la lista de PDFs
+	 *
+	 * @param array $l Lista de PDFs
+	 *
+	 * @return void
+	 */
+	public function setPdfs(array $l): void {
+		$this->pdfs = $l;
+	}
+
+	/**
+	 * Carga la lista de PDFs de un pedido
+	 *
+	 * @return void
+	 */
+	public function loadPdfs(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `pdf_pedido` WHERE `id_pedido` = ?";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$pdf = new PdfPedido();
+			$pdf->update($res);
+			array_push($list, $pdf);
+		}
+
+		$this->setPdfs($list);
 	}
 }

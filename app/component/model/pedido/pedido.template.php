@@ -1,6 +1,13 @@
-<?php if (is_null($values['pedido'])): ?>
+<?php
+use OsumiFramework\App\Component\Model\LineaPedidoListComponent;
+use OsumiFramework\App\Component\Model\PdfPedidoListComponent;
+
+if (is_null($values['pedido'])) {
+?>
 null
-<?php else: ?>
+<?php
+else {
+?>
 {
 	"id": <?php echo $values['pedido']->get('id') ?>,
 	"idProveedor": <?php echo $values['pedido']->get('id_proveedor') ?>,
@@ -14,6 +21,10 @@ null
 	"re": <?php echo $values['pedido']->get('re') ? 'true' : 'false' ?>,
 	"ue": <?php echo $values['pedido']->get('europeo') ? 'true' : 'false' ?>,
 	"faltas": <?php echo $values['pedido']->get('faltas') ? 'true' : 'false' ?>,
-	"recepcionado": <?php echo $values['pedido']->get('recepcionado') ? 'true' : 'false' ?>
+	"recepcionado": <?php echo $values['pedido']->get('recepcionado') ? 'true' : 'false' ?>,
+	"lineas": [<?php echo new LineaPedidoListComponent(['list' => $values['pedido']->getLineas()]) ?>],
+	"pdfs": [<?php echo new PdfPedidoListComponent(['list' => $values['pedido']->getPdfs()]) ?>]
 }
-<?php endif ?>
+<?php
+}
+?>

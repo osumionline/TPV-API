@@ -81,4 +81,40 @@ class LineaPedido extends OModel {
 
 		parent::load($model);
 	}
+
+	private ?Articulo $articulo = null;
+
+	/**
+	 * Obtiene el artículo al que pertenece la línea
+	 *
+	 * @return Articulo Artículo al que pertenece la línea
+	 */
+	public function getArticulo(): Articulo {
+		if (is_null($this->articulo)) {
+			$this->loadArticulo();
+		}
+		return $this->articulo;
+	}
+
+	/**
+	 * Guarda el artículo al que pertenece la línea
+	 *
+	 * @param Articulo $a Artículo al que pertenece la línea
+	 *
+	 * @return void
+	 */
+	public function setArticulo(Articulo $a): void {
+		$this->articulo = $a;
+	}
+
+	/**
+	 * Carga el artículo al que pertenece la línea
+	 *
+	 * @return void
+	 */
+	public function loadArticulo(): void {
+		$a = new Articulo();
+		$a->find(['id' => $this->get('id_articulo')]);
+		$this->setArticulo($a);
+	}
 }

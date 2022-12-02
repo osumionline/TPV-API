@@ -4,4 +4,4 @@ namespace OsumiFramework\App\Component\Model;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class LineaventaComponent extends OComponent {}
+class PdfPedidoListComponent extends OComponent {}
