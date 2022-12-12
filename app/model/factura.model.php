@@ -3,94 +3,109 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\OFW\DB\ODB;
 
 class Factura extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada factura'
-			],
-			'id_cliente' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'cliente.id',
-				'comment' => 'Id del cliente al que se le emite la factura'
-			],
-			'nombre_apellidos' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 150,
-				'comment' => 'Nombre y apellidos del cliente'
-			],
-			'dni_cif' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'DNI/CIF del cliente'
-			],
-			'telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono del cliente'
-			],
-			'email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Email del cliente'
-			],
-			'direccion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección del cliente'
-			],
-			'codigo_postal' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'Código postal del cliente'
-			],
-			'poblacion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Población del cliente'
-			],
-			'provincia' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Id de la provincia del cliente'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de baja del empleado'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada factura'
+			),
+			new OModelField(
+				name: 'id_cliente',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'cliente.id',
+				comment: 'Id del cliente al que se le emite la factura'
+			),
+			new OModelField(
+				name: 'nombre_apellidos',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 150,
+				comment: 'Nombre y apellidos del cliente'
+			),
+			new OModelField(
+				name: 'dni_cif',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'DNI/CIF del cliente'
+			),
+			new OModelField(
+				name: 'telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono del cliente'
+			),
+			new OModelField(
+				name: 'email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Email del cliente'
+			),
+			new OModelField(
+				name: 'direccion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección del cliente'
+			),
+			new OModelField(
+				name: 'codigo_postal',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'Código postal del cliente'
+			),
+			new OModelField(
+				name: 'poblacion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 50,
+				comment: 'Población del cliente'
+			),
+			new OModelField(
+				name: 'provincia',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Id de la provincia del cliente'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de baja del empleado'
+			)
+		);
 
 		parent::load($model);
 	}

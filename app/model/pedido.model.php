@@ -3,93 +3,109 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Pedido extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada pedido'
-			],
-			'id_proveedor' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'ref'      => 'proveedor.id',
-				'comment'  => 'Id del proveedor del pedido'
-			],
-			'albaran_factura' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => true,
-				'comment' => 'Indica si se trata de un albarán 1 o una factura 0'
-			],
-			'num_albaran_factura' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 200,
-				'comment' => 'Albarán / factura del pedido'
-			],
-			'importe' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => 0,
-				'comment'  => 'Importe total del pedido'
-			],
-			'portes' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => 0,
-				'comment'  => 'Importe de los portes del pedido'
-			],
-			'fecha_pago' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de pago del pedido'
-			],
-			'fecha_pedido' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha del pedido'
-			],
-			're' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si el pedido tiene RE 1 o no 0'
-			],
-			'europeo' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si se rata de un pedido europeo 1 o no 0'
-			],
-			'faltas' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si hay faltas en el pedido 1 o no 0'
-			],
-			'recepcionado' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si se ha recepcionado el pedido 1 o si está pendiente 0'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada pedido'
+			),
+			new OModelField(
+				name: 'id_proveedor',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'proveedor.id',
+				comment: 'Id del proveedor del pedido'
+			),
+			new OModelField(
+				name: 'albaran_factura',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: true,
+				comment: 'Indica si se trata de un albarán 1 o una factura 0'
+			),
+			new OModelField(
+				name: 'num_albaran_factura',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 200,
+				comment: 'Albarán / factura del pedido'
+			),
+			new OModelField(
+				name: 'importe',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total del pedido'
+			),
+			new OModelField(
+				name: 'portes',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe de los portes del pedido'
+			),
+			new OModelField(
+				name: 'fecha_pago',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de pago del pedido'
+			),
+			new OModelField(
+				name: 'fecha_pedido',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha del pedido'
+			),
+			new OModelField(
+				name: 're',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si el pedido tiene RE 1 o no 0'
+			),
+			new OModelField(
+				name: 'europeo',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si se rata de un pedido europeo 1 o no 0'
+			),
+			new OModelField(
+				name: 'faltas',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si hay faltas en el pedido 1 o no 0'
+			),
+			new OModelField(
+				name: 'recepcionado',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si se ha recepcionado el pedido 1 o si está pendiente 0'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}
@@ -132,7 +148,7 @@ class Pedido extends OModel {
 		$p->find(['id' => $this->get('id_proveedor')]);
 		$this->setProveedor($p);
 	}
-	
+
 	private ?array $lineas = null;
 
 	/**
@@ -177,7 +193,7 @@ class Pedido extends OModel {
 
 		$this->setLineas($list);
 	}
-	
+
 	private ?array $pdfs = null;
 
 	/**

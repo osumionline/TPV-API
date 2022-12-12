@@ -3,80 +3,93 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\OFW\DB\ODB;
 
 class Proveedor extends OModel {
 function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada proveedor'
-			],
-			'nombre' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del proveedor'
-			],
-			'id_foto' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Foto del proveedor',
-				'ref' => 'foto.id'
-			],
-			'direccion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 200,
-				'comment' => 'Dirección física del proveedor'
-			],
-			'telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono del proveedor'
-			],
-			'email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección de email del proveedor'
-			],
-			'web' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección de la página web del proveedor'
-			],
-			'observaciones' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Observaciones o notas personales del proveedor'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de borrado del proveedor'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada proveedor'
+			),
+			new OModelField(
+				name: 'nombre',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del proveedor'
+			),
+			new OModelField(
+				name: 'id_foto',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Foto del proveedor',
+				ref: 'foto.id'
+			),
+			new OModelField(
+				name: 'direccion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 200,
+				comment: 'Dirección física del proveedor'
+			),
+			new OModelField(
+				name: 'telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono del proveedor'
+			),
+			new OModelField(
+				name: 'email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección de email del proveedor'
+			),
+			new OModelField(
+				name: 'web',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección de la página web del proveedor'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Observaciones o notas personales del proveedor'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado del proveedor'
+			)
+		);
 
 		parent::load($model);
 	}

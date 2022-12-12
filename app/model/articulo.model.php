@@ -3,186 +3,226 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\OFW\DB\ODB;
 
 class Articulo extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único de cada artículo'
-			],
-			'localizador' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Localizador único de cada artículo'
-			],
-			'nombre' => [
-				'type'     => OModel::TEXT,
-				'nullable' => false,
-				'default'  => null,
-				'size'     => 100,
-				'comment'  => 'Nombre del artículo'
-			],
-			'slug' => [
-				'type'     => OModel::TEXT,
-				'nullable' => false,
-				'default'  => null,
-				'size'     => 100,
-				'comment'  => 'Slug del nombre del artículo'
-			],
-			'id_categoria' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Id de la categoría en la que se engloba el artículo'
-			],
-			'id_marca' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'ref'      => 'marca.id',
-				'comment'  => 'Id de la marca del artículo'
-			],
-			'id_proveedor' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'ref'      => 'proveedor.id',
-				'comment'  => 'Id del proveedor del artículo'
-			],
-			'referencia' => [
-				'type'     => OModel::TEXT,
-				'nullable' => true,
-				'default'  => null,
-				'size'     => 50,
-				'comment'  => 'Referencia original del proveedor'
-			],
-			'palb' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio del artículo en el albarán'
-			],
-			'puc' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio Unitario de Compra del artículo'
-			],
-			'pvp' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Precio de Venta al Público del artículo'
-			],
-			'iva' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'IVA del artículo'
-			],
-			're' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Recargo de equivalencia'
-			],
-			'margen' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Margen de beneficio del artículo'
-			],
-			'stock' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Stock actual del artículo'
-			],
-			'stock_min' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Stock mínimo del artículo'
-			],
-			'stock_max' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Stock máximo del artículo'
-			],
-			'lote_optimo' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => '0',
-				'comment'  => 'Lote óptimo para realizar pedidos del artículo'
-			],
-			'venta_online' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Indica si el producto está disponible desde la web 1 o no 0'
-			],
-			'fecha_caducidad' => [
-				'type'     => OModel::DATE,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Fecha de caducidad del artículo'
-			],
-			'mostrar_en_web' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Indica si debe ser mostrado en la web 1 o no 0'
-			],
-			'desc_corta' => [
-				'type'     => OModel::TEXT,
-				'nullable' => true,
-				'default'  => null,
-				'size'     => 250,
-				'comment'  => 'Descripción corta para la web'
-			],
-			'descripcion' => [
-				'type'     => OModel::LONGTEXT,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Descripción larga para la web'
-			],
-			'observaciones' => [
-				'type'     => OModel::LONGTEXT,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Observaciones o notas sobre el artículo'
-			],
-			'mostrar_obs_pedidos' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar observaciones en pedidos 0 no 1 si'
-			],
-			'mostrar_obs_ventas' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Mostrar observaciones en ventas 0 no 1 si'
-			],
-			'acceso_directo' => [
-				'type'     => OModel::NUM,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Acceso directo al artículo'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'     => OModel::UPDATED,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'     => OModel::DATE,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Fecha de borrado del artículo'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único de cada artículo'
+			),
+			new OModelField(
+				name: 'localizador',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Localizador único de cada artículo'
+			),
+			new OModelField(
+				name: 'nombre',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 100,
+				comment: 'Nombre del artículo'
+			),
+			new OModelField(
+				name: 'slug',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 100,
+				comment: 'Slug del nombre del artículo'
+			),
+			new OModelField(
+				name: 'id_categoria',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Id de la categoría en la que se engloba el artículo'
+			),
+			new OModelField(
+				name: 'id_marca',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'marca.id',
+				comment: 'Id de la marca del artículo'
+			),
+			new OModelField(
+				name: 'id_proveedor',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'proveedor.id',
+				comment: 'Id del proveedor del artículo'
+			),
+			new OModelField(
+				name: 'referencia',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 50,
+				comment: 'Referencia original del proveedor'
+			),
+			new OModelField(
+				name: 'palb',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Precio del artículo en el albarán'
+			),
+			new OModelField(
+				name: 'puc',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Precio Unitario de Compra del artículo'
+			),
+			new OModelField(
+				name: 'pvp',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Precio de Venta al Público del artículo'
+			),
+			new OModelField(
+				name: 'iva',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'IVA del artículo'
+			),
+			new OModelField(
+				name: 're',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: null,
+				comment: 'Recargo de equivalencia'
+			),
+			new OModelField(
+				name: 'margen',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Margen de beneficio del artículo'
+			),
+			new OModelField(
+				name: 'stock',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Stock actual del artículo'
+			),
+			new OModelField(
+				name: 'stock_min',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Stock mínimo del artículo'
+			),
+			new OModelField(
+				name: 'stock_max',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Stock máximo del artículo'
+			),
+			new OModelField(
+				name: 'lote_optimo',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Lote óptimo para realizar pedidos del artículo'
+			),
+			new OModelField(
+				name: 'venta_online',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si el producto está disponible desde la web 1 o no 0'
+			),
+			new OModelField(
+				name: 'fecha_caducidad',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de caducidad del artículo'
+			),
+			new OModelField(
+				name: 'mostrar_en_web',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si debe ser mostrado en la web 1 o no 0'
+			),
+			new OModelField(
+				name: 'desc_corta',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 250,
+				comment: 'Descripción corta para la web'
+			),
+			new OModelField(
+				name: 'descripcion',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Descripción larga para la web'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Observaciones o notas sobre el artículo'
+			),
+			new OModelField(
+				name: 'mostrar_obs_pedidos',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Mostrar observaciones en pedidos 0 no 1 si'
+			),
+			new OModelField(
+				name: 'mostrar_obs_ventas',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Mostrar observaciones en ventas 0 no 1 si'
+			),
+			new OModelField(
+				name: 'acceso_directo',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Acceso directo al artículo'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado del artículo'
+			)
+		);
 
 		parent::load($model);
 	}

@@ -3,121 +3,142 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Caja extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada cierre de caja'
-			],
-			'apertura' => [
-				'type'    => OModel::DATE,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Fecha de apertura de la caja'
-			],
-			'cierre' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de cierre de la caja'
-			],
-			'ventas' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total de ventas para el período de la caja'
-			],
-			'beneficios' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total de beneficios para el período de la caja'
-			],
-			'venta_efectivo' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total vendido en efectivo'
-			],
-			'operaciones_efectivo' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => 0,
-				'comment'  => 'Número de operaciones hechas en efectivo'
-			],
-			'descuento_efectivo' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Descuento total de las ventas en efectivo'
-			],
-			'venta_otros' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total vendido mediante tipos de pago alternativos'
-			],
-			'operaciones_otros' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => 0,
-				'comment'  => 'Número de operaciones hechas mediante tipos de pago alternativos'
-			],
-			'descuento_otros' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Descuento total de las ventas hechas mediante tipos de pago alternativos'
-			],
-			'importe_pagos_caja' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total en pagos de caja'
-			],
-			'num_pagos_caja' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => 0,
-				'comment'  => 'Número de pagos de caja'
-			],
-			'importe_apertura' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total en efectivo en la caja al momento de la apertura'
-			],
-			'importe_cierre' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe total en efectivo en la caja al momento del cierre'
-			],
-			'importe_cierre_real' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe real en efectivo en la caja al momento del cierre'
-			],
-			'importe_retirado' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => 0,
-				'comment' => 'Importe retirado de la caja al momento del cierre'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada cierre de caja'
+			),
+			new OModelField(
+				name: 'apertura',
+				type: OMODEL_DATE,
+				nullable: false,
+				default: null,
+				comment: 'Fecha de apertura de la caja'
+			),
+			new OModelField(
+				name: 'cierre',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de cierre de la caja'
+			),
+			new OModelField(
+				name: 'ventas',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total de ventas para el período de la caja'
+			),
+			new OModelField(
+				name: 'beneficios',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total de beneficios para el período de la caja'
+			),
+			new OModelField(
+				name: 'venta_efectivo',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total vendido en efectivo'
+			),
+			new OModelField(
+				name: 'operaciones_efectivo',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de operaciones hechas en efectivo'
+			),
+			new OModelField(
+				name: 'descuento_efectivo',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Descuento total de las ventas en efectivo'
+			),
+			new OModelField(
+				name: 'venta_otros',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total vendido mediante tipos de pago alternativos'
+			),
+			new OModelField(
+				name: 'operaciones_otros',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de operaciones hechas mediante tipos de pago alternativos'
+			),
+			new OModelField(
+				name: 'descuento_otros',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Descuento total de las ventas hechas mediante tipos de pago alternativos'
+			),
+			new OModelField(
+				name: 'importe_pagos_caja',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total en pagos de caja'
+			),
+			new OModelField(
+				name: 'num_pagos_caja',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de pagos de caja'
+			),
+			new OModelField(
+				name: 'importe_apertura',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total en efectivo en la caja al momento de la apertura'
+			),
+			new OModelField(
+				name: 'importe_cierre',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total en efectivo en la caja al momento del cierre'
+			),
+			new OModelField(
+				name: 'importe_cierre_real',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe real en efectivo en la caja al momento del cierre'
+			),
+			new OModelField(
+				name: 'importe_retirado',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe retirado de la caja al momento del cierre'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

@@ -3,6 +3,8 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\TipoPago;
@@ -11,79 +13,91 @@ use OsumiFramework\App\Model\Caja;
 
 class Venta extends OModel {
 	function __construct() {
-	$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único de cada venta'
-			],
-			'id_empleado' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'ref' => 'empleado.id',
-				'comment' => 'Id del empleado que realiza la venta'
-			],
-			'id_cliente' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'ref' => 'cliente.id',
-				'comment' => 'Id del cliente'
-			],
-			'total' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => '0',
-				'comment' => 'Importe total de la venta'
-			],
-			'entregado' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => '0',
-				'comment' => 'Importe entregado por el cliente'
-			],
-			'pago_mixto' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si se ha hecho un pago mixto'
-			],
-			'id_tipo_pago' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'ref' => 'tipo_pago.id',
-				'comment' => 'Id del tipo de pago'
-			],
-			'entregado_otro' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Cantidad pagada mediante tipo de pago alternativo'
-			],
-			'saldo' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Saldo en caso de que el ticket sea un vale'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de borrado de la venta'
-			]
-		];
+	$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único de cada venta'
+			),
+			new OModelField(
+				name: 'id_empleado',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				ref: 'empleado.id',
+				comment: 'Id del empleado que realiza la venta'
+			),
+			new OModelField(
+				name: 'id_cliente',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				ref: 'cliente.id',
+				comment: 'Id del cliente'
+			),
+			new OModelField(
+				name: 'total',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total de la venta'
+			),
+			new OModelField(
+				name: 'entregado',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe entregado por el cliente'
+			),
+			new OModelField(
+				name: 'pago_mixto',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si se ha hecho un pago mixto'
+			),
+			new OModelField(
+				name: 'id_tipo_pago',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				ref: 'tipo_pago.id',
+				comment: 'Id del tipo de pago'
+			),
+			new OModelField(
+				name: 'entregado_otro',
+				type: OMODEL_FLOAT,
+				nullable: true,
+				default: null,
+				comment: 'Cantidad pagada mediante tipo de pago alternativo'
+			),
+			new OModelField(
+				name: 'saldo',
+				type: OMODEL_FLOAT,
+				nullable: true,
+				default: null,
+				comment: 'Saldo en caso de que el ticket sea un vale'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado de la venta'
+			)
+		);
 
 		parent::load($model);
 	}

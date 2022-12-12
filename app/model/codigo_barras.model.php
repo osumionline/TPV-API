@@ -3,42 +3,50 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class CodigoBarras extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada código de barras'
-			],
-			'id_articulo' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'ref' => 'articulo.id',
-				'comment' => 'Id del artículo al que pertenece el código de barras'
-			],
-			'codigo_barras' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Código de barras del artículo'
-			],
-			'por_defecto' => [
-				'type'    => OModel::BOOL,
-				'comment' => 'Indica si es el código de barras asignado por defecto por el TPV 1 o añadido a mano 1'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada código de barras'
+			),
+			new OModelField(
+				name: 'id_articulo',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'articulo.id',
+				comment: 'Id del artículo al que pertenece el código de barras'
+			),
+			new OModelField(
+				name: 'codigo_barras',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Código de barras del artículo'
+			),
+			new OModelField(
+				name: 'por_defecto',
+				type: OMODEL_BOOL,
+				comment: 'Indica si es el código de barras asignado por defecto por el TPV 1 o añadido a mano 1'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

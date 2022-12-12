@@ -3,34 +3,41 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class FacturaVenta extends OModel {
 	function __construct() {
-		$model = [
-			'id_factura' => [
-				'type'    => OModel::PK,
-				'ref' => 'factura.id',
-				'incr' => false,
-				'comment' => 'Id de la factura'
-			],
-			'id_venta' => [
-				'type'    => OModel::PK,
-				'nullable' => false,
-				'incr' => false,
-				'ref' => 'venta.id',
-				'comment' => 'Id de la venta'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id_factura',
+				type: OMODEL_PK,
+				ref: 'factura.id',
+				incr: false,
+				comment: 'Id de la factura'
+			),
+			new OModelField(
+				name: 'id_venta',
+				type: OMODEL_PK,
+				nullable: false,
+				incr: false,
+				ref: 'venta.id',
+				comment: 'Id de la venta'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
+
 
 		parent::load($model);
 	}

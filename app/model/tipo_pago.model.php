@@ -3,63 +3,75 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class TipoPago extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada tipo de pago'
-			],
-			'nombre' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del tipo de pago'
-			],
-      'slug' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Slug del nombre del tipo de pago'
-			],
-			'afecta_caja' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Indica si el tipo de pago afecta a la caja'
-			],
-			'orden' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Orden del tipo de pago en la lista completa'
-			],
-			'fisico' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => true,
-				'comment' => 'Indica si el tipo de pago es para tienda física'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-      'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de borrado del tipo de pago'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada tipo de pago'
+			),
+			new OModelField(
+				name: 'nombre',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del tipo de pago'
+			),
+			new OModelField(
+				name: 'slug',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Slug del nombre del tipo de pago'
+			),
+			new OModelField(
+				name: 'afecta_caja',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si el tipo de pago afecta a la caja'
+			),
+			new OModelField(
+				name: 'orden',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Orden del tipo de pago en la lista completa'
+			),
+			new OModelField(
+				name: 'fisico',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: true,
+				comment: 'Indica si el tipo de pago es para tienda física'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado del proveedor'
+			)
+		);
+
 
 		parent::load($model);
 	}

@@ -3,72 +3,84 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Marca extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada marca'
-			],
-			'nombre' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre de la marca'
-			],
-			'direccion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 200,
-				'comment' => 'Dirección física de la marca'
-			],
-			'telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono de la marca'
-			],
-			'email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección de email de la marca'
-			],
-			'web' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección de la página web de la marca'
-			],
-			'observaciones' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Observaciones o notas personales de la marca'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de borrado de la marca'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada marca'
+			),
+			new OModelField(
+				name: 'nombre',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre de la marca'
+			),
+			new OModelField(
+				name: 'direccion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 200,
+				comment: 'Dirección física de la marca'
+			),
+			new OModelField(
+				name: 'telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono de la marca'
+			),
+			new OModelField(
+				name: 'email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección de email de la marca'
+			),
+			new OModelField(
+				name: 'web',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección de la página web de la marca'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Observaciones o notas personales de la marca'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado de la marca'
+			)
+		);
 
 		parent::load($model);
 	}

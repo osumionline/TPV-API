@@ -3,65 +3,76 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class Comercial extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada comercial'
-			],
-			'id_proveedor' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-        'ref' => 'proveedor.id',
-				'comment' => 'Id del proveedor para el que trabaja el comercial'
-			],
-      'nombre' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Nombre del comercial'
-			],
-			'telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono del comercial'
-			],
-			'email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección de email del comercial'
-			],
-			'observaciones' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Observaciones o notas personales del comercial'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'    => OModel::DATE,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de borrado del comercial'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada comercial'
+			),
+			new OModelField(
+				name: 'id_proveedor',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+        ref: 'proveedor.id',
+				comment: 'Id del proveedor para el que trabaja el comercial'
+			),
+			new OModelField(
+				name: 'nombre',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 50,
+				comment: 'Nombre del comercial'
+			),
+			new OModelField(
+				name: 'telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono del comercial'
+			),
+			new OModelField(
+				name: 'email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección de email del comercial'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Observaciones o notas personales del comercial'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado del cliente'
+			)
+		);
 
 		parent::load($model);
 	}

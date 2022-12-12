@@ -3,81 +3,95 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 
 class LineaPedido extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único para cada línea de un pedido'
-			],
-			'id_pedido' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'ref'      => 'pedido.id',
-				'comment'  => 'Id del pedido al que pertenece la línea'
-			],
-			'id_articulo' => [
-				'type'     => OModel::NUM,
-				'nullable' => false,
-				'default'  => null,
-				'ref'      => 'articulo.id',
-				'comment'  => 'Id del artículo recibido'
-			],
-			'unidades' => [
-				'type'    => OModel::NUM,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Número de unidades recibidas'
-			],
-			'palb' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => null,
-				'comment' => 'Precio de albarán del artículo'
-			],
-			'pvp' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'PVP del artículo'
-			],
-			'margen' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'Porcentaje de margen del artículo'
-			],
-			'iva' => [
-				'type'     => OModel::FLOAT,
-				'nullable' => false,
-				'default'  => null,
-				'comment'  => 'IVA del artículo'
-			],
-			're' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'RE del artículo'
-			],
-			'descuento' => [
-				'type'    => OModel::FLOAT,
-				'nullable' => false,
-				'default' => false,
-				'comment' => 'Porcentaje de descuento del artículo'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único para cada línea de un pedido'
+			),
+			new OModelField(
+				name: 'id_pedido',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'pedido.id',
+				comment: 'Id del pedido al que pertenece la línea'
+			),
+			new OModelField(
+				name: 'id_articulo',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				ref: 'articulo.id',
+				comment: 'Id del artículo recibido'
+			),
+			new OModelField(
+				name: 'unidades',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: null,
+				comment: 'Número de unidades recibidas'
+			),
+			new OModelField(
+				name: 'palb',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: null,
+				comment: 'Precio de albarán del artículo'
+			),
+			new OModelField(
+				name: 'pvp',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: null,
+				comment: 'PVP del artículo'
+			),
+			new OModelField(
+				name: 'margen',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: null,
+				comment: 'Porcentaje de margen del artículo'
+			),
+			new OModelField(
+				name: 'iva',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: null,
+				comment: 'IVA del artículo'
+			),
+			new OModelField(
+				name: 're',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: false,
+				comment: 'RE del artículo'
+			),
+			new OModelField(
+				name: 'descuento',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: false,
+				comment: 'Porcentaje de descuento del artículo'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			)
+		);
 
 		parent::load($model);
 	}

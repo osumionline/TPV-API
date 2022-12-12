@@ -3,154 +3,178 @@
 namespace OsumiFramework\App\Model;
 
 use OsumiFramework\OFW\DB\OModel;
+use OsumiFramework\OFW\DB\OModelGroup;
+use OsumiFramework\OFW\DB\OModelField;
 use OsumiFramework\OFW\DB\ODB;
 
 class Cliente extends OModel {
 	function __construct() {
-		$model = [
-			'id' => [
-				'type'    => OModel::PK,
-				'comment' => 'Id único de cada cliente'
-			],
-			'nombre_apellidos' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 150,
-				'comment' => 'Nombre y apellidos del cliente'
-			],
-			'dni_cif' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'DNI/CIF del cliente'
-			],
-			'telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono del cliente'
-			],
-			'email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Email del cliente'
-			],
-			'direccion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección del cliente'
-			],
-			'codigo_postal' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'Código postal del cliente'
-			],
-			'poblacion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Población del cliente'
-			],
-			'provincia' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Id de la provincia del cliente'
-			],
-			'fact_igual' => [
-				'type'    => OModel::BOOL,
-				'nullable' => false,
-				'default' => true,
-				'comment' => 'Indica si los datos de facturación son iguales a los del cliente'
-			],
-			'fact_nombre_apellidos' => [
-				'type'    => OModel::TEXT,
-				'nullable' => false,
-				'default' => null,
-				'size' => 150,
-				'comment' => 'Nombre y apellidos del cliente para la facturación'
-			],
-			'fact_dni_cif' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'DNI/CIF del cliente para la facturación'
-			],
-			'fact_telefono' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 15,
-				'comment' => 'Teléfono del cliente para la facturación'
-			],
-			'fact_email' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Email del cliente para la facturación'
-			],
-			'fact_direccion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 100,
-				'comment' => 'Dirección del cliente para la facturación'
-			],
-			'fact_codigo_postal' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 10,
-				'comment' => 'Código postal del cliente para la facturación'
-			],
-			'fact_poblacion' => [
-				'type'    => OModel::TEXT,
-				'nullable' => true,
-				'default' => null,
-				'size' => 50,
-				'comment' => 'Población del cliente para la facturación'
-			],
-			'fact_provincia' => [
-				'type'    => OModel::NUM,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Id de la provincia del cliente para la facturación'
-			],
-			'observaciones' => [
-				'type'    => OModel::LONGTEXT,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Campo libre para observaciones personales del cliente'
-			],
-			'created_at' => [
-				'type'    => OModel::CREATED,
-				'comment' => 'Fecha de creación del registro'
-			],
-			'updated_at' => [
-				'type'    => OModel::UPDATED,
-				'nullable' => true,
-				'default' => null,
-				'comment' => 'Fecha de última modificación del registro'
-			],
-			'deleted_at' => [
-				'type'     => OModel::DATE,
-				'nullable' => true,
-				'default'  => null,
-				'comment'  => 'Fecha de borrado del cliente'
-			]
-		];
+		$model = new OModelGroup(
+			new OModelField(
+				name: 'id',
+				type: OMODEL_PK,
+				comment: 'Id único de cada cliente'
+			),
+			new OModelField(
+				name: 'nombre_apellidos',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 150,
+				comment: 'Nombre y apellidos del cliente'
+			),
+			new OModelField(
+				name: 'dni_cif',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'DNI/CIF del cliente'
+			),
+			new OModelField(
+				name: 'telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono del cliente'
+			),
+			new OModelField(
+				name: 'email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Email del cliente'
+			),
+			new OModelField(
+				name: 'direccion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección del cliente'
+			),
+			new OModelField(
+				name: 'codigo_postal',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'Código postal del cliente'
+			),
+			new OModelField(
+				name: 'poblacion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 50,
+				comment: 'Población del cliente'
+			),
+			new OModelField(
+				name: 'provincia',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Id de la provincia del cliente'
+			),
+			new OModelField(
+				name: 'fact_igual',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: true,
+				comment: 'Indica si los datos de facturación son iguales a los del cliente'
+			),
+			new OModelField(
+				name: 'fact_nombre_apellidos',
+				type: OMODEL_TEXT,
+				nullable: false,
+				default: null,
+				size: 150,
+				comment: 'Nombre y apellidos del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_dni_cif',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'DNI/CIF del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_telefono',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 15,
+				comment: 'Teléfono del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_email',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Email del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_direccion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Dirección del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_codigo_postal',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 10,
+				comment: 'Código postal del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_poblacion',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 50,
+				comment: 'Población del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'fact_provincia',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Id de la provincia del cliente para la facturación'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Campo libre para observaciones personales del cliente'
+			),
+			new OModelField(
+				name: 'created_at',
+				type: OMODEL_CREATED,
+				comment: 'Fecha de creación del registro'
+			),
+			new OModelField(
+				name: 'updated_at',
+				type: OMODEL_UPDATED,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de última modificación del registro'
+			),
+			new OModelField(
+				name: 'deleted_at',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha de borrado del cliente'
+			)
+		);
 
 		parent::load($model);
 	}
