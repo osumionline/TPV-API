@@ -29,6 +29,12 @@ class savePedidoAction extends OAction {
 			if (!is_null($data->getId())) {
 				$pedido->find(['id' => $data->getId()]);
 			}
+			
+			$pedido->set('id_proveedor', $data->getIdProveedor());
+			$pedido->set('albaran_factura', $data->getAlbaranFactura() === 'albaran');
+			$pedido->set('num_albaran_factura', $data->getNumAlbaranFactura());
+			$pedido->set('importe', $data->getImporte());
+			$pedido->set('portes', $data->getPortes());
 		}
 
 		$this->getTemplate()->add('status', $status);

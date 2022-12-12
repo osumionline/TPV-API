@@ -27,110 +27,110 @@ class PedidoDTO implements ODTO{
 	public function setId(?int $id): void {
 		$this->id = $id;
 	}
-  public function getIdProveedor(): ?int {
+	public function getIdProveedor(): ?int {
 		return $this->id_proveedor;
 	}
 	private function setIdProveedor(?int $id_proveedor): void {
 		$this->id_proveedor = $id_proveedor;
 	}
-  public function getRe(): ?bool {
+	public function getRe(): ?bool {
 		return $this->re;
 	}
 	private function setRe(?bool $re): void {
 		$this->re = $re;
 	}
-  public function getUe(): ?bool {
+	public function getUe(): ?bool {
 		return $this->ue;
 	}
 	private function setUe(?bool $ue): void {
 		$this->ue = $ue;
 	}
-  public function getAlbaranFactura(): ?string {
+	public function getAlbaranFactura(): ?string {
 		return $this->albaran_factura;
 	}
 	private function setAlbaranFactura(?string $albaran_factura): void {
 		$this->albaran_factura = $albaran_factura;
 	}
-  public function getNumAlbaranFactura(): ?string {
+	public function getNumAlbaranFactura(): ?string {
 		return $this->num_albaran_factura;
 	}
 	private function setNumAlbaranFactura(?string $num_albaran_factura): void {
 		$this->num_albaran_factura = $num_albaran_factura;
 	}
-  public function getFechaPago(): ?string {
+	public function getFechaPago(): ?string {
 		return $this->fecha_pago;
 	}
 	private function setFechaPago(?string $fecha_pago): void {
 		$this->fecha_pago = $fecha_pago;
 	}
-  public function getFechaPedido(): ?string {
+	public function getFechaPedido(): ?string {
 		return $this->fecha_pedido;
 	}
 	private function setFechaPedido(?string $fecha_pedido): void {
 		$this->fecha_pedido = $fecha_pedido;
 	}
-  public function getLineas(): ?array {
+	public function getLineas(): ?array {
 		return $this->lineas;
 	}
 	private function setLineas(?array $lineas): void {
 		$this->lineas = $lineas;
 	}
-  public function getImporte(): ?float {
+	public function getImporte(): ?float {
 		return $this->importe;
 	}
 	private function setImporte(?float $importe): void {
 		$this->importe = $importe;
 	}
-  public function getPortes(): ?float {
+	public function getPortes(): ?float {
 		return $this->portes;
 	}
 	private function setPortes(?float $portes): void {
 		$this->portes = $portes;
 	}
-  public function getFaltas(): ?bool {
+	public function getFaltas(): ?bool {
 		return $this->faltas;
 	}
 	private function setFaltas(?bool $faltas): void {
 		$this->faltas = $faltas;
 	}
-  public function getRecepcionado(): ?bool {
+	public function getRecepcionado(): ?bool {
 		return $this->recepcionado;
 	}
 	private function setRecepcionado(?bool $recepcionado): void {
 		$this->recepcionado = $recepcionado;
 	}
-  public function getPdfs(): ?array {
+	public function getPdfs(): ?array {
 		return $this->pdfs;
 	}
 	private function setPdfs(?array $pdfs): void {
 		$this->pdfs = $pdfs;
 	}
 
-  public function isValid(): bool {
+	public function isValid(): bool {
 		return (
-      !is_null($this->getAlbaranFactura()) &&
-      !is_null($this->getNumAlbaranFactura()) &&
-      !is_null($this->getFechaPago()) &&
-      !is_null($this->getFechaPedido()) &&
-      !is_null($this->getLineas()) &&
-      !is_null($this->getRecepcionado())
-    );
+			!is_null($this->getAlbaranFactura()) &&
+			!is_null($this->getNumAlbaranFactura()) &&
+			!is_null($this->getFechaPago()) &&
+			!is_null($this->getFechaPedido()) &&
+			!is_null($this->getLineas()) &&
+			!is_null($this->getRecepcionado())
+	    );
 	}
 
 	public function load(ORequest $req): void {
-    $this->setId( $req->getParamInt('id') );
-    $this->setIdProveedor( $req->getParamInt('idProveedor') );
-    $this->setRe( $req->getParamBool('re') );
-    $this->setUe( $req->getParamBool('ue') );
-    $this->setAlbaranFactura( $req->getParamString('albaranFactura') );
-    $this->setNumAlbaranFactura( $req->getParamString('numAlbaranFactura') );
-    $this->setFechaPago( $req->getParamString('fechaPago') );
-    $this->setFechaPedido( $req->getParamString('fechaPedido') );
-    $this->setLineas( $req->getParam('lineas') );
-    $this->setImporte( $req->getParamFloat('importe') );
-    $this->setPortes( $req->getParamFloat('portes') );
-    $this->setFaltas( $req->getParamBool('faltas') );
-    $this->setRecepcionado( $req->getParamBool('recepcionado') );
-    $this->setPdfs( $req->getParam('pdfs') );
-  }
+		$this->setId( $req->getParamInt('id') );
+		$this->setIdProveedor( $req->getParamInt('idProveedor') );
+		$this->setRe( $req->getParamBool('re') );
+		$this->setUe( $req->getParamBool('ue') );
+		$this->setAlbaranFactura( $req->getParamString('albaranFactura') );
+		$this->setNumAlbaranFactura( $req->getParamString('numAlbaranFactura') );
+		$this->setFechaPago( $req->getParamString('fechaPago') );
+		$this->setFechaPedido( $req->getParamString('fechaPedido') );
+		$this->setLineas( $req->getParam('lineas') );
+		$this->setImporte( $req->getParamFloat('importe') );
+		$this->setPortes( $req->getParamFloat('portes') );
+		$this->setFaltas( $req->getParamBool('faltas') );
+		$this->setRecepcionado( $req->getParamBool('recepcionado') );
+		$this->setPdfs( $req->getParam('pdfs') );
+	}
 }
