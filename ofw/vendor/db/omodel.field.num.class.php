@@ -76,6 +76,15 @@ class OModelFieldNum extends OModelField {
   }
 
   /**
+   * Get the SQL string needed to insert the field.
+   *
+   * @return string SQL string.
+   */
+  public function getInsertStr(): string {
+    return "?";
+  }
+
+  /**
    * Get the SQL line needed to create this particular field of a whole table.
    *
    * @return string Get the SQL line to create this field.
