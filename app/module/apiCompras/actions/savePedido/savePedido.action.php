@@ -6,9 +6,11 @@ use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\App\DTO\PedidoDTO;
 use OsumiFramework\App\Model\Pedido;
+use OsumiFramework\App\Model\LineaPedido;
 
 #[OModuleAction(
-	url: '/save-pedido'
+	url: '/save-pedido',
+	services: ['compras']
 )]
 class savePedidoAction extends OAction {
 	/**
@@ -24,17 +26,52 @@ class savePedidoAction extends OAction {
 			$status = 'error';
 		}
 
-		if ($status=='ok') {
+		if ($status == 'ok') {
 			$pedido = new Pedido();
 			if (!is_null($data->getId())) {
 				$pedido->find(['id' => $data->getId()]);
 			}
-			
-			$pedido->set('id_proveedor', $data->getIdProveedor());
-			$pedido->set('albaran_factura', $data->getAlbaranFactura() === 'albaran');
-			$pedido->set('num_albaran_factura', $data->getNumAlbaranFactura());
-			$pedido->set('importe', $data->getImporte());
-			$pedido->set('portes', $data->getPortes());
+
+			// Si el pedido ya está recepcionado devuelvo error por que ya no se puede volver a modificar
+			if ($pedido->get('recepcionado')) {
+				$status = 'error';
+			}
+
+			if ($status == 'ok') {
+				$pedido->set('id_proveedor', $data->getIdProveedor());
+				$pedido->set('albaran_factura', $data->getAlbaranFactura() === 'albaran');
+				$pedido->set('num_albaran_factura', $data->getNumAlbaranFactura());
+				$pedido->set('importe', $data->getImporte());
+				$pedido->set('portes', $data->getPortes());
+				$pedido->set('fecha_pago', urldecode($data->getFechaPago()), '%e/%c/%Y');
+				$pedido->set('fecha_pedido', urldecode($data->getFechaPedido()), '%e/%c/%Y');
+				$pedido->set('re', $data->getRe());
+				$pedido->set('europeo', $data->getUe());
+				$pedido->set('faltas', $data->getFaltas());
+				$pedido->set('recepcionado', $data->getRecepcionado());
+
+				$pedido->save();
+				$data->setId($pedido->get('id'));
+
+				$this->compras_service->borrarLineasPedido($pedido->get('id'));
+
+				foreach ($data->getLineas() as $linea) {
+					$lp = new LineaPedido();
+					$lp->set('id_pedido', $pedido->get('id'));
+					$lp->set('id_articulo', $linea['idArticulo']);
+					$lp->set('unidades', $linea['unidades']);
+					$lp->set('palb', $linea['palb']);
+					$lp->set('pvp', $linea['pvp']);
+					$lp->set('iva', $linea['iva']);
+					$lp->set('re', $linea['re']);
+					$lp->set('descuento', $linea['descuento']);
+					$lp->save();
+
+					if ($pedido->get('recepcionado')) {
+
+					}
+				}
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);

@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['getPedidos', 'getPedidosGuardados', 'getPedidosRecepcionados', 'savePedido'],
+	actions: ['getPedidos', 'getPedidosGuardados', 'getPedidosRecepcionados', 'savePedido', 'getPedido'],
 	type: 'json',
 	prefix: '/api-compras'
 )]

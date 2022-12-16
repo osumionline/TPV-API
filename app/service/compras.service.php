@@ -116,4 +116,17 @@ class comprasService extends OService {
 	public function getPedidosRecepcionados(PedidosFilterDTO $data): array {
 		return $this->getPedidosList($data, true);
 	}
+
+	/*
+	 * Función para borrar todas las líneas de un pedido. Se usa al guardar un pedido para borrar las líneas existentes y así guardar la última versión.
+	 *
+	 * @param int $id_pedido Id del pedido al que que borrar sus líneas
+	 *
+	 * @return void
+	 */
+	public function borrarLineasPedido(int $id_pedido): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `linea_pedido` WHERE `id_pedido` = ?";
+		$db->query($sql, [$id_pedido]);
+	}
 }

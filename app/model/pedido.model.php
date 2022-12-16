@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Model;
 use OsumiFramework\OFW\DB\OModel;
 use OsumiFramework\OFW\DB\OModelGroup;
 use OsumiFramework\OFW\DB\OModelField;
+use OsumiFramework\OFW\DB\ODB;
 
 class Pedido extends OModel {
 	function __construct() {
