@@ -6,6 +6,8 @@ use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\DTO\PedidosFilterDTO;
 use OsumiFramework\App\Model\Pedido;
+use OsumiFramework\App\Model\PdfPedido;
+use OsumiFramework\OFW\Tools\OTools;
 
 class comprasService extends OService {
 	function __construct() {
@@ -58,10 +60,10 @@ class comprasService extends OService {
 		$sql = "";
 
 		if (!is_null($data->getFechaDesde())) {
-			$sql .= " AND `created_at` > STR_TO_DATE('".$data->getFechaDesde()." 00:00:00', '%Y-%m-%d %H:%i:%s')";
+			$sql .= " AND `created_at` > STR_TO_DATE('".$data->getFechaDesde()." 00:00:00', '%d/%m/%Y %H:%i:%s')";
 		}
 		if (!is_null($data->getFechaHasta())) {
-			$sql .= " AND `created_at` < STR_TO_DATE('".$data->getFechaHasta()." 23:59:59', '%Y-%m-%d %H:%i:%s')";
+			$sql .= " AND `created_at` < STR_TO_DATE('".$data->getFechaHasta()." 23:59:59', '%d/%m/%Y %H:%i:%s')";
 		}
 		if (!is_null($data->getIdProveedor())) {
 			$sql .= " AND `id_proveedor` = ".$data->getIdProveedor();
@@ -79,7 +81,7 @@ class comprasService extends OService {
 
 		$db->query($sql_count.$sql);
 		$res = $db->next();
-		$ret['pags'] = ceil($res['NUM'] / $c->getExtra('num_por_pag'));
+		$ret['pags'] = ceil($res['num'] / $c->getExtra('num_por_pag'));
 
 		$lim = ($data->getPagina() - 1) * $c->getExtra('num_por_pag');
 		$sql_pag = $sql_all.$sql;
@@ -128,5 +130,36 @@ class comprasService extends OService {
 		$db = new ODB();
 		$sql = "DELETE FROM `linea_pedido` WHERE `id_pedido` = ?";
 		$db->query($sql, [$id_pedido]);
+	}
+
+	/**
+	 * Función para actualizar (guardar o borrar los PDFs adjuntos de un pedido.
+	 *
+	 * @param Pedido $pedido Pedido al que adjuntar los PDFs
+	 *
+	 * @param array $pdfs Lista de PDFs a guardar o borrar
+	 *
+	 * @return void
+	 */
+	public function updatePedidoPDFs(Pedido $pedido, array $pdfs): void {
+		foreach ($pdfs as $pdf) {
+$this->getLog()->debug(var_export($pdf, true));
+			$pedido_pdf = new PdfPedido();
+			if (is_null($pdf['id']) && !is_null($pdf['data'])) {
+$this->getLog()->debug('nuevo');
+				$pedido_pdf->set('id_pedido', $pedido->get('id'));
+				$pedido_pdf->set('nombre', $pdf['nombre']);
+				$pedido_pdf->save();
+
+				$ruta = $pedido_pdf->getFileRoute();
+$this->getLog()->debug($ruta);
+				OTools::base64ToFile($pdf['data'], $ruta);
+			}
+			if (!is_null($pdf['id']) && $pdf['deleted']) {
+$this->getLog()->debug('a borrar');
+				$pedido_pdf->find(['id' => $pdf['id']]);
+				$pedido_pdf->deleteFull();
+			}
+		}
 	}
 }

@@ -38,6 +38,7 @@ class savePedidoAction extends OAction {
 			}
 
 			if ($status == 'ok') {
+				// Guardo datos del pedido
 				$pedido->set('id_proveedor', $data->getIdProveedor());
 				$pedido->set('albaran_factura', $data->getAlbaranFactura() === 'albaran');
 				$pedido->set('num_albaran_factura', $data->getNumAlbaranFactura());
@@ -53,8 +54,10 @@ class savePedidoAction extends OAction {
 				$pedido->save();
 				$data->setId($pedido->get('id'));
 
+				// Borro líneas del pedido
 				$this->compras_service->borrarLineasPedido($pedido->get('id'));
 
+				// Guardo nuevas líneas del pedido
 				foreach ($data->getLineas() as $linea) {
 					$lp = new LineaPedido();
 					$lp->set('id_pedido', $pedido->get('id'));
@@ -67,10 +70,14 @@ class savePedidoAction extends OAction {
 					$lp->set('descuento', $linea['descuento']);
 					$lp->save();
 
+					// Si el pedido está recepcionado
 					if ($pedido->get('recepcionado')) {
 
 					}
 				}
+
+				// Actualizo PDFs adjuntos
+				$this->compras_service->updatePedidoPDFs($pedido, $data->getPdfs());
 			}
 		}
 
