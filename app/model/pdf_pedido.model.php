@@ -53,8 +53,17 @@ class PdfPedido extends OModel {
 	 * @return string Ruta al archivo
 	 */
 	public function getFileRoute(): string {
+		return $this->getFileFolder().'/'.$this->get('id').'.pdf';
+	}
+
+	/**
+	 * Función para obtener la ruta a la carpeta del archivo físico
+	 *
+	 * @return string Ruta a la carpeta del archivo
+	 */
+	public function getFileFolder(): string {
 		global $core;
-		return $core->config->getDir('web').'pdf/'.$this->get('id_pedido').'/'.$this->get('id').'.pdf';
+		return $core->config->getDir('web').'pdf/'.$this->get('id_pedido');
 	}
 
 	/**
@@ -66,7 +75,7 @@ class PdfPedido extends OModel {
 		global $core;
 		return $core->config->getUrl('base').'pdf/'.$this->get('id_pedido').'/'.$this->get('id').'.pdf';
 	}
-	
+
 	/**
 	 * Función para borrar un  pdf, el archivo, y luego su registro
 	 *

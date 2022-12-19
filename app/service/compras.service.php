@@ -143,22 +143,31 @@ class comprasService extends OService {
 	 */
 	public function updatePedidoPDFs(Pedido $pedido, array $pdfs): void {
 		foreach ($pdfs as $pdf) {
-$this->getLog()->debug(var_export($pdf, true));
 			$pedido_pdf = new PdfPedido();
+
 			if (is_null($pdf['id']) && !is_null($pdf['data'])) {
-$this->getLog()->debug('nuevo');
 				$pedido_pdf->set('id_pedido', $pedido->get('id'));
-				$pedido_pdf->set('nombre', $pdf['nombre']);
+				$pedido_pdf->set('nombre', urldecode($pdf['nombre']));
 				$pedido_pdf->save();
 
 				$ruta = $pedido_pdf->getFileRoute();
-$this->getLog()->debug($ruta);
+				$ruta_folder = $pedido_pdf->getFileFolder();
+
+				if (!is_dir($ruta_folder)) {
+					mkdir($ruta_folder, 0777, true);
+				}
+
 				OTools::base64ToFile($pdf['data'], $ruta);
 			}
 			if (!is_null($pdf['id']) && $pdf['deleted']) {
-$this->getLog()->debug('a borrar');
 				$pedido_pdf->find(['id' => $pdf['id']]);
 				$pedido_pdf->deleteFull();
+
+				$ruta_folder = $pedido_pdf->getFileFolder();
+
+				if (count(scandir($ruta_folder)) == 2) {
+					rmdir($ruta_folder);
+				}
 			}
 		}
 	}
