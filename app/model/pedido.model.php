@@ -18,7 +18,7 @@ class Pedido extends OModel {
 			new OModelField(
 				name: 'id_proveedor',
 				type: OMODEL_NUM,
-				nullable: false,
+				nullable: true,
 				default: null,
 				ref: 'proveedor.id',
 				comment: 'Id del proveedor del pedido'
@@ -33,7 +33,7 @@ class Pedido extends OModel {
 			new OModelField(
 				name: 'num_albaran_factura',
 				type: OMODEL_TEXT,
-				nullable: false,
+				nullable: true,
 				default: null,
 				size: 200,
 				comment: 'Albarán / factura del pedido'
