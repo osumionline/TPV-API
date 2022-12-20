@@ -21,6 +21,7 @@ class PedidoDTO implements ODTO{
   private ?bool $recepcionado = null;
   private ?string $observaciones = null;
   private ?array $pdfs = null;
+  private ?array $vista = null;
 
   public function getId(): ?int {
 		return $this->id;
@@ -112,6 +113,12 @@ class PedidoDTO implements ODTO{
 	private function setPdfs(?array $pdfs): void {
 		$this->pdfs = $pdfs;
 	}
+  public function getVista(): ?array {
+		return $this->vista;
+	}
+	private function setVista(?array $vista): void {
+		$this->vista = $vista;
+	}
 
 	public function isValid(): bool {
 		return (
@@ -140,5 +147,6 @@ class PedidoDTO implements ODTO{
 		$this->setRecepcionado( $req->getParamBool('recepcionado') );
     $this->setObservaciones( $req->getParamString('observaciones') );
 		$this->setPdfs( $req->getParam('pdfs') );
+    $this->setVista( $req->getParam('vista') );
 	}
 }

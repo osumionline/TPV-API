@@ -253,4 +253,49 @@ class Pedido extends OModel {
 
 		$this->setPdfs($list);
 	}
+
+	private ?array $vista = null;
+
+	/**
+	 * Obtiene el listado de opciones para la vista de un pedido
+	 *
+	 * @return array Listado de opciones
+	 */
+	public function getVista(): array {
+		if (is_null($this->vista)) {
+			$this->loadVista();
+		}
+		return $this->vista;
+	}
+
+	/**
+	 * Guarda la lista de opciones para la vista de un pedido
+	 *
+	 * @param array $l Lista de opciones
+	 *
+	 * @return void
+	 */
+	public function setVista(array $v): void {
+		$this->vista = $v;
+	}
+
+	/**
+	 * Carga la lista de opciones para la vista de un pedido
+	 *
+	 * @return void
+	 */
+	public function loadVista(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `vista_pedido` WHERE `id_pedido` = ? ORDER BY `id_column` ASC";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$v = new VistaPedido();
+			$v->update($res);
+			array_push($list, $v);
+		}
+
+		$this->setVista($list);
+	}
 }

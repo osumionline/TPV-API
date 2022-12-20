@@ -1,6 +1,7 @@
 <?php
 use OsumiFramework\App\Component\Model\LineaPedidoListComponent;
 use OsumiFramework\App\Component\Model\PdfPedidoListComponent;
+use OsumiFramework\App\Component\Model\VistaPedidoListComponent;
 
 if (is_null($values['pedido'])) {
 ?>
@@ -26,7 +27,8 @@ else {
 	"recepcionado": <?php echo $values['pedido']->get('recepcionado') ? 'true' : 'false' ?>,
 	"observaciones": <?php echo is_null($values['pedido']->get('observaciones')) ? 'null' : '"'.urlencode($values['pedido']->get('observaciones')).'"' ?>,
 	"lineas": [<?php echo new LineaPedidoListComponent(['list' => $values['pedido']->getLineas(), 'recepcionado' => $values['pedido']->get('recepcionado')]) ?>],
-	"pdfs": [<?php echo new PdfPedidoListComponent(['list' => $values['pedido']->getPdfs()]) ?>]
+	"pdfs": [<?php echo new PdfPedidoListComponent(['list' => $values['pedido']->getPdfs()]) ?>],
+	"vista": [<?php echo new VistaPedidoListComponent(['list' => $values['pedido']->getVista()]) ?>]
 }
 <?php
 }

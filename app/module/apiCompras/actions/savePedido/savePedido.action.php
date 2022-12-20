@@ -8,6 +8,7 @@ use OsumiFramework\App\DTO\PedidoDTO;
 use OsumiFramework\App\Model\Pedido;
 use OsumiFramework\App\Model\LineaPedido;
 use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\VistaPedido;
 
 #[OModuleAction(
 	url: '/save-pedido',
@@ -116,6 +117,18 @@ class savePedidoAction extends OAction {
 
 							// TODO: falta event log
 						}
+					}
+
+					// Borro todas las líneas de la vista del pedido
+					$this->compras_service->borrarVistaPedido($pedido->get('id'));
+
+					// Guardo nueva vista
+					foreach ($data->getVista() as $vista) {
+						$vp = new VistaPedido();
+						$vp->set('id_pedido', $pedido->get('id'));
+						$vp->set('id_column', $vista['idColumn']);
+						$vp->set('status', $vista['status']);
+						$vp->save();
 					}
 				}
 
