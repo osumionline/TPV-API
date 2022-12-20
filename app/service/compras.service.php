@@ -60,10 +60,10 @@ class comprasService extends OService {
 		$sql = "";
 
 		if (!is_null($data->getFechaDesde())) {
-			$sql .= " AND `created_at` > STR_TO_DATE('".$data->getFechaDesde()." 00:00:00', '%d/%m/%Y %H:%i:%s')";
+			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` > STR_TO_DATE('".$data->getFechaDesde()." 00:00:00', '%d/%m/%Y %H:%i:%s')";
 		}
 		if (!is_null($data->getFechaHasta())) {
-			$sql .= " AND `created_at` < STR_TO_DATE('".$data->getFechaHasta()." 23:59:59', '%d/%m/%Y %H:%i:%s')";
+			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` < STR_TO_DATE('".$data->getFechaHasta()." 23:59:59', '%d/%m/%Y %H:%i:%s')";
 		}
 		if (!is_null($data->getIdProveedor())) {
 			$sql .= " AND `id_proveedor` = ".$data->getIdProveedor();

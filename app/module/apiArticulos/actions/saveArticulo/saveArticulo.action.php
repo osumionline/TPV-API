@@ -70,6 +70,7 @@ class saveArticuloAction extends OAction {
 					$time = mktime(0, 0, 0, intval($fec_cad_data[0]), 1, (2000 + intval($fec_cad_data[1])));
 					$fecha_caducidad = date('Y-m-d H:i:s', $time);
 				}
+				// Guardo datos del artículo
 				$art->set('localizador',         $data->getLocalizador());
 				$art->set('nombre',              urldecode($data->getNombre()));
 				$art->set('slug',                OTools::slugify(urldecode($data->getNombre())));
@@ -99,6 +100,7 @@ class saveArticuloAction extends OAction {
 				$art->save();
 				$data->setId( $art->get('id') );
 
+				// Guardo los códigos de barras
 				$cod_barras_por_defecto = false;
 				foreach ($data->getCodigosBarras() as $cod) {
 					if (!empty($cod['codigoBarras'])) {
@@ -111,10 +113,14 @@ class saveArticuloAction extends OAction {
 						if ($cb->get('por_defecto')) {
 							$cod_barras_por_defecto = true;
 						}
+						else {
+							$cb->set('por_defecto', false);
+						}
 						$cb->save();
 					}
 				}
 
+				// Si no tiene código de barras por defecto se lo creo
 				if (!$cod_barras_por_defecto) {
 					$cb = new CodigoBarras();
 					$cb->set('id_articulo', $data->getId());
@@ -123,7 +129,10 @@ class saveArticuloAction extends OAction {
 					$cb->save();
 				}
 
+				// Actualizo las fotos del artículo
 				$this->articulos_service->updateFotos($art, $data->getFotosList());
+
+				// Obtengo el localizador del artículo, o el que se le ha asignado
 				$localizador = $data->getLocalizador();
 			}
 		}

@@ -31,6 +31,14 @@ class LineaVenta extends OModel {
 				comment: 'Id del artículo que está siendo vendido'
 			),
 			new OModelField(
+				name: 'nombre_articulo',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Nombre del artículo'
+			),
+			new OModelField(
 				name: 'puc',
 				type: OMODEL_FLOAT,
 				nullable: false,

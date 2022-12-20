@@ -18,7 +18,6 @@ class LineaPedido extends OModel {
 				name: 'id_pedido',
 				type: OMODEL_NUM,
 				nullable: false,
-				default: null,
 				ref: 'pedido.id',
 				comment: 'Id del pedido al que pertenece la línea'
 			),
@@ -26,42 +25,56 @@ class LineaPedido extends OModel {
 				name: 'id_articulo',
 				type: OMODEL_NUM,
 				nullable: false,
-				default: null,
 				ref: 'articulo.id',
 				comment: 'Id del artículo recibido'
 			),
 			new OModelField(
+				name: 'nombre_articulo',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 100,
+				comment: 'Nombre del artículo'
+			),
+			new OModelField(
+				name: 'codigo_barras',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Nuevo código de barras para el artículo'
+			),
+			new OModelField(
 				name: 'unidades',
 				type: OMODEL_NUM,
-				nullable: false,
+				nullable: true,
 				default: null,
 				comment: 'Número de unidades recibidas'
 			),
 			new OModelField(
 				name: 'palb',
 				type: OMODEL_FLOAT,
-				nullable: false,
+				nullable: true,
 				default: null,
 				comment: 'Precio de albarán del artículo'
 			),
 			new OModelField(
 				name: 'pvp',
 				type: OMODEL_FLOAT,
-				nullable: false,
+				nullable: true,
 				default: null,
 				comment: 'PVP del artículo'
 			),
 			new OModelField(
 				name: 'margen',
 				type: OMODEL_FLOAT,
-				nullable: false,
+				nullable: true,
 				default: null,
 				comment: 'Porcentaje de margen del artículo'
 			),
 			new OModelField(
 				name: 'iva',
 				type: OMODEL_FLOAT,
-				nullable: false,
+				nullable: true,
 				default: null,
 				comment: 'IVA del artículo'
 			),
@@ -75,8 +88,8 @@ class LineaPedido extends OModel {
 			new OModelField(
 				name: 'descuento',
 				type: OMODEL_FLOAT,
-				nullable: false,
-				default: false,
+				nullable: true,
+				default: null,
 				comment: 'Porcentaje de descuento del artículo'
 			),
 			new OModelField(

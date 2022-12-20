@@ -49,6 +49,7 @@ class saveVentaAction extends OAction {
 				$lv = new LineaVenta();
 				$lv->set('id_venta', $venta->get('id'));
 				$lv->set('id_articulo', $linea['idArticulo']);
+				$lv->set('nombre_articulo', $art->get('nombre'));
 				$lv->set('puc', $art->get('puc'));
 				$lv->set('pvp', $art->get('pvp'));
 				$lv->set('iva', $art->get('iva'));

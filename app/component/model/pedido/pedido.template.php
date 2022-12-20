@@ -19,11 +19,13 @@ else {
 	"portes": <?php echo $values['pedido']->get('portes') ?>,
 	"fechaPago": "<?php echo is_null($values['pedido']->get('fecha_pago')) ? 'null' : $values['pedido']->get('fecha_pago', 'd/m/Y') ?>",
 	"fechaPedido": "<?php echo is_null($values['pedido']->get('fecha_pedido')) ? 'null' : $values['pedido']->get('fecha_pedido', 'd/m/Y') ?>",
+	"fechaRecepcionado": "<?php echo is_null($values['pedido']->get('fecha_recepcionado')) ? 'null' : $values['pedido']->get('fecha_recepcionado', 'd/m/Y') ?>",
 	"re": <?php echo $values['pedido']->get('re') ? 'true' : 'false' ?>,
 	"ue": <?php echo $values['pedido']->get('europeo') ? 'true' : 'false' ?>,
 	"faltas": <?php echo $values['pedido']->get('faltas') ? 'true' : 'false' ?>,
 	"recepcionado": <?php echo $values['pedido']->get('recepcionado') ? 'true' : 'false' ?>,
-	"lineas": [<?php echo new LineaPedidoListComponent(['list' => $values['pedido']->getLineas()]) ?>],
+	"observaciones": <?php echo is_null($values['pedido']->get('observaciones')) ? 'null' : '"'.urlencode($values['pedido']->get('observaciones')).'"' ?>,
+	"lineas": [<?php echo new LineaPedidoListComponent(['list' => $values['pedido']->getLineas(), 'recepcionado' => $values['pedido']->get('recepcionado')]) ?>],
 	"pdfs": [<?php echo new PdfPedidoListComponent(['list' => $values['pedido']->getPdfs()]) ?>]
 }
 <?php

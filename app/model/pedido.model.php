@@ -67,6 +67,13 @@ class Pedido extends OModel {
 				comment: 'Fecha del pedido'
 			),
 			new OModelField(
+				name: 'fecha_recepcionado',
+				type: OMODEL_DATE,
+				nullable: true,
+				default: null,
+				comment: 'Fecha del momento de la recepcion del pedido'
+			),
+			new OModelField(
 				name: 're',
 				type: OMODEL_BOOL,
 				nullable: false,
@@ -93,6 +100,13 @@ class Pedido extends OModel {
 				nullable: false,
 				default: false,
 				comment: 'Indica si se ha recepcionado el pedido 1 o si está pendiente 0'
+			),
+			new OModelField(
+				name: 'observaciones',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Observaciones o notas sobre el pedido'
 			),
 			new OModelField(
 				name: 'created_at',

@@ -1,4 +1,5 @@
 {
   "status": "{{status}}",
-  "id": {{id}}
+  "id": {{id}},
+	"message": "{{message}}"
 }

@@ -19,6 +19,7 @@ class PedidoDTO implements ODTO{
   private ?float $portes = null;
   private ?bool $faltas = null;
   private ?bool $recepcionado = null;
+  private ?string $observaciones = null;
   private ?array $pdfs = null;
 
   public function getId(): ?int {
@@ -99,6 +100,12 @@ class PedidoDTO implements ODTO{
 	private function setRecepcionado(?bool $recepcionado): void {
 		$this->recepcionado = $recepcionado;
 	}
+  public function getObservaciones(): ?string {
+		return $this->observaciones;
+	}
+	private function setObservaciones(?string $observaciones): void {
+		$this->observaciones = $observaciones;
+	}
 	public function getPdfs(): ?array {
 		return $this->pdfs;
 	}
@@ -131,6 +138,7 @@ class PedidoDTO implements ODTO{
 		$this->setPortes( $req->getParamFloat('portes') );
 		$this->setFaltas( $req->getParamBool('faltas') );
 		$this->setRecepcionado( $req->getParamBool('recepcionado') );
+    $this->setObservaciones( $req->getParamString('observaciones') );
 		$this->setPdfs( $req->getParam('pdfs') );
 	}
 }

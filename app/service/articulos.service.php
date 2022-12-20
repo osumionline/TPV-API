@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Foto;
 use OsumiFramework\App\Model\ArticuloFoto;
 use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\LineaPedido;
 
 class articulosService extends OService {
 	/**
