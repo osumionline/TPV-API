@@ -24,19 +24,19 @@ class Pedido extends OModel {
 				comment: 'Id del proveedor del pedido'
 			),
 			new OModelField(
-				name: 'albaran_factura',
-				type: OMODEL_BOOL,
-				nullable: false,
-				default: true,
-				comment: 'Indica si se trata de un albarán 1 o una factura 0'
+				name: 'tipo',
+				type: OMODEL_TEXT,
+				nullable: true,
+				size: 10,
+				comment: 'Indica si se trata de un albarán, una factura o un abono'
 			),
 			new OModelField(
-				name: 'num_albaran_factura',
+				name: 'num',
 				type: OMODEL_TEXT,
 				nullable: true,
 				default: null,
 				size: 200,
-				comment: 'Albarán / factura del pedido'
+				comment: 'Albarán / factura / abono del pedido'
 			),
 			new OModelField(
 				name: 'importe',
@@ -297,5 +297,29 @@ class Pedido extends OModel {
 		}
 
 		$this->setVista($list);
+	}
+
+	/**
+	 * Función para borrar un pedido, sus líneas, sus pdfs y su vista
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$lineas = $this->getLineas();
+		foreach ($lineas as $linea) {
+			$linea->delete();
+		}
+
+		$pdfs = $this->getPdfs();
+		foreach ($pdfs as $pdf) {
+			$pdf->deleteFull();
+		}
+
+		$vista = $this->getVista();
+		foreach ($vista as $v) {
+			$v->delete();
+		}
+
+		$this->delete();
 	}
 }

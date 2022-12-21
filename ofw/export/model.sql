@@ -137,8 +137,8 @@ CREATE TABLE `pdf_pedido` (
 CREATE TABLE `pedido` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada pedido',
   `id_proveedor` INT(11) NOT NULL DEFAULT NULL COMMENT 'Id del proveedor del pedido',
-  `albaran_factura` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Indica si se trata de un albarán 1 o una factura 0',
-  `num_albaran_factura` VARCHAR(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT NULL COMMENT 'Albarán / factura del pedido',
+  `tipo` VARCHAR(10) COLLATE utf8mb4_unicode_ci COMMENT 'Indica si se trata de un albarán, una factura o un abono',
+  `num` VARCHAR(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Albarán / factura / abono del pedido',
   `importe` FLOAT NOT NULL DEFAULT 0 COMMENT 'Importe total del pedido',
   `portes` FLOAT NOT NULL DEFAULT 0 COMMENT 'Importe de los portes del pedido',
   `fecha_pago` DATETIME DEFAULT NULL COMMENT 'Fecha de pago del pedido',

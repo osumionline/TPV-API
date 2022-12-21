@@ -10,8 +10,8 @@ class PedidoDTO implements ODTO{
   private ?int $id_proveedor = null;
   private ?bool $re = null;
   private ?bool $ue = null;
-  private ?string $albaran_factura = null;
-  private ?string $num_albaran_factura = null;
+  private ?string $tipo = null;
+  private ?string $num = null;
   private ?string $fecha_pago = null;
   private ?string $fecha_pedido = null;
   private ?array $lineas = null;
@@ -47,17 +47,17 @@ class PedidoDTO implements ODTO{
 	private function setUe(?bool $ue): void {
 		$this->ue = $ue;
 	}
-	public function getAlbaranFactura(): ?string {
-		return $this->albaran_factura;
+	public function getTipo(): ?string {
+		return $this->tipo;
 	}
-	private function setAlbaranFactura(?string $albaran_factura): void {
-		$this->albaran_factura = $albaran_factura;
+	private function setTipo(?string $tipo): void {
+		$this->tipo = $tipo;
 	}
-	public function getNumAlbaranFactura(): ?string {
-		return $this->num_albaran_factura;
+	public function getNum(): ?string {
+		return $this->num;
 	}
-	private function setNumAlbaranFactura(?string $num_albaran_factura): void {
-		$this->num_albaran_factura = $num_albaran_factura;
+	private function setNum(?string $num): void {
+		$this->num = $num;
 	}
 	public function getFechaPago(): ?string {
 		return $this->fecha_pago;
@@ -122,8 +122,8 @@ class PedidoDTO implements ODTO{
 
 	public function isValid(): bool {
 		return (
-			!is_null($this->getAlbaranFactura()) &&
-			!is_null($this->getNumAlbaranFactura()) &&
+			!is_null($this->getTipo()) &&
+			!is_null($this->getNum()) &&
 			!is_null($this->getFechaPago()) &&
 			!is_null($this->getFechaPedido()) &&
 			!is_null($this->getLineas()) &&
@@ -136,8 +136,8 @@ class PedidoDTO implements ODTO{
 		$this->setIdProveedor( $req->getParamInt('idProveedor') );
 		$this->setRe( $req->getParamBool('re') );
 		$this->setUe( $req->getParamBool('ue') );
-		$this->setAlbaranFactura( $req->getParamString('albaranFactura') );
-		$this->setNumAlbaranFactura( $req->getParamString('numAlbaranFactura') );
+		$this->setTipo( $req->getParamString('tipo') );
+		$this->setNum( $req->getParamString('num') );
 		$this->setFechaPago( $req->getParamString('fechaPago') );
 		$this->setFechaPedido( $req->getParamString('fechaPedido') );
 		$this->setLineas( $req->getParam('lineas') );

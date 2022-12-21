@@ -5,6 +5,9 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\App\DTO\PedidoDTO;
+use OsumiFramework\App\Model\Pedido;
+use OsumiFramework\App\Model\LineaPedido;
+use OsumiFramework\App\Model\VistaPedido;
 
 #[OModuleAction(
 	url: '/auto-save-pedido',
@@ -24,18 +27,35 @@ class autoSavePedidoAction extends OAction {
 		}
 
 		// Guardo datos del pedido
-		$pedido->set('id_proveedor', $data->getIdProveedor());
-		$pedido->set('albaran_factura', $data->getAlbaranFactura() === 'albaran');
-		$pedido->set('num_albaran_factura', $data->getNumAlbaranFactura());
+		if (!is_null($data->getIdProveedor()) && $data->getIdProveedor() != -1) {
+			$pedido->set('id_proveedor', $data->getIdProveedor());
+		}
+		else {
+			$pedido->set('id_proveedor', null);
+		}
+		$pedido->set('tipo', $data->getTipo());
+		$pedido->set('num', $data->getNum());
 		$pedido->set('importe', $data->getImporte());
 		$pedido->set('portes', $data->getPortes());
-		$pedido->set('fecha_pago', urldecode($data->getFechaPago()), '%e/%c/%Y');
-		$pedido->set('fecha_pedido', urldecode($data->getFechaPedido()), '%e/%c/%Y');
+		if (!is_null($data->getFechaPago())) {
+			$pedido->set('fecha_pago', urldecode($data->getFechaPago()), '%e/%c/%Y');
+		}
+		else {
+			$pedido->set('fecha_pago', null);
+		}
+		if (!is_null($data->getFechaPedido())) {
+			$pedido->set('fecha_pedido', urldecode($data->getFechaPedido()), '%e/%c/%Y');
+		}
+		else {
+			$pedido->set('fecha_pedido', null);
+		}
 		$pedido->set('re', $data->getRe());
 		$pedido->set('europeo', $data->getUe());
 		$pedido->set('faltas', $data->getFaltas());
 		$pedido->set('recepcionado', $data->getRecepcionado());
-		$pedido->set('observaciones', urldecode($data->getObservaciones()));
+		if (!is_null($data->getObservaciones())) {
+			$pedido->set('observaciones', urldecode($data->getObservaciones()));
+		}
 
 		$pedido->save();
 		$data->setId($pedido->get('id'));
