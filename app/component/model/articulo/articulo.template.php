@@ -1,7 +1,7 @@
 <?php
 use OsumiFramework\App\Component\Model\CodigoBarrasListComponent;
-use OsumiFramework\App\Component\Model\EtiquetasListComponent;
-use OsumiFramework\App\Component\Model\EtiquetasWebListComponent;
+use OsumiFramework\App\Component\Model\EtiquetaListComponent;
+use OsumiFramework\App\Component\Model\EtiquetaWebListComponent;
 
 if (is_null($values['articulo'])) {
 ?>
@@ -38,8 +38,8 @@ else { ?>
 	"accesoDirecto": <?php echo is_null($values['articulo']->get('acceso_directo')) ? 'null' : $values['articulo']->get('acceso_directo') ?>,
 	"codigosBarras": [<?php echo new CodigoBarrasListComponent(['list' => $values['articulo']->getCodigosBarras()]) ?>],
 	"fotos": [<?php echo implode(',', $values['articulo']->getFotosList()) ?>],
-	"etiquetas": [<?php echo new EtiquetasListComponent(['list' => $values['articulo']->getEtiquetas()]) ?>],
-	"etiquetasWeb": [<?php echo new EtiquetasWebListComponent(['list' => $values['articulo']->getEtiquetasWeb()]) ?>]
+	"etiquetas": [<?php echo new EtiquetaListComponent(['list' => $values['articulo']->getEtiquetas()]) ?>],
+	"etiquetasWeb": [<?php echo new EtiquetaWebListComponent(['list' => $values['articulo']->getEtiquetasWeb()]) ?>]
 }
 <?php
 }
