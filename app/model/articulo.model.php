@@ -446,4 +446,94 @@ class Articulo extends OModel {
 		$p->find(['id' => $this->get('id_proveedor')]);
 		$this->setProveedor($p);
 	}
+
+	private ?array $etiquetas = null;
+
+	/**
+	 * Obtiene el listado de etiquetas de un artículo
+	 *
+	 * @return array Listado de etiquetas
+	 */
+	public function getEtiquetas(): array {
+		if (is_null($this->etiquetas)) {
+			$this->loadEtiquetas();
+		}
+		return $this->etiquetas;
+	}
+
+	/**
+	 * Guarda la lista de etiquetas
+	 *
+	 * @param array $e Lista de etiquetas
+	 *
+	 * @return void
+	 */
+	public function setEtiquetas(array $e): void {
+		$this->etiquetas = $e;
+	}
+
+	/**
+	 * Carga la lista de etiquetas de un artículo
+	 *
+	 * @return void
+	 */
+	public function loadEtiquetas(): void {
+		$db = new ODB();
+		$sql = "SELECT e.* FROM `etiqueta` e, `articulo_etiqueta` ae WHERE e.`id` = ae.`id_etiqueta` AND ae.`id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$e = new Etiqueta();
+			$e->update($res);
+			array_push($list, $e);
+		}
+
+		$this->setEtiquetas($list);
+	}
+
+	private ?array $etiquetas_web = null;
+
+	/**
+	 * Obtiene el listado de etiquetas web de un artículo
+	 *
+	 * @return array Listado de etiquetas web
+	 */
+	public function getEtiquetasWeb(): array {
+		if (is_null($this->etiquetas_web)) {
+			$this->loadEtiquetasWeb();
+		}
+		return $this->etiquetas_web;
+	}
+
+	/**
+	 * Guarda la lista de etiquetas web
+	 *
+	 * @param array $e Lista de etiquetas web
+	 *
+	 * @return void
+	 */
+	public function setEtiquetasWeb(array $e): void {
+		$this->etiquetas_web = $e;
+	}
+
+	/**
+	 * Carga la lista de etiquetas web de un artículo
+	 *
+	 * @return void
+	 */
+	public function loadEtiquetasWeb(): void {
+		$db = new ODB();
+		$sql = "SELECT e.* FROM `etiqueta_web` e, `articulo_etiqueta_web` ae WHERE e.`id` = ae.`id_etiqueta_web` AND ae.`id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$e = new EtiquetaWeb();
+			$e->update($res);
+			array_push($list, $e);
+		}
+
+		$this->setEtiquetasWeb($list);
+	}
 }

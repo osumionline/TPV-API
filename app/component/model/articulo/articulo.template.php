@@ -1,6 +1,14 @@
-<?php if (is_null($values['articulo'])): ?>
+<?php
+use OsumiFramework\App\Component\Model\CodigoBarrasListComponent;
+use OsumiFramework\App\Component\Model\EtiquetasListComponent;
+use OsumiFramework\App\Component\Model\EtiquetasWebListComponent;
+
+if (is_null($values['articulo'])) {
+?>
 null
-<?php else: ?>
+<?php
+}
+else { ?>
 {
 	"id": <?php echo $values['articulo']->get('id') ?>,
 	"localizador": <?php echo $values['articulo']->get('localizador') ?>,
@@ -28,15 +36,11 @@ null
 	"mostrarObsPedidos": <?php echo $values['articulo']->get('mostrar_obs_pedidos') ? 'true' : 'false' ?>,
 	"mostrarObsVentas": <?php echo $values['articulo']->get('mostrar_obs_ventas') ? 'true' : 'false' ?>,
 	"accesoDirecto": <?php echo is_null($values['articulo']->get('acceso_directo')) ? 'null' : $values['articulo']->get('acceso_directo') ?>,
-	"codigosBarras": [
-	<?php foreach ($values['articulo']->getCodigosBarras() as $i => $cod_barras): ?>
-			{
-				"id": <?php echo $cod_barras->get('id') ?>,
-				"codigoBarras": <?php echo $cod_barras->get('codigo_barras') ?>,
-				"porDefecto": <?php echo $cod_barras->get('por_defecto') ? 'true' : 'false' ?>
-			}<?php if ($i < count($values['articulo']->getCodigosBarras()) -1): ?>,<?php endif ?>
-	<?php endforeach ?>
-	],
-	"fotos": [<?php echo implode(',', $values['articulo']->getFotosList()) ?>]
+	"codigosBarras": [<?php echo new CodigoBarrasListComponent(['list' => $values['articulo']->getCodigosBarras()]) ?>],
+	"fotos": [<?php echo implode(',', $values['articulo']->getFotosList()) ?>],
+	"etiquetas": [<?php echo new EtiquetasListComponent(['list' => $values['articulo']->getEtiquetas()]) ?>],
+	"etiquetasWeb": [<?php echo new EtiquetasWebListComponent(['list' => $values['articulo']->getEtiquetasWeb()]) ?>]
 }
-<?php endif ?>
+<?php
+}
+?>
