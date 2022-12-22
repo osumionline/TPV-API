@@ -8,6 +8,7 @@ use OsumiFramework\OFW\Web\ORequest;
 class PedidoDTO implements ODTO{
   private ?int $id = null;
   private ?int $id_proveedor = null;
+  private ?int $id_metodo_pago = null;
   private ?bool $re = null;
   private ?bool $ue = null;
   private ?string $tipo = null;
@@ -17,6 +18,7 @@ class PedidoDTO implements ODTO{
   private ?array $lineas = null;
   private ?float $importe = null;
   private ?float $portes = null;
+  private ?int $descuento = null;
   private ?bool $faltas = null;
   private ?bool $recepcionado = null;
   private ?string $observaciones = null;
@@ -34,6 +36,12 @@ class PedidoDTO implements ODTO{
 	}
 	private function setIdProveedor(?int $id_proveedor): void {
 		$this->id_proveedor = $id_proveedor;
+	}
+  public function getIdMetodoPago(): ?int {
+		return $this->id_metodo_pago;
+	}
+	private function setIdMetodoPago(?int $id_metodo_pago): void {
+		$this->id_metodo_pago = $id_metodo_pago;
 	}
 	public function getRe(): ?bool {
 		return $this->re;
@@ -89,6 +97,12 @@ class PedidoDTO implements ODTO{
 	private function setPortes(?float $portes): void {
 		$this->portes = $portes;
 	}
+  public function getDescuento(): ?int {
+		return $this->descuento;
+	}
+	private function setDescuento(?int $descuento): void {
+		$this->descuento = $descuento;
+	}
 	public function getFaltas(): ?bool {
 		return $this->faltas;
 	}
@@ -134,6 +148,7 @@ class PedidoDTO implements ODTO{
 	public function load(ORequest $req): void {
 		$this->setId( $req->getParamInt('id') );
 		$this->setIdProveedor( $req->getParamInt('idProveedor') );
+    $this->setIdMetodoPago( $req->getParamInt('idMetodoPago') );
 		$this->setRe( $req->getParamBool('re') );
 		$this->setUe( $req->getParamBool('ue') );
 		$this->setTipo( $req->getParamString('tipo') );
@@ -143,6 +158,7 @@ class PedidoDTO implements ODTO{
 		$this->setLineas( $req->getParam('lineas') );
 		$this->setImporte( $req->getParamFloat('importe') );
 		$this->setPortes( $req->getParamFloat('portes') );
+    $this->setDescuento( $req->getParamInt('descuento') );
 		$this->setFaltas( $req->getParamBool('faltas') );
 		$this->setRecepcionado( $req->getParamBool('recepcionado') );
     $this->setObservaciones( $req->getParamString('observaciones') );

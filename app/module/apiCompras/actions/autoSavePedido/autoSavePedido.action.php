@@ -33,10 +33,12 @@ class autoSavePedidoAction extends OAction {
 		else {
 			$pedido->set('id_proveedor', null);
 		}
+		$pedido->set('metodo_pago', $data->getIdMetodoPago());
 		$pedido->set('tipo', $data->getTipo());
 		$pedido->set('num', $data->getNum());
 		$pedido->set('importe', $data->getImporte());
 		$pedido->set('portes', $data->getPortes());
+		$pedido->set('descuento', $data->getDescuento());
 		if (!is_null($data->getFechaPago())) {
 			$pedido->set('fecha_pago', urldecode($data->getFechaPago()), '%e/%c/%Y');
 		}

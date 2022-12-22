@@ -12,12 +12,15 @@ else {
 ?>
 {
 	"id": <?php echo $values['pedido']->get('id') ?>,
-	"idProveedor": <?php echo is_null($values['pedido']->get('id_proveedor')) ? 'null' : '"'.$values['pedido']->get('id_proveedor').'"' ?>,
+	"idProveedor": <?php echo is_null($values['pedido']->get('id_proveedor')) ? 'null' : $values['pedido']->get('id_proveedor') ?>,
+	"idMetodoPago": <?php echo is_null($values['pedido']->get('metodo_pago')) ? 'null' : $values['pedido']->get('metodo_pago') ?>,
+	"metodoPago": <?php echo is_null($values['pedido']->getMetodoPago()) ? 'null' : '"'.urlencode($values['pedido']->getMetodoPago()).'"' ?>,
 	"proveedor": <?php echo is_null($values['pedido']->getProveedor()) ? 'null' : '"'.urlencode($values['pedido']->getProveedor()->get('nombre')).'"' ?>,
 	"tipo": "<?php echo $values['pedido']->get('tipo') ?>",
 	"num": "<?php echo urlencode($values['pedido']->get('num')) ?>",
 	"importe": <?php echo $values['pedido']->get('importe') ?>,
 	"portes": <?php echo $values['pedido']->get('portes') ?>,
+	"descuento": <?php echo $values['pedido']->get('descuento') ?>,
 	"fechaPago": <?php echo is_null($values['pedido']->get('fecha_pago')) ? 'null' : '"'.$values['pedido']->get('fecha_pago', 'd/m/Y').'"' ?>,
 	"fechaPedido": <?php echo is_null($values['pedido']->get('fecha_pedido')) ? 'null' : '"'.$values['pedido']->get('fecha_pedido', 'd/m/Y').'"' ?>,
 	"fechaRecepcionado": <?php echo is_null($values['pedido']->get('fecha_recepcionado')) ? 'null' : '"'.$values['pedido']->get('fecha_recepcionado', 'd/m/Y').'"' ?>,

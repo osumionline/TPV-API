@@ -24,6 +24,13 @@ class Pedido extends OModel {
 				comment: 'Id del proveedor del pedido'
 			),
 			new OModelField(
+				name: 'metodo_pago',
+				type: OMODEL_NUM,
+				nullable: true,
+				default: null,
+				comment: 'Método de pago del pedido'
+			),
+			new OModelField(
 				name: 'tipo',
 				type: OMODEL_TEXT,
 				nullable: true,
@@ -51,6 +58,13 @@ class Pedido extends OModel {
 				nullable: false,
 				default: 0,
 				comment: 'Importe de los portes del pedido'
+			),
+			new OModelField(
+				name: 'descuento',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Porcentaje de descuento en el pedido'
 			),
 			new OModelField(
 				name: 'fecha_pago',
@@ -123,6 +137,35 @@ class Pedido extends OModel {
 		);
 
 		parent::load($model);
+	}
+
+	/**
+	 * Función para obtener el nombre del método de pago
+	 *
+	 * @return string Nombre del método de pago
+	 */
+	public function getMetodoPago(): ?string {
+		if (is_null($this->get('metodo_pago'))) {
+			return null;
+		}
+		switch ($this->get('metodo_pago')) {
+			case 0: {
+				return 'Domiciliación bancaria';
+			}
+			break;
+			case 1: {
+				return 'Tarjeta';
+			}
+			break;
+			case 2: {
+				return 'Paypal';
+			}
+			break;
+			case 3: {
+				return 'Al contado';
+			}
+			break;
+		}
 	}
 
 	private ?Proveedor $proveedor = null;
