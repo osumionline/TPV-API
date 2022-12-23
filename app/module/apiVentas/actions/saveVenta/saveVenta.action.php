@@ -4,7 +4,7 @@ namespace OsumiFramework\App\Module\Action;
 
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
-use OsumiFramework\OFW\Plugins\OEmail;
+use OsumiFramework\OFW\Plugins\OEmailSMTP;
 use OsumiFramework\App\DTO\VentaDTO;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
@@ -93,11 +93,11 @@ class saveVentaAction extends OAction {
 					$this->getLog()->debug('EMAIL CONTENT: ');
 					$this->getLog()->debug(var_export(strval($content), true));
 					$this->getLog()->debug('RUTA PDF: '.$ticket_pdf);
-					$email = new OEmail();
+					$email = new OEmailSMTP();
 					$email->addRecipient(urldecode($data->getEmail()));
 					$email->setSubject('TIENDA - Ticket venta X');
 					$email->setMessage(strval($content));
-					$email->setFrom('tienda@tpv.osumi.es');
+					$email->setFrom('hola@indomablestore.com');
 					$email->addAttachment($ticket_pdf);
 					$email->send();
 				}
