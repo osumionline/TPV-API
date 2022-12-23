@@ -300,21 +300,22 @@ class OEmail {
 	 */
 	private function getHeaders(string $recipient, string $separator): string {
 		$headers = '';
-		if (count($this->attachments)==0){
+		$headers .= "MIME-Version: 1.0".$this->eol;
+		$headers .= "To: ".$recipient.$this->eol;
+		$headers .= "From: ".$this->from.( is_null($this->from_name) ? "" : "<".$this->from_name.">" ).$this->eol;
+
+		if (count($this->attachments)==0) {
 			// If is html add special headers
 			if ($this->is_html) {
 				$headers .= "Content-type: text/html; charset=\"utf-8\"".$this->eol;
 			}
-			else{
+			else {
 				$headers .= "Content-Type: text/plain; charset=\"utf-8\"".$this->eol;
 			}
 		}
-		else{
-			$headers .= "Content-Type: multipart/mixed; boundary=\"".$separator."\"".$this->eol;
+		else {
+			$headers .= "Content-Type: multipart/mixed;".$this->eol." boundary=\"".$separator."\"".$this->eol;
 		}
-		$headers .= "MIME-Version: 1.0\r\n";
-		$headers .= "To: ".$recipient."\r\n";
-		$headers .= "From: ".$this->from.( is_null($this->from_name) ? "" : "<".$this->from_name.">" ).$this->eol;
 
 		return $headers;
 	}
@@ -331,16 +332,16 @@ class OEmail {
 		if (count($this->attachments)>0){
 			$body .= "--" . $separator . $this->eol;
 			if ($this->is_html) {
-	    		$body .= "Content-Type: text/html; charset=\"utf-8\"" . $this->eol;
-	    	}
-	    	else{
-		    	$body .= "Content-Type: text/plain; charset=\"utf-8\"" . $this->eol;
-	    	}
-	    	$body .= "Content-Transfer-Encoding: 8bit" . $this->eol;
+	    	$body .= "Content-Type: text/html; charset=\"utf-8\"" . $this->eol;
 	    }
-	    $body .= $this->message . $this->eol;
+	    else{
+		   	$body .= "Content-Type: text/plain; charset=\"utf-8\"" . $this->eol;
+	    }
+	    $body .= "Content-Transfer-Encoding: 8bit" . $this->eol;
+	  }
+	  $body .= $this->message . $this->eol;
 
-	    return $body;
+	  return $body;
 	}
 
 	/**
@@ -352,16 +353,20 @@ class OEmail {
 	 *
 	 * @return string Attachment as string ready to be inserted into the email
 	 */
-	public function getAttachment(string $filename, string $separator): string {
+	public function getAttachment(string $filename, string $separator, bool $last): string {
 		$content = file_get_contents($filename);
 		$content = chunk_split(base64_encode($content));
 
-		$attachment = "--" . $separator . $this->eol;
-		$attachment .= "Content-Type: application/octet-stream; name=\"".basename($filename)."\"".$this->eol;
+		$attachment .= "Content-Type: {\"application/octet-stream\"};".$this->eol." name=\"".basename($filename)."\"".$this->eol;
+		$attachment .= "Content-Disposition: attachment;".$this->eol." filename=\"".basename($filename)."\"".$this->eol;
 		$attachment .= "Content-Transfer-Encoding: base64".$this->eol;
-		$attachment .= "Content-Disposition: attachment".$this->eol;
 		$attachment .= $content.$this->eol;
-		$attachment .= "--".$separator."--";
+		if (!$last) {
+			$attachment .= "--".$separator.$this->eol;
+		}
+		else {
+			$attachment .= "--".$separator."--".$this->eol;
+		}
 
 		return $attachment;
 	}
@@ -382,21 +387,28 @@ class OEmail {
 		else {
 			$this->log('Sending emails to '.count($this->recipients).' addresses');
 
-			foreach ($this->recipients as $item) {
-				// A random hash will be necessary to send mixed content
-				$separator = md5(uniqid());
+			// A random hash will be necessary to send mixed content
+			$separator = "==Multipart_Boundary_x".md5(uniqid())."x";
 
+			foreach ($this->recipients as $item) {
 				// Headers
 				$headers = $this->getHeaders($item, $separator);
 
 				// Body
 				$body = $this->getBody($separator);
 
-				// Attachments
-				foreach ($this->attachments as $attachment) {
-					$body .= $this->getAttachment($attachment, $separator);
+				if (count($this->attachments)) {
+					$body .= "--" . $separator . $this->eol;
 				}
 
+				// Attachments
+				foreach ($this->attachments as $i => $attachment) {
+					$body .= $this->getAttachment($attachment, $separator, ($i < (count($this->attachments)-1)));
+				}
+$this->log('HEADERS');
+$this->log($headers);
+$this->log('BODY');
+$this->log($body);
 				// Send the email
 				if (mail($item, $this->subject, $body, $headers)) {
 					$this->addResultOk($item);

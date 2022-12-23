@@ -15,8 +15,8 @@ class VentaDTO implements ODTO{
 	private ?float $total = null;
 	private array $lineas = [];
 	private bool $pago_mixto = false;
-	private bool $factura = false;
-	private bool $regalo = false;
+	private ?string $imprimir = null;
+	private ?string $email = null;
 
 	public function getEfectivo(): ?float {
 		return $this->efectivo;
@@ -72,21 +72,24 @@ class VentaDTO implements ODTO{
 	private function setPagoMixto(bool $pago_mixto): void {
 		$this->pago_mixto = $pago_mixto;
 	}
-	public function getFactura(): bool {
-		return $this->factura;
+	public function getImprimir(): ?string {
+		return $this->imprimir;
 	}
-	private function setFactura(bool $factura): void {
-		$this->factura = $factura;
+	private function setImprimir(?string $imprimir): void {
+		$this->imprimir = $imprimir;
 	}
-	public function getRegalo(): bool {
-		return $this->regalo;
+	public function getEmail(): ?string {
+		return $this->email;
 	}
-	private function setRegalo(bool $regalo): void {
-		$this->regalo = $regalo;
+	private function setEmail(?string $email): void {
+		$this->email = $email;
 	}
 
 	public function isValid(): bool {
-		return (count($this->getLineas()) > 0);
+		return (
+			count($this->getLineas()) > 0 &&
+			!is_null($this->getImprimir())
+		);
 	}
 
 	public function load(ORequest $req): void {
@@ -99,7 +102,7 @@ class VentaDTO implements ODTO{
 		$this->setTotal( $req->getParamFloat('total') );
 		$this->setLineas( $req->getParam('lineas') );
 		$this->setPagoMixto( $req->getParamBool('pagoMixto') );
-		$this->setFactura( $req->getParamBool('factura') );
-		$this->setRegalo( $req->getParamBool('regalo') );
+		$this->setImprimir( $req->getParamString('imprimir') );
+		$this->setEmail( $req->getParamString('email') );
 	}
 }

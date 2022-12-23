@@ -50,9 +50,13 @@ class ticketService extends OService {
 	 *
 	 * @param Venta $venta Objeto venta con todos los datos de la venta
 	 *
-	 * @return void
+	 * @param bool $regalo Indica si es un ticket regalo
+	 *
+	 * @param bool $silent Indica si deben mostrarse mensajes, sirve para la tarea ticket
+	 *
+	 * @return string Ruta al archivo PDF generado
 	 */
-	public function generateTicket(Venta $venta, bool $silent = true): void {
+	public function generateTicket(Venta $venta, bool $regalo = false, bool $silent = true): string {
 		require_once $this->getConfig()->getDir('ofw_lib').'dompdf/autoload.inc.php';
 		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 
@@ -70,11 +74,11 @@ class ticketService extends OService {
 
 		if ($silent) {
 			$route = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.html';
-			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.pdf';
+			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').($regalo ? '-regalo' : '').'.pdf';
 		}
 		else {
 			$route = $this->getConfig()->getDir('web').'ticket.html';
-			$route_pdf = $this->getConfig()->getDir('web').'ticket.pdf';
+			$route_pdf = $this->getConfig()->getDir('web').($regalo ? '-regalo' : '').'ticket.pdf';
 		}
 		if (file_exists($route)) {
 			unlink($route);
@@ -104,7 +108,8 @@ class ticketService extends OService {
 			'lineas'     => $venta->getLineas(),
 			'total'      => $venta->get('total'),
 			'forma_pago' => $venta->getNombreTipoPago(),
-			'cliente'    => $venta->getCliente()
+			'cliente'    => $venta->getCliente(),
+			'regalo'     => $regalo
 		];
 
 		$ticket = new TicketComponent(['data' => $ticket_data]);
@@ -141,5 +146,7 @@ class ticketService extends OService {
 
 		$output = $dompdf->output();
 		file_put_contents($route_pdf, $output);
+
+		return $route_pdf;
 	}
 }

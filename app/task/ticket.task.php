@@ -25,6 +25,7 @@ class ticketTask extends OTask {
 		}
 
 		$id = $options[0];
+		$regalo = array_key_exists(1, $options);
 
 		$venta = new Venta();
 		if (!$venta->find(['id' => $id])) {
@@ -32,6 +33,6 @@ class ticketTask extends OTask {
 			exit();
 		}
 
-		$this->ticket_service->generateTicket($venta, false);
+		$this->ticket_service->generateTicket($venta, $regalo, false);
 	}
 }

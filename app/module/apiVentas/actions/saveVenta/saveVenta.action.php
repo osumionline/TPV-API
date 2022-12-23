@@ -4,10 +4,12 @@ namespace OsumiFramework\App\Module\Action;
 
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
+use OsumiFramework\OFW\Plugins\OEmail;
 use OsumiFramework\App\DTO\VentaDTO;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/save-venta',
@@ -77,7 +79,29 @@ class saveVentaAction extends OAction {
 				$art->save();
 			}
 
-			$this->ticket_service->generateTicket($venta);
+			$ticket_pdf = null;
+			$ticket_regalo_pdf = null;
+
+			if ($data->getImprimir() == 'si' || $data->getImprimir() == 'regalo' || $data->getImprimir() == 'email') {
+				$ticket_pdf = $this->ticket_service->generateTicket($venta, false);
+				if ($data->getImprimir() == 'regalo') {
+					$ticket_regalo_pdf = $this->ticket_service->generateTicket($venta, true);
+				}
+
+				if ($data->getImprimir() == 'email') {
+					$content = new TicketEmailComponent();
+					$this->getLog()->debug('EMAIL CONTENT: ');
+					$this->getLog()->debug(var_export(strval($content), true));
+					$this->getLog()->debug('RUTA PDF: '.$ticket_pdf);
+					$email = new OEmail();
+					$email->addRecipient(urldecode($data->getEmail()));
+					$email->setSubject('TIENDA - Ticket venta X');
+					$email->setMessage(strval($content));
+					$email->setFrom('tienda@tpv.osumi.es');
+					$email->addAttachment($ticket_pdf);
+					$email->send();
+				}
+			}
 
 			$id = $venta->get('id');
 			$importe = $venta->get('total');
