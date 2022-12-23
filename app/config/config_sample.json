@@ -1,9 +1,9 @@
 {
     "name": "Osumi TPV",
     "db": {
-        "host": "localhost",
-        "user": "apitpv",
-        "pass": "f2*6S5yb1",
+        "host": "host",
+        "user": "user",
+        "pass": "pass",
         "name": "apitpv"
     },
     "base_url": "https://apitpv.osumi.dev",
