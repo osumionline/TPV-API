@@ -3,10 +3,10 @@ null
 <?php else: ?>
 {
 	"id": <?php echo $values['linea_venta']->get('id') ?>,
-	"idArticulo": <?php echo $values['linea_venta']->get('id_articulo') ?>,
+	"idArticulo": <?php echo is_null($values['linea_venta']->get('id_articulo')) ? 'null' : $values['linea_venta']->get('id_articulo') ?>,
 	"articulo": "<?php echo urlencode($values['linea_venta']->get('nombre_articulo')) ?>",
-	"localizador": <?php echo $values['linea_venta']->getArticulo()->get('localizador') ?>,
-	"marca": "<?php echo urlencode($values['linea_venta']->getArticulo()->getMarca()->get('nombre')) ?>",
+	"localizador": <?php echo is_null($values['linea_venta']->getArticulo()) ? 'null' : $values['linea_venta']->getArticulo()->get('localizador') ?>,
+	"marca": <?php echo is_null($values['linea_venta']->getArticulo()) ? 'null' : '"'.urlencode($values['linea_venta']->getArticulo()->getMarca()->get('nombre')).'"' ?>,
 	"puc": <?php echo $values['linea_venta']->get('puc') ?>,
 	"pvp": <?php echo $values['linea_venta']->get('pvp') ?>,
 	"iva": <?php echo $values['linea_venta']->get('iva') ?>,

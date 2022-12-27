@@ -104,11 +104,13 @@ class ticketService extends OService {
 			'nif'        => $app_data->getCif(),
 			'social'     => $social,
 			'id'         => $venta->get('id'),
-			'date'       => $venta->get('created_at', 'd/m/Y H:i'),
+			'date'       => $venta->get('created_at', 'd/m/Y'),
+			'hour'       => $venta->get('created_at', 'H:i'),
 			'lineas'     => $venta->getLineas(),
 			'total'      => $venta->get('total'),
 			'forma_pago' => $venta->getNombreTipoPago(),
 			'cliente'    => $venta->getCliente(),
+			'employee'   => $venta->getEmpleado()->get('nombre'),
 			'regalo'     => $regalo
 		];
 

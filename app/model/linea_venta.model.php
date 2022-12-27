@@ -25,7 +25,7 @@ class LineaVenta extends OModel {
 			new OModelField(
 				name: 'id_articulo',
 				type: OMODEL_NUM,
-				nullable: false,
+				nullable: true,
 				default: null,
 				ref: 'articulo.id',
 				comment: 'Id del artículo que está siendo vendido'
@@ -161,7 +161,10 @@ class LineaVenta extends OModel {
 	 *
 	 * @return Articulo Artículo al que pertenece la línea
 	 */
-	public function getArticulo(): Articulo {
+	public function getArticulo(): ?Articulo {
+		if (is_null($this->get('id_articulo'))) {
+			return null;
+		}
 		if (is_null($this->articulo)) {
 			$this->loadArticulo();
 		}

@@ -342,7 +342,7 @@ class Venta extends OModel {
 		if (is_null($this->empleado) && !is_null($this->get('id_empleado'))) {
 			$this->loadEmpleado();
 		}
-		if (!is_null($this->empleado->get('deleted_at'))) {
+		if (is_null($this->empleado->get('deleted_at'))) {
 			return $this->empleado;
 		}
 		return null;

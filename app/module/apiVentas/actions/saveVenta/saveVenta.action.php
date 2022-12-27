@@ -13,7 +13,7 @@ use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/save-venta',
-	services: ['ticket']
+	services: ['ticket', 'general']
 )]
 class saveVentaAction extends OAction {
 	/**
@@ -44,18 +44,33 @@ class saveVentaAction extends OAction {
 			$venta->set('saldo', null);
 			$venta->save();
 
+			$app_data = $this->general_service->getAppData();
+
 			foreach ($data->getLineas() as $linea) {
-				$art = new Articulo();
-				$art->find(['id' => $linea['idArticulo']]);
+				$nombre = $linea['descripcion'];
+				$puc = 0;
+				$pvp = $linea['pvp'];
+				$iva = $linea['iva'];
+				$re  = $linea['re'];
+
+				if ($linea['idArticulo'] != 0) {
+					$art = new Articulo();
+					$art->find(['id' => $linea['idArticulo']]);
+					$nombre = $art->get('nombre');
+					$puc    = $art->get('puc');
+					$pvp    = $art->get('pvp');
+					$iva    = $art->get('iva');
+					$re     = $art->get('re');
+				}
 
 				$lv = new LineaVenta();
 				$lv->set('id_venta', $venta->get('id'));
-				$lv->set('id_articulo', $linea['idArticulo']);
-				$lv->set('nombre_articulo', $art->get('nombre'));
-				$lv->set('puc', $art->get('puc'));
-				$lv->set('pvp', $art->get('pvp'));
-				$lv->set('iva', $art->get('iva'));
-				$lv->set('re', $art->get('re'));
+				$lv->set('id_articulo', $linea['idArticulo'] != 0 ? $linea['idArticulo'] : null);
+				$lv->set('nombre_articulo', $nombre);
+				$lv->set('puc', $puc);
+				$lv->set('pvp', $pvp);
+				$lv->set('iva', $iva);
+				$lv->set('re', $re);
 				$importe = $linea['importe'];
 
 				if (!$linea['descuentoManual']) {
@@ -75,8 +90,10 @@ class saveVentaAction extends OAction {
 				$lv->save();
 
 				// Reduzco el stock
-				$art->set('stock', $art->get('stock') -1);
-				$art->save();
+				if ($linea['idArticulo'] != 0) {
+					$art->set('stock', $art->get('stock') -1);
+					$art->save();
+				}
 			}
 
 			$ticket_pdf = null;

@@ -5,8 +5,9 @@
     <title>Ticket</title>
     <style type="text/css">
       html, body {
-        margin: 0;
+        margin: 4px;
         font-size: 10px;
+        font-family: Helvetica;
       }
       .logo {
         margin: 8px auto;
@@ -38,11 +39,19 @@
         margin-top: 8px;
         line-height: 15px;
       }
-      .ticket-id {
+      .ticket-row {
+        width: 100%;
+        font-size: 8px;
+      }
+      .ticket-row-left {
+        text-align: left;
+        width: 46%;
+        display: inline-block
+      }
+      .ticket-row-right {
+        text-align: right;
+        width: 52%;
         display: inline-block;
-        width: 45%;
-        box-sizing: border-box;
-        margin-left: 3%;
       }
       .ticket-date {
         display: inline-block;
@@ -57,6 +66,18 @@
       td {
         box-sizing: border-box;
         font-size: 8px;
+      }
+      .descuento {
+        font-style: italic;
+      }
+      .left {
+        text-align: left;
+      }
+      .center {
+        text-align: center;
+      }
+      .right {
+        text-align: right;
       }
       .total {
         margin-top: 8px;
@@ -116,24 +137,42 @@
 <?php endforeach ?>
     </div>
     <div class="ticket-info">
-      <div class="ticket-id"><?php echo $values['data']['id'] ?></div>
-      <div class="ticket-date"><?php echo $values['data']['date'] ?></div>
+      <div class="ticket-row">
+        <div class="ticket-row-left">Fecha: <?php echo $values['data']['date'] ?></div>
+        <div class="ticket-row-right">Hora: <?php echo $values['data']['hour'] ?></div>
+      </div>
+      <div class="ticket-row">
+        <div class="ticket-row-left">F. Simp.: <?php echo $values['data']['id'] ?></div>
+        <div class="ticket-row-right">Vendedor: <?php echo $values['data']['employee'] ?></div>
+      </div>
     </div>
     <table>
+      <thead>
+        <tr>
+          <th class="left">Artículo</th>
+          <th class="center">Ud.</th>
+          <th class="right">PVP (€)</th>
+          <th class="right">Total (€)</th>
+        </tr>
+      </thead>
+      <tbody>
 <?php foreach ($values['data']['lineas'] as $i => $linea): ?>
       <tr>
-        <td>Loc: <?php echo $linea->getArticulo()->get('localizador') ?></td>
-        <td>PVP: <?php echo number_format($linea->get('pvp'), 2, ',') ?> €</td>
-        <td>Uds: <?php echo $linea->get('unidades') ?></td>
-        <td>Tot: <?php echo number_format($linea->get('importe'), 2, ',') ?> €</td>
+        <td class="left"><?php echo $linea->getArticulo()->get('nombre') ?></td>
+        <td class="center"><?php echo $linea->get('unidades') ?></td>
+        <td class="right"><?php echo number_format($linea->get('pvp'), 2, ',') ?></td>
+        <td class="right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
       </tr>
+<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0): ?>
       <tr>
-        <td colspan="4"><?php echo $linea->getArticulo()->get('nombre') ?></td>
+        <td class="center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
+        <td></td>
+        <td class="right  descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
+        <td class="right descuento">-<?php echo $linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
       </tr>
-<?php if ($i<count($values['data']['lineas'])-1): ?>
-      <tr><td colspan="4">&nbsp;</td></tr>
 <?php endif ?>
 <?php endforeach ?>
+      </tbody>
     </table>
     <div class="total">
       <div class="total-label">TOTAL:</div>

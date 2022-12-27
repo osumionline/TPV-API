@@ -5,8 +5,9 @@
     <title>Ticket</title>
     <style type="text/css">
       html, body {
-        margin: 0;
+        margin: 4px;
         font-size: 10px;
+        font-family: Helvetica;
       }
       .logo {
         margin: 8px auto;
@@ -38,11 +39,19 @@
         margin-top: 8px;
         line-height: 15px;
       }
-      .ticket-id {
+      .ticket-row {
+        width: 100%;
+        font-size: 8px;
+      }
+      .ticket-row-left {
+        text-align: left;
+        width: 46%;
+        display: inline-block
+      }
+      .ticket-row-right {
+        text-align: right;
+        width: 52%;
         display: inline-block;
-        width: 45%;
-        box-sizing: border-box;
-        margin-left: 3%;
       }
       .ticket-date {
         display: inline-block;
@@ -57,6 +66,18 @@
       td {
         box-sizing: border-box;
         font-size: 8px;
+      }
+      .descuento {
+        font-style: italic;
+      }
+      .left {
+        text-align: left;
+      }
+      .center {
+        text-align: center;
+      }
+      .right {
+        text-align: right;
       }
       .total {
         margin-top: 8px;
@@ -122,47 +143,52 @@
       </div>
     </div>
     <div class="ticket-info">
-      <div class="ticket-id">31</div>
-      <div class="ticket-date">29/11/2022 15:33</div>
+      <div class="ticket-row">
+        <div class="ticket-row-left">Fecha: 23/12/2022</div>
+        <div class="ticket-row-right">Hora: 23:44</div>
+      </div>
+      <div class="ticket-row">
+        <div class="ticket-row-left">F. Simp.: 45</div>
+        <div class="ticket-row-right">Vendedor: igorosabel</div>
+      </div>
     </div>
     <table>
+      <thead>
+        <tr>
+          <th class="left">Artículo</th>
+          <th class="center">Ud.</th>
+          <th class="right">PVP (€)</th>
+          <th class="right">Total (€)</th>
+        </tr>
+      </thead>
+      <tbody>
       <tr>
-        <td>Loc: 226175</td>
-        <td>PVP: 20,00 €</td>
-        <td>Uds: 1</td>
-        <td>Tot: 20,00 €</td>
+        <td class="left">Zapato de taconazo</td>
+        <td class="center">1</td>
+        <td class="right">20,00</td>
+        <td class="right">20,00</td>
       </tr>
       <tr>
-        <td colspan="4">Zapato de tacon</td>
-      </tr>
-      <tr><td colspan="4">&nbsp;</td></tr>
-      <tr>
-        <td>Loc: 224391</td>
-        <td>PVP: 42,90 €</td>
-        <td>Uds: 2</td>
-        <td>Tot: 77,22 €</td>
+        <td class="center descuento"><strong>Descuento: 10%</strong></td>
+        <td></td>
+        <td class="right  descuento">-2</td>
+        <td class="right descuento">-2</td>
       </tr>
       <tr>
-        <td colspan="4">Moto amarilla</td>
+        <td class="left">Moto amarilla</td>
+        <td class="center">1</td>
+        <td class="right">42,90</td>
+        <td class="right">42,90</td>
       </tr>
-      <tr><td colspan="4">&nbsp;</td></tr>
-      <tr>
-        <td>Loc: 229250</td>
-        <td>PVP: 20,00 €</td>
-        <td>Uds: 1</td>
-        <td>Tot: 15,00 €</td>
-      </tr>
-      <tr>
-        <td colspan="4">Artículo con una descripción super larga</td>
-      </tr>
+      </tbody>
     </table>
     <div class="total">
       <div class="total-label">TOTAL:</div>
-      <div class="total-amount">112,22 €</div>
+      <div class="total-amount">60,90 €</div>
     </div>
     <div class="forma-pago">
       <div class="forma-pago-label">Forma de pago:</div>
-      <div class="forma-pago-forma">VISA</div>
+      <div class="forma-pago-forma">Efectivo</div>
     </div>
     <div class="iva-incluido">I.V.A. incluído</div>
     <div class="legal">
