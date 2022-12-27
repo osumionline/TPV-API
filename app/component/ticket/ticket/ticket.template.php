@@ -38,34 +38,34 @@
         border-bottom: 2px solid #000000;
         margin-top: 8px;
         line-height: 15px;
-      }
-      .ticket-row {
         width: 100%;
+      }
+      .ticket-info td {
+        width: 50%;
         font-size: 8px;
       }
-      .ticket-row-left {
-        text-align: left;
-        width: 46%;
-        display: inline-block
-      }
-      .ticket-row-right {
-        text-align: right;
-        width: 52%;
-        display: inline-block;
-      }
-      .ticket-date {
-        display: inline-block;
-        width: 45%;
-        box-sizing: border-box;
-        text-align: right;
-      }
-      table {
+      .venta {
         width: 100%;
         border-bottom: 2px solid #000000;
       }
-      td {
+      .venta thead {
+        font-size: 7px;
+      }
+      .venta td {
         box-sizing: border-box;
         font-size: 8px;
+      }
+      .table-articulo {
+        width: 50%;
+      }
+      .table-unidades {
+        width: 10%;
+      }
+      .table-pvp {
+        width: 20%;
+      }
+      .table-total {
+        width: 20%;
       }
       .descuento {
         font-style: italic;
@@ -79,11 +79,19 @@
       .right {
         text-align: right;
       }
+      .regalo {
+        text-align: center;
+        font-weight: bold;
+        margin: 8px 0;
+      }
       .total {
+        width: 100%;
         margin-top: 8px;
         line-height: 15px;
-        font-size: 14px;
         font-weight: bold;
+      }
+      .total-header {
+        font-size: 14px;
       }
       .total-label {
         display: inline-block;
@@ -92,21 +100,8 @@
       }
       .total-amount {
         display: inline-block;
-        margin-left: 8px;
-      }
-      .forma-pago {
-        line-height: 15px;
-      }
-      .forma-pago-label {
-        display: inline-block;
-        width: 65%;
+        width: 30%;
         text-align: right;
-      }
-      .forma-pago-forma {
-        display: inline-block;
-        margin-left: 8px;
-        text-align: right;
-        width: 25%;
       }
       .cliente {
         text-align: center;
@@ -117,20 +112,18 @@
         text-align: center;
         margin: 8px;
       }
-      .iva-row {
+      .iva {
+        width: 100%;
         margin-bottom: 4px;
         font-size: 7px;
       }
-      .iva-row-iva {
-        display: inline-block;
+      .iva-iva {
         width: 25%;
       }
-      .iva-row-base {
-        display: inline-block;
+      .iva-base {
         width: 45%;
       }
-      .iva-row-cuota {
-        display: inline-block;
+      .iva-cuota {
         width: 25%;
         text-align: right;
       }
@@ -159,101 +152,107 @@
       </div>
 <?php endforeach ?>
     </div>
-    <div class="ticket-info">
-      <div class="ticket-row">
-        <div class="ticket-row-left">Fecha: <?php echo $values['data']['date'] ?></div>
-        <div class="ticket-row-right">Hora: <?php echo $values['data']['hour'] ?></div>
-      </div>
-      <div class="ticket-row">
-        <div class="ticket-row-left">F. Simp.: <?php echo $values['data']['id'] ?></div>
-        <div class="ticket-row-right">Vendedor: <?php echo $values['data']['employee'] ?></div>
-      </div>
-    </div>
-    <table>
+    <table class="ticket-info">
+      <tr>
+        <td>Fecha: <?php echo $values['data']['date'] ?></td>
+        <td class="right">Hora: <?php echo $values['data']['hour'] ?></td>
+      </tr>
+      <tr>
+        <td>F. Simp.: <?php echo $values['data']['id'] ?></td>
+        <td class="right">Vendedor: <?php echo $values['data']['employee'] ?></td>
+      </tr>
+    </table>
+    <table class="venta">
       <thead>
         <tr>
-          <th class="left">Artículo</th>
-          <th class="center">Ud.</th>
-          <th class="right">PVP (€)</th>
-          <th class="right">Total (€)</th>
+          <th class="table-articulo left">Artículo</th>
+          <th class="table-unidades center">Ud.</th>
+          <th class="table-pvp right">PVP (€)</th>
+          <th class="table-total right">Total (€)</th>
         </tr>
       </thead>
       <tbody>
 <?php foreach ($values['data']['lineas'] as $i => $linea): ?>
       <tr>
-        <td class="left"><?php echo $linea->get('nombre_articulo') ?></td>
-        <td class="center"><?php echo $linea->get('unidades') ?></td>
-        <td class="right"><?php echo number_format($linea->get('pvp'), 2, ',') ?></td>
-        <td class="right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
+        <td class="table-articulo left"><?php echo $linea->get('nombre_articulo') ?></td>
+        <td class="table-unidades center"><?php echo $linea->get('unidades') ?></td>
+        <td class="table-pvp right"><?php echo !$values['data']['regalo'] ? number_format($linea->get('pvp'), 2, ',') : '-' ?></td>
+        <td class="table-total right"><?php echo !$values['data']['regalo'] ? number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') : '-' ?></td>
       </tr>
-<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0): ?>
+<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && !$values['data']['regalo']): ?>
       <tr>
-        <td class="center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
-        <td></td>
-        <td class="right  descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
-        <td class="right descuento">-<?php echo $linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
+        <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
+        <td class="table-unidades">&nbsp;</td>
+        <td class="table-pvp right descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
+        <td class="table-total right descuento">-<?php echo $linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
       </tr>
 <?php endif ?>
 <?php endforeach ?>
       </tbody>
     </table>
-    <div class="total">
-      <div class="total-label">Total:</div>
-      <div class="total-amount"><?php echo number_format($values['data']['total'], 2, ',') ?> €</div>
-    </div>
+<?php if (!$values['data']['regalo']): ?>
+    <table class="total">
+      <tr class="total-header">
+        <td class="total-label">Total:</td>
+        <td class="total-amount"><?php echo number_format($values['data']['total'], 2, ',') ?> €</td>
+      </tr>
 <?php if (!$values['data']['mixto']): ?>
-  <div class="forma-pago">
-    <div class="forma-pago-label"><?php echo $values['data']['forma_pago'] ?>:</div>
-    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</div>
-  </div>
+      <tr>
+        <td class="total-label"><?php echo $values['data']['forma_pago'] ?>:</td>
+        <td class="total-amount"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</td>
+      </tr>
   <?php if ($values['data']['total'] != $values['data']['entregado']): ?>
-    <div class="forma-pago">
-      <div class="forma-pago-label">Cambio:</div>
-      <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</div>
-    </div>
+      <tr>
+        <td class="total-label">Cambio:</td>
+        <td class="total-amount"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</td>
+      </tr>
   <?php endif ?>
 <?php else: ?>
-  <div class="forma-pago">
-    <div class="forma-pago-label"><?php echo $values['data']['forma_pago'] ?>:</div>
-    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado_otro'], 2, ',') ?> €</div>
-  </div>
-  <div class="forma-pago">
-    <div class="forma-pago-label">Efectivo:</div>
-    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</div>
-  </div>
+      <tr>
+        <td class="total-label"><?php echo $values['data']['forma_pago'] ?>:</td>
+        <td class="total-amount"><?php echo number_format($values['data']['entregado_otro'], 2, ',') ?> €</td>
+      </tr>
+      <tr>
+        <td class="total-label">Efectivo:</td>
+        <td class="total-amount"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</td>
+      </tr>
   <?php if ($values['data']['total'] != ($values['data']['entregado'] + $values['data']['entregado_otro'])): ?>
-    <div class="forma-pago">
-      <div class="forma-pago-label">Cambio:</div>
-      <div class="forma-pago-forma"><?php echo number_format(($values['data']['entregado'] + $values['data']['entregado_otro']) - $values['data']['total'], 2, ',') ?> €</div>
-    </div>
+      <tr>
+        <td class="total-label">Cambio:</td>
+        <td class="total-amount"><?php echo number_format(($values['data']['entregado'] + $values['data']['entregado_otro']) - $values['data']['total'], 2, ',') ?> €</td>
+      </tr>
   <?php endif ?>
 <?php endif ?>
-
+    </table>
 <?php if (!is_null($values['data']['cliente'])): ?>
     <div class="cliente">Cliente: <?php echo $values['data']['cliente']->get('nombre_apellidos') ?></div>
 <?php endif ?>
 
     <div class="iva-incluido">I.V.A. incluído</div>
-    <div class="iva-row">
-      <div class="iva-row-iva">IVA</div>
-      <div class="iva-row-base">Base imponible ( € )</div>
-      <div class="iva-row-cuota">Cuota ( € )</div>
-    </div>
+    <table class="iva">
+      <tr>
+        <td class="iva-iva">IVA</td>
+        <td class="iva-base">Base imponible ( € )</td>
+        <td class="iva-cuota">Cuota ( € )</td>
+      </tr>
 <?php foreach ($values['data']['ivas'] as $iva): ?>
-    <div class="iva-row">
-      <div class="iva-row-iva"><?php echo $iva['iva'] ?>%</div>
-      <div class="iva-row-base"><?php echo number_format($iva['base'], 2, ',') ?></div>
-      <div class="iva-row-cuota"><?php echo number_format($iva['cuota_iva'], 2, ',') ?></div>
-    </div>
+      <tr>
+        <td class="iva-iva"><?php echo $iva['iva'] ?>%</td>
+        <td class="iva-base"><?php echo number_format($iva['base'], 2, ',') ?></td>
+        <td class="iva-cuota"><?php echo number_format($iva['cuota_iva'], 2, ',') ?></td>
+      </tr>
     <?php if ($iva['re'] != 0): ?>
-    <div class="iva-row">
-      <div class="iva-row-iva">R.E.: <?php echo $iva['re'] ?>%</div>
-      <div class="iva-row-base"><?php echo number_format($iva['base'], 2, ',') ?></div>
-      <div class="iva-row-cuota"><?php echo number_format($iva['cuota_re'], 2, ',') ?></div>
-    </div>
+      <tr>
+        <td class="iva-iva">R.E.: <?php echo $iva['re'] ?>%</td>
+        <td class="iva-base"><?php echo number_format($iva['base'], 2, ',') ?></td>
+        <td class="iva-cuota"><?php echo number_format($iva['cuota_re'], 2, ',') ?></td>
+      </tr>
   <?php endif ?>
 <?php endforeach ?>
-
+    </table>
+<?php else: ?>
+    <div class="regalo">TICKET REGALO</div>
+<?php endif ?>
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o sin caja
       <br>

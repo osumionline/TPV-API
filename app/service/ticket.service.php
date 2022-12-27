@@ -63,6 +63,10 @@ class ticketService extends OService {
 
 		if (!$silent) {
 			echo "Creo ticket de venta ".$venta->get('id')."\n";
+			if ($regalo) {
+				echo "TICKET REGALO\n";
+			}
+			echo "\n";
 		}
 
 		// Cargo archivo de configuración
@@ -174,7 +178,7 @@ class ticketService extends OService {
 		unset($dompdf);
 
 		$dompdf = new \Dompdf\Dompdf();
-		$dompdf->set_paper([0, 0, 147.40, $GLOBALS['bodyHeight'] + 10]);
+		$dompdf->set_paper([0, 0, 147.40, $GLOBALS['bodyHeight'] + 15]);
 		$dompdf->loadHtml($html);
 		$dompdf->render();
 

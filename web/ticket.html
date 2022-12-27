@@ -38,34 +38,34 @@
         border-bottom: 2px solid #000000;
         margin-top: 8px;
         line-height: 15px;
-      }
-      .ticket-row {
         width: 100%;
+      }
+      .ticket-info td {
+        width: 50%;
         font-size: 8px;
       }
-      .ticket-row-left {
-        text-align: left;
-        width: 46%;
-        display: inline-block
-      }
-      .ticket-row-right {
-        text-align: right;
-        width: 52%;
-        display: inline-block;
-      }
-      .ticket-date {
-        display: inline-block;
-        width: 45%;
-        box-sizing: border-box;
-        text-align: right;
-      }
-      table {
+      .venta {
         width: 100%;
         border-bottom: 2px solid #000000;
       }
-      td {
+      .venta thead {
+        font-size: 7px;
+      }
+      .venta td {
         box-sizing: border-box;
         font-size: 8px;
+      }
+      .table-articulo {
+        width: 50%;
+      }
+      .table-unidades {
+        width: 10%;
+      }
+      .table-pvp {
+        width: 20%;
+      }
+      .table-total {
+        width: 20%;
       }
       .descuento {
         font-style: italic;
@@ -79,11 +79,19 @@
       .right {
         text-align: right;
       }
+      .regalo {
+        text-align: center;
+        font-weight: bold;
+        margin: 8px 0;
+      }
       .total {
+        width: 100%;
         margin-top: 8px;
         line-height: 15px;
-        font-size: 14px;
         font-weight: bold;
+      }
+      .total-header {
+        font-size: 14px;
       }
       .total-label {
         display: inline-block;
@@ -92,21 +100,8 @@
       }
       .total-amount {
         display: inline-block;
-        margin-left: 8px;
-      }
-      .forma-pago {
-        line-height: 15px;
-      }
-      .forma-pago-label {
-        display: inline-block;
-        width: 65%;
+        width: 30%;
         text-align: right;
-      }
-      .forma-pago-forma {
-        display: inline-block;
-        margin-left: 8px;
-        text-align: right;
-        width: 25%;
       }
       .cliente {
         text-align: center;
@@ -117,20 +112,18 @@
         text-align: center;
         margin: 8px;
       }
-      .iva-row {
+      .iva {
+        width: 100%;
         margin-bottom: 4px;
         font-size: 7px;
       }
-      .iva-row-iva {
-        display: inline-block;
+      .iva-iva {
         width: 25%;
       }
-      .iva-row-base {
-        display: inline-block;
+      .iva-base {
         width: 45%;
       }
-      .iva-row-cuota {
-        display: inline-block;
+      .iva-cuota {
         width: 25%;
         text-align: right;
       }
@@ -165,97 +158,99 @@
         <span>tienda.com</span>
       </div>
     </div>
-    <div class="ticket-info">
-      <div class="ticket-row">
-        <div class="ticket-row-left">Fecha: 27/12/2022</div>
-        <div class="ticket-row-right">Hora: 12:55</div>
-      </div>
-      <div class="ticket-row">
-        <div class="ticket-row-left">F. Simp.: 50</div>
-        <div class="ticket-row-right">Vendedor: igorosabel</div>
-      </div>
-    </div>
-    <table>
+    <table class="ticket-info">
+      <tr>
+        <td>Fecha: 27/12/2022</td>
+        <td class="right">Hora: 12:55</td>
+      </tr>
+      <tr>
+        <td>F. Simp.: 50</td>
+        <td class="right">Vendedor: igorosabel</td>
+      </tr>
+    </table>
+    <table class="venta">
       <thead>
         <tr>
-          <th class="left">Artículo</th>
-          <th class="center">Ud.</th>
-          <th class="right">PVP (€)</th>
-          <th class="right">Total (€)</th>
+          <th class="table-articulo left">Artículo</th>
+          <th class="table-unidades center">Ud.</th>
+          <th class="table-pvp right">PVP (€)</th>
+          <th class="table-total right">Total (€)</th>
         </tr>
       </thead>
       <tbody>
       <tr>
-        <td class="left">Zapato de taconazo</td>
-        <td class="center">2</td>
-        <td class="right">20,00</td>
-        <td class="right">40,00</td>
+        <td class="table-articulo left">Zapato de taconazo</td>
+        <td class="table-unidades center">2</td>
+        <td class="table-pvp right">20,00</td>
+        <td class="table-total right">40,00</td>
       </tr>
       <tr>
-        <td class="left">Moto amarilla</td>
-        <td class="center">1</td>
-        <td class="right">42,90</td>
-        <td class="right">42,90</td>
+        <td class="table-articulo left">Moto amarilla</td>
+        <td class="table-unidades center">1</td>
+        <td class="table-pvp right">42,90</td>
+        <td class="table-total right">42,90</td>
       </tr>
       <tr>
-        <td class="center descuento"><strong>Descuento: 10%</strong></td>
-        <td></td>
-        <td class="right  descuento">-4.29</td>
-        <td class="right descuento">-4.29</td>
+        <td class="table-articulo center descuento"><strong>Descuento: 10%</strong></td>
+        <td class="table-unidades">&nbsp;</td>
+        <td class="table-pvp right descuento">-4.29</td>
+        <td class="table-total right descuento">-4.29</td>
       </tr>
       <tr>
-        <td class="left">Artículo con una descripción super larga</td>
-        <td class="center">1</td>
-        <td class="right">18,93</td>
-        <td class="right">18,93</td>
+        <td class="table-articulo left">Artículo con una descripción super larga</td>
+        <td class="table-unidades center">1</td>
+        <td class="table-pvp right">18,93</td>
+        <td class="table-total right">18,93</td>
       </tr>
       </tbody>
     </table>
-    <div class="total">
-      <div class="total-label">Total:</div>
-      <div class="total-amount">97,54 €</div>
-    </div>
-  <div class="forma-pago">
-    <div class="forma-pago-label">VISA:</div>
-    <div class="forma-pago-forma">50,00 €</div>
-  </div>
-  <div class="forma-pago">
-    <div class="forma-pago-label">Efectivo:</div>
-    <div class="forma-pago-forma">50,00 €</div>
-  </div>
-      <div class="forma-pago">
-      <div class="forma-pago-label">Cambio:</div>
-      <div class="forma-pago-forma">2,46 €</div>
-    </div>
-  
+    <table class="total">
+      <tr class="total-header">
+        <td class="total-label">Total:</td>
+        <td class="total-amount">97,54 €</td>
+      </tr>
+      <tr>
+        <td class="total-label">VISA:</td>
+        <td class="total-amount">50,00 €</td>
+      </tr>
+      <tr>
+        <td class="total-label">Efectivo:</td>
+        <td class="total-amount">50,00 €</td>
+      </tr>
+        <tr>
+        <td class="total-label">Cambio:</td>
+        <td class="total-amount">2,46 €</td>
+      </tr>
+      </table>
 
     <div class="iva-incluido">I.V.A. incluído</div>
-    <div class="iva-row">
-      <div class="iva-row-iva">IVA</div>
-      <div class="iva-row-base">Base imponible ( € )</div>
-      <div class="iva-row-cuota">Cuota ( € )</div>
-    </div>
-    <div class="iva-row">
-      <div class="iva-row-iva">21%</div>
-      <div class="iva-row-base">58,01</div>
-      <div class="iva-row-cuota">12,18</div>
-    </div>
-        <div class="iva-row">
-      <div class="iva-row-iva">R.E.: 5.2%</div>
-      <div class="iva-row-base">58,01</div>
-      <div class="iva-row-cuota">3,02</div>
-    </div>
-      <div class="iva-row">
-      <div class="iva-row-iva">10%</div>
-      <div class="iva-row-base">16,77</div>
-      <div class="iva-row-cuota">1,68</div>
-    </div>
-        <div class="iva-row">
-      <div class="iva-row-iva">R.E.: 1.4%</div>
-      <div class="iva-row-base">16,77</div>
-      <div class="iva-row-cuota">0,23</div>
-    </div>
-  
+    <table class="iva">
+      <tr>
+        <td class="iva-iva">IVA</td>
+        <td class="iva-base">Base imponible ( € )</td>
+        <td class="iva-cuota">Cuota ( € )</td>
+      </tr>
+      <tr>
+        <td class="iva-iva">21%</td>
+        <td class="iva-base">58,01</td>
+        <td class="iva-cuota">12,18</td>
+      </tr>
+          <tr>
+        <td class="iva-iva">R.E.: 5.2%</td>
+        <td class="iva-base">58,01</td>
+        <td class="iva-cuota">3,02</td>
+      </tr>
+        <tr>
+        <td class="iva-iva">10%</td>
+        <td class="iva-base">16,77</td>
+        <td class="iva-cuota">1,68</td>
+      </tr>
+          <tr>
+        <td class="iva-iva">R.E.: 1.4%</td>
+        <td class="iva-base">16,77</td>
+        <td class="iva-cuota">0,23</td>
+      </tr>
+      </table>
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o sin caja
       <br>

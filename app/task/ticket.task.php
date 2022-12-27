@@ -18,7 +18,7 @@ class ticketTask extends OTask {
 	}
 
 	public function run(array $options=[]): void {
-		if (count($options) != 1) {
+		if (count($options) < 1) {
 			echo "\nERROR: Tienes que indicar el id de la venta de la que generar el ticket.\n\n";
 			echo "  ofw ticket 1\n\n";
 			exit();
