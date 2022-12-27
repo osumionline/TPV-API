@@ -105,6 +105,8 @@
       .forma-pago-forma {
         display: inline-block;
         margin-left: 8px;
+        text-align: right;
+        width: 25%;
       }
       .cliente {
         text-align: center;
@@ -115,10 +117,31 @@
         text-align: center;
         margin: 8px;
       }
+      .iva-row {
+        margin-bottom: 4px;
+        font-size: 7px;
+      }
+      .iva-row-iva {
+        display: inline-block;
+        width: 25%;
+      }
+      .iva-row-base {
+        display: inline-block;
+        width: 45%;
+      }
+      .iva-row-cuota {
+        display: inline-block;
+        width: 25%;
+        text-align: right;
+      }
       .legal {
         text-align: center;
         line-height: 14px;
-        font-size: 8px;
+        font-size: 6px;
+        margin-bottom: 16px;
+      }
+      .qr {
+        text-align: center;
       }
     </style>
   </head>
@@ -158,7 +181,7 @@
       <tbody>
 <?php foreach ($values['data']['lineas'] as $i => $linea): ?>
       <tr>
-        <td class="left"><?php echo $linea->getArticulo()->get('nombre') ?></td>
+        <td class="left"><?php echo $linea->get('nombre_articulo') ?></td>
         <td class="center"><?php echo $linea->get('unidades') ?></td>
         <td class="right"><?php echo number_format($linea->get('pvp'), 2, ',') ?></td>
         <td class="right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
@@ -175,17 +198,62 @@
       </tbody>
     </table>
     <div class="total">
-      <div class="total-label">TOTAL:</div>
+      <div class="total-label">Total:</div>
       <div class="total-amount"><?php echo number_format($values['data']['total'], 2, ',') ?> €</div>
     </div>
+<?php if (!$values['data']['mixto']): ?>
+  <div class="forma-pago">
+    <div class="forma-pago-label"><?php echo $values['data']['forma_pago'] ?>:</div>
+    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</div>
+  </div>
+  <?php if ($values['data']['total'] != $values['data']['entregado']): ?>
     <div class="forma-pago">
-      <div class="forma-pago-label">Forma de pago:</div>
-      <div class="forma-pago-forma"><?php echo $values['data']['forma_pago'] ?></div>
+      <div class="forma-pago-label">Cambio:</div>
+      <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</div>
     </div>
+  <?php endif ?>
+<?php else: ?>
+  <div class="forma-pago">
+    <div class="forma-pago-label"><?php echo $values['data']['forma_pago'] ?>:</div>
+    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado_otro'], 2, ',') ?> €</div>
+  </div>
+  <div class="forma-pago">
+    <div class="forma-pago-label">Efectivo:</div>
+    <div class="forma-pago-forma"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</div>
+  </div>
+  <?php if ($values['data']['total'] != ($values['data']['entregado'] + $values['data']['entregado_otro'])): ?>
+    <div class="forma-pago">
+      <div class="forma-pago-label">Cambio:</div>
+      <div class="forma-pago-forma"><?php echo number_format(($values['data']['entregado'] + $values['data']['entregado_otro']) - $values['data']['total'], 2, ',') ?> €</div>
+    </div>
+  <?php endif ?>
+<?php endif ?>
+
 <?php if (!is_null($values['data']['cliente'])): ?>
     <div class="cliente">Cliente: <?php echo $values['data']['cliente']->get('nombre_apellidos') ?></div>
 <?php endif ?>
+
     <div class="iva-incluido">I.V.A. incluído</div>
+    <div class="iva-row">
+      <div class="iva-row-iva">IVA</div>
+      <div class="iva-row-base">Base imponible ( € )</div>
+      <div class="iva-row-cuota">Cuota ( € )</div>
+    </div>
+<?php foreach ($values['data']['ivas'] as $iva): ?>
+    <div class="iva-row">
+      <div class="iva-row-iva"><?php echo $iva['iva'] ?>%</div>
+      <div class="iva-row-base"><?php echo number_format($iva['base'], 2, ',') ?></div>
+      <div class="iva-row-cuota"><?php echo number_format($iva['cuota_iva'], 2, ',') ?></div>
+    </div>
+    <?php if ($iva['re'] != 0): ?>
+    <div class="iva-row">
+      <div class="iva-row-iva">R.E.: <?php echo $iva['re'] ?>%</div>
+      <div class="iva-row-base"><?php echo number_format($iva['base'], 2, ',') ?></div>
+      <div class="iva-row-cuota"><?php echo number_format($iva['cuota_re'], 2, ',') ?></div>
+    </div>
+  <?php endif ?>
+<?php endforeach ?>
+
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o sin caja
       <br>
@@ -198,6 +266,10 @@
       GRACIAS POR SU VISITA
       <br>
       ESKERRIK ASKO ETORTZEAGATIK
+    </div>
+
+    <div class="qr">
+      <img src="<?php echo $values['data']['qr'] ?>" width="80">
     </div>
   </body>
 </html>

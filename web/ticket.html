@@ -105,6 +105,8 @@
       .forma-pago-forma {
         display: inline-block;
         margin-left: 8px;
+        text-align: right;
+        width: 25%;
       }
       .cliente {
         text-align: center;
@@ -115,10 +117,31 @@
         text-align: center;
         margin: 8px;
       }
+      .iva-row {
+        margin-bottom: 4px;
+        font-size: 7px;
+      }
+      .iva-row-iva {
+        display: inline-block;
+        width: 25%;
+      }
+      .iva-row-base {
+        display: inline-block;
+        width: 45%;
+      }
+      .iva-row-cuota {
+        display: inline-block;
+        width: 25%;
+        text-align: right;
+      }
       .legal {
         text-align: center;
         line-height: 14px;
-        font-size: 8px;
+        font-size: 6px;
+        margin-bottom: 16px;
+      }
+      .qr {
+        text-align: center;
       }
     </style>
   </head>
@@ -144,11 +167,11 @@
     </div>
     <div class="ticket-info">
       <div class="ticket-row">
-        <div class="ticket-row-left">Fecha: 23/12/2022</div>
-        <div class="ticket-row-right">Hora: 23:44</div>
+        <div class="ticket-row-left">Fecha: 27/12/2022</div>
+        <div class="ticket-row-right">Hora: 12:55</div>
       </div>
       <div class="ticket-row">
-        <div class="ticket-row-left">F. Simp.: 45</div>
+        <div class="ticket-row-left">F. Simp.: 50</div>
         <div class="ticket-row-right">Vendedor: igorosabel</div>
       </div>
     </div>
@@ -164,15 +187,9 @@
       <tbody>
       <tr>
         <td class="left">Zapato de taconazo</td>
-        <td class="center">1</td>
+        <td class="center">2</td>
         <td class="right">20,00</td>
-        <td class="right">20,00</td>
-      </tr>
-      <tr>
-        <td class="center descuento"><strong>Descuento: 10%</strong></td>
-        <td></td>
-        <td class="right  descuento">-2</td>
-        <td class="right descuento">-2</td>
+        <td class="right">40,00</td>
       </tr>
       <tr>
         <td class="left">Moto amarilla</td>
@@ -180,17 +197,65 @@
         <td class="right">42,90</td>
         <td class="right">42,90</td>
       </tr>
+      <tr>
+        <td class="center descuento"><strong>Descuento: 10%</strong></td>
+        <td></td>
+        <td class="right  descuento">-4.29</td>
+        <td class="right descuento">-4.29</td>
+      </tr>
+      <tr>
+        <td class="left">Artículo con una descripción super larga</td>
+        <td class="center">1</td>
+        <td class="right">18,93</td>
+        <td class="right">18,93</td>
+      </tr>
       </tbody>
     </table>
     <div class="total">
-      <div class="total-label">TOTAL:</div>
-      <div class="total-amount">60,90 €</div>
+      <div class="total-label">Total:</div>
+      <div class="total-amount">97,54 €</div>
     </div>
-    <div class="forma-pago">
-      <div class="forma-pago-label">Forma de pago:</div>
-      <div class="forma-pago-forma">Efectivo</div>
+  <div class="forma-pago">
+    <div class="forma-pago-label">VISA:</div>
+    <div class="forma-pago-forma">50,00 €</div>
+  </div>
+  <div class="forma-pago">
+    <div class="forma-pago-label">Efectivo:</div>
+    <div class="forma-pago-forma">50,00 €</div>
+  </div>
+      <div class="forma-pago">
+      <div class="forma-pago-label">Cambio:</div>
+      <div class="forma-pago-forma">2,46 €</div>
     </div>
+  
+
     <div class="iva-incluido">I.V.A. incluído</div>
+    <div class="iva-row">
+      <div class="iva-row-iva">IVA</div>
+      <div class="iva-row-base">Base imponible ( € )</div>
+      <div class="iva-row-cuota">Cuota ( € )</div>
+    </div>
+    <div class="iva-row">
+      <div class="iva-row-iva">21%</div>
+      <div class="iva-row-base">58,01</div>
+      <div class="iva-row-cuota">12,18</div>
+    </div>
+        <div class="iva-row">
+      <div class="iva-row-iva">R.E.: 5.2%</div>
+      <div class="iva-row-base">58,01</div>
+      <div class="iva-row-cuota">3,02</div>
+    </div>
+      <div class="iva-row">
+      <div class="iva-row-iva">10%</div>
+      <div class="iva-row-base">16,77</div>
+      <div class="iva-row-cuota">1,68</div>
+    </div>
+        <div class="iva-row">
+      <div class="iva-row-iva">R.E.: 1.4%</div>
+      <div class="iva-row-base">16,77</div>
+      <div class="iva-row-cuota">0,23</div>
+    </div>
+  
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o sin caja
       <br>
@@ -203,6 +268,10 @@
       GRACIAS POR SU VISITA
       <br>
       ESKERRIK ASKO ETORTZEAGATIK
+    </div>
+
+    <div class="qr">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFcAAABXAQMAAABLBksvAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAr0lEQVQ4jc3RsRHDIAwFUPko3JkFfOc16JgpEwQWMCu50xrcsYDTUeSiiBxOUmDRWkfxCgHiA3C10kTOJKIoeALlIDkQbdNqVMgdc3/XHnsG5Ul9Z2ia51//3tJ02WJ+UTStM70MRyF5yDOM8w0la1TOLruJggd88rpvIDmnvfRLLsduyon+5BAnkMx5Bu63om0KG39xlO2x5iA44PI4/rptvpdqDmcu84+1/8zXqjeZkgDGxh6vfgAAAABJRU5ErkJggg==" width="80">
     </div>
   </body>
 </html>

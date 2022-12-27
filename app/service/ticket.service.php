@@ -58,6 +58,7 @@ class ticketService extends OService {
 	 */
 	public function generateTicket(Venta $venta, bool $regalo = false, bool $silent = true): string {
 		require_once $this->getConfig()->getDir('ofw_lib').'dompdf/autoload.inc.php';
+		require_once $this->getConfig()->getDir('ofw_lib').'phpqrcode/qrlib.php';
 		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 
 		if (!$silent) {
@@ -75,10 +76,12 @@ class ticketService extends OService {
 		if ($silent) {
 			$route = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.html';
 			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').($regalo ? '-regalo' : '').'.pdf';
+			$route_qr = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').($regalo ? '-qr' : '').'.png';
 		}
 		else {
 			$route = $this->getConfig()->getDir('web').'ticket.html';
-			$route_pdf = $this->getConfig()->getDir('web').($regalo ? '-regalo' : '').'ticket.pdf';
+			$route_pdf = $this->getConfig()->getDir('web').'ticket'.($regalo ? '-regalo' : '').'.pdf';
+			$route_qr = $this->getConfig()->getDir('web').'ticket'.($regalo ? '-regalo' : '').'-qr.png';
 		}
 		if (file_exists($route)) {
 			unlink($route);
@@ -86,9 +89,13 @@ class ticketService extends OService {
 		if (file_exists($route_pdf)) {
 			unlink($route_pdf);
 		}
+		if (file_exists($route_qr)) {
+			unlink($route_qr);
+		}
 		if (!$silent) {
 			echo "RUTA HTML: ".$route."\n";
 			echo "RUTA PDF: ".$route_pdf."\n";
+			echo "RUTA QR: ".$route_qr."\n";
 		}
 
 		$social = $app_data->getSocial();
@@ -96,22 +103,47 @@ class ticketService extends OService {
 			$social[$i][0] = OTools::fileToBase64($this->getConfig()->getDir('web').'/iconos/icono_'.$social[$i][0].'.png');
 		}
 
+		$ivas = [];
+		foreach ($venta->getLineas() as $linea) {
+			if (!array_key_exists('iva_'.$linea->get('iva'), $ivas)) {
+				$ivas['iva_'.$linea->get('iva')] = [
+					'iva' => $linea->get('iva'),
+					're' => $linea->get('re'),
+					'base' => 0,
+					'cuota_iva' => 0,
+					'cuota_re' => 0
+				];
+			}
+			$base = $linea->get('importe') * ((100 - $linea->get('iva') - $linea->get('re')) / 100);
+			$ivas['iva_'.$linea->get('iva')]['base'] += $base;
+			$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $base * ($linea->get('iva') / 100);
+			$ivas['iva_'.$linea->get('iva')]['cuota_re'] += $base * ($linea->get('re') / 100);
+		}
+
+		\QRcode::png(strval($venta->get('id')), $route_qr);
+		$qr = OTools::fileToBase64($route_qr);
+
 		$ticket_data = [
-			'url_base'   => $this->getConfig()->getUrl('base'),
-			'logo'       => OTools::fileToBase64($this->getConfig()->getDir('web').'/logo.jpg'),
-			'direccion'  => $app_data->getDireccion(),
-			'telefono'   => $app_data->getTelefono(),
-			'nif'        => $app_data->getCif(),
-			'social'     => $social,
-			'id'         => $venta->get('id'),
-			'date'       => $venta->get('created_at', 'd/m/Y'),
-			'hour'       => $venta->get('created_at', 'H:i'),
-			'lineas'     => $venta->getLineas(),
-			'total'      => $venta->get('total'),
-			'forma_pago' => $venta->getNombreTipoPago(),
-			'cliente'    => $venta->getCliente(),
-			'employee'   => $venta->getEmpleado()->get('nombre'),
-			'regalo'     => $regalo
+			'url_base'       => $this->getConfig()->getUrl('base'),
+			'logo'           => OTools::fileToBase64($this->getConfig()->getDir('web').'/logo.jpg'),
+			'direccion'      => $app_data->getDireccion(),
+			'telefono'       => $app_data->getTelefono(),
+			'nif'            => $app_data->getCif(),
+			'social'         => $social,
+			'id'             => $venta->get('id'),
+			'date'           => $venta->get('created_at', 'd/m/Y'),
+			'hour'           => $venta->get('created_at', 'H:i'),
+			'lineas'         => $venta->getLineas(),
+			'total'          => $venta->get('total'),
+			'mixto'          => $venta->get('pago_mixto'),
+			'entregado'      => $venta->get('entregado'),
+			'entregado_otro' => $venta->get('entregado_otro'),
+			'forma_pago'     => $venta->getNombreTipoPago(),
+			'cliente'        => $venta->getCliente(),
+			'employee'       => $venta->getEmpleado()->get('nombre'),
+			'regalo'         => $regalo,
+			'ivas'           => $ivas,
+			'qr'             => $qr
 		];
 
 		$ticket = new TicketComponent(['data' => $ticket_data]);
