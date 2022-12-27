@@ -107,9 +107,6 @@ class saveVentaAction extends OAction {
 
 				if ($data->getImprimir() == 'email') {
 					$content = new TicketEmailComponent();
-					$this->getLog()->debug('EMAIL CONTENT: ');
-					$this->getLog()->debug(var_export(strval($content), true));
-					$this->getLog()->debug('RUTA PDF: '.$ticket_pdf);
 					$email = new OEmailSMTP();
 					$email->addRecipient(urldecode($data->getEmail()));
 					$email->setSubject('TIENDA - Ticket venta X');

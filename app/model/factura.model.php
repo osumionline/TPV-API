@@ -19,7 +19,6 @@ class Factura extends OModel {
 				name: 'id_cliente',
 				type: OMODEL_NUM,
 				nullable: false,
-				default: null,
 				ref: 'cliente.id',
 				comment: 'Id del cliente al que se le emite la factura'
 			),
@@ -27,7 +26,6 @@ class Factura extends OModel {
 				name: 'nombre_apellidos',
 				type: OMODEL_TEXT,
 				nullable: false,
-				default: null,
 				size: 150,
 				comment: 'Nombre y apellidos del cliente'
 			),
@@ -103,7 +101,7 @@ class Factura extends OModel {
 				type: OMODEL_DATE,
 				nullable: true,
 				default: null,
-				comment: 'Fecha de baja del empleado'
+				comment: 'Fecha de borrado de la factura'
 			)
 		);
 
