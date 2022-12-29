@@ -62,8 +62,15 @@
       .table-articulo {
         width: 50%;
       }
+      .table-articulo-wide {
+        width: 80%;
+      }
       .table-unidades {
         width: 10%;
+      }
+      .table-unidades-wide {
+        width: 20%;
+        text-align: right;
       }
       .table-pvp {
         width: 20%;
@@ -165,25 +172,29 @@
       </tr>
       <tr>
         <td>F. Simp.: <?php echo $values['data']['id'] ?></td>
-        <td class="right">Vendedor: <?php echo $values['data']['employee'] ?></td>
+        <td class="right">Le atendió: <?php echo $values['data']['employee'] ?></td>
       </tr>
     </table>
     <table class="venta">
       <thead>
         <tr>
-          <th class="table-articulo left">Artículo</th>
-          <th class="table-unidades center">Ud.</th>
+          <th class="<?php echo (!$values['data']['regalo']) ? 'table-articulo' : 'table-articulo-wide' ?> left">Artículo</th>
+          <th class="<?php echo (!$values['data']['regalo']) ? 'table-unidades center' : 'table-unidades-wide' ?>">Ud.</th>
+          <?php if (!$values['data']['regalo']): ?>
           <th class="table-pvp right">PVP (€)</th>
           <th class="table-total right">Total (€)</th>
+          <?php endif ?>
         </tr>
       </thead>
       <tbody>
 <?php foreach ($values['data']['lineas'] as $i => $linea): ?>
       <tr>
         <td class="table-articulo left"><?php echo $linea->get('nombre_articulo') ?></td>
-        <td class="table-unidades center"><?php echo $linea->get('unidades') ?></td>
-        <td class="table-pvp right"><?php echo !$values['data']['regalo'] ? number_format($linea->get('pvp'), 2, ',') : '-' ?></td>
-        <td class="table-total right"><?php echo !$values['data']['regalo'] ? number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') : '-' ?></td>
+        <td class="<?php echo (!$values['data']['regalo']) ? 'table-unidades center' : 'table-unidades-wide' ?>"><?php echo $linea->get('unidades') ?></td>
+        <?php if (!$values['data']['regalo']): ?>
+        <td class="table-pvp right"><?php echo number_format($linea->get('pvp'), 2, ',') ?></td>
+        <td class="table-total right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
+      <?php endif ?>
       </tr>
 <?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && !$values['data']['regalo']): ?>
       <tr>

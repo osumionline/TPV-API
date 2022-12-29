@@ -10,7 +10,8 @@ use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
-	url: '/send-ticket'
+	url: '/send-ticket',
+	services: ['ticket']
 )]
 class sendTicketAction extends OAction {
 	/**
@@ -22,29 +23,25 @@ class sendTicketAction extends OAction {
 	public function run(ORequest $req):void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
+		$email_address = $req->getParamString('email');
 
-		if (is_null($id)) {
+		if (is_null($id) || is_null($email_address)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
 			$venta = new Venta();
 			if ($venta->find(['id' => $id])) {
-				if (!is_null($venta->getCliente())) {
-					$ticket_pdf = $this->ticket_service->generateTicket($venta, false);
+				$ticket_pdf = $this->ticket_service->generateTicket($venta, false);
 
-					$content = new TicketEmailComponent();
-					$email = new OEmailSMTP();
-					$email->addRecipient($venta->getCliente()->get('email'));
-					$email->setSubject('TIENDA - Ticket venta X');
-					$email->setMessage(strval($content));
-					$email->setFrom('hola@indomablestore.com');
-					$email->addAttachment($ticket_pdf);
-					$email->send();
-				}
-				else {
-					$status = 'error';
-				}
+				$content = new TicketEmailComponent();
+				$email = new OEmailSMTP();
+				$email->addRecipient(urldecode($email_address));
+				$email->setSubject('TIENDA - Ticket venta X');
+				$email->setMessage(strval($content));
+				$email->setFrom('hola@indomablestore.com');
+				$email->addAttachment($ticket_pdf);
+				$email->send();
 			}
 			else {
 				$status = 'error';

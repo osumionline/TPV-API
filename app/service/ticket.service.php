@@ -116,9 +116,10 @@ class ticketService extends OService {
 					'cuota_iva' => 0
 				];
 			}
-			$base = $linea->get('importe') / (($linea->get('iva') / 100) +1);
+			$importe = ($linea->get('importe') < 0) ? $linea->get('importe') * -1 : $linea->get('importe');
+			$base = $importe / (($linea->get('iva') / 100) +1);
 			$ivas['iva_'.$linea->get('iva')]['base'] += $base;
-			$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $linea->get('importe') - $base;
+			$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $importe - $base;
 		}
 
 		\QRcode::png(strval(-1 * $venta->get('id')), $route_qr);
