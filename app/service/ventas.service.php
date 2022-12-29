@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\App\DTO\HistoricoDTO;
 use OsumiFramework\App\Model\Venta;
 
 class ventasService extends OService {
@@ -14,25 +15,19 @@ class ventasService extends OService {
 	/**
 	 * Obtiene el listado de ventas de una fecha o un rango dados
 	 *
-	 * @param string $modo Indica si se deben obtener las ventas de un día ("fecha") o las ventas entre dos fechas ("rango")
-	 *
-	 * @param string $fecha Indica la fecha de la que obtener las ventas si el modo es "fecha"
-	 *
-	 * @param string $desde Indica la fecha inicial del rango del que obtener las ventas en el modo "rango"
-	 *
-	 * @param string $hasta Indica la fecha final del rango del que obtener las ventas en el modo "rango"
+	 * @param HistoricoDTO $data Filtros usados para buscar ventas
 	 *
 	 * @return array Lista de ventas obtenidas
 	 */
-	public function getHistoricoVentas(string $modo, ?string $fecha, ?string $desde, ?string $hasta): array {
+	public function getHistoricoVentas(HistoricoDTO $data): array {
 		$db = new ODB();
-		if ($modo == 'fecha') {
+		if ($data->getModo() == 'fecha') {
 			$sql = "SELECT * FROM `venta` WHERE DATE_FORMAT(`created_at`, '%d/%m/%Y') = ? AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
-			$db->query($sql, [$fecha]);
+			$db->query($sql, [$data->getFecha()]);
 		}
-		if ($modo == 'rango') {
+		if ($data->getModo() == 'rango') {
 			$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
-			$db->query($sql, [$desde.' 00:00:00', $hasta.' 23:59:59']);
+			$db->query($sql, [$data->getDesde().' 00:00:00', $data->getHasta().' 23:59:59']);
 		}
 		$ret = [];
 

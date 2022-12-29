@@ -112,19 +112,16 @@ class ticketService extends OService {
 			if (!array_key_exists('iva_'.$linea->get('iva'), $ivas)) {
 				$ivas['iva_'.$linea->get('iva')] = [
 					'iva' => $linea->get('iva'),
-					're' => $linea->get('re'),
 					'base' => 0,
-					'cuota_iva' => 0,
-					'cuota_re' => 0
+					'cuota_iva' => 0
 				];
 			}
-			$base = $linea->get('importe') * ((100 - $linea->get('iva') - $linea->get('re')) / 100);
+			$base = $linea->get('importe') / (($linea->get('iva') / 100) +1);
 			$ivas['iva_'.$linea->get('iva')]['base'] += $base;
-			$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $base * ($linea->get('iva') / 100);
-			$ivas['iva_'.$linea->get('iva')]['cuota_re'] += $base * ($linea->get('re') / 100);
+			$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $linea->get('importe') - $base;
 		}
 
-		\QRcode::png(strval($venta->get('id')), $route_qr);
+		\QRcode::png(strval(-1 * $venta->get('id')), $route_qr);
 		$qr = OTools::fileToBase64($route_qr);
 
 		$ticket_data = [

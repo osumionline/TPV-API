@@ -5,7 +5,7 @@ namespace OsumiFramework\App\DTO;
 use OsumiFramework\OFW\Core\ODTO;
 use OsumiFramework\OFW\Web\ORequest;
 
-class EmpleadoDTO implements ODTO{
+class EmpleadoDTO implements ODTO {
   private ?int $id = null;
 	private string $nombre = '';
   private bool $has_password = false;

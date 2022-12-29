@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
-use OsumiFramework\App\Component\Api\FacturaComponent;
+use OsumiFramework\App\Component\Api\VentaFinComponent;
 
 #[OModuleAction(
 	url: '/get-venta',
@@ -21,17 +21,17 @@ class getVentaAction extends OAction {
 	public function run(ORequest $req):void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
-		$factura_component = new FacturaComponent(['datos' => []]);
+		$venta_fin_component = new VentaFinComponent(['datos' => []]);
 
 		if (is_null($id)) {
 			$status = 'error';
 		}
 
 		if ($status ==  'ok') {
-			$factura_component->setValue('datos', $this->ticket_service->getVenta($id));
+			$venta_fin_component->setValue('datos', $this->ticket_service->getVenta($id));
 		}
 
 		$this->getTemplate()->add('status',  $status);
-		$this->getTemplate()->add('factura', $factura_component);
+		$this->getTemplate()->add('venta', $venta_fin_component);
 	}
 }

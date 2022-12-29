@@ -13,17 +13,17 @@
         margin: 8px auto;
         text-align: center;
       }
-      .center {
+      .header {
         text-align: center;
-        line-height: 15px;
+        line-height: 10px;
       }
       .social {
-        margin-top: 8px;
+        margin-top: 6px;
         text-align: center;
       }
       .social-item {
         display: inline-block;
-        padding-right: 8px;
+        padding-right: 6px;
         box-sizing: border-box;
       }
       .social-item img {
@@ -31,7 +31,7 @@
         margin-right: 4px;
       }
       .social-item span {
-        line-height: 14px;
+        line-height: 12px;
       }
       .ticket-info {
         border-top: 2px solid #000000;
@@ -39,14 +39,17 @@
         margin-top: 8px;
         line-height: 15px;
         width: 100%;
+        border-spacing: 0;
       }
       .ticket-info td {
         width: 50%;
         font-size: 8px;
+        line-height: 10px;
       }
       .venta {
         width: 100%;
         border-bottom: 2px solid #000000;
+        border-spacing: 0;
       }
       .venta thead {
         font-size: 7px;
@@ -54,6 +57,7 @@
       .venta td {
         box-sizing: border-box;
         font-size: 8px;
+        line-height: 10px;
       }
       .table-articulo {
         width: 50%;
@@ -86,12 +90,13 @@
       }
       .total {
         width: 100%;
-        margin-top: 8px;
-        line-height: 15px;
+        margin-top: 4px;
+        line-height: 8px;
         font-weight: bold;
+        font-size: 8px;
       }
       .total-header {
-        font-size: 14px;
+        font-size: 10px;
       }
       .total-label {
         display: inline-block;
@@ -106,15 +111,16 @@
       .cliente {
         text-align: center;
         font-weight: bold;
-        margin: 8px;
+        margin: 4px;
+        font-size: 8px;
       }
       .iva-incluido {
         text-align: center;
-        margin: 8px;
+        margin: 2px;
       }
       .iva {
         width: 100%;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
         font-size: 7px;
       }
       .iva-iva {
@@ -129,9 +135,9 @@
       }
       .legal {
         text-align: center;
-        line-height: 14px;
+        line-height: 10px;
         font-size: 6px;
-        margin-bottom: 16px;
+        margin-bottom: 2px;
       }
       .qr {
         text-align: center;
@@ -142,8 +148,8 @@
     <div class="logo">
       <img src="<?php echo $values['data']['logo'] ?>" width="100">
     </div>
-    <div class="center"><?php echo $values['data']['direccion'] ?></div>
-    <div class="center">Tel: <?php echo $values['data']['telefono'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
+    <div class="header"><?php echo $values['data']['direccion'] ?></div>
+    <div class="header">Tel: <?php echo $values['data']['telefono'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
     <div class="social">
 <?php foreach ($values['data']['social'] as $value): ?>
       <div class="social-item">
@@ -241,13 +247,6 @@
         <td class="iva-base"><?php echo number_format($iva['base'], 2, ',') ?></td>
         <td class="iva-cuota"><?php echo number_format($iva['cuota_iva'], 2, ',') ?></td>
       </tr>
-    <?php if ($iva['re'] != 0): ?>
-      <tr>
-        <td class="iva-iva">R.E.: <?php echo $iva['re'] ?>%</td>
-        <td class="iva-base"><?php echo number_format($iva['base'], 2, ',') ?></td>
-        <td class="iva-cuota"><?php echo number_format($iva['cuota_re'], 2, ',') ?></td>
-      </tr>
-  <?php endif ?>
 <?php endforeach ?>
     </table>
 <?php else: ?>

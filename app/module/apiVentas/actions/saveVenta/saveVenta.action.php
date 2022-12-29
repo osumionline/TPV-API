@@ -91,8 +91,16 @@ class saveVentaAction extends OAction {
 
 				// Reduzco el stock
 				if ($linea['idArticulo'] != 0) {
-					$art->set('stock', $art->get('stock') -1);
+					$art->set('stock', $art->get('stock') - $linea['cantidad']);
 					$art->save();
+
+					// Si la línea proviene de una venta, es una devolución, por lo que hay que marcar cuantas unidades se han devuelto de esa línea original
+					if (!is_null($linea['fromVenta'])) {
+						$lv_dev = new LineaVenta();
+						$lv_dev->find(['id_articulo' => $linea['idArticulo'], 'id_venta' => $linea['fromVenta']]);
+						$lv_dev->set('devuelto', $linea['cantidad'] * -1);
+						$lv_dev->save();
+					}
 				}
 			}
 

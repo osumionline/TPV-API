@@ -4,4 +4,4 @@ namespace OsumiFramework\App\Component\Api;
 
 use OsumiFramework\OFW\Core\OComponent;
 
-class FacturaComponent extends OComponent {}
+class VentaFinComponent extends OComponent {}

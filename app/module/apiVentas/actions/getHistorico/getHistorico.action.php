@@ -4,8 +4,9 @@ namespace OsumiFramework\App\Module\Action;
 
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
-use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\App\DTO\HistoricoDTO;
 use OsumiFramework\App\Component\Model\VentaListComponent;
+use OsumiFramework\App\Model\Venta;
 
 #[OModuleAction(
 	url: '/get-historico',
@@ -13,26 +14,32 @@ use OsumiFramework\App\Component\Model\VentaListComponent;
 )]
 class getHistoricoAction extends OAction {
 	/**
-	 * Función para obtener el listado de ventas
+	 * Función para obtener el listado de ventas o detalle de una venta concreta
 	 *
-	 * @param ORequest $req Request object with method, headers, parameters and filters used
+	 * @param HistoricoDTO $data Filtros usados para buscar ventas
 	 * @return void
 	 */
-	public function run(ORequest $req):void {
+	public function run(HistoricoDTO $data):void {
 		$status = 'ok';
-		$modo   = $req->getParamString('modo');
-		$fecha  = $req->getParamString('fecha');
-		$desde  = $req->getParamString('desde');
-		$hasta  = $req->getParamString('hasta');
 		$venta_list_component = new VentaListComponent(['list' => []]);
 
-		if (is_null($fecha) && is_null($desde) && is_null($hasta)) {
+		if (!$data->isValid()) {
 			$status = 'error';
 		}
 
 		if ($status=='ok') {
-			$list = $this->ventas_service->getHistoricoVentas($modo, $fecha, $desde, $hasta);
-			$venta_list_component->setValue('list', $list);
+			if ($data->getModo() != 'id') {
+				$venta_list_component->setValue('list', $this->ventas_service->getHistoricoVentas($data));
+			}
+			else {
+				$venta = new Venta();
+				if ($venta->find(['id' => $data->getId()])) {
+					$venta_list_component->setValue('list', [$venta]);
+				}
+				else {
+					$status = 'error';
+				}
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);
