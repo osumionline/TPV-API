@@ -10,7 +10,6 @@ else{
 ?>
 {
 	"id": <?php echo $values['factura']->get('id') ?>,
-	"idCliente": <?php echo $values['factura']->get('id_cliente') ?>,
 	"nombreApellidos": "<?php echo urlencode($values['factura']->get('nombre_apellidos')) ?>",
 	"dniCif": "<?php echo is_null($values['factura']->get('dni_cif')) ? 'null' : urlencode($values['factura']->get('dni_cif')) ?>",
 	"telefono": "<?php echo is_null($values['factura']->get('telefono')) ? 'null' : urlencode($values['factura']->get('telefono')) ?>",
