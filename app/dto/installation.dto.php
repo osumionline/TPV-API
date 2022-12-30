@@ -10,6 +10,7 @@ class InstallationDTO implements ODTO{
 	private string $cif = '';
 	private string $telefono = '';
 	private string $direccion = '';
+	private string $poblacion = '';
 	private string $email = '';
 	private string $logo = '';
 	private string $nombre_empleado = '';
@@ -51,6 +52,12 @@ class InstallationDTO implements ODTO{
 	}
 	private function setDireccion(string $direccion): void {
 		$this->direccion = $direccion;
+	}
+	private function setPoblacion(string $poblacion): void {
+		$this->poblacion = $poblacion;
+	}
+	public function getPoblacion(): string {
+		return $this->poblacion;
 	}
 	public function getEmail(): string {
 		return $this->email;
@@ -172,6 +179,7 @@ class InstallationDTO implements ODTO{
 		$this->setCif( $req->getParamString('cif') );
 		$this->setTelefono( $req->getParamString('telefono') );
 		$this->setDireccion( $req->getParamString('direccion') );
+		$this->setPoblacion( $req->getParamString('poblacion') );
 		$this->setEmail( $req->getParamString('email') );
 		$this->setLogo( $req->getParamString('logo') );
 		$this->setNombreEmpleado( $req->getParamString('nombreEmpleado') );

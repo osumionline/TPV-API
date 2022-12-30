@@ -10,6 +10,7 @@ class AppData {
 	private string $cif = '';
 	private string $telefono = '';
 	private string $direccion = '';
+	private string $poblacion = '';
 	private string $email = '';
 	private string $twitter = '';
 	private string $facebook = '';
@@ -32,6 +33,7 @@ class AppData {
 				$this->setCif($data['cif']);
 				$this->setTelefono($data['telefono']);
 				$this->setDireccion($data['direccion']);
+				$this->setPoblacion($data['poblacion']);
 				$this->setEmail($data['email']);
 				$this->setTwitter($data['twitter']);
 				$this->setFacebook($data['facebook']);
@@ -55,6 +57,7 @@ class AppData {
 		$this->setCif($data->getCif());
 		$this->setTelefono($data->getTelefono());
 		$this->setDireccion($data->getDireccion());
+		$this->setPoblacion($data->getPoblacion());
 		$this->setEmail($data->getEmail());
 		$this->setTwitter($data->getTwitter());
 		$this->setFacebook($data->getFacebook());
@@ -100,6 +103,12 @@ class AppData {
 	}
 	public function getDireccion(): string {
 		return $this->direccion;
+	}
+	private function setPoblacion(string $poblacion): void {
+		$this->poblacion = $poblacion;
+	}
+	public function getPoblacion(): string {
+		return $this->poblacion;
 	}
 	private function setEmail(string $email): void {
 		$this->email = $email;
@@ -222,6 +231,7 @@ class AppData {
 			'cif'         => $this->getCif(),
 			'telefono'    => $this->getTelefono(),
 			'direccion'   => $this->getDireccion(),
+			'poblacion'   => $this->getPoblacion(),
 			'email'       => $this->getEmail(),
 			'twitter'     => $this->getTwitter(),
 			'facebook'    => $this->getFacebook(),
