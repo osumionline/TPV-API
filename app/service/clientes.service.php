@@ -6,6 +6,7 @@ use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Venta;
+use OsumiFramework\App\Model\Factura;
 
 class clientesService extends OService {
 	/**
@@ -131,5 +132,68 @@ class clientesService extends OService {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Función para obtener la lista de facturas de un cliente
+	 *
+	 * @param int $id_cliente Id del cliente
+	 *
+	 * @return array Lista de facturas de un cliente
+	 */
+	public function getFacturasCliente(int $id_cliente): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `factura` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
+		$db->query($sql, [$id_cliente]);
+		$list = [];
+
+		while ($res = $db->next()) {
+			$factura = new Factura();
+			$factura->update($res);
+			array_push($list, $factura);
+		}
+
+		return $list;
+	}
+
+	/**
+	 * Función para obtener la lista de ventas de un cliente
+	 *
+	 * @param int $id_cliente Id del cliente
+	 *
+	 * @param string $facturadas Sirve para elegir las ventas ya facturadas ("si"), las no facturadas ("no") o todas ("todas")
+	 *
+	 * @return array Lista de ventas de un cliente
+	 */
+	public function getVentasCliente(int $id_cliente, string $facturadas): array {
+		$db = new ODB();
+		$list = [];
+
+		switch ($facturadas) {
+			case 'si': {
+				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
+				$db->query($sql, [$id_cliente, $id_cliente]);
+			}
+			break;
+			case 'no': {
+				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
+				$db->query($sql, [$id_cliente, $id_cliente]);
+			}
+			break;
+			case 'todas': {
+				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
+				$db->query($sql, [$id_cliente]);
+			}
+			break;
+		}
+		$db->query($sql, [$id_cliente]);
+
+		while ($res = $db->next()) {
+			$venta = new Venta();
+			$venta->update($res);
+			array_push($list, $venta);
+		}
+
+		return $list;
 	}
 }
