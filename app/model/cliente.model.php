@@ -238,4 +238,67 @@ class Cliente extends OModel {
 		}
 		return null;
 	}
+
+	private ?array $facturas = null;
+
+	/**
+	 * Obtiene el listado de facturas de un cliente
+	 *
+	 * @return array Listado de facturas
+	 */
+	public function getFacturas(): array {
+		if (is_null($this->facturas)) {
+			$this->loadFacturas();
+		}
+		return $this->facturas;
+	}
+
+	/**
+	 * Guarda la lista de facturas
+	 *
+	 * @param array $f Lista de facturas
+	 *
+	 * @return void
+	 */
+	public function setFacturas(array $f): void {
+		$this->facturas = $f;
+	}
+
+	/**
+	 * Carga la lista de facturas de un cliente
+	 *
+	 * @return void
+	 */
+	public function loadFacturas(): void {
+		$db = new ODB();
+		$sql = "SELECT * FROM `factura` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
+		$db->query($sql, [$this->get('id')]);
+		$list = [];
+
+		while ($res=$db->next()) {
+			$f = new Factura();
+			$f->update($res);
+			array_push($list, $f);
+		}
+
+		$this->setFacturas($list);
+	}
+
+	/**
+	 * Función para borrar definitivamente un cliente y todas sus implicaciones
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+		$sql = "UPDATE `venta` SET `id_cliente` = NULL WHERE `id_cliente` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$facturas = $this->getFacturas();
+		foreach ($facturas as $factura) {
+			$factura->deleteFull();
+		}
+
+		$this->delete();
+	}
 }

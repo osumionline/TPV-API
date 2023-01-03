@@ -69,14 +69,16 @@ class articulosService extends OService {
 	 * @return array Resultado de la comprobación
 	 */
 	public function checkReferencia(string $referencia, int $id_articulo): array {
-		$db = new ODB();
-		$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `id` != ? AND `deleted_at` IS NULL";
-		$db->query($sql, [$referencia, $id_articulo]);
-		if ($res = $db->next()) {
-			$art = new Articulo();
-			$art->update($res);
+		if (!empty($referencia)) {
+			$db = new ODB();
+			$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `id` != ? AND `deleted_at` IS NULL";
+			$db->query($sql, [$referencia, $id_articulo]);
+			if ($res = $db->next()) {
+				$art = new Articulo();
+				$art->update($res);
 
-			return ['status' => 'referencia-used', 'message' => $art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+				return ['status' => 'referencia-used', 'message' => $art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+			}
 		}
 		return ['status' => 'ok', 'message' => ''];
 	}

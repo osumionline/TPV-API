@@ -18,6 +18,7 @@ else{
 	"codigoPostal": "<?php echo is_null($values['factura']->get('codigo_postal')) ? 'null' : urlencode($values['factura']->get('codigo_postal')) ?>",
 	"poblacion": "<?php echo is_null($values['factura']->get('poblacion')) ? 'null' : urlencode($values['factura']->get('poblacion')) ?>",
 	"provincia": <?php echo is_null($values['factura']->get('provincia')) ? 'null' : $values['factura']->get('provincia') ?>,
+	"importe": <?php echo $values['factura']->get('importe') ?>,
 	"fecha": "<?php echo $values['factura']->get('created_at', 'd/m/Y H:i') ?>",
 	"ventas": [<?php echo new VentaListComponent(['list' => $values['factura']->getVentas()]) ?>]
 }

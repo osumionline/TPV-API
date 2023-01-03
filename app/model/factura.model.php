@@ -85,6 +85,13 @@ class Factura extends OModel {
 				comment: 'Id de la provincia del cliente'
 			),
 			new OModelField(
+				name: 'importe',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe total de la factura'
+			),
+			new OModelField(
 				name: 'created_at',
 				type: OMODEL_CREATED,
 				comment: 'Fecha de creación del registro'
@@ -187,5 +194,18 @@ class Factura extends OModel {
 		}
 
 		$this->setVentas($list);
+	}
+
+	/**
+	 * Función para borrar definitivamente una factura
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `factura_venta` WHERE `id_factura` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$this->delete();
 	}
 }

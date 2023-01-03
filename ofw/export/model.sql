@@ -122,10 +122,12 @@ CREATE TABLE `pdf_pedido` (
 CREATE TABLE `pedido` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada pedido',
   `id_proveedor` INT(11) NOT NULL DEFAULT NULL COMMENT 'Id del proveedor del pedido',
+  `metodo_pago` INT(11) DEFAULT NULL COMMENT 'Método de pago del pedido',
   `tipo` VARCHAR(10) COLLATE utf8mb4_unicode_ci COMMENT 'Indica si se trata de un albarán, una factura o un abono',
   `num` VARCHAR(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Albarán / factura / abono del pedido',
   `importe` FLOAT NOT NULL DEFAULT 0 COMMENT 'Importe total del pedido',
   `portes` FLOAT NOT NULL DEFAULT 0 COMMENT 'Importe de los portes del pedido',
+  `descuento` INT(11) NOT NULL DEFAULT 0 COMMENT 'Porcentaje de descuento en el pedido',
   `fecha_pago` DATETIME DEFAULT NULL COMMENT 'Fecha de pago del pedido',
   `fecha_pedido` DATETIME DEFAULT NULL COMMENT 'Fecha del pedido',
   `fecha_recepcionado` DATETIME DEFAULT NULL COMMENT 'Fecha del momento de la recepcion del pedido',
@@ -362,8 +364,8 @@ CREATE TABLE `cliente` (
 
 CREATE TABLE `factura` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id único para cada factura',
-  `id_cliente` INT(11) NOT NULL DEFAULT NULL COMMENT 'Id del cliente al que se le emite la factura',
-  `nombre_apellidos` VARCHAR(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT NULL COMMENT 'Nombre y apellidos del cliente',
+  `id_cliente` INT(11) NOT NULL COMMENT 'Id del cliente al que se le emite la factura',
+  `nombre_apellidos` VARCHAR(150) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre y apellidos del cliente',
   `dni_cif` VARCHAR(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'DNI/CIF del cliente',
   `telefono` VARCHAR(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Teléfono del cliente',
   `email` VARCHAR(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Email del cliente',
@@ -371,9 +373,10 @@ CREATE TABLE `factura` (
   `codigo_postal` VARCHAR(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Código postal del cliente',
   `poblacion` VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Población del cliente',
   `provincia` INT(11) DEFAULT NULL COMMENT 'Id de la provincia del cliente',
+  `importe` FLOAT NOT NULL DEFAULT 0 COMMENT 'Importe total de la factura',
   `created_at` DATETIME NOT NULL COMMENT 'Fecha de creación del registro',
   `updated_at` DATETIME DEFAULT NULL COMMENT 'Fecha de última modificación del registro',
-  `deleted_at` DATETIME DEFAULT NULL COMMENT 'Fecha de baja del empleado',
+  `deleted_at` DATETIME DEFAULT NULL COMMENT 'Fecha de borrado de la factura',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

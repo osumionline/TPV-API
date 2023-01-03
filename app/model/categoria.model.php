@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Model;
 use OsumiFramework\OFW\DB\OModel;
 use OsumiFramework\OFW\DB\OModelGroup;
 use OsumiFramework\OFW\DB\OModelField;
+use OsumiFramework\OFW\DB\ODB;
 
 class Categoria extends OModel {
 	function __construct() {
@@ -80,5 +81,18 @@ class Categoria extends OModel {
 		$c = new Categoria();
 		$c->find(['id' => $this->get('id_padre')]);
 		$this->setPadre($c);
+	}
+
+	/**
+	 * Función para borrar una categoría y quitarse de los artículos que la tuviesen asignada
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+		$sql = "UPDATE `articulo` SET `id_categoria` = NULL WHERE `id_categoria` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$this->delete();
 	}
 }

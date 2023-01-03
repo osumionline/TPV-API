@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Model;
 use OsumiFramework\OFW\DB\OModel;
 use OsumiFramework\OFW\DB\OModelGroup;
 use OsumiFramework\OFW\DB\OModelField;
+use OsumiFramework\OFW\DB\ODB;
 
 class Marca extends OModel {
 	function __construct() {
@@ -149,5 +150,26 @@ class Marca extends OModel {
 	public function getRutaFoto(): string {
 		global $core;
 		return $core->config->getDir('web').'marcas/'.$this->get('id').'.webp';
+	}
+
+	/**
+	 * Función para borrar completamente una marca y sus relaciones
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `proveedor_marca` WHERE `id_marca` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$ruta_foto = $this->getRutaFoto();
+		if (file_exists($ruta_foto)) {
+			unlink($ruta_foto);
+		}
+
+		$sql = "UPDATE `articulo` SET `id_marca` = NULL WHERE `id_marca` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		$this->delete();
 	}
 }
