@@ -164,6 +164,20 @@ class generalService extends OService {
 	}
 
 	/**
+	 * Función para obtener el orden de un nuevo tipo de pago
+	 *
+	 * @return int Orden del nuevo tipo de pago
+	 */
+	public function getNewTipoPagoOrden(): int {
+		$db = new ODB();
+		$sql = "SELECT MAX('orden') as `orden` FROM `tipo_pago`";
+		$db->query($sql);
+		$res = $db->next();
+
+		return intval($res['orden']) +1;
+	}
+
+	/**
 	 * Guarda una imagen en Base64. Si no tiene formato WebP se convierte
 	 *
 	 * @param string $base64_string Imagen en formato Base64

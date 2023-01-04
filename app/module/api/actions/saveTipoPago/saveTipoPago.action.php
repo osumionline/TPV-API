@@ -31,10 +31,14 @@ class saveTipoPagoAction extends OAction {
 			if (!is_null($data->getId())) {
 				$tp->find(['id' => $data->getId()]);
 			}
+			$orden = $data->getOrden();
+			if (is_null($orden)) {
+				$orden = $this->general_service->getNewTipoPagoOrden();
+			}
 			$tp->set('nombre',      urldecode($data->getNombre()));
 			$tp->set('slug',        OTools::slugify(urldecode($data->getNombre())));
 			$tp->set('afecta_caja', $data->getAfectaCaja());
-			$tp->set('orden',       $data->getOrden());
+			$tp->set('orden',       $orden);
 			$tp->set('fisico',      $data->getFisico());
 
 			$tp->save();

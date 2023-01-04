@@ -223,6 +223,20 @@ class Venta extends OModel {
 	}
 
 	/**
+	 * Función para añadir una nueva línea a la venta
+	 *
+	 * @param LineaVenta $l Nueva línea de la venta
+	 *
+	 * @return void
+	 */
+	public function addLinea(LineaVenta $l): void {
+		if (is_null($this->lineas)) {
+			$this->lineas = [];
+		}
+		array_push($this->lineas, $l);
+	}
+
+	/**
 	 * Carga la lista de líneas de una venta
 	 *
 	 * @return void
@@ -386,5 +400,25 @@ class Venta extends OModel {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Función para borrar completamente una venta y sus líneas
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+
+		// Primero borro la venta de las posibles facturas en las que pueda estar
+		$sql = "DELETE FROM `factura_venta` WHERE `id_venta` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		// A continuación borro sus líneas
+		$sql = "DELETE FROM `linea_venta` WHERE `id_venta` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		// Finalmente borro la venta en si
+		$this->delete();
 	}
 }

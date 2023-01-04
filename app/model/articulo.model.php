@@ -536,4 +536,57 @@ class Articulo extends OModel {
 
 		$this->setEtiquetasWeb($list);
 	}
+
+	/**
+	 * Función para borrar completamente un artículo y sus relaciones
+	 *
+	 * @return void
+	 */
+	public function deleteFull(): void {
+		$db = new ODB();
+
+		// Fotos
+		$fotos = $this->getFotos();
+		foreach ($fotos as $foto) {
+			$foto->deleteFull();
+		}
+
+		$sql = "DELETE * FROM `articulo_foto` WHERE `id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		// Etiquetas
+		$etiquetas = $this->getEtiquetas();
+		$sql = "DELETE FROM `articulo_etiqueta` WHERE `id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		foreach ($etiquetas as $etiqueta) {
+			$sql = "SELECT COUNT(*) AS `num` FROM `articulo_etiqueta` WHERE `id_etiqueta` = ?";
+			$db->query($sql, [$etiqueta->get('id')]);
+			$res = $db->next();
+			if ($res['num'] == 0) {
+				$etiqueta->delete();
+			}
+		}
+
+		// Etiquetas web
+		$etiquetas_web = $this->getEtiquetasWeb();
+		$sql = "DELETE FROM `articulo_etiqueta_web` WHERE `id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		foreach ($etiquetas_web as $etiqueta_web) {
+			$sql = "SELECT COUNT(*) AS `num` FROM `articulo_etiqueta_web` WHERE `id_etiqueta_web` = ?";
+			$db->query($sql, [$etiqueta_web->get('id')]);
+			$res = $db->next();
+			if ($res['num'] == 0) {
+				$etiqueta_web->delete();
+			}
+		}
+
+		// Códigos de barras
+		$sql = "DELETE FROM `codigo_barras` WHERE `id_articulo` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		// Finalmente, borro el artículo
+		$this->delete();
+	}
 }
