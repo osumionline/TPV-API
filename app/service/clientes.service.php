@@ -186,7 +186,6 @@ class clientesService extends OService {
 			}
 			break;
 		}
-		$db->query($sql, [$id_cliente]);
 
 		while ($res = $db->next()) {
 			$venta = new Venta();

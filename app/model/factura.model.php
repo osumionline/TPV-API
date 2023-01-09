@@ -23,6 +23,12 @@ class Factura extends OModel {
 				comment: 'Id del cliente al que se le emite la factura'
 			),
 			new OModelField(
+				name: 'num_factura',
+				type: OMODEL_NUM,
+				nullable: false,
+				comment: 'Número de factura'
+			),
+			new OModelField(
 				name: 'nombre_apellidos',
 				type: OMODEL_TEXT,
 				nullable: false,
@@ -90,6 +96,13 @@ class Factura extends OModel {
 				nullable: false,
 				default: 0,
 				comment: 'Importe total de la factura'
+			),
+			new OModelField(
+				name: 'impresa',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si la factura ha sido impresa 1 o no 0'
 			),
 			new OModelField(
 				name: 'created_at',
