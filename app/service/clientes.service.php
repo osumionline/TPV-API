@@ -7,6 +7,7 @@ use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Factura;
+use OsumiFramework\App\Model\FacturaVenta;
 
 class clientesService extends OService {
 	/**
@@ -163,9 +164,10 @@ class clientesService extends OService {
 	 *
 	 * @param string $facturadas Sirve para elegir las ventas ya facturadas ("si"), las no facturadas ("no") o todas ("todas")
 	 *
+	 * @param int $id_factura_include Sirve para añadir al resultado las ventas de una factura concreta. Se usa al editar una factura no impresa todavía.
 	 * @return array Lista de ventas de un cliente
 	 */
-	public function getVentasCliente(int $id_cliente, string $facturadas): array {
+	public function getVentasCliente(int $id_cliente, string $facturadas, ?int $id_factura_include): array {
 		$db = new ODB();
 		$list = [];
 
@@ -176,8 +178,14 @@ class clientesService extends OService {
 			}
 			break;
 			case 'no': {
-				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
-				$db->query($sql, [$id_cliente, $id_cliente]);
+				if (is_null($id_factura_include)) {
+					$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
+					$db->query($sql, [$id_cliente, $id_cliente]);
+				}
+				else {
+					$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ? AND `id` != ?)) ORDER BY `created_at` DESC";
+					$db->query($sql, [$id_cliente, $id_cliente, $id_factura_include]);
+				}
 			}
 			break;
 			case 'todas': {
@@ -194,5 +202,35 @@ class clientesService extends OService {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Función que actualiza las ventas asignadas a una factura y devuelve el importe total de la factura
+	 *
+	 * @param int $id_factura Id de la factura a actualizar
+	 *
+	 * @param array $ventas Lista de ids de ventas
+	 *
+	 * @return float Importe total de la factura
+	 */
+	public function updateFacturaVentas(int $id_factura, array $ventas): float {
+		$total = 0;
+
+		$db = new ODB();
+		$sql = "DELETE FROM `factura_venta` WHERE `id_factura` = ?";
+		$db->query($sql, [$id_factura]);
+
+		foreach ($ventas as $id_venta) {
+			$fv = new FacturaVenta();
+			$fv->set('id_factura', $id_factura);
+			$fv->set('id_venta',   $id_venta);
+			$fv->save();
+
+			$v = new Venta();
+			$v->find(['id' => $id_venta]);
+			$total += $v->get('total');
+		}
+
+		return $total;
 	}
 }

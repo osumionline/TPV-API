@@ -25,7 +25,8 @@ class Factura extends OModel {
 			new OModelField(
 				name: 'num_factura',
 				type: OMODEL_NUM,
-				nullable: false,
+				nullable: true,
+				default: null,
 				comment: 'Número de factura'
 			),
 			new OModelField(

@@ -285,6 +285,40 @@ class Cliente extends OModel {
 	}
 
 	/**
+	 * Función para obtener los datos del cliente para una factura
+	 */
+	public function getDatosFactura(): array {
+		$datos = [];
+
+		if ($this->get('fact_igual')) {
+			$datos = [
+				'nombre_apellidos' => $this->get('nombre_apellidos'),
+				'dni_cif'          => $this->get('dni_cif'),
+				'telefono'         => $this->get('telefono'),
+				'email'            => $this->get('email'),
+				'direccion'        => $this->get('direccion'),
+				'codigo_postal'    => $this->get('codigo_postal'),
+				'poblacion'        => $this->get('poblacion'),
+				'provincia'        => $this->get('provincia')
+			];
+		}
+		else {
+			$datos = [
+				'nombre_apellidos' => $this->get('fact_nombre_apellidos'),
+				'dni_cif'          => $this->get('fact_dni_cif'),
+				'telefono'         => $this->get('fact_telefono'),
+				'email'            => $this->get('fact_email'),
+				'direccion'        => $this->get('fact_direccion'),
+				'codigo_postal'    => $this->get('fact_codigo_postal'),
+				'poblacion'        => $this->get('fact_poblacion'),
+				'provincia'        => $this->get('fact_provincia')
+			];
+		}
+
+		return $datos;
+	}
+
+	/**
 	 * Función para borrar definitivamente un cliente y todas sus implicaciones
 	 *
 	 * @return void

@@ -22,6 +22,7 @@ class getVentasClienteAction extends OAction {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
 		$facturadas = $req->getParamString('facturadas');
+		$id_factura_include = $req->getParamInt('idFacturaInclude');
 		$venta_list_component = new VentaListComponent(['list' => []]);
 
 		if (is_null($id) || is_null($facturadas)) {
@@ -29,7 +30,7 @@ class getVentasClienteAction extends OAction {
 		}
 
 		if ($status == 'ok') {
-			$venta_list_component->setValue('list', $this->clientes_service->getVentasCliente($id, $facturadas));
+			$venta_list_component->setValue('list', $this->clientes_service->getVentasCliente($id, $facturadas, $id_factura_include));
 		}
 
 		$this->getTemplate()->add('status', $status);
