@@ -9,6 +9,7 @@ class FacturaDTO implements ODTO {
   private ?int $id = null;
   private ?int $id_cliente = null;
   private ?array $ventas = null;
+  private bool $imprimir = false;
 
   public function getId(): ?int {
 		return $this->id;
@@ -28,6 +29,12 @@ class FacturaDTO implements ODTO {
 	private function setVentas(?array $ventas): void {
 		$this->ventas = $ventas;
 	}
+  public function getImprimir(): bool {
+		return $this->imprimir;
+	}
+	private function setImprimir(bool $imprimir): void {
+		$this->imprimir = $imprimir;
+	}
 
   public function isValid(): bool {
 		return (
@@ -42,5 +49,6 @@ class FacturaDTO implements ODTO {
     $this->setId( $req->getParamInt('id') );
   	$this->setIdCliente( $req->getParamInt('idCliente') );
     $this->setVentas( $req->getParam('ventas') );
+    $this->setImprimir( $req->getParamBool('imprimir') );
   }
 }

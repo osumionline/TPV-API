@@ -161,7 +161,7 @@ class Venta extends OModel {
 	public function getVentaOtros(): float {
 		// Si el pago es mixto, lo entregado va a efectivo y la diferencia (total - entregado) será lo que ha pagado aparte
 		if ($this->get('pago_mixto')) {
-			return ($this->get('total') - $venta->get('entregado'));
+			return ($this->get('total') - $this->get('entregado'));
 		}
 		else {
 			// Si hay tipo de pago alternativo, todo es otros

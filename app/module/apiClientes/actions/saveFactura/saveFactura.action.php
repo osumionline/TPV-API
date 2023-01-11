@@ -23,7 +23,7 @@ class saveFacturaAction extends OAction {
 		$status = 'ok';
 
 		if (!$data->isValid()) {
-			$status = 'error-valid';
+			$status = 'error';
 		}
 
 		if ($status == 'ok') {
@@ -36,15 +36,11 @@ class saveFacturaAction extends OAction {
 				if (!is_null($data->getId())) {
 					$factura->find(['id' => $data->getId()]);
 				}
-				else {
-					// Si es nueva marco impresa a false
-					$factura->set('impresa', false);
-				}
 
 				// Si no ha sido impresa se puede editar
 				if (!$factura->get('impresa')) {
 					$datos = $cliente->getDatosFactura();
-					$factura->set('id_cliente', $data->getIdCliente());
+					$factura->set('id_cliente',       $data->getIdCliente());
 					$factura->set('nombre_apellidos', $datos['nombre_apellidos']);
 					$factura->set('dni_cif',          $datos['dni_cif']);
 					$factura->set('telefono',         $datos['telefono']);
@@ -54,6 +50,7 @@ class saveFacturaAction extends OAction {
 					$factura->set('poblacion',        $datos['poblacion']);
 					$factura->set('provincia',        $datos['provincia']);
 					$factura->set('importe',          0);
+					$factura->set('impresa',          $data->getImprimir());
 					$factura->save();
 
 					// Actualizo las ventas de la factura y recalculo el importe
@@ -64,11 +61,11 @@ class saveFacturaAction extends OAction {
 					$data->setId($factura->get('id'));
 				}
 				else {
-					$status = 'error-impresa';
+					$status = 'error';
 				}
 			}
 			else {
-				$status = 'error-cliente';
+				$status = 'error';
 			}
 		}
 

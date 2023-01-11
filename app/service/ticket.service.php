@@ -140,6 +140,7 @@ class ticketService extends OService {
 			'mixto'          => $venta->get('pago_mixto'),
 			'entregado'      => $venta->get('entregado'),
 			'entregado_otro' => $venta->get('entregado_otro'),
+			'id_tipo_pago'   => $venta->get('id_tipo_pago'),
 			'forma_pago'     => $venta->getNombreTipoPago(),
 			'cliente'        => $venta->getCliente(),
 			'employee'       => $venta->getEmpleado()->get('nombre'),

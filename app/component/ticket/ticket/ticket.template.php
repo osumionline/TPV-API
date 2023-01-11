@@ -216,9 +216,11 @@
 <?php if (!$values['data']['mixto']): ?>
       <tr>
         <td class="total-label"><?php echo $values['data']['forma_pago'] ?>:</td>
-        <td class="total-amount"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</td>
+        <td class="total-amount">
+          <?php echo number_format(is_null($values['data']['id_tipo_pago']) ? $values['data']['entregado'] : $values['data']['total'], 2, ',') ?> €
+        </td>
       </tr>
-  <?php if ($values['data']['total'] != $values['data']['entregado']): ?>
+  <?php if (is_null($values['data']['id_tipo_pago'])): ?>
       <tr>
         <td class="total-label">Cambio:</td>
         <td class="total-amount"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</td>
