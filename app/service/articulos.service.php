@@ -123,7 +123,11 @@ class articulosService extends OService {
 		$ret = [];
 
 		if (!empty($name)) {
-			$sql .= " AND `slug` LIKE '%".OTools::slugify($name)."%'";
+			$parts = explode(' ', $name);
+			for ($i = 0; $i<count($parts); $i++) {
+				$parts[$i] = OTools::slugify($parts[$i]);
+			}
+			$sql .= " AND `slug` LIKE '%".implode('%', $parts)."%'";
 		}
 		if ($id_marca !== -1) {
 			$sql .= " AND `id_marca` = ".$id_marca;
@@ -150,12 +154,16 @@ class articulosService extends OService {
 	public function searchArticulosVentas(string $name): array {
 		$list = $this->searchArticulos($name, -1);
 		$ret = [];
+		$marcas = [];
 
 		foreach ($list as $item) {
+			if (!array_key_exists($item->get('id_marca'), $marcas)) {
+				$marcas[$item->get('id_marca')] = $item->getMarca();
+			}
 			array_push($ret, [
 				'localizador' => $item->get('localizador'),
 				'nombre' => $item->get('nombre'),
-				'marca'  => $item->getMarca()->get('nombre'),
+				'marca'  => $marcas[$item->get('id_marca')]->get('nombre'),
 				'pvp'    => $item->get('pvp'),
 				'stock'  => $item->get('stock')
 			]);
