@@ -327,4 +327,20 @@ class articulosService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Función para calcular un margen de beneficio
+	 *
+	 * @param float $puc PUC de un artículo
+	 *
+	 * @param float $pvp PVP de un artículo
+	 *
+	 * @return float Margen de beneficio de un artículo
+	 */
+	public function getMargen(float $puc, float $pvp): float {
+		if ($pvp == 0) {
+      return 0;
+    }
+    return (100 * ($pvp - $puc)) / $pvp;
+	}
 }
