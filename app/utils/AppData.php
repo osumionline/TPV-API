@@ -16,14 +16,17 @@ class AppData {
 	private string $facebook = '';
 	private string $instagram = '';
 	private string $web = '';
+	private float  $caja_inicial = 0;
+  private int    $ticket_inicial = 1;
+  private int    $factura_inicial = 1;
 	private string $tipo_iva = '';
-	private array $iva_list = [];
-	private array $re_list = [];
-	private array $margin_list = [];
-	private bool $venta_online = false;
+	private array  $iva_list = [];
+	private array  $re_list = [];
+	private array  $margin_list = [];
+	private bool   $venta_online = false;
 	private string $url_api = '';
-	private bool $fecha_cad = false;
-	private bool $empleados = false;
+	private bool   $fecha_cad = false;
+	private bool   $empleados = false;
 
 	function __construct(string $path = null) {
 		if (!is_null($path) && file_exists($path)) {
@@ -39,6 +42,9 @@ class AppData {
 				$this->setFacebook($data['facebook']);
 				$this->setInstagram($data['instagram']);
 				$this->setWeb($data['web']);
+				$this->setCajaInicial($data['cajaInicial']);
+				$this->setTicketInicial($data['ticketInicial']);
+				$this->setFacturaInicial($data['facturaInicial']);
 				$this->setTipoIva($data['tipoIva']);
 				$this->setIvaList($data['ivaList']);
 				$this->setReList($data['reList']);
@@ -63,6 +69,9 @@ class AppData {
 		$this->setFacebook($data->getFacebook());
 		$this->setInstagram($data->getInstagram());
 		$this->setWeb($data->getWeb());
+		$this->setCajaInicial($data->getCajaInicial());
+		$this->setTicketInicial($data->getTicketInicial());
+		$this->setFacturaInicial($data->getFacturaInicial());
 		$this->setTipoIva($data->getTipoIva());
 		$this->setIvaList($data->getIvaList());
 		$this->setReList($data->getReList());
@@ -139,6 +148,24 @@ class AppData {
 	}
 	public function getWeb(): string {
 		return $this->web;
+	}
+	public function getCajaInicial(): float {
+		return $this->caja_inicial;
+	}
+	private function setCajaInicial(float $caja_inicial): void {
+		$this->caja_inicial = $caja_inicial;
+	}
+	public function getTicketInicial(): int {
+		return $this->ticket_inicial;
+	}
+	private function setTicketInicial(int $ticket_inicial): void {
+		$this->ticket_inicial = $ticket_inicial;
+	}
+	public function getFacturaInicial(): int {
+		return $this->factura_inicial;
+	}
+	private function setFacturaInicial(int $factura_inicial): void {
+		$this->factura_inicial = $factura_inicial;
 	}
 	private function setTipoIva(string $tipo_iva): void {
 		$this->tipo_iva = $tipo_iva;
@@ -227,24 +254,27 @@ class AppData {
 			return null;
 		}
 		return json_encode([
-			'nombre'      => $this->getNombre(),
-			'cif'         => $this->getCif(),
-			'telefono'    => $this->getTelefono(),
-			'direccion'   => $this->getDireccion(),
-			'poblacion'   => $this->getPoblacion(),
-			'email'       => $this->getEmail(),
-			'twitter'     => $this->getTwitter(),
-			'facebook'    => $this->getFacebook(),
-			'instagram'   => $this->getInstagram(),
-			'web'         => $this->getWeb(),
-			'tipoIva'     => $this->getTipoIva(),
-			'ivaList'     => $this->getIvaList(),
-			'reList'      => $this->getReList(),
-			'marginList'  => $this->getMarginList(),
-			'ventaOnline' => $this->getVentaOnline(),
-			'urlApi'      => $this->getUrlApi(),
-			'fechaCad'    => $this->getFechaCad(),
-			'empleados'   => $this->getEmpleados()
+			'nombre'         => $this->getNombre(),
+			'cif'            => $this->getCif(),
+			'telefono'       => $this->getTelefono(),
+			'direccion'      => $this->getDireccion(),
+			'poblacion'      => $this->getPoblacion(),
+			'email'          => $this->getEmail(),
+			'twitter'        => $this->getTwitter(),
+			'facebook'       => $this->getFacebook(),
+			'instagram'      => $this->getInstagram(),
+			'web'            => $this->getWeb(),
+			'cajaInicial'    => $this->getCajaInicial(),
+			'ticketInicial'  => $this->getTicketInicial(),
+			'facturaInicial' => $this->getFacturaInicial(),
+			'tipoIva'        => $this->getTipoIva(),
+			'ivaList'        => $this->getIvaList(),
+			'reList'         => $this->getReList(),
+			'marginList'     => $this->getMarginList(),
+			'ventaOnline'    => $this->getVentaOnline(),
+			'urlApi'         => $this->getUrlApi(),
+			'fechaCad'       => $this->getFechaCad(),
+			'empleados'      => $this->getEmpleados()
 		]);
 	}
 }

@@ -40,6 +40,12 @@ class saveFacturaAction extends OAction {
 				// Si no ha sido impresa se puede editar
 				if (!$factura->get('impresa')) {
 					$datos = $cliente->getDatosFactura();
+					$num_factura = null;
+					// Si no estaba impresa y ahora si, le tengo que generar un número de factura
+					if ($data->getImprimir()) {
+						$num_factura = $this->clientes_service->generateNumFactura();
+					}
+					$factura->set('num_factura',      $num_factura);
 					$factura->set('id_cliente',       $data->getIdCliente());
 					$factura->set('nombre_apellidos', $datos['nombre_apellidos']);
 					$factura->set('dni_cif',          $datos['dni_cif']);

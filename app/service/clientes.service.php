@@ -8,6 +8,7 @@ use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Factura;
 use OsumiFramework\App\Model\FacturaVenta;
+use OsumiFramework\App\Utils\AppData;
 
 class clientesService extends OService {
 	/**
@@ -232,5 +233,32 @@ class clientesService extends OService {
 		}
 
 		return $total;
+	}
+
+	/**
+	 * Función para obtener un nuevo número de factura
+	 *
+	 * @return int Nuevo número de factura generado
+	 */
+	public function generateNumFactura(): int {
+		$db = new ODB();
+		$sql = "SELECT MAX(`num_factura`) AS `num` FROM `factura`";
+		$db->query($sql);
+		$res = $db->next();
+
+		if (!is_null($res['num'])) {
+			return intval($res['num']) + 1;
+		}
+
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
+		// Cargo archivo de configuración
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+		$app_data = new AppData($app_data_file);
+		if (!$app_data->getLoaded()) {
+			echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+			exit();
+		}
+
+		return $app_data->getFacturaInicial();
 	}
 }

@@ -20,14 +20,17 @@ class InstallationDTO implements ODTO{
 	private string $facebook = '';
 	private string $instagram = '';
 	private string $web = '';
+	private float  $caja_inicial = 0;
+  private int    $ticket_inicial = 1;
+  private int    $factura_inicial = 1;
 	private string $tipo_iva = '';
-	private array $iva_list = [];
-	private array $re_list = [];
-	private array $margin_list = [];
-	private bool $venta_online = false;
+	private array  $iva_list = [];
+	private array  $re_list = [];
+	private array  $margin_list = [];
+	private bool   $venta_online = false;
 	private string $url_api = '';
-	private bool $fecha_cad = false;
-	private bool $empleados = false;
+	private bool   $fecha_cad = false;
+	private bool   $empleados = false;
 
 	public function getNombre(): string {
 		return $this->nombre;
@@ -113,6 +116,24 @@ class InstallationDTO implements ODTO{
 	private function setWeb(string $web): void {
 		$this->web = $web;
 	}
+	public function getCajaInicial(): float {
+		return $this->caja_inicial;
+	}
+	private function setCajaInicial(float $caja_inicial): void {
+		$this->caja_inicial = $caja_inicial;
+	}
+	public function getTicketInicial(): int {
+		return $this->ticket_inicial;
+	}
+	private function setTicketInicial(int $ticket_inicial): void {
+		$this->ticket_inicial = $ticket_inicial;
+	}
+	public function getFacturaInicial(): int {
+		return $this->factura_inicial;
+	}
+	private function setFacturaInicial(int $factura_inicial): void {
+		$this->factura_inicial = $factura_inicial;
+	}
 	public function getTipoIva(): string {
 		return $this->tipo_iva;
 	}
@@ -189,6 +210,9 @@ class InstallationDTO implements ODTO{
 		$this->setFacebook( $req->getParamString('facebook') );
 		$this->setInstagram( $req->getParamString('instagram') );
 		$this->setWeb( $req->getParamString('web') );
+		$this->setCajaInicial( $req->getParamFloat('cajaInicial') );
+		$this->setTicketInicial( $req->getParamInt('ticketInicial') );
+		$this->setFacturaInicial( $req->getParamInt('facturaInicial') );
 		$this->setTipoIva( $req->getParamString('tipoIva') );
 		$this->setIvaList( $req->getParam('ivaList') );
 		$this->setReList( $req->getParam('reList') );

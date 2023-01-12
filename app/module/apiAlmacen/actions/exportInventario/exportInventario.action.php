@@ -39,6 +39,6 @@ class exportInventarioAction extends OAction {
 		header('Content-Disposition: attachment; filename="inventario.csv"');
 
 		echo implode("\n", $lines);
-		exit;
+		exit();
 	}
 }
