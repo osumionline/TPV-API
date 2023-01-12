@@ -17,8 +17,8 @@ class AppData {
 	private string $instagram = '';
 	private string $web = '';
 	private float  $caja_inicial = 0;
-  private int    $ticket_inicial = 1;
-  private int    $factura_inicial = 1;
+	private int    $ticket_inicial = 1;
+	private int    $factura_inicial = 1;
 	private string $tipo_iva = '';
 	private array  $iva_list = [];
 	private array  $re_list = [];

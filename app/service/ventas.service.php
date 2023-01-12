@@ -6,6 +6,7 @@ use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\DTO\HistoricoDTO;
 use OsumiFramework\App\Model\Venta;
+use OsumiFramework\App\Utils\AppData;
 
 class ventasService extends OService {
 	function __construct() {
@@ -38,5 +39,32 @@ class ventasService extends OService {
 		}
 
 		return $ret;
+	}
+	
+	/**
+	 * Función para obtener un nuevo número de venta
+	 *
+	 * @return int Nuevo número de venta generado
+	 */
+	public function generateNumVenta(): int {
+		$db = new ODB();
+		$sql = "SELECT MAX(`num_veenta`) AS `num` FROM `venta`";
+		$db->query($sql);
+		$res = $db->next();
+
+		if (!is_null($res['num'])) {
+			return intval($res['num']) + 1;
+		}
+
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
+		// Cargo archivo de configuración
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+		$app_data = new AppData($app_data_file);
+		if (!$app_data->getLoaded()) {
+			echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+			exit();
+		}
+
+		return $app_data->getTicketInicial();
 	}
 }

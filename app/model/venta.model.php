@@ -20,6 +20,12 @@ class Venta extends OModel {
 				comment: 'Id único de cada venta'
 			),
 			new OModelField(
+				name: 'num_venta',
+				type: OMODEL_NUM,
+				nullable: false,
+				comment: 'Número de venta'
+			),
+			new OModelField(
 				name: 'id_empleado',
 				type: OMODEL_NUM,
 				nullable: true,

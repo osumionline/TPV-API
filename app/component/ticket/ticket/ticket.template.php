@@ -171,7 +171,7 @@
         <td class="right">Hora: <?php echo $values['data']['hour'] ?></td>
       </tr>
       <tr>
-        <td>F. Simp.: <?php echo $values['data']['id'] ?></td>
+        <td>F. Simp.: <?php echo $values['data']['num_venta'] ?></td>
         <td class="right">Le atendió: <?php echo $values['data']['employee'] ?></td>
       </tr>
     </table>

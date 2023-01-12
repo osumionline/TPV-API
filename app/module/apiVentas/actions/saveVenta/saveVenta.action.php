@@ -13,7 +13,7 @@ use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/save-venta',
-	services: ['ticket', 'general']
+	services: ['ticket', 'general', 'ventas']
 )]
 class saveVentaAction extends OAction {
 	/**
@@ -34,6 +34,7 @@ class saveVentaAction extends OAction {
 
 		if ($status=='ok') {
 			$venta = new Venta();
+			$venta->set('num_venta',      $this->ventas_service->generateNumVenta());
 			$venta->set('id_empleado',    $data->getIdEmpleado());
 			$venta->set('id_cliente',     ($data->getIdCliente() != -1) ? $data->getIdCliente() : null);
 			$venta->set('total',          $data->getTotal());
