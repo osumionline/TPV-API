@@ -52,8 +52,10 @@ class almacenService extends OService {
 		else {
 			$sql_limit = " ORDER BY m.`nombre` ASC, a.`nombre` ASC";
 		}
-		$lim = ($data->getPagina() - 1) * $data->getNum();
-		$sql_limit .= " LIMIT ".$lim.",".$data->getNum();
+		if (!is_null($data->getNum())) {
+			$lim = ($data->getPagina() - 1) * $data->getNum();
+			$sql_limit .= " LIMIT ".$lim.",".$data->getNum();
+		}
 
 		$db->query($sql.$sql_body.$sql_limit);
 		$marcas = [];

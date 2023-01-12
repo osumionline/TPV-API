@@ -53,7 +53,7 @@ class InventarioDTO implements ODTO {
   public function getNum(): ?int {
 		return $this->num;
 	}
-	private function setNum(?int $num): void {
+	public function setNum(?int $num): void {
 		$this->num = $num;
 	}
 

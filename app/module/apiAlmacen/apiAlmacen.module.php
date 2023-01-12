@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['getInventario', 'saveInventario', 'deleteInventario', 'saveAllInventario'],
+	actions: ['getInventario', 'saveInventario', 'deleteInventario', 'saveAllInventario', 'exportInventario'],
 	type: 'json',
 	prefix: '/api-almacen'
 )]
