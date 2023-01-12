@@ -9,6 +9,8 @@ use OsumiFramework\App\Utils\AppData;
 use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Categoria;
 use OsumiFramework\App\Model\Marca;
+use OsumiFramework\App\Model\Proveedor;
+use OsumiFramework\App\Model\ProveedorMarca;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\Venta;
@@ -285,6 +287,20 @@ class importTask extends OTask {
 			$this->marcas[intval($item[0])] = $m;
 
 			$this->logMessage("  Nueva marca \"".$this->getColors()->getColoredString($m->get('nombre'), "light_green")."\" cargada.");
+			
+			if (!empty($item[2])) {
+				$p = new Proveedor();
+				if (!$p->find(['nombre' => $item[2]])) {
+					$p->set('nombre', $item[2]);
+					$p->save();
+					
+					$this->logMessage("  Nuevo proveedor \"".$this->getColors()->getColoredString($p->get('nombre'), "light_green")."\" cargado.");
+				}
+				$pm = new ProveedorMarca();
+				$pm->set('id_proveedor', $p->get('id'));
+				$pm->set('id_marca', $m->get('id'));
+				$pm->save();
+			}
 		}
 
 		$this->logMessage("Marcas cargadas.\n");
@@ -399,6 +415,7 @@ class importTask extends OTask {
 			$web = floatval($item[5]);
 
 			$v = new Venta();
+			$v->set('num_venta', intval($item[0]));
 			$v->set('id_empleado', 1);
 			$v->set('id_cliente', empty($item[1]) ? null : $this->clientes[$item[1]]->get('id'));
 			$v->set('total', $total);
