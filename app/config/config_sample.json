@@ -23,6 +23,9 @@
             "secure": null,
             "user": null,
             "pass": null
+        },
+        "ticketbai": {
+            "token": ""
         }
     }
 }
