@@ -25,12 +25,10 @@ class generalService extends OService {
 	/**
 	 * Devuelve si la caja está abierta o no
 	 *
-	 * @param string Fecha a comprobar
-	 *
 	 * @return bool Devuelve si la caja está abierta o no para la fecha indicada
 	 */
-	public function getOpened(string $date): bool {
-		$c = $this->getCaja($date);
+	public function getOpened(): bool {
+		$c = $this->getCaja();
 		if (is_null($c)) {
 			return false;
 		}
@@ -43,13 +41,11 @@ class generalService extends OService {
 	/**
 	 * Función para obtener la caja de una fecha
 	 *
-	 * @param string Fecha de la caja a obtener
-	 *
 	 * @return Caja Caja obtenida o null si no existe
 	 */
-	public function getCaja(string $date): ?Caja {
+	public function getCaja(): ?Caja {
 		$db = new ODB();
-		$sql = "SELECT * FROM `caja` WHERE DATE(`apertura`) = ? AND `cierre` IS NULL";
+		$sql = "SELECT * FROM `caja` WHERE `cierre` IS NULL";
 		$db->query($sql, [$date]);
 
 		if ($res = $db->next()) {

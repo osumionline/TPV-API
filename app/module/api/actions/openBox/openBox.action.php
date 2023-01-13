@@ -95,17 +95,6 @@ class openBoxAction extends OAction {
 			$caja->save();
 		}
 
-		// Limpieza de carpeta tmp
-		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.html") as $nombre_fichero) {
-    	unlink($nombre_fichero);
-		}
-		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.pdf") as $nombre_fichero) {
-    	unlink($nombre_fichero);
-		}
-		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.png") as $nombre_fichero) {
-    	unlink($nombre_fichero);
-		}
-
 		$this->getTemplate()->add('status', $status);
 	}
 }
