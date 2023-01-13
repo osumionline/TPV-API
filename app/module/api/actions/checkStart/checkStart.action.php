@@ -19,33 +19,25 @@ class checkStartAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
-		$status   = 'ok';
 		$opened   = 'false';
 		$app_data = 'null';
 		$tipos_pago_component = new TipoPagoListComponent(['list' => []]);
 
-		if (is_null($date)) {
-			$status = 'error';
+		$opened   = $this->general_service->getOpened() ? 'true' : 'false';
+		$app_data = $this->general_service->getAppData();
+		$tipos_pago_component->setValue('list', $this->general_service->getTiposPago());
+
+		// Limpieza de carpeta tmp
+		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.html") as $nombre_fichero) {
+    	unlink($nombre_fichero);
+		}
+		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.pdf") as $nombre_fichero) {
+    	unlink($nombre_fichero);
+		}
+		foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.png") as $nombre_fichero) {
+    	unlink($nombre_fichero);
 		}
 
-		if ($status=='ok') {
-			$opened   = $this->general_service->getOpened() ? 'true' : 'false';
-			$app_data = $this->general_service->getAppData();
-			$tipos_pago_component->setValue('list', $this->general_service->getTiposPago());
-
-			// Limpieza de carpeta tmp
-			foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.html") as $nombre_fichero) {
-	    	unlink($nombre_fichero);
-			}
-			foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.pdf") as $nombre_fichero) {
-	    	unlink($nombre_fichero);
-			}
-			foreach (glob($this->getConfig()->getDir('ofw_tmp')."*.png") as $nombre_fichero) {
-	    	unlink($nombre_fichero);
-			}
-		}
-
-		$this->getTemplate()->add('status',    $status);
 		$this->getTemplate()->add('opened',    $opened);
 		$this->getTemplate()->add('appData',   $app_data, 'nourlencode');
 		$this->getTemplate()->add('tiposPago', $tipos_pago_component);

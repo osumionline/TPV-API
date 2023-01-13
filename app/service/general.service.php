@@ -46,7 +46,7 @@ class generalService extends OService {
 	public function getCaja(): ?Caja {
 		$db = new ODB();
 		$sql = "SELECT * FROM `caja` WHERE `cierre` IS NULL";
-		$db->query($sql, [$date]);
+		$db->query($sql);
 
 		if ($res = $db->next()) {
 			$c = new Caja();
