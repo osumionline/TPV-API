@@ -119,6 +119,33 @@ class generalService extends OService {
 			$empleado->save();
 		}
 
+		// Compruebo si ya hay cierres de caja, si no hay ninguno hago la caja inicial
+		$db = new ODB();
+		$sql = "SELECT COUNT(*) AS `num` FROM `caja`";
+		$db->query($sql);
+		$res = $db->next();
+		if ($res['num'] == 0) {
+			$caja = new Caja();
+			$caja->set('apertura',             date('Y-m-d H:i:s', time()));
+			$caja->set('cierre',               null);
+			$caja->set('ventas',               0);
+			$caja->set('beneficios',           0);
+			$caja->set('venta_efectivo',       0);
+			$caja->set('operaciones_efectivo', 0);
+			$caja->set('descuento_efectivo',   0);
+			$caja->set('venta_otros',          0);
+			$caja->set('operaciones_otros',    0);
+			$caja->set('descuento_otros',      0);
+			$caja->set('importe_pagos_caja',   0);
+			$caja->set('num_pagos_caja',       0);
+			$caja->set('importe_apertura',     $data->getCajaInicial());
+			$caja->set('importe_cierre',       0);
+			$caja->set('importe_cierre_real',  0);
+			$caja->set('importe_retirado',     0);
+
+			$caja->save();
+		}
+
 		// Guardo datos de configuración
 		$app_data = new AppData();
 		$app_data->fromDTO($data);
