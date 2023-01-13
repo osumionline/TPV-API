@@ -51,7 +51,6 @@ class comprasService extends OService {
 	 */
 	public function getPedidosList(PedidosFilterDTO $data, bool $recepcionado): array {
 		$db = new ODB();
-		$c  = $this->getConfig();
 
 		$ret = ['list' => [], 'pags' => 0];
 
@@ -81,11 +80,11 @@ class comprasService extends OService {
 
 		$db->query($sql_count.$sql);
 		$res = $db->next();
-		$ret['pags'] = ceil($res['num'] / $c->getExtra('num_por_pag'));
+		$ret['pags'] = ceil($res['num'] / $data->getNum());
 
-		$lim = ($data->getPagina() - 1) * $c->getExtra('num_por_pag');
+		$lim = ($data->getPagina() - 1) * $data->getNum();
 		$sql_pag = $sql_all.$sql;
-		$sql_pag .= " LIMIT ".$lim.",".$c->getExtra('num_por_pag');
+		$sql_pag .= " LIMIT ".$lim.",".$data->getNum();
 
 		$db->query($sql_pag);
 		while ($res = $db->next()) {

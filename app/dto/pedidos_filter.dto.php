@@ -13,6 +13,7 @@ class PedidosFilterDTO implements ODTO {
   private ?float $importe_desde = null;
   private ?float $importe_hasta = null;
   private ?int $pagina = null;
+  private ?int $num = null;
 
   public function getFechaDesde(): ?string {
 		return $this->fecha_desde;
@@ -56,9 +57,18 @@ class PedidosFilterDTO implements ODTO {
 	private function setPagina(?int $pagina): void {
 		$this->pagina = $pagina;
 	}
+  public function getNum(): ?int {
+		return $this->num;
+	}
+	private function setNum(?int $num): void {
+		$this->num = $num;
+	}
 
   public function isValid(): bool {
-		return (!is_null($this->getPagina()));
+		return (
+      !is_null($this->getPagina()) &&
+      !is_null($this->getNum())
+    );
 	}
 
 	public function load(ORequest $req): void {
@@ -69,5 +79,6 @@ class PedidosFilterDTO implements ODTO {
     $this->setImporteDesde( $req->getParamFloat('importeDesde') );
     $this->setImporteHasta( $req->getParamFloat('importeHasta') );
     $this->setPagina( $req->getParamInt('pagina') );
+    $this->setNum( $req->getParamInt('num') );
   }
 }
