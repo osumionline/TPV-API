@@ -85,6 +85,29 @@ class Venta extends OModel {
 				comment: 'Saldo en caso de que el ticket sea un vale'
 			),
 			new OModelField(
+				name: 'tbai_huella',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 50,
+				comment: 'Huella de TicketBai'
+			),
+			new OModelField(
+				name: 'tbai_qr',
+				type: OMODEL_LONGTEXT,
+				nullable: true,
+				default: null,
+				comment: 'Código QR de TicketBai'
+			),
+			new OModelField(
+				name: 'tbai_url',
+				type: OMODEL_TEXT,
+				nullable: true,
+				default: null,
+				size: 255,
+				comment: 'URL del ticket en Batuz'
+			),
+			new OModelField(
 				name: 'created_at',
 				type: OMODEL_CREATED,
 				comment: 'Fecha de creación del registro'
@@ -426,5 +449,50 @@ class Venta extends OModel {
 
 		// Finalmente borro la venta en si
 		$this->delete();
+	}
+
+	/**
+	 * Función para obtener los datos necesarios para enviar a TicketBai
+	 *
+	 * @return array Array de datos para TicketBai
+	 */
+	public function getDatosTBai(): array {
+		$ret = [
+			'fecha'                     => $this->get('created_at', 'd/m/Y'),
+			'hora'                      => $this->get('created_at', 'H:i:s'),
+			'nif'                       => '',
+			'nombre'                    => '',
+			'direccion'                 => '',
+			'cp'                        => '',
+			'serie'                     => 'TPV01',
+			'numero'                    => sprintf('%06d', $this->get('num_venta')),
+			'simplificada'              => true,
+			'modo_recargo_equivalencia' => true,
+			'rectificativa'             => false,
+			'importacion'               => false,
+			'intracomunitaria'          => false,
+			'retencion'                 => 0,
+			'lineas'                    => [],
+			'total_factura'             => $this->get('total')
+		];
+
+		$lineas = $this->getLineas();
+
+		foreach ($lineas as $linea) {
+			$importe_siva = $linea->get('pvp') / (1 + ($linea->get('iva') / 100));
+
+			$datos_linea = [
+				'iva'              => ($linea->get('iva') == 0) ? 21 : $linea->get('iva'),
+				'descripcion'      => html_entity_decode($linea->get('nombre_articulo')),
+				'cantidad'         => $linea->get('unidades'),
+				'importe_unitario' => round($importe_siva, 4),
+				'tipo_iva'         => $linea->get('iva'),
+				'tipo_req'         => 0
+			];
+			
+			array_push($ret['lineas'], $datos_linea);
+		}
+
+		return $ret;
 	}
 }

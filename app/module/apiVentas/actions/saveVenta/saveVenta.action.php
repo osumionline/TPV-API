@@ -42,7 +42,7 @@ class saveVentaAction extends OAction {
 			$venta->set('pago_mixto',     $data->getPagoMixto());
 			$venta->set('id_tipo_pago',   $data->getIdTipoPago());
 			$venta->set('entregado_otro', $data->getTarjeta());
-			$venta->set('saldo', null);
+			$venta->set('saldo',          null);
 			$venta->save();
 
 			$app_data = $this->general_service->getAppData();
@@ -104,6 +104,8 @@ class saveVentaAction extends OAction {
 					}
 				}
 			}
+
+			// Generar TicketBai
 
 			$ticket_pdf = null;
 			$ticket_regalo_pdf = null;

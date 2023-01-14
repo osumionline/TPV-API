@@ -149,6 +149,13 @@
       .qr {
         text-align: center;
       }
+      .qr > label {
+        display: block;
+      }
+      .qr > span {
+        display: block;
+        margin-top: 8px;
+      }
     </style>
   </head>
   <body>
@@ -281,6 +288,12 @@
 
     <div class="qr">
       <img src="<?php echo $values['data']['qr'] ?>" width="80">
+    </div>
+    
+    <div class="qr">
+      <label>TICKET BAI</label>
+      <img src="data:image/png;base64,<?php echo $values['data']['tbai_qr'] ?>" width="80">
+      <span><?php echo $values['data']['tbai_huella'] ?></span>
     </div>
   </body>
 </html>

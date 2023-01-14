@@ -146,7 +146,9 @@ class ticketService extends OService {
 			'employee'       => $venta->getEmpleado()->get('nombre'),
 			'regalo'         => $regalo,
 			'ivas'           => $ivas,
-			'qr'             => $qr
+			'qr'             => $qr,
+			'tbai_qr'        => $venta->get('tbai_qr'),
+			'tbai_huella'    => $venta->get('tbai_huella')
 		];
 
 		$ticket = new TicketComponent(['data' => $ticket_data]);

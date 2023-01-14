@@ -12,11 +12,19 @@ class OTicketBai {
 	private bool   $ssl_verification = false;
 	private bool   $debug            = false;
 
-	function __construct() {
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param bool $prod Indica si es producción (true) o test (false)
+	 */
+	function __construct(bool $prod = true) {
 		global $core;
 		$conf = $core->config->getPluginConfig('ticketbai');
 		$this->token = $conf['token'];
 		$this->nif   = $conf['nif'];
+		if (!$prod) {
+			$this->url = 'https://api-test.ticketbaiws.eus/';
+		}
 	}
 
 	/**
@@ -51,7 +59,7 @@ class OTicketBai {
 	 */
 	public function checkStatus(): bool {
 		$response = $this->callService('status', 'GET');		
-		return ($respuesta['result'] == 'OK');
+		return ($response['result'] == 'OK');
 	}
 
 	/**
@@ -76,7 +84,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -97,7 +105,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -118,7 +126,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -138,7 +146,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -159,7 +167,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -179,7 +187,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -199,7 +207,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -219,7 +227,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -239,7 +247,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
@@ -258,7 +266,7 @@ class OTicketBai {
 			return $response['msg'];
 		}
 		else {
-			return $response['return']);
+			return $response['return'];
 		}
 	}
 
