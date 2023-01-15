@@ -48,7 +48,7 @@ class ventasService extends OService {
 	 */
 	public function generateNumVenta(): int {
 		$db = new ODB();
-		$sql = "SELECT MAX(`num_veenta`) AS `num` FROM `venta`";
+		$sql = "SELECT MAX(`num_venta`) AS `num` FROM `venta`";
 		$db->query($sql);
 		$res = $db->next();
 

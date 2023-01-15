@@ -179,7 +179,7 @@ class ticketService extends OService {
 		unset($dompdf);
 
 		$dompdf = new \Dompdf\Dompdf();
-		$dompdf->set_paper([0, 0, 147.40, $GLOBALS['bodyHeight'] + 15]);
+		$dompdf->set_paper([0, 0, 147.40, $GLOBALS['bodyHeight'] + 20]);
 		$dompdf->loadHtml($html);
 		$dompdf->render();
 

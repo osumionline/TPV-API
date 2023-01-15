@@ -5,8 +5,15 @@ namespace OsumiFramework\App\Task;
 use OsumiFramework\OFW\Core\OTask;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\OFW\Plugins\OTicketBai;
+use OsumiFramework\App\Service\ticketService;
 
 class pruebaTask extends OTask {
+	private ?ticketService $ticket_service = null;
+
+	function __construct() {
+		$this->ticket_service = new ticketService();
+	}
+
 	public function __toString() {
 		return "prueba: Tarea para pruebas y experimentos";
 	}
@@ -27,10 +34,14 @@ class pruebaTask extends OTask {
 		}
 
 		$tbai = new OTicketBai(false);
+		var_dump($tbai);
+		echo "----------------\n\n";
 
 		if ($tbai->checkStatus()) {
 			echo "STATUS TBAI: OK\n";
 			$response = $tbai->nuevoTbai($venta->getDatosTBai());
+			var_dump($response);
+			echo "----------------\n\n";
 			if (is_array($response)) {
 				$venta->set('tbai_huella', $response['huella_tbai']);
 				$venta->set('tbai_qr',     $response['qr']);

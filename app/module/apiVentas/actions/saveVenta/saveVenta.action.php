@@ -5,6 +5,7 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Plugins\OEmailSMTP;
+use OsumiFramework\OFW\Plugins\OTicketBai;
 use OsumiFramework\App\DTO\VentaDTO;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
@@ -43,6 +44,9 @@ class saveVentaAction extends OAction {
 			$venta->set('id_tipo_pago',   $data->getIdTipoPago());
 			$venta->set('entregado_otro', $data->getTarjeta());
 			$venta->set('saldo',          null);
+			$venta->set('tbai_huella',    null);
+			$venta->set('tbai_qr',        null);
+			$venta->set('tbai_url',       null);
 			$venta->save();
 
 			$app_data = $this->general_service->getAppData();
@@ -105,7 +109,27 @@ class saveVentaAction extends OAction {
 				}
 			}
 
-			// Generar TicketBai
+			// TicketBai
+			$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
+			if ($tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
+				$tbai = new OTicketBai(false);
+	
+				if ($tbai->checkStatus()) {
+					$this->getLog()->info('TicketBai status OK');
+					$response = $tbai->nuevoTbai($venta->getDatosTBai());
+					if (is_array($response)) {
+						$this->getLog()->info('TicketBai response OK');
+						$venta->set('tbai_huella', $response['huella_tbai']);
+						$venta->set('tbai_qr',     $response['qr']);
+						$venta->set('tbai_url',    $response['url']);
+						$venta->save();
+					}
+					else {
+						$this->getLog()->error('Ocurrió un error al generar el TicketBai de la venta '.$venta->get('id'));
+						$this->getLog()->error(var_export($response, true));
+					}
+				}
+			}
 
 			$ticket_pdf = null;
 			$ticket_regalo_pdf = null;

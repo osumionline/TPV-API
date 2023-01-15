@@ -129,6 +129,10 @@
         width: 100%;
         margin-bottom: 2px;
         font-size: 7px;
+        border-spacing: 0;
+      }
+      .iva-header {
+        border-bottom: 1px solid #ccc;
       }
       .iva-iva {
         width: 25%;
@@ -208,7 +212,7 @@
         <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
         <td class="table-unidades">&nbsp;</td>
         <td class="table-pvp right descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
-        <td class="table-total right descuento">-<?php echo $linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
+        <td class="table-total right descuento">-<?php echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',') ?></td>
       </tr>
 <?php endif ?>
 <?php endforeach ?>
@@ -257,9 +261,9 @@
     <div class="iva-incluido">I.V.A. incluído</div>
     <table class="iva">
       <tr>
-        <td class="iva-iva">IVA</td>
-        <td class="iva-base">Base imponible ( € )</td>
-        <td class="iva-cuota">Cuota ( € )</td>
+        <td class="iva-header iva-iva">IVA</td>
+        <td class="iva-header iva-base">Base imponible ( € )</td>
+        <td class="iva-header iva-cuota">Cuota ( € )</td>
       </tr>
 <?php foreach ($values['data']['ivas'] as $iva): ?>
       <tr>
@@ -272,6 +276,11 @@
 <?php else: ?>
     <div class="regalo">TICKET REGALO</div>
 <?php endif ?>
+
+    <div class="qr">
+      <img src="<?php echo $values['data']['qr'] ?>" width="80">
+    </div>
+
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o sin caja
       <br>
@@ -285,15 +294,12 @@
       <br>
       ESKERRIK ASKO ETORTZEAGATIK
     </div>
-
-    <div class="qr">
-      <img src="<?php echo $values['data']['qr'] ?>" width="80">
-    </div>
-    
+<?php if (!is_null($values['data']['tbai_qr'])) : ?>
     <div class="qr">
       <label>TICKET BAI</label>
       <img src="data:image/png;base64,<?php echo $values['data']['tbai_qr'] ?>" width="80">
       <span><?php echo $values['data']['tbai_huella'] ?></span>
     </div>
+<?php endif ?>
   </body>
 </html>
