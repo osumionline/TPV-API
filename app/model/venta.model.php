@@ -139,7 +139,7 @@ class Venta extends OModel {
 	public function getBeneficio(): float {
 		$beneficio = 0;
 		foreach ($this->getLineas() as $linea) {
-			$beneficio += ($linea->get('importe') - $linea->get('puc'));
+			$beneficio += $linea->getBeneficio();
 		}
 		return $beneficio;
 	}
@@ -489,7 +489,7 @@ class Venta extends OModel {
 				'tipo_iva'         => $linea->get('iva'),
 				'tipo_req'         => 0
 			];
-			
+
 			array_push($ret['lineas'], $datos_linea);
 		}
 

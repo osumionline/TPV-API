@@ -27,6 +27,7 @@ class getHistoricoAction extends OAction {
 		$ventas_otros = [];
 		$otros = [];
 		$ventas_web = 0;
+		$ventas_beneficio = 0;
 
 		if (!$data->isValid()) {
 			$status = 'error';
@@ -62,6 +63,7 @@ class getHistoricoAction extends OAction {
 						$ventas_web += $venta->get('total') - $venta->get('entregado');
 					}
 				}
+				$ventas_beneficio += $venta->getBeneficio();
 			}
 			foreach ($otros as $key => $value) {
 				if ($value != 0) {
@@ -70,11 +72,12 @@ class getHistoricoAction extends OAction {
 			}
 		}
 
-		$this->getTemplate()->add('status',          $status);
-		$this->getTemplate()->add('list',            $venta_list_component);
-		$this->getTemplate()->add('total_dia',       $total_dia);
-		$this->getTemplate()->add('ventas_efectivo', $ventas_efectivo);
-		$this->getTemplate()->add('ventas_otros',    json_encode($ventas_otros), 'nourlencode');
-		$this->getTemplate()->add('ventas_web',      $ventas_web);
+		$this->getTemplate()->add('status',           $status);
+		$this->getTemplate()->add('list',             $venta_list_component);
+		$this->getTemplate()->add('total_dia',        $total_dia);
+		$this->getTemplate()->add('ventas_efectivo',  $ventas_efectivo);
+		$this->getTemplate()->add('ventas_otros',     json_encode($ventas_otros), 'nourlencode');
+		$this->getTemplate()->add('ventas_web',       $ventas_web);
+		$this->getTemplate()->add('ventas_beneficio', $ventas_beneficio);
 	}
 }
