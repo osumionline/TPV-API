@@ -44,6 +44,7 @@ class saveVentaAction extends OAction {
 			$venta->set('id_tipo_pago',   $data->getIdTipoPago());
 			$venta->set('entregado_otro', $data->getTarjeta());
 			$venta->set('saldo',          null);
+			$venta->set('facturada',      false);
 			$venta->set('tbai_huella',    null);
 			$venta->set('tbai_qr',        null);
 			$venta->set('tbai_url',       null);
@@ -113,7 +114,7 @@ class saveVentaAction extends OAction {
 			$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
 			if ($tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
 				$tbai = new OTicketBai(false);
-	
+
 				if ($tbai->checkStatus()) {
 					$this->getLog()->info('TicketBai status OK');
 					$response = $tbai->nuevoTbai($venta->getDatosTBai());

@@ -408,19 +408,19 @@ class importTask extends OTask {
 		$error_list = [];
 
 		foreach ($list as $item) {
-			$error = false;
-			$total = floatval(str_ireplace(',', '.', $item[2]));
+			$error     = false;
+			$total     = floatval(str_ireplace(',', '.', $item[2]));
 			$entregado = floatval(str_ireplace(',', '.', $item[3]));
-			$tarjeta = floatval(str_ireplace(',', '.', $item[4]));
-			$web = floatval(str_ireplace(',', '.', $item[5]));
+			$tarjeta   = floatval(str_ireplace(',', '.', $item[4]));
+			$web       = floatval(str_ireplace(',', '.', $item[5]));
 
 			$v = new Venta();
-			$v->set('num_venta', intval($item[0]));
+			$v->set('num_venta',   intval($item[0]));
 			$v->set('id_empleado', 1);
-			$v->set('id_cliente', empty($item[1]) ? null : $this->clientes[$item[1]]->get('id'));
-			$v->set('total', $total);
-			$v->set('entregado', $entregado);
-			$v->set('pago_mixto', false);
+			$v->set('id_cliente',  empty($item[1]) ? null : $this->clientes[$item[1]]->get('id'));
+			$v->set('total',       $total);
+			$v->set('entregado',   $entregado);
+			$v->set('pago_mixto',  false);
 			$id_tipo_pago = null;
 			if ($tarjeta > 0) {
 				$id_tipo_pago = $this->visa->get('id');
@@ -428,9 +428,10 @@ class importTask extends OTask {
 			if ($web > 0) {
 				$id_tipo_pago = $this->web->get('id');
 			}
-			$v->set('id_tipo_pago', $id_tipo_pago);
+			$v->set('id_tipo_pago',   $id_tipo_pago);
 			$v->set('entregado_otro', 0);
-			$v->set('saldo', null);
+			$v->set('saldo',          null);
+			$v->set('facturada',      false);
 			$v->save();
 
 			$v->set('created_at', $item[6]);
@@ -442,18 +443,18 @@ class importTask extends OTask {
 					break;
 				}
 				$lv = new LineaVenta();
-				$lv->set('id_venta', $v->get('id'));
-				$lv->set('id_articulo', $this->articulos[$linea[2]]->get('id'));
-				$lv->set('nombre_articulo', $linea[3]);
-				$lv->set('puc', floatval(str_ireplace(',', '.', $linea[4])));
-				$lv->set('pvp', floatval(str_ireplace(',', '.', $linea[5])));
-				$lv->set('iva', $this->articulos[$linea[2]]->get('iva'));
-				$lv->set('re', $this->articulos[$linea[2]]->get('re'));
-				$lv->set('importe', floatval(str_ireplace(',', '.', $linea[8])));
-				$lv->set('descuento', intval($linea[6]));
+				$lv->set('id_venta',          $v->get('id'));
+				$lv->set('id_articulo',       $this->articulos[$linea[2]]->get('id'));
+				$lv->set('nombre_articulo',   $linea[3]);
+				$lv->set('puc',               floatval(str_ireplace(',', '.', $linea[4])));
+				$lv->set('pvp',               floatval(str_ireplace(',', '.', $linea[5])));
+				$lv->set('iva',               $this->articulos[$linea[2]]->get('iva'));
+				$lv->set('re',                $this->articulos[$linea[2]]->get('re'));
+				$lv->set('importe',           floatval(str_ireplace(',', '.', $linea[8])));
+				$lv->set('descuento',         intval($linea[6]));
 				$lv->set('importe_descuento', null);
-				$lv->set('devuelto', 0);
-				$lv->set('unidades', intval($linea[7]));
+				$lv->set('devuelto',          0);
+				$lv->set('unidades',          intval($linea[7]));
 				$lv->save();
 			}
 

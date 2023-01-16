@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Caja;
+use OsumiFramework\App\Model\Factura;
 
 class Venta extends OModel {
 	function __construct() {
@@ -83,6 +84,13 @@ class Venta extends OModel {
 				nullable: true,
 				default: null,
 				comment: 'Saldo en caso de que el ticket sea un vale'
+			),
+			new OModelField(
+				name: 'facturada',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si la venta ha sido facturada'
 			),
 			new OModelField(
 				name: 'tbai_huella',
@@ -429,6 +437,24 @@ class Venta extends OModel {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Si la venta está en una factura, obtiene dicha factura
+	 *
+	 * @return Factura Factura en la que está la venta o null si no ha sido facturada
+	 */
+	public function getFactura(): ?Factura {
+		$db = new ODB();
+		$sql = "SELECT `id_factura` FROM `factura_venta` WHERE `id_venta` = ?";
+		$db->query($sql, [$this->get('id')]);
+
+		if ($res = $db->next()) {
+			$factura = new Factura();
+			$factura->find(['id' => $res['id_factura']]);
+			return $factura;
+		}
+		return null;
 	}
 
 	/**

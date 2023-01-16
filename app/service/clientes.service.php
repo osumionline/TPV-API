@@ -214,7 +214,7 @@ class clientesService extends OService {
 	 *
 	 * @return float Importe total de la factura
 	 */
-	public function updateFacturaVentas(int $id_factura, array $ventas): float {
+	public function updateFacturaVentas(int $id_factura, array $ventas, bool $facturada): float {
 		$total = 0;
 
 		$db = new ODB();
@@ -229,6 +229,10 @@ class clientesService extends OService {
 
 			$v = new Venta();
 			$v->find(['id' => $id_venta]);
+			if ($facturada) {
+				$v->set('facturada', true);
+				$v->save();
+			}
 			$total += $v->get('total');
 		}
 

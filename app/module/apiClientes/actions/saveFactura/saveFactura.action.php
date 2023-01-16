@@ -60,7 +60,7 @@ class saveFacturaAction extends OAction {
 					$factura->save();
 
 					// Actualizo las ventas de la factura y recalculo el importe
-					$importe = $this->clientes_service->updateFacturaVentas($factura->get('id'), $data->getVentas());
+					$importe = $this->clientes_service->updateFacturaVentas($factura->get('id'), $data->getVentas(), $data->getImprimir());
 					$factura->set('importe', $importe);
 					$factura->save();
 
