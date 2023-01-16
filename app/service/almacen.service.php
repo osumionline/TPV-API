@@ -69,14 +69,15 @@ class almacenService extends OService {
 			}
 
 			array_push($ret['list'], [
-				'id'          => $articulo->get('id'),
-			  'localizador' => $articulo->get('localizador'),
-			  'marca'       => $marcas[$articulo->get('id_marca')]->get('nombre'),
-			  'referencia'  => $articulo->get('referencia'),
-			  'nombre'      => $articulo->get('nombre'),
-			  'stock'       => $articulo->get('stock'),
-				'puc'         => $articulo->get('puc'),
-			  'pvp'         => $articulo->get('pvp')
+				'id'                 => $articulo->get('id'),
+				'localizador'        => $articulo->get('localizador'),
+				'marca'              => $marcas[$articulo->get('id_marca')]->get('nombre'),
+				'referencia'         => $articulo->get('referencia'),
+				'nombre'             => $articulo->get('nombre'),
+				'stock'              => $articulo->get('stock'),
+				'puc'                => $articulo->get('puc'),
+				'pvp'                => $articulo->get('pvp'),
+				'has_codigos_barras' => (count($articulo->getNotDefaultCodigosBarras()) > 0)
 			]);
 		}
 

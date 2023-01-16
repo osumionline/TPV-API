@@ -272,6 +272,24 @@ class Articulo extends OModel {
 		$this->setCodigosBarras($list);
 	}
 
+	/**
+	 * Función para obtener la lista de códigos de barras que no son el de por defecto.
+	 *
+	 * @return array Lista de códigos de barras
+	 */
+	public function getNotDefaultCodigosBarras(): array {
+		$ret = [];
+		$codigos_barras = $this->getCodigosBarras();
+
+		foreach ($codigos_barras as $cb) {
+			if (!$cb->get('por_defecto')) {
+				array_push($ret, $cb);
+			}
+		}
+
+		return $ret;
+	}
+
 	private ?array $fotos = null;
 
 	/**
