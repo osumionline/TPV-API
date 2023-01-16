@@ -287,13 +287,13 @@ class importTask extends OTask {
 			$this->marcas[intval($item[0])] = $m;
 
 			$this->logMessage("  Nueva marca \"".$this->getColors()->getColoredString($m->get('nombre'), "light_green")."\" cargada.");
-			
+
 			if (!empty($item[2])) {
 				$p = new Proveedor();
 				if (!$p->find(['nombre' => $item[2]])) {
 					$p->set('nombre', $item[2]);
 					$p->save();
-					
+
 					$this->logMessage("  Nuevo proveedor \"".$this->getColors()->getColoredString($p->get('nombre'), "light_green")."\" cargado.");
 				}
 				$pm = new ProveedorMarca();
@@ -409,10 +409,10 @@ class importTask extends OTask {
 
 		foreach ($list as $item) {
 			$error = false;
-			$total = floatval($item[2]);
-			$entregado = floatval($item[3]);
-			$tarjeta = floatval($item[4]);
-			$web = floatval($item[5]);
+			$total = floatval(str_ireplace(',', '.', $item[2]));
+			$entregado = floatval(str_ireplace(',', '.', $item[3]));
+			$tarjeta = floatval(str_ireplace(',', '.', $item[4]));
+			$web = floatval(str_ireplace(',', '.', $item[5]));
 
 			$v = new Venta();
 			$v->set('num_venta', intval($item[0]));
@@ -445,11 +445,11 @@ class importTask extends OTask {
 				$lv->set('id_venta', $v->get('id'));
 				$lv->set('id_articulo', $this->articulos[$linea[2]]->get('id'));
 				$lv->set('nombre_articulo', $linea[3]);
-				$lv->set('puc', $this->articulos[$linea[2]]->get('puc'));
-				$lv->set('pvp', $this->articulos[$linea[2]]->get('pvp'));
+				$lv->set('puc', floatval(str_ireplace(',', '.', $linea[4])));
+				$lv->set('pvp', floatval(str_ireplace(',', '.', $linea[5])));
 				$lv->set('iva', $this->articulos[$linea[2]]->get('iva'));
 				$lv->set('re', $this->articulos[$linea[2]]->get('re'));
-				$lv->set('importe', floatval($linea[8]));
+				$lv->set('importe', floatval(str_ireplace(',', '.', $linea[8])));
 				$lv->set('descuento', intval($linea[6]));
 				$lv->set('importe_descuento', null);
 				$lv->set('devuelto', 0);
