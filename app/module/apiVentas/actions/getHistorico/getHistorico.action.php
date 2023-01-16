@@ -24,7 +24,8 @@ class getHistoricoAction extends OAction {
 		$venta_list_component = new VentaListComponent(['list' => []]);
 		$total_dia = 0;
 		$ventas_efectivo = 0;
-		$ventas_otros = 0;
+		$ventas_otros = [];
+		$otros = [];
 		$ventas_web = 0;
 
 		if (!$data->isValid()) {
@@ -51,12 +52,20 @@ class getHistoricoAction extends OAction {
 				$ventas_efectivo += $venta->get('entregado');
 				if (!is_null($venta->get('id_tipo_pago'))) {
 					$tipo_pago = $venta->getTipoPago();
+					if (!array_key_exists($tipo_pago->get('nombre'), $otros)) {
+						$otros[$tipo_pago->get('nombre')] = 0;
+					}
 					if ($tipo_pago->get('fisico')) {
-						$ventas_otros += $venta->get('total') - $venta->get('entregado');
+						$otros[$tipo_pago->get('nombre')] += $venta->get('total') - $venta->get('entregado');
 					}
 					else {
 						$ventas_web += $venta->get('total') - $venta->get('entregado');
 					}
+				}
+			}
+			foreach ($otros as $key => $value) {
+				if ($value != 0) {
+					array_push($ventas_otros, ['nombre' => $key, 'valor' => $value]);
 				}
 			}
 		}
@@ -65,7 +74,7 @@ class getHistoricoAction extends OAction {
 		$this->getTemplate()->add('list',            $venta_list_component);
 		$this->getTemplate()->add('total_dia',       $total_dia);
 		$this->getTemplate()->add('ventas_efectivo', $ventas_efectivo);
-		$this->getTemplate()->add('ventas_otros',    $ventas_otros);
+		$this->getTemplate()->add('ventas_otros',    json_encode($ventas_otros), 'nourlencode');
 		$this->getTemplate()->add('ventas_web',      $ventas_web);
 	}
 }
