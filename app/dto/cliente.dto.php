@@ -134,10 +134,10 @@ class ClienteDTO implements ODTO{
 	private function setFactProvincia(?int $fact_provincia): void {
 		$this->fact_provincia = $fact_provincia;
 	}
-  public function getObservaciones(): string {
+  public function getObservaciones(): ?string {
 		return $this->observaciones;
 	}
-	private function setObservaciones(string $observaciones): void {
+	private function setObservaciones(?string $observaciones): void {
 		$this->observaciones = $observaciones;
 	}
 
