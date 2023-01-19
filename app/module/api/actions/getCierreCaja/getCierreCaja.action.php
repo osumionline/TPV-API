@@ -25,7 +25,7 @@ class getCierreCajaAction extends OAction {
 		$datos_cierre_component = new DatosCierreComponent(['datos' => null]);
 
 		if (is_null($date)) {
-			$status = 'error';
+			$status = 'error-date';
 		}
 
 		if ($status=='ok') {
@@ -55,7 +55,7 @@ class getCierreCajaAction extends OAction {
 				$datos_cierre_component->setValue('datos', $datos_cierre);
 			}
 			else {
-				$status = 'error';
+				$status = 'error-null';
 			}
 		}
 

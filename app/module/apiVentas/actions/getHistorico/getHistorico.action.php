@@ -50,17 +50,17 @@ class getHistoricoAction extends OAction {
 			$venta_list_component->setValue('list', $list);
 			foreach ($list as $venta) {
 				$total_dia += $venta->get('total');
-				$ventas_efectivo += $venta->get('entregado');
+				$ventas_efectivo += $venta->getVentaEfectivo();
 				if (!is_null($venta->get('id_tipo_pago'))) {
 					$tipo_pago = $venta->getTipoPago();
 					if (!array_key_exists($tipo_pago->get('nombre'), $otros)) {
 						$otros[$tipo_pago->get('nombre')] = 0;
 					}
 					if ($tipo_pago->get('fisico')) {
-						$otros[$tipo_pago->get('nombre')] += $venta->get('total') - $venta->get('entregado');
+						$otros[$tipo_pago->get('nombre')] += $venta->getVentaOtros();
 					}
 					else {
-						$ventas_web += $venta->get('total') - $venta->get('entregado');
+						$ventas_web += $venta->getVentaOtros();
 					}
 				}
 				$ventas_beneficio += $venta->getBeneficio();

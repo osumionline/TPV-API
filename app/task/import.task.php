@@ -422,10 +422,10 @@ class importTask extends OTask {
 			$v->set('entregado',   $entregado);
 			$v->set('pago_mixto',  false);
 			$id_tipo_pago = null;
-			if ($tarjeta > 0) {
+			if ($tarjeta != 0) {
 				$id_tipo_pago = $this->visa->get('id');
 			}
-			if ($web > 0) {
+			if ($web != 0) {
 				$id_tipo_pago = $this->web->get('id');
 			}
 			$v->set('id_tipo_pago',   $id_tipo_pago);
@@ -563,7 +563,7 @@ class importTask extends OTask {
 		$this->app_data = $app_data;
 
 		// Archivo de logs
-		$this->log_route = $this->getConfig()->getDir('logs').'import.log';
+		$this->log_route = $this->getConfig()->getDir('logs').'import_'.date('Y-m-d', time()).'.log';
 		if (file_exists($this->log_route)) {
 			unlink($this->log_route);
 			$this->logMessage("El archivo de logs ya existía, ha sido borrado.");
