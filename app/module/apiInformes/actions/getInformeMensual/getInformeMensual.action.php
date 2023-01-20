@@ -20,19 +20,17 @@ class getInformeMensualAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$month = $req->getParamInt('month');
-		$year = $req->getParamInt('year');
-		$informe_mensual_item_list_component = new InformeMensualItemListComponent(['list' => []]);
+		$month  = $req->getParamInt('month');
+		$year   = $req->getParamInt('year');
 
 		if (is_null($month) || is_null($year)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
-			$informe_mensual_item_list_component->setValue('list', $this->informes_service->getInformeMensual($month, $year));
+
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('list', $informe_mensual_item_list_component);
 	}
 }

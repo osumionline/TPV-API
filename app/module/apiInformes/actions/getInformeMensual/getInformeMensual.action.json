@@ -1,4 +1,3 @@
 {
-  "status": "{{status}}",
-  "list": [{{list}}]
+  "status": "{{status}}"
 }

@@ -29,7 +29,7 @@ class informesService extends OService {
 	}
 
 	/**
-	 * Función para obtener los datos del informe mensual
+	 * Función para obtener los datos del informe de cierre de caja mensual
 	 *
 	 * @param int $month Mes del que obtener los datos
 	 *
@@ -37,7 +37,7 @@ class informesService extends OService {
 	 *
 	 * @return array Array con los datos obtenidos
 	 */
-	public function getInformeMensual(int $month, int $year): array {
+	public function getInformeCierreCajaMensual(int $month, int $year): array {
 		$number = cal_days_in_month(CAL_GREGORIAN,$month, $year);
 		$days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 		$db = new ODB();

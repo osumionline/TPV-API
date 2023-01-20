@@ -5,9 +5,11 @@ namespace OsumiFramework\App\Module\Action;
 use OsumiFramework\OFW\Routing\OModuleAction;
 use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
+use OsumiFramework\App\Component\Api\InformeMensualItemListComponent;
 
 #[OModuleAction(
-	url: '/get-informe-cierre-caja-mensual'
+	url: '/get-informe-cierre-caja-mensual',
+	services: ['informes']
 )]
 class getInformeCierreCajaMensualAction extends OAction {
 	/**
@@ -18,17 +20,19 @@ class getInformeCierreCajaMensualAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$month = $req->getParamInt('month');
-		$year = $req->getParamInt('year');
+		$month  = $req->getParamInt('month');
+		$year   = $req->getParamInt('year');
+		$informe_mensual_item_list_component = new InformeMensualItemListComponent(['list' => []]);
 
 		if (is_null($month) || is_null($year)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
-
+			$informe_mensual_item_list_component->setValue('list', $this->informes_service->getInformeCierreCajaMensual($month, $year));
 		}
 
 		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('list', $informe_mensual_item_list_component);
 	}
 }
