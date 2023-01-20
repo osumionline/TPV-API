@@ -14,7 +14,7 @@ use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/save-venta',
-	services: ['ticket', 'general', 'ventas']
+	services: ['imprimir', 'general', 'ventas']
 )]
 class saveVentaAction extends OAction {
 	/**
@@ -136,9 +136,9 @@ class saveVentaAction extends OAction {
 			$ticket_regalo_pdf = null;
 
 			if ($data->getImprimir() == 'si' || $data->getImprimir() == 'regalo' || $data->getImprimir() == 'email') {
-				$ticket_pdf = $this->ticket_service->generateTicket($venta, false);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
 				if ($data->getImprimir() == 'regalo') {
-					$ticket_regalo_pdf = $this->ticket_service->generateTicket($venta, true);
+					$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, true);
 				}
 
 				if ($data->getImprimir() == 'email') {

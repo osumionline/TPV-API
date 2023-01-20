@@ -4,13 +4,13 @@ namespace OsumiFramework\App\Task;
 
 use OsumiFramework\OFW\Core\OTask;
 use OsumiFramework\App\Model\Venta;
-use OsumiFramework\App\Service\ticketService;
+use OsumiFramework\App\Service\imprimirService;
 
 class ticketTask extends OTask {
-	private ?ticketService $ticket_service = null;
+	private ?ticketService $imprimir_service = null;
 
   function __construct() {
-		$this->ticket_service = new ticketService();
+		$this->imprimir_service = new imprimirService();
   }
 
 	public function __toString() {
@@ -33,6 +33,6 @@ class ticketTask extends OTask {
 			exit();
 		}
 
-		$this->ticket_service->generateTicket($venta, $regalo, false);
+		$this->imprimir_service->generateTicket($venta, $regalo, false);
 	}
 }

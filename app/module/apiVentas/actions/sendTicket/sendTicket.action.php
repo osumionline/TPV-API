@@ -11,7 +11,7 @@ use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/send-ticket',
-	services: ['ticket']
+	services: ['imprimir']
 )]
 class sendTicketAction extends OAction {
 	/**
@@ -32,7 +32,7 @@ class sendTicketAction extends OAction {
 		if ($status == 'ok') {
 			$venta = new Venta();
 			if ($venta->find(['id' => $id])) {
-				$ticket_pdf = $this->ticket_service->generateTicket($venta, false);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
 
 				$content = new TicketEmailComponent();
 				$email = new OEmailSMTP();

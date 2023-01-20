@@ -5,13 +5,13 @@ namespace OsumiFramework\App\Task;
 use OsumiFramework\OFW\Core\OTask;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\OFW\Plugins\OTicketBai;
-use OsumiFramework\App\Service\ticketService;
+use OsumiFramework\App\Service\imprimirService;
 
 class pruebaTask extends OTask {
-	private ?ticketService $ticket_service = null;
+	private ?imprimirService $imprimir_service = null;
 
 	function __construct() {
-		$this->ticket_service = new ticketService();
+		$this->imprimir_service = new imprimirService();
 	}
 
 	public function __toString() {
@@ -50,7 +50,7 @@ class pruebaTask extends OTask {
 
 				echo "VENTA ACTUALIZADA CON DATOS TICKET BAI.\n";
 
-				$this->ticket_service->generateTicket($venta, false, false);
+				$this->imprimir_service->generateTicket($venta, false, false);
 			}
 			else {
 				echo "OCURRIÓ UN ERROR:\n";

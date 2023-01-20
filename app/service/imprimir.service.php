@@ -9,7 +9,7 @@ use OsumiFramework\App\Utils\PDF;
 use OsumiFramework\App\Utils\AppData;
 use OsumiFramework\App\Component\Ticket\TicketComponent;
 
-class ticketService extends OService {
+class imprimirService extends OService {
 	/**
 	 * Load service tools
 	 */
