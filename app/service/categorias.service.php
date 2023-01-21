@@ -21,7 +21,7 @@ class categoriasService extends OService {
 	 *
 	 * @return array Lista de subcategorías
 	 */
-	public function getCategories(int $id_parent): array {
+	public function getCategories(?int $id_parent): array {
 		$db = new ODB();
 		$sql = "SELECT * FROM `categoria`";
 		if ($id_parent!==-1) {
@@ -49,12 +49,12 @@ class categoriasService extends OService {
 	 * @return array Lista de categorías aplanada
 	 */
 	public function getCategoryTree(array $options): array {
-		$options['id_category'] = array_key_exists('id_category', $options) ? $options['id_category'] : 0;
+		$options['id_category'] = array_key_exists('id_category', $options) ? $options['id_category'] : null;
 		$options['depth'] = array_key_exists('depth', $options) ? $options['depth'] : 0;
 
 		$cat = new Categoria();
 		$options['depth']++;
-		if ($options['id_category']==0) {
+		if (is_null($options['id_category'])) {
 			$cat->set('id',       0);
 			$cat->set('nombre',   'Inicio');
 			$cat->set('id_padre', null);

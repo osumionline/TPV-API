@@ -20,12 +20,15 @@ use OsumiFramework\App\Model\Pedido;
 use OsumiFramework\App\Model\LineaPedido;
 use OsumiFramework\App\Service\articulosService;
 
+// tabla modelos ref_orig variois
+
 class importTask extends OTask {
 	private ?articulosService $articulos_service = null;
-	private ?AppData $app_data = null;
-	private ?TipoPago $visa = null;
-	private ?TipoPago $web = null;
-	private ?string $log_route = null;
+	private ?AppData  $app_data  = null;
+	private ?TipoPago $visa      = null;
+	private ?TipoPago $web       = null;
+	private ?int      $id_varios = null;
+	private ?string   $log_route = null;
 
   function __construct() {
 		$this->articulos_service = new articulosService();
@@ -317,6 +320,10 @@ class importTask extends OTask {
 		$list = $this->readCSVFile($file);
 
 		foreach ($list as $item) {
+			if (intval($item[0]) === $this->id_varios) {
+				$this->logMessage("Artículo \"Varios\" encontrado.");
+				continue;
+			}
 			$puc = floatval(str_ireplace(',', '.', $item[9]));
 			$iva = intval($item[10]);
 			if ($iva === 0) {
@@ -405,7 +412,6 @@ class importTask extends OTask {
 	 */
 	private function loadVentas(string $file): void {
 		$list = $this->readCSVFileWithSubLines($file);
-		$error_list = [];
 
 		foreach ($list as $item) {
 			$error     = false;
@@ -439,17 +445,26 @@ class importTask extends OTask {
 
 			foreach ($item['lineas'] as $linea) {
 				if (!array_key_exists($linea[2], $this->articulos)) {
-					$error = true;
-					break;
+					$id_articulo = null;
+					$iva = 21;
+					$re = 0;
+					if ($this->app_data->getTipoIva() === 're') {
+						$re = 5.2;
+					}
+				}
+				else {
+					$id_articulo = $this->articulos[$linea[2]]->get('id');
+					$iva = $this->articulos[$linea[2]]->get('iva');
+					$re = $this->articulos[$linea[2]]->get('re');
 				}
 				$lv = new LineaVenta();
 				$lv->set('id_venta',          $v->get('id'));
-				$lv->set('id_articulo',       $this->articulos[$linea[2]]->get('id'));
+				$lv->set('id_articulo',       $id_articulo);
 				$lv->set('nombre_articulo',   $linea[3]);
 				$lv->set('puc',               floatval(str_ireplace(',', '.', $linea[4])));
 				$lv->set('pvp',               floatval(str_ireplace(',', '.', $linea[5])));
-				$lv->set('iva',               $this->articulos[$linea[2]]->get('iva'));
-				$lv->set('re',                $this->articulos[$linea[2]]->get('re'));
+				$lv->set('iva',               $iva);
+				$lv->set('re',                $re);
 				$lv->set('importe',           floatval(str_ireplace(',', '.', $linea[8])));
 				$lv->set('descuento',         intval($linea[6]));
 				$lv->set('importe_descuento', null);
@@ -458,19 +473,9 @@ class importTask extends OTask {
 				$lv->save();
 			}
 
-			if (!$error) {
-				$this->logMessage("  Nueva venta \"".$this->getColors()->getColoredString($item[0], "light_green")."\" cargada.");
-			}
-			else {
-				$v->deleteFull();
-				array_push($error_list, $item[0]);
-				$this->logMessage("  ".$this->getColors()->getColoredString("ERROR", "red")." Al guardar la venta \"".$this->getColors()->getColoredString($item[0], "light_green")."\" no se ha encontrado un artículo.");
-			}
+			$this->logMessage("  Nueva venta \"".$this->getColors()->getColoredString($item[0], "light_green")."\" cargada.");
 		}
 
-		if (count($error_list) > 0) {
-			$this->logMessage("  ".$this->getColors()->getColoredString("ERROR", "red")." Las siguientes ventas han dado un error: ".$this->getColors()->getColoredString(implode(', ', $error_list), 'red'));
-		}
 		$this->logMessage("Ventas cargadas.\n");
 	}
 
@@ -552,6 +557,14 @@ class importTask extends OTask {
 
 	public function run(array $options=[]): void {
 		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
+
+		if (count($options) < 1) {
+			echo "\nERROR: Tienes que indicar el id del artículo \"Varios\".\n\n";
+			echo "  ofw import 178\n\n";
+			exit();
+		}
+
+		$this->id_varios = intval($options[0]);
 
 		// Cargo archivo de configuración
 		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
