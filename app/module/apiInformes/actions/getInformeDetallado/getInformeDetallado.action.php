@@ -8,12 +8,12 @@ use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Component\Api\InformeMensualItemListComponent;
 
 #[OModuleAction(
-	url: '/get-informe-cierre-caja-mensual',
+	url: '/get-informe-detallado',
 	services: ['informes']
 )]
-class getInformeCierreCajaMensualAction extends OAction {
+class getInformeDetalladoAction extends OAction {
 	/**
-	 * Función para obtener los datos del informe de cierre de caja mensual
+	 * Función para obtener los datos del informe mensual
 	 *
 	 * @param ORequest $req Request object with method, headers, parameters and filters used
 	 * @return void
@@ -22,17 +22,15 @@ class getInformeCierreCajaMensualAction extends OAction {
 		$status = 'ok';
 		$month  = $req->getParamInt('month');
 		$year   = $req->getParamInt('year');
-		$informe_mensual_item_list_component = new InformeMensualItemListComponent(['list' => []]);
 
 		if (is_null($month) || is_null($year)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
-			$informe_mensual_item_list_component->setValue('list', $this->informes_service->getInformeCierreCajaMensual($month, $year));
+
 		}
 
 		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('list', $informe_mensual_item_list_component);
 	}
 }

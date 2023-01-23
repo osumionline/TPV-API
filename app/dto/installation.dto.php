@@ -7,6 +7,7 @@ use OsumiFramework\OFW\Web\ORequest;
 
 class InstallationDTO implements ODTO{
 	private string $nombre = '';
+	private string $nombre_comercial = '';
 	private string $cif = '';
 	private string $telefono = '';
 	private string $direccion = '';
@@ -37,6 +38,12 @@ class InstallationDTO implements ODTO{
 	}
 	private function setNombre(string $nombre): void {
 		$this->nombre = $nombre;
+	}
+	public function getNombreComercial(): string {
+		return $this->nombre_comercial;
+	}
+	private function setNombreComercial(string $nombre_comercial): void {
+		$this->nombre_comercial = $nombre_comercial;
 	}
 	public function getCif(): string {
 		return $this->cif;
@@ -186,6 +193,7 @@ class InstallationDTO implements ODTO{
 	public function isValid(): bool {
 		return (
 			$this->getNombre() != '' &&
+			$this->getNombreComercial() != '' &&
 			$this->getCif() != '' &&
 			$this->getLogo() != '' &&
 			$this->getColor() != '' &&
@@ -197,6 +205,7 @@ class InstallationDTO implements ODTO{
 
 	public function load(ORequest $req): void {
 		$this->setNombre( $req->getParamString('nombre') );
+		$this->setNombreComercial( $req->getParamString('nombreComercial') );
 		$this->setCif( $req->getParamString('cif') );
 		$this->setTelefono( $req->getParamString('telefono') );
 		$this->setDireccion( $req->getParamString('direccion') );

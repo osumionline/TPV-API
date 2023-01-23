@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['getInformeCierreCajaMensual', 'getInformeMensual'],
+	actions: ['getInformeSimple', 'getInformeDetallado'],
 	type: 'json',
 	prefix: '/api-informes'
 )]

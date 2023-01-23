@@ -7,6 +7,7 @@ use OsumiFramework\App\DTO\InstallationDTO;
 class AppData {
 	private bool $loaded = false;
 	private string $nombre = '';
+	private string $nombre_comercial = '';
 	private string $cif = '';
 	private string $telefono = '';
 	private string $direccion = '';
@@ -33,6 +34,7 @@ class AppData {
 			$data = json_decode(file_get_contents($path), true);
 			if ($data !== null) {
 				$this->setNombre($data['nombre']);
+				$this->setNombreComercial($data['nombreComercial']);
 				$this->setCif($data['cif']);
 				$this->setTelefono($data['telefono']);
 				$this->setDireccion($data['direccion']);
@@ -60,6 +62,7 @@ class AppData {
 
 	public function fromDTO(InstallationDTO $data): void {
 		$this->setNombre($data->getNombre());
+		$this->setNombreComercial($data->getNombreComercial());
 		$this->setCif($data->getCif());
 		$this->setTelefono($data->getTelefono());
 		$this->setDireccion($data->getDireccion());
@@ -94,6 +97,12 @@ class AppData {
 	}
 	public function getNombre(): string {
 		return $this->nombre;
+	}
+	private function setNombreComercial(string $nombre_comercial): void {
+		$this->nombre_comercial = $nombre_comercial;
+	}
+	public function getNombreComercial(): string {
+		return $this->nombre_comercial;
 	}
 	private function setCif(string $cif): void {
 		$this->cif = $cif;
@@ -238,14 +247,15 @@ class AppData {
 			return null;
 		}
 		return json_encode([
-			'nombre'      => $this->getNombre(),
-			'tipoIva'     => $this->getTipoIva(),
-			'ivaList'     => $this->getIvaList(),
-			'reList'      => $this->getReList(),
-			'marginList'  => $this->getMarginList(),
-			'ventaOnline' => $this->getVentaOnline(),
-			'fechaCad'    => $this->getFechaCad(),
-			'empleados'   => $this->getEmpleados()
+			'nombre'          => $this->getNombre(),
+			'nombreComercial' => $this->getNombreComercial(),
+			'tipoIva'         => $this->getTipoIva(),
+			'ivaList'         => $this->getIvaList(),
+			'reList'          => $this->getReList(),
+			'marginList'      => $this->getMarginList(),
+			'ventaOnline'     => $this->getVentaOnline(),
+			'fechaCad'        => $this->getFechaCad(),
+			'empleados'       => $this->getEmpleados()
 		]);
 	}
 
@@ -254,27 +264,28 @@ class AppData {
 			return null;
 		}
 		return json_encode([
-			'nombre'         => $this->getNombre(),
-			'cif'            => $this->getCif(),
-			'telefono'       => $this->getTelefono(),
-			'direccion'      => $this->getDireccion(),
-			'poblacion'      => $this->getPoblacion(),
-			'email'          => $this->getEmail(),
-			'twitter'        => $this->getTwitter(),
-			'facebook'       => $this->getFacebook(),
-			'instagram'      => $this->getInstagram(),
-			'web'            => $this->getWeb(),
-			'cajaInicial'    => $this->getCajaInicial(),
-			'ticketInicial'  => $this->getTicketInicial(),
-			'facturaInicial' => $this->getFacturaInicial(),
-			'tipoIva'        => $this->getTipoIva(),
-			'ivaList'        => $this->getIvaList(),
-			'reList'         => $this->getReList(),
-			'marginList'     => $this->getMarginList(),
-			'ventaOnline'    => $this->getVentaOnline(),
-			'urlApi'         => $this->getUrlApi(),
-			'fechaCad'       => $this->getFechaCad(),
-			'empleados'      => $this->getEmpleados()
+			'nombre'          => $this->getNombre(),
+			'nombreComercial' => $this->getNombreComercial(),
+			'cif'             => $this->getCif(),
+			'telefono'        => $this->getTelefono(),
+			'direccion'       => $this->getDireccion(),
+			'poblacion'       => $this->getPoblacion(),
+			'email'           => $this->getEmail(),
+			'twitter'         => $this->getTwitter(),
+			'facebook'        => $this->getFacebook(),
+			'instagram'       => $this->getInstagram(),
+			'web'             => $this->getWeb(),
+			'cajaInicial'     => $this->getCajaInicial(),
+			'ticketInicial'   => $this->getTicketInicial(),
+			'facturaInicial'  => $this->getFacturaInicial(),
+			'tipoIva'         => $this->getTipoIva(),
+			'ivaList'         => $this->getIvaList(),
+			'reList'          => $this->getReList(),
+			'marginList'      => $this->getMarginList(),
+			'ventaOnline'     => $this->getVentaOnline(),
+			'urlApi'          => $this->getUrlApi(),
+			'fechaCad'        => $this->getFechaCad(),
+			'empleados'       => $this->getEmpleados()
 		]);
 	}
 }
