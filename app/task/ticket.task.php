@@ -7,7 +7,7 @@ use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Service\imprimirService;
 
 class ticketTask extends OTask {
-	private ?ticketService $imprimir_service = null;
+	private ?imprimirService $imprimir_service = null;
 
   function __construct() {
 		$this->imprimir_service = new imprimirService();

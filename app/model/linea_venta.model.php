@@ -120,6 +120,21 @@ class LineaVenta extends OModel {
 		return $this->get('unidades') * ($this->get('importe') - $this->get('puc'));
 	}
 
+	/**
+	 * Obtiene el importe total descontado en la línea
+	 *
+	 * @return float Importe descontado
+	 */
+	public function getTotalDescuento(): float {
+		if (!is_null($this->get('descuento')) && $this->get('descuento') !== 0) {
+		  return $this->get('unidades') * $this->get('pvp') * ($this->get('descuento') / 100);
+		}
+		if (!is_null($this->get('importe_descuento')) && $this->get('importe_descuento') !== 0) {
+		  return $this->get('unidades') * $this->get('importe_descuento');
+		}
+		return 0;
+	}
+
 	private ?Venta $venta = null;
 
 	/**
