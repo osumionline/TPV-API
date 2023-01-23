@@ -7,7 +7,8 @@ use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\OFW\Plugins\OEmailSMTP;
 use OsumiFramework\App\Model\Venta;
-use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
+use OsumiFramework\App\Utils\AppData;
+use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
 
 #[OModuleAction(
 	url: '/send-ticket',
@@ -21,6 +22,7 @@ class sendTicketAction extends OAction {
 	 * @return void
 	 */
 	public function run(ORequest $req):void {
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 		$status = 'ok';
 		$id = $req->getParamInt('id');
 		$email_address = $req->getParamString('email');
@@ -32,12 +34,19 @@ class sendTicketAction extends OAction {
 		if ($status == 'ok') {
 			$venta = new Venta();
 			if ($venta->find(['id' => $id])) {
+				$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+				$app_data = new AppData($app_data_file);
+				if (!$app_data->getLoaded()) {
+					echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+					exit();
+				}
+
 				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
 
-				$content = new TicketEmailComponent();
+				$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 				$email = new OEmailSMTP();
 				$email->addRecipient(urldecode($email_address));
-				$email->setSubject('TIENDA - Ticket venta X');
+				$email->setSubject('TIENDA - Ticket venta '.$venta->get('id'));
 				$email->setMessage(strval($content));
 				$email->setFrom('hola@indomablestore.com');
 				$email->addAttachment($ticket_pdf);

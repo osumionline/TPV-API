@@ -7,7 +7,7 @@ use OsumiFramework\OFW\Tools\OTools;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Utils\PDF;
 use OsumiFramework\App\Utils\AppData;
-use OsumiFramework\App\Component\Ticket\TicketComponent;
+use OsumiFramework\App\Component\Imprimir\TicketComponent;
 
 class imprimirService extends OService {
 	/**

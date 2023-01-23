@@ -10,7 +10,8 @@ use OsumiFramework\App\DTO\VentaDTO;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
-use OsumiFramework\App\Component\Ticket\TicketEmailComponent;
+use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
+use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
 	url: '/save-venta',
@@ -24,6 +25,7 @@ class saveVentaAction extends OAction {
 	 * @return void
 	 */
 	public function run(VentaDTO $data):void {
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 		$status  = 'ok';
 		$id      = 'null';
 		$importe = 'null';
@@ -142,10 +144,17 @@ class saveVentaAction extends OAction {
 				}
 
 				if ($data->getImprimir() == 'email') {
-					$content = new TicketEmailComponent();
+					$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+					$app_data = new AppData($app_data_file);
+					if (!$app_data->getLoaded()) {
+						echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+						exit();
+					}
+
+					$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 					$email = new OEmailSMTP();
 					$email->addRecipient(urldecode($data->getEmail()));
-					$email->setSubject('TIENDA - Ticket venta X');
+					$email->setSubject('TIENDA - Ticket venta '.$venta->get('id'));
 					$email->setMessage(strval($content));
 					$email->setFrom('hola@indomablestore.com');
 					$email->addAttachment($ticket_pdf);
