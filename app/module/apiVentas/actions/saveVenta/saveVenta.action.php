@@ -59,7 +59,6 @@ class saveVentaAction extends OAction {
 				$puc = 0;
 				$pvp = $linea['pvp'];
 				$iva = $linea['iva'];
-				$re  = $linea['re'];
 
 				if ($linea['idArticulo'] != 0) {
 					$art = new Articulo();
@@ -68,7 +67,6 @@ class saveVentaAction extends OAction {
 					$puc    = $art->get('puc');
 					$pvp    = $art->get('pvp');
 					$iva    = $art->get('iva');
-					$re     = $art->get('re');
 				}
 
 				$lv = new LineaVenta();
@@ -78,7 +76,6 @@ class saveVentaAction extends OAction {
 				$lv->set('puc', $puc);
 				$lv->set('pvp', $pvp);
 				$lv->set('iva', $iva);
-				$lv->set('re', $re);
 				$importe = $linea['importe'];
 
 				if (!$linea['descuentoManual']) {
@@ -154,7 +151,7 @@ class saveVentaAction extends OAction {
 					$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 					$email = new OEmailSMTP();
 					$email->addRecipient(urldecode($data->getEmail()));
-					$email->setSubject('TIENDA - Ticket venta '.$venta->get('id'));
+					$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->get('id'));
 					$email->setMessage(strval($content));
 					$email->setFrom('hola@indomablestore.com');
 					$email->addAttachment($ticket_pdf);

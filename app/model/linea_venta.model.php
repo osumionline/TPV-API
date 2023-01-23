@@ -60,13 +60,6 @@ class LineaVenta extends OModel {
 				comment: 'IVA del artículo en el momento de su venta'
 			),
 			new OModelField(
-				name: 're',
-				type: OMODEL_FLOAT,
-				nullable: false,
-				default: 0,
-				comment: 'Recargo de equivalencia del artículo en el momento de su venta'
-			),
-			new OModelField(
 				name: 'importe',
 				type: OMODEL_FLOAT,
 				nullable: false,

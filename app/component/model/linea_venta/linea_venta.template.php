@@ -10,7 +10,6 @@ null
 	"puc": <?php echo $values['linea_venta']->get('puc') ?>,
 	"pvp": <?php echo $values['linea_venta']->get('pvp') ?>,
 	"iva": <?php echo $values['linea_venta']->get('iva') ?>,
-	"re": <?php echo $values['linea_venta']->get('re') ?>,
 	"importe": <?php echo $values['linea_venta']->get('importe') ?>,
 	"descuento": <?php echo is_null($values['linea_venta']->get('descuento')) ? 'null' : $values['linea_venta']->get('descuento') ?>,
 	"importeDescuento": <?php echo is_null($values['linea_venta']->get('importe_descuento')) ? 'null' : $values['linea_venta']->get('importe_descuento') ?>,

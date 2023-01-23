@@ -447,15 +447,10 @@ class importTask extends OTask {
 				if (!array_key_exists($linea[2], $this->articulos)) {
 					$id_articulo = null;
 					$iva = 21;
-					$re = 0;
-					if ($this->app_data->getTipoIva() === 're') {
-						$re = 5.2;
-					}
 				}
 				else {
 					$id_articulo = $this->articulos[$linea[2]]->get('id');
 					$iva = $this->articulos[$linea[2]]->get('iva');
-					$re = $this->articulos[$linea[2]]->get('re');
 				}
 				$lv = new LineaVenta();
 				$lv->set('id_venta',          $v->get('id'));
@@ -464,7 +459,6 @@ class importTask extends OTask {
 				$lv->set('puc',               floatval(str_ireplace(',', '.', $linea[4])));
 				$lv->set('pvp',               floatval(str_ireplace(',', '.', $linea[5])));
 				$lv->set('iva',               $iva);
-				$lv->set('re',                $re);
 				$lv->set('importe',           floatval(str_ireplace(',', '.', $linea[8])));
 				$lv->set('descuento',         intval($linea[6]));
 				$lv->set('importe_descuento', null);
