@@ -95,7 +95,7 @@ class savePedidoAction extends OAction {
 					$lp->set('palb', $linea['palb']);
 					$lp->set('pvp', $linea['pvp']);
 					$lp->set('iva', $linea['iva']);
-					$lp->set('re', $linea['re']);
+					$lp->set('re', $data->getRe() ? $linea['re'] : null);
 					$lp->set('descuento', $linea['descuento']);
 					$lp->save();
 
@@ -107,7 +107,7 @@ class savePedidoAction extends OAction {
 						$articulo->set('palb', $linea['palb']);
 						$articulo->set('pvp', $linea['pvp']);
 						$articulo->set('iva', $linea['iva']);
-						$articulo->set('re', $linea['re']);
+						$articulo->set('re', $data->getRe() ? $linea['re'] : null);
 						$articulo->save();
 
 						$lp->set('nombre_articulo', $art->get('nombre'));

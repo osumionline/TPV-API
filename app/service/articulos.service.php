@@ -46,10 +46,16 @@ class articulosService extends OService {
 	 *
 	 * @return array Resultado de la comprobación
 	 */
-	public function checkNombre(string $name, int $id_articulo): array {
+	public function checkNombre(string $name, ?int $id_articulo): array {
 		$db = new ODB();
-		$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `id` != ? AND `deleted_at` IS NULL";
-		$db->query($sql, [$id_articulo]);
+		if (!is_null($id_articulo)) {
+			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `id` != ? AND `deleted_at` IS NULL";
+			$db->query($sql, [$id_articulo]);
+		}
+		else {
+			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `deleted_at` IS NULL";
+			$db->query($sql);
+		}
 		if ($res = $db->next()) {
 			$art = new Articulo();
 			$art->update($res);
@@ -68,11 +74,17 @@ class articulosService extends OService {
 	 *
 	 * @return array Resultado de la comprobación
 	 */
-	public function checkReferencia(string $referencia, int $id_articulo): array {
+	public function checkReferencia(string $referencia, ?int $id_articulo): array {
 		if (!empty($referencia)) {
 			$db = new ODB();
-			$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `id` != ? AND `deleted_at` IS NULL";
-			$db->query($sql, [$referencia, $id_articulo]);
+			if (!is_null($id_articulo)) {
+				$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `id` != ? AND `deleted_at` IS NULL";
+				$db->query($sql, [$referencia, $id_articulo]);
+			}
+			else {
+				$sql = "SELECT * FROM `articulo` WHERE `referencia` = ? AND `deleted_at` IS NULL";
+				$db->query($sql, [$referencia]);
+			}
 			if ($res = $db->next()) {
 				$art = new Articulo();
 				$art->update($res);
@@ -92,11 +104,17 @@ class articulosService extends OService {
 	 *
 	 * @return array Resultado de la comprobación
 	 */
-	public function checkCodigosBarras(array $list, int $id_articulo): array {
+	public function checkCodigosBarras(array $list, ?int $id_articulo): array {
 		$db = new ODB();
 		foreach ($list as $cb) {
-			$sql = "SELECT * FROM `codigo_barras` WHERE `codigo_barras` = ? AND `id_articulo` != ?";
-			$db->query($sql, [$cb['codigoBarras'], $id_articulo]);
+			if (!is_null($id_articulo)) {
+				$sql = "SELECT * FROM `codigo_barras` WHERE `codigo_barras` = ? AND `id_articulo` != ?";
+				$db->query($sql, [$cb['codigoBarras'], $id_articulo]);
+			}
+			else {
+				$sql = "SELECT * FROM `codigo_barras` WHERE `codigo_barras` = ?";
+				$db->query($sql, [$cb['codigoBarras']]);
+			}
 			if ($res = $db->next()) {
 				$cod = new CodigoBarras();
 				$cod->update($res);

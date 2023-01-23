@@ -75,7 +75,7 @@ class autoSavePedidoAction extends OAction {
 			$lp->set('palb', $linea['palb']);
 			$lp->set('pvp', $linea['pvp']);
 			$lp->set('iva', $linea['iva']);
-			$lp->set('re', $linea['re']);
+			$lp->set('re', $data->getRe() ? $linea['re'] : null);
 			$lp->set('descuento', $linea['descuento']);
 			$lp->save();
 		}
