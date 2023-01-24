@@ -117,7 +117,7 @@ class imprimirService extends OService {
 			'id_tipo_pago'   => $venta->get('id_tipo_pago'),
 			'forma_pago'     => $venta->getNombreTipoPago(),
 			'cliente'        => $venta->getCliente(),
-			'employee'       => $venta->getEmpleado()->get('nombre'),
+			'employee'       => (!is_null($venta->getEmpleado())) ? $venta->getEmpleado()->get('nombre') : '-',
 			'regalo'         => $regalo,
 			'ivas'           => $ivas,
 			'qr'             => $qr,
