@@ -81,8 +81,8 @@ class LineaPedido extends OModel {
 			new OModelField(
 				name: 're',
 				type: OMODEL_FLOAT,
-				nullable: false,
-				default: false,
+				nullable: true,
+				default: null,
 				comment: 'RE del artículo'
 			),
 			new OModelField(

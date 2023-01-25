@@ -13,7 +13,7 @@ null
 	"pvp": <?php echo $values['linea_pedido']->get('pvp') ?>,
 	"stock": <?php echo $values['linea_pedido']->getArticulo()->get('stock') ?>,
 	"iva": <?php echo $values['linea_pedido']->get('iva') ?>,
-	"re": <?php echo $values['linea_pedido']->get('re') ?>,
+	"re": <?php echo is_null($values['linea_pedido']->get('re')) ? 'null' : $values['linea_pedido']->get('re') ?>,
 	"descuento": <?php echo $values['linea_pedido']->get('descuento') ?>,
 	"idCategoria": <?php echo is_null($values['linea_pedido']->get('id_categoria')) ? 'null' : $values['linea_pedido']->get('id_categoria') ?>,
 	"codBarras": <?php echo is_null($values['linea_pedido']->get('codigo_barras')) ? 'null' : $values['linea_pedido']->get('codigo_barras') ?>,

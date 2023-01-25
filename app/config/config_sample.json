@@ -14,7 +14,10 @@
     "log_level": "ALL",
     "extra": {
         "num_por_pag": 20,
-        "fotos": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/web/fotos"
+        "fotos": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/web/fotos",
+        "backup_api_url": "",
+    		"backup_api_key": "",
+    		"backup_id_account": null
     },
     "plugins": {
         "email_smtp": {
@@ -25,7 +28,8 @@
             "pass": null
         },
         "ticketbai": {
-            "token": ""
+            "token": "",
+            "nif": ""
         }
     }
 }

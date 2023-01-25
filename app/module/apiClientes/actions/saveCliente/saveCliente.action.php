@@ -31,11 +31,11 @@ class saveClienteAction extends OAction {
 			}
 
 			$cliente->set('nombre_apellidos',      urldecode($data->getNombreApellidos()));
-			$cliente->set('dni_cif',               urldecode($data->getDniCif()));
-			$cliente->set('telefono',              urldecode($data->getTelefono()));
-			$cliente->set('email',                 urldecode($data->getEmail()));
-			$cliente->set('direccion',             urldecode($data->getDireccion()));
-			$cliente->set('poblacion',             urldecode($data->getPoblacion()));
+			$cliente->set('dni_cif',               !is_null($data->getDniCif()) ? urldecode($data->getDniCif()) : null);
+			$cliente->set('telefono',              !is_null($data->getTelefono()) ? urldecode($data->getTelefono()) : null);
+			$cliente->set('email',                 !is_null($data->getEmail()) ? urldecode($data->getEmail()) : null);
+			$cliente->set('direccion',             !is_null($data->getDireccion()) ? urldecode($data->getDireccion()) : null);
+			$cliente->set('poblacion',             !is_null($data->getPoblacion()) ? urldecode($data->getPoblacion()) : null);
 			$cliente->set('provincia',             $data->getProvincia());
 			$cliente->set('fact_igual',            $data->getFactIgual());
 			$cliente->set('fact_nombre_apellidos', !is_null($data->getFactNombreApellidos()) ? urldecode($data->getFactNombreApellidos()) : null);
