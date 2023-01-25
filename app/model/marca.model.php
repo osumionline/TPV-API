@@ -93,7 +93,7 @@ class Marca extends OModel {
 	 *
 	 * @return Proveedor Proveedor al que pertenece la marca
 	 */
-	public function getProveedor(): Proveedor {
+	public function getProveedor(): ?Proveedor {
 		if (is_null($this->proveedor)) {
 			$this->loadProveedor();
 		}
@@ -107,7 +107,7 @@ class Marca extends OModel {
 	 *
 	 * @return void
 	 */
-	public function setProveedor(Proveedor $p): void {
+	public function setProveedor(?Proveedor $p): void {
 		$this->proveedor = $p;
 	}
 
@@ -121,8 +121,9 @@ class Marca extends OModel {
 		$sql = "SELECT p.* FROM `proveedor` p, `proveedor_marca` pm WHERE p.`id` = pm.`id_proveedor` AND pm.`id_marca` = ?";
 		$db->query($sql, [$this->get('id')]);
 
-		$p = new Proveedor();
+		$p = null;
 		if ($res = $db->next()) {
+			$p = new Proveedor();
 			$p->update($res);
 		}
 		$this->setProveedor($p);
