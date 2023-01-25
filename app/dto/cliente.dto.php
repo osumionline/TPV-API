@@ -8,7 +8,7 @@ use OsumiFramework\OFW\Web\ORequest;
 class ClienteDTO implements ODTO{
   private ?int $id = null;
 	private string $nombre_apellidos = '';
-	private string $dni_cif = '';
+	private ?string $dni_cif = '';
 	private ?string $telefono = null;
 	private ?string $email = null;
 	private ?string $direccion = null;
@@ -38,10 +38,10 @@ class ClienteDTO implements ODTO{
 	private function setNombreApellidos(string $nombre_apellidos): void {
 		$this->nombre_apellidos = $nombre_apellidos;
 	}
-  public function getDniCif(): string {
+  public function getDniCif(): ?string {
 		return $this->dni_cif;
 	}
-	private function setDniCif(string $dni_cif): void {
+	private function setDniCif(?string $dni_cif): void {
 		$this->dni_cif = $dni_cif;
 	}
   public function getTelefono(): ?string {
