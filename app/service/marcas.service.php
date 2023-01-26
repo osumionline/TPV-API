@@ -80,6 +80,11 @@ class marcasService extends OService {
 		if ($marca->find(['id' => $id_marca])) {
 			$marca->set('deleted_at', date('Y-m-d H:i:s', time()));
 			$marca->save();
+
+			$db = new ODB();
+			$sql = "DELETE FROM `proveedor_marca` WHERE `id_marca` = ?";
+			$db->query($sql, [$id_marca]);
+
 			return true;
 		}
 		return false;

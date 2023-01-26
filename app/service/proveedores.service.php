@@ -111,6 +111,10 @@ class proveedoresService extends OService {
 				$comercial->save();
 			}
 
+			$db = new ODB();
+			$sql = "DELETE FROM `proveedor_marca` WHERE `id_proveedor` = ?";
+			$db->query($sql, [$id_proveedor]);
+
 			return true;
 		}
 		return false;
