@@ -1,7 +1,7 @@
 <?php foreach ($values['list'] as $i => $item): ?>
   {
     "fecha": "<?php echo $item['fecha'] ?>",
-    "localizador": <?php echo $item['localizador'] ?>,
+    "localizador": <?php echo !is_null($item['localizador']) ? $item['localizador'] : 'null' ?>,
     "nombre": "<?php echo urlencode($item['nombre']) ?>",
     "unidades": <?php echo $item['unidades'] ?>,
     "pvp": <?php echo $item['pvp'] ?>,
