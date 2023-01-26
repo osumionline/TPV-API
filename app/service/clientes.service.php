@@ -80,12 +80,12 @@ class clientesService extends OService {
 			$lineas = $venta->getLineas();
 			foreach ($lineas as $linea) {
 				array_push($list, [
-					'fecha' => $linea->get('created_at', 'd/m/Y'),
+					'fecha'       => $linea->get('created_at', 'd/m/y'),
 					'localizador' => !is_null($linea->getArticulo()) ? $linea->getArticulo()->get('localizador') : null,
-					'nombre' => $linea->get('nombre_articulo'),
-					'unidades' => $linea->get('unidades'),
-					'pvp' => $linea->get('pvp'),
-					'importe' => $linea->get('importe')
+					'nombre'      => $linea->get('nombre_articulo'),
+					'unidades'    => $linea->get('unidades'),
+					'pvp'         => $linea->get('pvp'),
+					'importe'     => $linea->get('importe')
 				]);
 			}
 		}
@@ -110,14 +110,16 @@ class clientesService extends OService {
 			if (!array_key_exists($localizador, $list)) {
 				$list[$localizador] = [
 					'localizador' => $linea['localizador'],
-					'nombre' => $linea['nombre'],
-					'importe' => 0
+					'nombre'      => $linea['nombre'],
+					'importe'     => 0,
+					'unidades'    => 0
 				];
 			}
 
-			$list[$localizador]['importe'] += $linea['importe'];
+			$list[$localizador]['importe']  += $linea['importe'];
+			$list[$localizador]['unidades'] += $linea['unidades'];
 		}
-		array_multisort(array_column($list, 'importe'), $list);
+		array_multisort(array_column($list, 'unidades'), SORT_DESC, $list, SORT_DESC );
 
 		return $list;
 	}
