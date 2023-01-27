@@ -34,11 +34,11 @@ class saveMarcaAction extends OAction {
 			}
 
 			$marca->set('nombre',        urldecode($data->getNombre()));
-			$marca->set('direccion',     urldecode($data->getDireccion()));
-			$marca->set('telefono',      urldecode($data->getTelefono()));
-			$marca->set('email',         urldecode($data->getEmail()));
-			$marca->set('web',           urldecode($data->getWeb()));
-			$marca->set('observaciones', urldecode($data->getObservaciones()));
+			$marca->set('direccion',     is_null($data->getDireccion())     ? null : urldecode($data->getDireccion()));
+			$marca->set('telefono',      is_null($data->getTelefono())      ? null : urldecode($data->getTelefono()));
+			$marca->set('email',         is_null($data->getEmail())         ? null : urldecode($data->getEmail()));
+			$marca->set('web',           is_null($data->getWeb())           ? null : urldecode($data->getWeb()));
+			$marca->set('observaciones', is_null($data->getObservaciones()) ? null : urldecode($data->getObservaciones()));
 
 			$marca->save();
 
@@ -55,11 +55,11 @@ class saveMarcaAction extends OAction {
 			if ($data->getCrearProveeddor()) {
 				$proveedor = new Proveedor();
 				$proveedor->set('nombre',        urldecode($data->getNombre()));
-				$proveedor->set('direccion',     urldecode($data->getDireccion()));
-				$proveedor->set('telefono',      urldecode($data->getTelefono()));
-				$proveedor->set('email',         urldecode($data->getEmail()));
-				$proveedor->set('web',           urldecode($data->getWeb()));
-				$proveedor->set('observaciones', urldecode($data->getObservaciones()));
+				$proveedor->set('direccion',     is_null($data->getDireccion())     ? null : urldecode($data->getDireccion()));
+				$proveedor->set('telefono',      is_null($data->getTelefono())      ? null : urldecode($data->getTelefono()));
+				$proveedor->set('email',         is_null($data->getEmail())         ? null : urldecode($data->getEmail()));
+				$proveedor->set('web',           is_null($data->getWeb())           ? null : urldecode($data->getWeb()));
+				$proveedor->set('observaciones', is_null($data->getObservaciones()) ? null : urldecode($data->getObservaciones()));
 
 				$proveedor->save();
 
