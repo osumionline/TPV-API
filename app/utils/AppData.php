@@ -26,6 +26,7 @@ class AppData {
 	private array  $margin_list = [];
 	private bool   $venta_online = false;
 	private string $url_api = '';
+	private string $secret_api = '';
 	private bool   $fecha_cad = false;
 	private bool   $empleados = false;
 
@@ -53,6 +54,7 @@ class AppData {
 				$this->setMarginList($data['marginList']);
 				$this->setVentaOnline($data['ventaOnline']);
 				$this->setUrlApi($data['urlApi']);
+				$this->setSecretApi($data['secretApi']);
 				$this->setFechaCad($data['fechaCad']);
 				$this->setEmpleados($data['empleados']);
 				$this->setLoaded(true);
@@ -81,6 +83,7 @@ class AppData {
 		$this->setMarginList($data->getMarginList());
 		$this->setVentaOnline($data->getVentaOnline());
 		$this->setUrlApi($data->getUrlApi());
+		$this->setSecretApi($data->getSecretApi());
 		$this->setFechaCad($data->getFechaCad());
 		$this->setEmpleados($data->getEmpleados());
 		$this->setLoaded(true);
@@ -212,6 +215,12 @@ class AppData {
 	public function getUrlApi(): string {
 		return $this->url_api;
 	}
+	private function setSecretApi(string $secret_api): void {
+		$this->secret_api = $secret_api;
+	}
+	public function getSecretApi(): string {
+		return $this->secret_api;
+	}
 	private function setFechaCad(bool $fecha_cad): void {
 		$this->fecha_cad = $fecha_cad;
 	}
@@ -284,6 +293,7 @@ class AppData {
 			'marginList'      => $this->getMarginList(),
 			'ventaOnline'     => $this->getVentaOnline(),
 			'urlApi'          => $this->getUrlApi(),
+			'secretApi'       => $this->getSecretApi(),
 			'fechaCad'        => $this->getFechaCad(),
 			'empleados'       => $this->getEmpleados()
 		]);

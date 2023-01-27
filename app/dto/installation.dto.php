@@ -30,6 +30,7 @@ class InstallationDTO implements ODTO{
 	private array  $margin_list = [];
 	private bool   $venta_online = false;
 	private string $url_api = '';
+	private string $secret_api = '';
 	private bool   $fecha_cad = false;
 	private bool   $empleados = false;
 
@@ -177,6 +178,12 @@ class InstallationDTO implements ODTO{
 	private function setUrlApi(string $url_api): void {
 		$this->url_api = $url_api;
 	}
+	public function getSecretApi(): string {
+		return $this->secret_api;
+	}
+	private function setSecretApi(string $secret_api): void {
+		$this->secret_api = $secret_api;
+	}
 	public function getFechaCad(): bool {
 		return $this->fecha_cad;
 	}
@@ -199,7 +206,7 @@ class InstallationDTO implements ODTO{
 			$this->getColor() != '' &&
 			$this->getTipoIva() != '' &&
 			count($this->getIvaList()) > 0 &&
-			(!$this->getVentaOnline() || ($this->getVentaOnline() && $this->getUrlApi() != ''))
+			(!$this->getVentaOnline() || ($this->getVentaOnline() && $this->getUrlApi() != '' && $this->getSecretApi()))
 		);
 	}
 
@@ -228,6 +235,7 @@ class InstallationDTO implements ODTO{
 		$this->setMarginList( $req->getParam('marginList') );
 		$this->setVentaOnline( $req->getParamBool('ventaOnline', false) );
 		$this->setUrlApi( $req->getParamString('urlApi') );
+		$this->setSecretApi( $req->getParamString('secretApi') );
 		$this->setFechaCad( $req->getParamBool('fechaCad', false) );
 		$this->setEmpleados( $req->getParamBool('empleados', false) );
 	}
