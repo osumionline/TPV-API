@@ -9,6 +9,7 @@ use OsumiFramework\App\Model\Pedido;
 use OsumiFramework\App\Model\LineaPedido;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\VistaPedido;
+use OsumiFramework\App\Model\Articulo;
 
 #[OModuleAction(
 	url: '/save-pedido',
@@ -74,6 +75,9 @@ class savePedidoAction extends OAction {
 			$pedido->set('europeo', $data->getUe());
 			$pedido->set('faltas', $data->getFaltas());
 			$pedido->set('recepcionado', $data->getRecepcionado());
+			if ($data->getRecepcionado() && is_null($pedido->get('fecha_recepcionado'))) {
+				$pedido->set('fecha_recepcionado', date('Y-m-d H:i:s', time()));
+			}
 			if (!is_null($data->getObservaciones())) {
 				$pedido->set('observaciones', urldecode($data->getObservaciones()));
 			}
@@ -110,7 +114,7 @@ class savePedidoAction extends OAction {
 						$articulo->set('re', $data->getRe() ? $linea['re'] : null);
 						$articulo->save();
 
-						$lp->set('nombre_articulo', $art->get('nombre'));
+						$lp->set('nombre_articulo', $articulo->get('nombre'));
 						$lp->save();
 
 						// Si viene un nuevo código de barras se lo creo
