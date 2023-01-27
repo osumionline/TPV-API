@@ -14,9 +14,6 @@ use OsumiFramework\App\DTO\InstallationDTO;
 use OsumiFramework\App\Utils\AppData;
 
 class generalService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 		require $this->getConfig()->getDir('app_utils').'AppData.php';

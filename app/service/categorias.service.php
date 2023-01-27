@@ -7,9 +7,6 @@ use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Model\Categoria;
 
 class categoriasService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

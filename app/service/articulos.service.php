@@ -13,9 +13,6 @@ use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\LineaPedido;
 
 class articulosService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

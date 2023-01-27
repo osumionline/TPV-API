@@ -11,9 +11,6 @@ use OsumiFramework\App\Model\FacturaVenta;
 use OsumiFramework\App\Utils\AppData;
 
 class clientesService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

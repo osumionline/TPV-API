@@ -10,9 +10,6 @@ use OsumiFramework\App\Model\ProveedorMarca;
 use OsumiFramework\App\Model\Comercial;
 
 class proveedoresService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

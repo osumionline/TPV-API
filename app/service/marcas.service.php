@@ -8,9 +8,6 @@ use OsumiFramework\OFW\Plugins\OImage;
 use OsumiFramework\App\Model\Marca;
 
 class marcasService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

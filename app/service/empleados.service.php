@@ -8,9 +8,6 @@ use OsumiFramework\App\Model\Empleado;
 use OsumiFramework\App\Model\EmpleadoRol;
 
 class empleadosService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}

@@ -12,9 +12,6 @@ use OsumiFramework\App\Component\Imprimir\TicketComponent;
 use OsumiFramework\App\Component\Imprimir\FacturaEmailComponent;
 
 class imprimirService extends OService {
-	/**
-	 * Load service tools
-	 */
 	function __construct() {
 		$this->loadService();
 	}
@@ -244,7 +241,7 @@ class imprimirService extends OService {
 				$subtotal  += $venta_linea['subtotal'];
 				$descuento += $venta_linea['descuento'];
 				$total     += $venta_linea['total'];
-				
+
 				array_push($temp['lineas'], $venta_linea);
 			}
 
@@ -273,7 +270,7 @@ class imprimirService extends OService {
 			'descuento'                => $descuento,
 			'total'                    => $total
 		];
-		
+
 		$factura_email_component = new FacturaEmailComponent($factura_data);
 		$html = strval($factura_email_component);
 		file_put_contents($route, $html);
