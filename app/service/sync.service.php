@@ -7,13 +7,26 @@ use OsumiFramework\App\Service\ventasService;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\LineaVenta;
+use OsumiFramework\App\Utils\AppData;
 
 class syncService extends OService {
 	private ?ventasService $ventas_service = null;
+	private ?string $url    = null;
+	private ?string $secret = null;
+	private array   $params = [];
 
 	function __construct() {
 		$this->loadService();
 		$this->ventas_service = new ventasService();
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+		$app_data = new AppData($app_data_file);
+		if (!$app_data->getLoaded()) {
+			echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+			exit();
+		}
+		$this->url = $app_data->getUrlApi();
+		$this->secret = $app_data->getSecretApi();
 	}
 
 	/**
@@ -120,9 +133,9 @@ class syncService extends OService {
 	 *
 	 * @param string $token Token con información de artículos a actualizar
 	 *
-	 * @return void
+	 * @return bool Estado de la operación
 	 */
-	public function updateStock(string $token): void {
+	public function updateStock(string $token): bool {
 		if (!$this->checkToken($token)) {
 			$this->getLog()->info('Sync - Token error: '.$token);
 			return false;
@@ -133,7 +146,7 @@ class syncService extends OService {
 		foreach ($this->params as $data) {
 			$venta = new Venta();
 			$venta->set('num_venta',      $this->ventas_service->generateNumVenta());
-			$venta->set('id_empleado',    null);
+			$venta->set('id_empleado',    1);
 			$venta->set('id_cliente',     null);
 			$venta->set('total',          $data['amount']);
 			$venta->set('entregado',      0);
@@ -154,11 +167,6 @@ class syncService extends OService {
 
 				$art = new Articulo();
 				$art->find(['localizador' => $item['localizador']]);
-				$id_articulo = $art->get('id');
-				$nombre      = $art->get('nombre');
-				$puc         = $art->get('puc');
-				$pvp         = $art->get('pvp');
-				$iva         = $art->get('iva');
 
 				$lv = new LineaVenta();
 				$lv->set('id_venta', $venta->get('id'));
@@ -176,11 +184,12 @@ class syncService extends OService {
 
 				$this->getLog()->info('Sync - Linea ticket introducida');
 
-				$articulo->set('stock', $articulo->get('stock') - $item['num']);
-				$articulo->save();
+				$art->set('stock', $art->get('stock') - $item['num']);
+				$art->save();
 
 				$this->getLog()->info('Sync - Actualizo stock');
 			}
 		}
+		return true;
 	}
 }
