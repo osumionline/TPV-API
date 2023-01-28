@@ -355,7 +355,8 @@ class importTask extends OTask {
 			$a->set('localizador', empty($item[1]) ? intval($this->articulos_service->getNewLocalizador()) : intval($item[1]));
 			$a->set('nombre', empty($item[7]) ? null : $item[7]);
 			$a->set('slug', empty($item[7]) ? null : OTools::slugify($item[7]));
-			$a->set('id_categoria', $this->categorias[$item[4]]->get('id'));
+			//$a->set('id_categoria', $this->categorias[$item[4]]->get('id'));
+			$a->set('id_categoria', null);
 			$a->set('id_marca', $this->marcas[$item[2]]->get('id'));
 			$a->set('referencia', empty($item[6]) ? null : $item[6]);
 			$a->set('palb', $palb);
