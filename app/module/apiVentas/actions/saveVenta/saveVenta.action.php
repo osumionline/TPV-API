@@ -143,6 +143,7 @@ class saveVentaAction extends OAction {
 					else {
 						$comando = "lpr -P ".$this->getConfig()->getExtra('impresora')." ".$ticket_pdf." &";
 					}
+					$this->getLog()->debug($comando);
 					exec($comando, $salida);
 				}
 
