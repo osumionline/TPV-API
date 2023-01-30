@@ -80,12 +80,17 @@ class proveedoresService extends OService {
 		$db = new ODB();
 		$sql = "DELETE FROM `proveedor_marca` WHERE `id_proveedor` = ?";
 		$db->query($sql, [$id_proveedor]);
+		$sql = "UPDATE `articulo` SET `id_proveedor` = NULL WHERE `id_proveedor` = ?";
+		$db->query($sql, [$id_proveedor]);
 
 		foreach ($marcas as $id_marca) {
 			$pm = new ProveedorMarca();
 			$pm->set('id_proveedor', $id_proveedor);
 			$pm->set('id_marca',     $id_marca);
 			$pm->save();
+
+			$sql = "UPDATE `articulo` SET `id_proveedor` = ? WHERE `id_marca` = ?";
+			$db->query($sql, [$id_proveedor, $id_marca]);
 		}
 	}
 
