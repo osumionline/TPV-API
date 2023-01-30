@@ -165,6 +165,10 @@ class Pedido extends OModel {
 				return 'Al contado';
 			}
 			break;
+			case 4: {
+				return 'Transferencia bancaria';
+			}
+			break;
 		}
 	}
 
