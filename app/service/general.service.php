@@ -8,6 +8,7 @@ use OsumiFramework\OFW\Plugins\OImage;
 use OsumiFramework\App\Model\TipoPago;
 use OsumiFramework\App\Model\Caja;
 use OsumiFramework\App\Model\Empleado;
+use OsumiFramework\App\Model\EmpleadoRol;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\PagoCaja;
 use OsumiFramework\App\DTO\InstallationDTO;
@@ -110,6 +111,14 @@ class generalService extends OService {
 			$empleado->set('pass', password_hash($data->getPass(), PASSWORD_BCRYPT));
 			$empleado->set('color', str_ireplace('#', '', $data->getColor()));
 			$empleado->save();
+
+			// Le asigno todos los permisos posibles
+			for ($i = 1; $i <= 24; $i++) {
+				$empleado_rol = new EmpleadoRol();
+				$empleado_rol->set('id_empleado', $empleado->get('id'));
+				$empleado_rol->set('id_rol', $i);
+				$empleado_rol->save();
+			}
 		}
 
 		// Compruebo si ya hay cierres de caja, si no hay ninguno hago la caja inicial
