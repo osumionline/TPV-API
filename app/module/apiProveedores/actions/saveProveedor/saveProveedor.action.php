@@ -30,28 +30,35 @@ class saveProveedorAction extends OAction {
 			if (!is_null($data->getId())) {
 				$proveedor->find(['id' => $data->getId()]);
 			}
-
-			$proveedor->set('nombre',        urldecode($data->getNombre()));
-			$proveedor->set('direccion',     urldecode($data->getDireccion()));
-			$proveedor->set('telefono',      urldecode($data->getTelefono()));
-			$proveedor->set('email',         urldecode($data->getEmail()));
-			$proveedor->set('web',           urldecode($data->getWeb()));
-			$proveedor->set('observaciones', urldecode($data->getObservaciones()));
-
-			$proveedor->save();
-
-			if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http') && !str_starts_with($data->getFoto(), '/')) {
-				$ruta = $proveedor->getRutaFoto();
-				// Si ya tenía una imagen, primero la borro
-				if (file_exists($ruta)) {
-					unlink($ruta);
+			else {
+				if ($this->proveedores_service->checkNombreProveedor(urldecode($data->getNombre()))) {
+					$status = 'error-nombre';
 				}
-				$this->proveedores_service->saveFoto($data->getFoto(), $proveedor);
 			}
 
-			$this->proveedores_service->updateProveedoresMarcas($proveedor->get('id'), $data->getMarcas());
+			if ($status == 'ok') {
+				$proveedor->set('nombre',        urldecode($data->getNombre()));
+				$proveedor->set('direccion',     urldecode($data->getDireccion()));
+				$proveedor->set('telefono',      urldecode($data->getTelefono()));
+				$proveedor->set('email',         urldecode($data->getEmail()));
+				$proveedor->set('web',           urldecode($data->getWeb()));
+				$proveedor->set('observaciones', urldecode($data->getObservaciones()));
 
-			$data->setId( $proveedor->get('id') );
+				$proveedor->save();
+
+				if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http') && !str_starts_with($data->getFoto(), '/')) {
+					$ruta = $proveedor->getRutaFoto();
+					// Si ya tenía una imagen, primero la borro
+					if (file_exists($ruta)) {
+						unlink($ruta);
+					}
+					$this->proveedores_service->saveFoto($data->getFoto(), $proveedor);
+				}
+
+				$this->proveedores_service->updateProveedoresMarcas($proveedor->get('id'), $data->getMarcas());
+
+				$data->setId( $proveedor->get('id') );
+			}
 		}
 
 		$this->getTemplate()->add('status', $status);

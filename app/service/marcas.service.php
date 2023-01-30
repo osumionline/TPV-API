@@ -33,6 +33,24 @@ class marcasService extends OService {
 	}
 
 	/**
+	 * Función para comprobar si un nombre de marca ya existe
+	 *
+	 * @param string $nombre Nombre de la marca a comprobar
+	 *
+	 * @return bool Indica si la marca ya existe o no
+	 */
+	public function checkNombreMarca(string $nombre): bool {
+		$db = new ODB();
+		$sql = "SELECT * FROM `marca` WHERE `deleted_at` IS NULL AND `nombre` = ? ORDER BY `nombre`";
+		$db->query($sql, [$nombre]);
+
+		if ($res = $db->next()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Guarda una imagen en Base64. Si no tiene formato WebP se convierte
 	 *
 	 * @param string $base64_string Imagen en formato Base64

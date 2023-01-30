@@ -35,6 +35,24 @@ class proveedoresService extends OService {
 	}
 
 	/**
+	 * Función para comprobar si un nombre de proveedor ya existe
+	 *
+	 * @param string $nombre Nombre del proveedor a comprobar
+	 *
+	 * @return bool Indica si el proveedor ya existe o no
+	 */
+	public function checkNombreProveedor(string $nombre): bool {
+		$db = new ODB();
+		$sql = "SELECT * FROM `proveedor` WHERE `deleted_at` IS NULL AND `nombre` = ? ORDER BY `nombre`";
+		$db->query($sql, [$nombre]);
+
+		if ($res = $db->next()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Guarda una imagen en Base64. Si no tiene formato WebP se convierte
 	 *
 	 * @param string $base64_string Imagen en formato Base64
