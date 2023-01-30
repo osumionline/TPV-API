@@ -15,6 +15,7 @@
     "extra": {
         "num_por_pag": 20,
         "fotos": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/web/fotos",
+        "foxit": "C:\\Foxit Software\\Foxit Reader\\Foxit Reader.exe",
         "backup_api_url": "",
     		"backup_api_key": "",
     		"backup_id_account": null
