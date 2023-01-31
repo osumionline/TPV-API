@@ -10,6 +10,7 @@ null
     "stock": <?php echo $values['item']['stock'] ?>,
     "puc": <?php echo $values['item']['puc'] ?>,
     "pvp": <?php echo $values['item']['pvp'] ?>,
-    "hasCodigosBarras": <?php echo $values['item']['has_codigos_barras'] ? 'true' : 'false' ?>
+    "hasCodigosBarras": <?php echo $values['item']['has_codigos_barras'] ? 'true' : 'false' ?>,
+    "observaciones": "<?php echo urlencode($values['item']['observaciones']) ?>"
   }
 <?php endif ?>

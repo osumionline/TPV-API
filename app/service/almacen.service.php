@@ -77,7 +77,8 @@ class almacenService extends OService {
 				'stock'              => $articulo->get('stock'),
 				'puc'                => $articulo->get('puc'),
 				'pvp'                => $articulo->get('pvp'),
-				'has_codigos_barras' => (count($articulo->getNotDefaultCodigosBarras()) > 0)
+				'has_codigos_barras' => (count($articulo->getNotDefaultCodigosBarras()) > 0),
+				'observaciones'      => $articulo->get('observaciones')
 			]);
 		}
 
