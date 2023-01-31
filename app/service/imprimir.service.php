@@ -103,6 +103,7 @@ class imprimirService extends OService {
 			'telefono'       => $app_data->getTelefono(),
 			'nif'            => $app_data->getCif(),
 			'social'         => $social,
+			'timestamp'      => strtotime($venta->get('created_at')),
 			'num_venta'      => $venta->get('num_venta'),
 			'date'           => $venta->get('created_at', 'd/m/Y'),
 			'hour'           => $venta->get('created_at', 'H:i'),
