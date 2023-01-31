@@ -124,7 +124,7 @@ class saveArticuloAction extends OAction {
 				if (!$cod_barras_por_defecto) {
 					$cb = new CodigoBarras();
 					$cb->set('id_articulo', $data->getId());
-					$cb->set('codigo_barras', $data->getLocalizador());
+					$cb->set('codigo_barras', strval($data->getLocalizador()));
 					$cb->set('por_defecto', true);
 					$cb->save();
 				}
