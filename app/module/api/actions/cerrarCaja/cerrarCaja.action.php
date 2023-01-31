@@ -44,9 +44,25 @@ class cerrarCajaAction extends OAction {
 				$c->set('importe_pagos_caja',   $pagos_caja['importe']);
 				$c->set('num_pagos_caja',       $pagos_caja['num']);
 
+				$c->set('importe1c',            $data->getImporte1c());
+				$c->set('importe2c',            $data->getImporte2c());
+				$c->set('importe5c',            $data->getImporte5c());
+				$c->set('importe10c',           $data->getImporte10c());
+				$c->set('importe20c',           $data->getImporte20c());
+				$c->set('importe50c',           $data->getImporte50c());
+				$c->set('importe1',             $data->getImporte1());
+				$c->set('importe2',             $data->getImporte2());
+				$c->set('importe5',             $data->getImporte5());
+				$c->set('importe10',            $data->getImporte10());
+				$c->set('importe20',            $data->getImporte20());
+				$c->set('importe50',            $data->getImporte50());
+				$c->set('importe100',           $data->getImporte100());
+				$c->set('importe200',           $data->getImporte200());
+				$c->set('importe500',           $data->getImporte500());
+
 				$c->set('importe_cierre',       $c->get('importe_apertura') + $datos['venta_efectivo']);
-				$c->set('importe_cierre_real',  $data->getImporteReal());
-				$c->set('importe_retirado',     $data->getImporteRetirado());
+				$c->set('importe_cierre_real',  $data->getReal());
+				$c->set('importe_retirado',     $data->getRetirado());
 
 				$c->save();
 

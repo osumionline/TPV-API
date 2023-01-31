@@ -38,6 +38,21 @@ class openBoxAction extends OAction {
 		$caja->set('importe_apertura',     0);
 		$caja->set('importe_cierre',       0);
 		$caja->set('importe_cierre_real',  0);
+		$caja->set('importe1c',            0);
+		$caja->set('importe2c',            0);
+		$caja->set('importe5c',            0);
+		$caja->set('importe10c',           0);
+		$caja->set('importe20c',           0);
+		$caja->set('importe50c',           0);
+		$caja->set('importe1',             0);
+		$caja->set('importe2',             0);
+		$caja->set('importe5',             0);
+		$caja->set('importe10',            0);
+		$caja->set('importe20',            0);
+		$caja->set('importe50',            0);
+		$caja->set('importe100',           0);
+		$caja->set('importe200',           0);
+		$caja->set('importe500',           0);
 		$caja->set('importe_retirado',     0);
 
 		$caja->save();

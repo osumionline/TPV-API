@@ -35,10 +35,28 @@ class getCierreCajaAction extends OAction {
 				$pagos_caja = $this->general_service->getPagosCajaDia($c);
 				$datos_cierre = [];
 
+				$datos_cierre['date']             = $date;
 				$datos_cierre['saldo_inicial']    = $c->get('importe_apertura');
 				$datos_cierre['importe_efectivo'] = $datos['venta_efectivo'];
 				$datos_cierre['salidas_caja']     = $pagos_caja['importe'];
 				$datos_cierre['saldo_final']      = $datos['ventas'] - $pagos_caja['importe'];
+				$datos_cierre['real']             = 0;
+				$datos_cierre['importe1c']        = $c->get('importe1c');
+				$datos_cierre['importe2c']        = $c->get('importe2c');
+				$datos_cierre['importe5c']        = $c->get('importe5c');
+				$datos_cierre['importe10c']       = $c->get('importe10c');
+				$datos_cierre['importe20c']       = $c->get('importe20c');
+				$datos_cierre['importe50c']       = $c->get('importe50c');
+				$datos_cierre['importe1']         = $c->get('importe1');
+				$datos_cierre['importe2']         = $c->get('importe2');
+				$datos_cierre['importe5']         = $c->get('importe5');
+				$datos_cierre['importe10']        = $c->get('importe10');
+				$datos_cierre['importe20']        = $c->get('importe20');
+				$datos_cierre['importe50']        = $c->get('importe50');
+				$datos_cierre['importe100']       = $c->get('importe100');
+				$datos_cierre['importe200']       = $c->get('importe200');
+				$datos_cierre['importe500']       = $c->get('importe500');
+				$datos_cierre['retirado']         = 0;
 				$datos_cierre['tipos']            = [];
 
 				foreach ($datos['tipos_pago'] as $tipo) {

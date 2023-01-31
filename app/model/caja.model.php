@@ -120,6 +120,111 @@ class Caja extends OModel {
 				comment: 'Importe real en efectivo en la caja al momento del cierre'
 			),
 			new OModelField(
+				name: 'importe1c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 1 centimo'
+			),
+			new OModelField(
+				name: 'importe2c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 2 centimos'
+			),
+			new OModelField(
+				name: 'importe5c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 5 centimos'
+			),
+			new OModelField(
+				name: 'importe10c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 10 centimos'
+			),
+			new OModelField(
+				name: 'importe20c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 20 centimos'
+			),
+			new OModelField(
+				name: 'importe50c',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 50 centimos'
+			),
+			new OModelField(
+				name: 'importe1',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 1 euro'
+			),
+			new OModelField(
+				name: 'importe2',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de monedas de 2 euros'
+			),
+			new OModelField(
+				name: 'importe5',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 5 euros'
+			),
+			new OModelField(
+				name: 'importe10',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 10 euros'
+			),
+			new OModelField(
+				name: 'importe20',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 20 euros'
+			),
+			new OModelField(
+				name: 'importe50',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 50 euros'
+			),
+			new OModelField(
+				name: 'importe100',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 100 euros'
+			),
+			new OModelField(
+				name: 'importe200',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 200 euros'
+			),
+			new OModelField(
+				name: 'importe500',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Número de billetes de 500 euros'
+			),
+			new OModelField(
 				name: 'importe_retirado',
 				type: OMODEL_FLOAT,
 				nullable: false,
