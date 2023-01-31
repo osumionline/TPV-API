@@ -18,15 +18,14 @@ class CodigoBarras extends OModel {
 				name: 'id_articulo',
 				type: OMODEL_NUM,
 				nullable: false,
-				default: null,
 				ref: 'articulo.id',
 				comment: 'Id del artículo al que pertenece el código de barras'
 			),
 			new OModelField(
 				name: 'codigo_barras',
-				type: OMODEL_NUM,
+				type: OMODEL_TEXT,
 				nullable: false,
-				default: null,
+				size: 20,
 				comment: 'Código de barras del artículo'
 			),
 			new OModelField(
