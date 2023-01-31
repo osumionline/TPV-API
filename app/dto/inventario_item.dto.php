@@ -14,7 +14,7 @@ class InventarioItemDTO implements ODTO {
 	private ?int    $stock = null;
 	private ?float  $puc = null;
 	private ?float  $pvp = null;
-	private ?int    $codigo_barras = null;
+	private ?string $codigo_barras = null;
 
 	public function getId(): ?int {
 		return $this->id;
@@ -64,10 +64,10 @@ class InventarioItemDTO implements ODTO {
 	private function setPvp(?float $pvp): void {
 		$this->pvp = $pvp;
 	}
-	public function getCodigoBarras(): ?int {
+	public function getCodigoBarras(): ?string {
 		return $this->codigo_barras;
 	}
-	private function setCodigoBarras(?int $codigo_barras): void {
+	private function setCodigoBarras(?string $codigo_barras): void {
 		$this->codigo_barras = $codigo_barras;
 	}
 
@@ -88,6 +88,6 @@ class InventarioItemDTO implements ODTO {
 		$this->setStock( $req->getParamInt('stock') );
 		$this->setPuc( $req->getParamFloat('puc') );
 		$this->setPvp( $req->getParamFloat('pvp') );
-		$this->setCodigoBarras( $req->getParamInt('codigoBarras') );
+		$this->setCodigoBarras( $req->getParamString('codigoBarras') );
 	}
 }
