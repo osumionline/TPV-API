@@ -3,6 +3,7 @@
 namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
+use OsumiFramework\OFW\DB\ODB;
 use OsumiFramework\App\Service\ventasService;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Articulo;
@@ -191,5 +192,23 @@ class syncService extends OService {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Función para obtener los datos con los que sincronizar el stock
+	 *
+	 * @return array Lista de localizadores, stock y pvp
+	 */
+	public function getSyncStock(): array {
+		$db = new ODB();
+		$sql = "SELECT `localizador`, `stock`, `pvp` FROM `articulo`";
+		$db->query($sql);
+		$ret = [];
+
+		while ($res = $db->next()) {
+			array_push($ret, $res['localizador'].'_'.$res['stock'].'_'.$res['pvp']);
+		}
+
+		return $ret;
 	}
 }
