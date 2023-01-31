@@ -35,6 +35,7 @@ class saveClienteAction extends OAction {
 			$cliente->set('telefono',              !is_null($data->getTelefono()) ? urldecode($data->getTelefono()) : null);
 			$cliente->set('email',                 !is_null($data->getEmail()) ? urldecode($data->getEmail()) : null);
 			$cliente->set('direccion',             !is_null($data->getDireccion()) ? urldecode($data->getDireccion()) : null);
+			$cliente->set('codigo_postal',         !is_null($data->getCodigoPostal()) ? urldecode($data->getCodigoPostal()) : null);
 			$cliente->set('poblacion',             !is_null($data->getPoblacion()) ? urldecode($data->getPoblacion()) : null);
 			$cliente->set('provincia',             $data->getProvincia());
 			$cliente->set('fact_igual',            $data->getFactIgual());
@@ -43,6 +44,7 @@ class saveClienteAction extends OAction {
 			$cliente->set('fact_telefono',         !is_null($data->getFactTelefono()) ? urldecode($data->getFactTelefono()) : null);
 			$cliente->set('fact_email',            !is_null($data->getFactEmail()) ? urldecode($data->getFactEmail()) : null);
 			$cliente->set('fact_direccion',        !is_null($data->getFactDireccion()) ? urldecode($data->getFactDireccion()) : null);
+			$cliente->set('fact_codigo_postal',    !is_null($data->getFactCodigoPostal()) ? urldecode($data->getFactCodigoPostal()) : null);
 			$cliente->set('fact_poblacion',        !is_null($data->getFactPoblacion()) ? urldecode($data->getFactPoblacion()) : null);
 			$cliente->set('fact_provincia',        $data->getFactProvincia());
 			$cliente->set('observaciones',         !is_null($data->getObservaciones()) ? urldecode($data->getObservaciones()) : null);
