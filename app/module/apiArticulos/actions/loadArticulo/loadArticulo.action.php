@@ -35,7 +35,7 @@ class loadArticuloAction extends OAction {
 			}
 			else {
 				$cb = new CodigoBarras();
-				if ($cb->find(['codigo_barras'=>$localizador])) {
+				if ($cb->find(['codigo_barras' => strval($localizador)])) {
 					$articulo->find(['id' => $cb->get('id_articulo')]);
 					$articulo_component->setValue('articulo', $articulo);
 				}
