@@ -159,12 +159,14 @@ class saveVentaAction extends OAction {
 						exit();
 					}
 
+					$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
+
 					$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 					$email = new OEmailSMTP();
 					$email->addRecipient(urldecode($data->getEmail()));
 					$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->get('id'));
 					$email->setMessage(strval($content));
-					$email->setFrom('hola@indomablestore.com');
+					$email->setFrom($email_conf['user']);
 					$email->addAttachment($ticket_pdf);
 					$email->send();
 				}

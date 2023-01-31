@@ -41,6 +41,8 @@ class sendTicketAction extends OAction {
 					exit();
 				}
 
+				$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
+
 				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
 
 				$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
@@ -48,7 +50,7 @@ class sendTicketAction extends OAction {
 				$email->addRecipient(urldecode($email_address));
 				$email->setSubject('TIENDA - Ticket venta '.$venta->get('id'));
 				$email->setMessage(strval($content));
-				$email->setFrom('hola@indomablestore.com');
+				$email->setFrom($email_conf['user']);
 				$email->addAttachment($ticket_pdf);
 				$email->send();
 			}

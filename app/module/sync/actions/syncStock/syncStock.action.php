@@ -8,7 +8,7 @@ use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
-	url: '/stock/:mode',
+	url: '/stock',
 	services: ['sync']
 )]
 class syncStockAction extends OAction {
@@ -27,8 +27,6 @@ class syncStockAction extends OAction {
 			exit();
 		}
 
-		$mode = $req->getParamString('mode');
-
 		$data = $this->sync_service->getSyncStock();
 
 		$header = array('alg'=> 'HS256', 'typ'=>'JWT');
@@ -42,7 +40,7 @@ class syncStockAction extends OAction {
 
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_URL, "https://".(($mode == 'dev') ? 'dev' : '')."api.indomablestore.com/admin/syncStock");
+		curl_setopt($ch, CURLOPT_URL, $app_data->getUrlApi()."syncStock");
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('token' => $token)));
 
