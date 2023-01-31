@@ -7,7 +7,7 @@ use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 
 #[OModuleAction(
-	url: '/sync-sale',
+	url: '/sale',
 	services: ['sync']
 )]
 class syncSaleAction extends OAction {
