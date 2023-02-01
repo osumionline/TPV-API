@@ -38,13 +38,13 @@ class savePedidoAction extends OAction {
 
 			$recepcionado = $pedido->get('recepcionado');
 
+			$cb_errors = [];
 			if (!$recepcionado) {
 				// Compruebo posibles códigos de barras
-				$cb_errors = [];
 				foreach ($data->getLineas() as $linea) {
 					if (!is_null($linea['codBarras'])) {
 						$cb = new CodigoBarras();
-						if ($cb->find(['codigo_barras' => $linea['codBarras']])) {
+						if ($cb->find(['codigo_barras' => strval($linea['codBarras'])])) {
 							array_push($cb_errors, $linea['codBarras'].' ('.urldecode($linea['nombreArticulo']).')');
 						}
 					}
@@ -78,9 +78,7 @@ class savePedidoAction extends OAction {
 			if ($data->getRecepcionado() && is_null($pedido->get('fecha_recepcionado'))) {
 				$pedido->set('fecha_recepcionado', date('Y-m-d H:i:s', time()));
 			}
-			if (!is_null($data->getObservaciones())) {
-				$pedido->set('observaciones', urldecode($data->getObservaciones()));
-			}
+			$pedido->set('observaciones', !is_null($data->getObservaciones()) ? urldecode($data->getObservaciones()) : null);
 
 			$pedido->save();
 			$data->setId($pedido->get('id'));
@@ -94,6 +92,7 @@ class savePedidoAction extends OAction {
 					$lp = new LineaPedido();
 					$lp->set('id_pedido', $pedido->get('id'));
 					$lp->set('id_articulo', $linea['idArticulo']);
+					$lp->set('nombre_articulo', urldecode($linea['nombreArticulo']));
 					$lp->set('codigo_barras', $linea['codBarras']);
 					$lp->set('unidades', $linea['unidades']);
 					$lp->set('palb', $linea['palb']);
@@ -114,14 +113,11 @@ class savePedidoAction extends OAction {
 						$articulo->set('re', $data->getRe() ? $linea['re'] : null);
 						$articulo->save();
 
-						$lp->set('nombre_articulo', $articulo->get('nombre'));
-						$lp->save();
-
 						// Si viene un nuevo código de barras se lo creo
 						if (!is_null($linea['codBarras'])) {
 							$cb = new CodigoBarras();
 							$cb->set('id_articulo', $linea['idArticulo']);
-							$cb->set('codigo_barras', $linea['codBarras']);
+							$cb->set('codigo_barras', strval($linea['codBarras']));
 							$cb->set('por_defecto', false);
 							$cb->save();
 						}
