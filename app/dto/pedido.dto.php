@@ -137,7 +137,6 @@ class PedidoDTO implements ODTO{
 	public function isValid(): bool {
 		return (
 			!is_null($this->getTipo()) &&
-			!is_null($this->getNum()) &&
 			!is_null($this->getFechaPago()) &&
 			!is_null($this->getFechaPedido()) &&
 			!is_null($this->getLineas()) &&
