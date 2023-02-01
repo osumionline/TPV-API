@@ -282,11 +282,11 @@
     </div>
 
     <div class="legal">
-      No se admitirán cambios ni devoluciones sin ticket o sin caja
+      No se admitirán cambios ni devoluciones sin ticket o de productos abiertos o en mal estado
       <br>
       Plazo máximo de 15 días para devoluciones
       <br>
-      No se admitirán devoluciones de complementos
+      No se admitirán devoluciones de congelados
       <br>
       Resto de condiciones en tienda
       <br>
