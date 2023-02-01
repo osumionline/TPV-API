@@ -48,7 +48,7 @@ class saveMarcaAction extends OAction {
 
 				$marca->save();
 
-				if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http')) {
+				if (!is_null($data->getFoto()) && !str_starts_with($data->getFoto(), 'http') && !str_starts_with($data->getFoto(), '/assets')) {
 					$ruta = $marca->getRutaFoto();
 					// Si ya tenía una imagen, primero la borro
 					if (file_exists($ruta)) {
