@@ -5,7 +5,7 @@
     <title>Ticket</title>
     <style type="text/css">
       html, body {
-        margin: 4px;
+        margin: 0;
         font-size: 10px;
         font-family: Helvetica;
       }
