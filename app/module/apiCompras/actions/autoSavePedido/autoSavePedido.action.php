@@ -70,6 +70,7 @@ class autoSavePedidoAction extends OAction {
 			$lp = new LineaPedido();
 			$lp->set('id_pedido', $pedido->get('id'));
 			$lp->set('id_articulo', $linea['idArticulo']);
+			$lp->set('nombre_articulo', urldecode($linea['nombreArticulo']));
 			$lp->set('codigo_barras', $linea['codBarras']);
 			$lp->set('unidades', $linea['unidades']);
 			$lp->set('palb', $linea['palb']);
