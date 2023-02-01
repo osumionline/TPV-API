@@ -1,3 +1,6 @@
+<?php
+  $descuento_total = 0;
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -212,7 +215,10 @@
         <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
         <td class="table-unidades">&nbsp;</td>
         <td class="table-pvp right descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
-        <td class="table-total right descuento">-<?php echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',') ?></td>
+        <td class="table-total right descuento">-<?php
+        echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',');
+        $descuento_total += ($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100));
+        ?></td>
       </tr>
 <?php endif ?>
 <?php endforeach ?>
@@ -236,6 +242,12 @@
         <td class="total-label">Cambio:</td>
         <td class="total-amount"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</td>
       </tr>
+  <?php endif ?>
+  <?php if ($descuento_total > 0): ?>
+    <tr>
+      <td class="total-label">Descuento:</td>
+      <td class="total-amount">-<?php echo number_format($descuento_total, 2, ',') ?> €</td>
+    </tr>
   <?php endif ?>
 <?php else: ?>
       <tr>
