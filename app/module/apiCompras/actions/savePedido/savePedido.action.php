@@ -60,7 +60,7 @@ class savePedidoAction extends OAction {
 				$pedido->set('id_proveedor', $data->getIdProveedor());
 				$pedido->set('metodo_pago', $data->getIdMetodoPago());
 				$pedido->set('tipo', $data->getTipo());
-				$pedido->set('num', $data->getNum());
+				$pedido->set('num', !is_null($data->getNum()) ? urldecode($data->getNum()) : null);
 				$pedido->set('importe', $data->getImporte());
 				$pedido->set('portes', $data->getPortes());
 				$pedido->set('descuento', $data->getDescuento());
