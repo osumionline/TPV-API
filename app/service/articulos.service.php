@@ -117,7 +117,9 @@ class articulosService extends OService {
 				$cod->update($res);
 				$art = $cod->getArticulo();
 
-				return ['status' => 'cb-used', 'message' => $cb['codigoBarras'].'/'.$art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+				if (is_null($art->get('deleted_at'))) {
+					return ['status' => 'cb-used', 'message' => $cb['codigoBarras'].'/'.$art->get('nombre').'/'.$art->getMarca()->get('nombre')];
+				}
 			}
 		}
 		return ['status' => 'ok', 'message' => ''];
