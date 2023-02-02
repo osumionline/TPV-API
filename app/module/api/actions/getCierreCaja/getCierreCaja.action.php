@@ -39,7 +39,7 @@ class getCierreCajaAction extends OAction {
 				$datos_cierre['saldo_inicial']    = $c->get('importe_apertura');
 				$datos_cierre['importe_efectivo'] = $datos['venta_efectivo'];
 				$datos_cierre['salidas_caja']     = $pagos_caja['importe'];
-				$datos_cierre['saldo_final']      = $datos['ventas'] - $pagos_caja['importe'];
+				$datos_cierre['saldo_final']      = ($datos_cierre['saldo_inicial'] + $datos_cierre['importe_efectivo']) - $pagos_caja['importe'];
 				$datos_cierre['real']             = 0;
 				$datos_cierre['importe1c']        = $c->get('importe1c');
 				$datos_cierre['importe2c']        = $c->get('importe2c');
