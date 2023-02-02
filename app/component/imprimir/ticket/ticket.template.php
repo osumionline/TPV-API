@@ -20,6 +20,11 @@
         text-align: center;
         line-height: 10px;
       }
+      .header-small {
+        text-align: center;
+        line-height: 10px;
+        font-size: 8px;
+      }
       .social {
         margin-top: 6px;
         text-align: center;
@@ -169,7 +174,8 @@
     <div class="logo">
       <img src="<?php echo $values['data']['logo'] ?>" width="100">
     </div>
-    <div class="header"><?php echo $values['data']['direccion'] ?></div>
+    <div class="header"><?php echo $values['data']['direccion'] ?> <?php echo $values['data']['poblacion'] ?></div>
+    <div class="header-small"><?php echo $values['data']['nombre_comercial'] ?></div>
     <div class="header">Tel: <?php echo $values['data']['telefono'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
     <div class="social">
 <?php foreach ($values['data']['social'] as $value): ?>
