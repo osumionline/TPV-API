@@ -23,7 +23,8 @@ null
     "importe100": <?php echo $values['datos']['importe100'] ?>,
     "importe200": <?php echo $values['datos']['importe200'] ?>,
     "importe500": <?php echo $values['datos']['importe500'] ?>,
-    "retirado": <?php echo $values['datos']['real'] ?>,
+    "retirado": <?php echo $values['datos']['retirado'] ?>,
+    "entrada": <?php echo $values['datos']['entrada'] ?>,
     "tipos": [
 <?php foreach ($values['datos']['tipos'] as $i => $tipo): ?>
       {

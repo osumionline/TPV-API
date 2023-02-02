@@ -57,6 +57,7 @@ class getCierreCajaAction extends OAction {
 				$datos_cierre['importe200']       = $c->get('importe200');
 				$datos_cierre['importe500']       = $c->get('importe500');
 				$datos_cierre['retirado']         = 0;
+				$datos_cierre['entrada']          = 0;
 				$datos_cierre['tipos']            = [];
 
 				foreach ($datos['tipos_pago'] as $tipo) {

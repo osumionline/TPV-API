@@ -232,6 +232,13 @@ class Caja extends OModel {
 				comment: 'Importe retirado de la caja al momento del cierre'
 			),
 			new OModelField(
+				name: 'importe_entrada',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'Importe añadido a la caja al momento del cierre'
+			),
+			new OModelField(
 				name: 'created_at',
 				type: OMODEL_CREATED,
 				comment: 'Fecha de creación del registro'

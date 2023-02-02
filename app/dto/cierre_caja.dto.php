@@ -28,6 +28,7 @@ class CierreCajaDTO implements ODTO {
   private ?int    $importe200       = null;
   private ?int    $importe500       = null;
   private ?float  $retirado         = null;
+  private ?float  $entrada          = null;
   private ?array  $tipos            = null;
 
   public function getDate(): ?string {
@@ -162,6 +163,12 @@ class CierreCajaDTO implements ODTO {
 	private function setRetirado(?float $retirado): void {
 		$this->retirado = $retirado;
 	}
+  public function getEntrada(): ?float {
+		return $this->entrada;
+	}
+	private function setEntrada(?float $entrada): void {
+		$this->entrada = $entrada;
+	}
   public function getTipos(): ?array {
 		return $this->tipos;
 	}
@@ -195,6 +202,7 @@ class CierreCajaDTO implements ODTO {
     $this->setImporte200( $req->getParamInt('importe200') );
     $this->setImporte500( $req->getParamInt('importe500') );
     $this->setRetirado( $req->getParamFloat('retirado') );
+    $this->setEntrada( $req->getParamFloat('entrada') );
     $this->setTipos( $req->getParam('tipos') );
   }
 }
