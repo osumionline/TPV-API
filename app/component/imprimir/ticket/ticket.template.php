@@ -175,8 +175,8 @@
       <img src="<?php echo $values['data']['logo'] ?>" width="100">
     </div>
     <div class="header"><?php echo $values['data']['direccion'] ?> <?php echo $values['data']['poblacion'] ?></div>
-    <div class="header-small"><?php echo $values['data']['nombre_comercial'] ?></div>
-    <div class="header">Tel: <?php echo $values['data']['telefono'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
+    <div class="header">Tel: <?php echo $values['data']['telefono'] ?></div>
+    <div class="header-small"><?php echo $values['data']['nombre_comercial'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
     <div class="social">
 <?php foreach ($values['data']['social'] as $value): ?>
       <div class="social-item">
