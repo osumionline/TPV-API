@@ -21,7 +21,7 @@ class printTicketAction extends OAction {
 	public function run(ORequest $req):void {
 		$status = 'ok';
 		$id = $req->getParamInt('id');
-		$regalo = $req->getParamBool('regalo');
+		$tipo = $req->getParamString('tipo');
 
 		if (is_null($id) || is_null($regalo)) {
 			$status = 'error';
@@ -30,7 +30,7 @@ class printTicketAction extends OAction {
 		if ($status == 'ok') {
 			$venta = new Venta();
 			if ($venta->find(['id' => $id])) {
-				$ticket_pdf = $this->imprimir_service->generateTicket($venta, $regalo);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, $tipo);
 				if (PHP_OS_FAMILY == 'Windows') {
 					$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_pdf).'" '.$this->getConfig()->getExtra('impresora');
 				}

@@ -25,7 +25,7 @@ class ticketTask extends OTask {
 		}
 
 		$id = $options[0];
-		$regalo = array_key_exists(1, $options);
+		$regalo = array_key_exists(1, $options) ? $options[1] : 'venta';
 
 		$venta = new Venta();
 		if (!$venta->find(['id' => $id])) {

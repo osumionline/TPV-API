@@ -43,7 +43,7 @@ class sendTicketAction extends OAction {
 
 				$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
 
-				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
 
 				$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 				$email = new OEmailSMTP();

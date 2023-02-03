@@ -135,7 +135,7 @@ class saveVentaAction extends OAction {
 			$ticket_regalo_pdf = null;
 
 			if ($data->getImprimir() == 'si' || $data->getImprimir() == 'regalo' || $data->getImprimir() == 'email') {
-				$ticket_pdf = $this->imprimir_service->generateTicket($venta, false);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
 				if ($data->getImprimir() == 'si') {
 					if (PHP_OS_FAMILY == 'Windows') {
 						$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_pdf).'" '.$this->getConfig()->getExtra('impresora');
@@ -148,7 +148,7 @@ class saveVentaAction extends OAction {
 				}
 
 				if ($data->getImprimir() == 'regalo') {
-					$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, true);
+					$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, 'regalo');
 					if (PHP_OS_FAMILY == 'Windows') {
 						$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_regalo_pdf).'" '.$this->getConfig()->getExtra('impresora');
 					}

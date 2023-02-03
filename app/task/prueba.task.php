@@ -50,7 +50,7 @@ class pruebaTask extends OTask {
 
 				echo "VENTA ACTUALIZADA CON DATOS TICKET BAI.\n";
 
-				$this->imprimir_service->generateTicket($venta, false, false);
+				$this->imprimir_service->generateTicket($venta, 'venta', false);
 			}
 			else {
 				echo "OCURRIÓ UN ERROR:\n";

@@ -103,6 +103,12 @@
         font-weight: bold;
         margin: 8px 0;
       }
+      .reserva {
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 8px 0;
+      }
       .total {
         width: 100%;
         margin-top: 4px;
@@ -198,9 +204,9 @@
     <table class="venta">
       <thead>
         <tr>
-          <th class="<?php echo (!$values['data']['regalo']) ? 'table-articulo' : 'table-articulo-wide' ?> left">Artículo</th>
-          <th class="<?php echo (!$values['data']['regalo']) ? 'table-unidades center' : 'table-unidades-wide' ?>">Ud.</th>
-          <?php if (!$values['data']['regalo']): ?>
+          <th class="<?php echo ($values['data']['tipo'] !== 'regalo') ? 'table-articulo' : 'table-articulo-wide' ?> left">Artículo</th>
+          <th class="<?php echo ($values['data']['tipo'] !== 'regalo') ? 'table-unidades center' : 'table-unidades-wide' ?>">Ud.</th>
+          <?php if ($values['data']['tipo'] !== 'regalo'): ?>
           <th class="table-pvp right">PVP (€)</th>
           <th class="table-total right">Total (€)</th>
           <?php endif ?>
@@ -210,13 +216,13 @@
 <?php foreach ($values['data']['lineas'] as $i => $linea): ?>
       <tr>
         <td class="table-articulo left"><?php echo $linea->get('nombre_articulo') ?></td>
-        <td class="<?php echo (!$values['data']['regalo']) ? 'table-unidades center' : 'table-unidades-wide' ?>"><?php echo $linea->get('unidades') ?></td>
-        <?php if (!$values['data']['regalo']): ?>
+        <td class="<?php echo ($values['data']['tipo'] !== 'regalo') ? 'table-unidades center' : 'table-unidades-wide' ?>"><?php echo $linea->get('unidades') ?></td>
+        <?php if ($values['data']['tipo'] !== 'regalo'): ?>
         <td class="table-pvp right"><?php echo number_format($linea->get('pvp'), 2, ',') ?></td>
         <td class="table-total right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
       <?php endif ?>
       </tr>
-<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && !$values['data']['regalo']): ?>
+<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && $values['data']['tipo'] !== 'regalo'): ?>
       <tr>
         <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
         <td class="table-unidades">&nbsp;</td>
@@ -230,7 +236,7 @@
 <?php endforeach ?>
       </tbody>
     </table>
-<?php if (!$values['data']['regalo']): ?>
+<?php if ($values['data']['tipo'] == 'venta' || $values['data']['tipo'] == 'reserva'): ?>
     <table class="total">
       <tr class="total-header">
         <td class="total-label">Total:</td>
@@ -291,7 +297,8 @@
       </tr>
 <?php endforeach ?>
     </table>
-<?php else: ?>
+<?php endif ?>
+<?php if ($values['data']['tipo'] == 'regalo'): ?>
     <div class="regalo">TICKET REGALO</div>
 <?php endif ?>
 
@@ -299,6 +306,10 @@
       <img src="<?php echo $values['data']['qr'] ?>" width="80">
     </div>
 
+<?php if ($values['data']['tipo'] == 'reserva'): ?>
+<div class="reserva">RESERVA</div>
+<?php endif ?>
+<?php if ($values['data']['tipo'] !== 'reserva'): ?>
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o de productos abiertos o en mal estado
       <br>
@@ -312,6 +323,7 @@
       <br>
       ESKERRIK ASKO ETORTZEAGATIK
     </div>
+<?php endif ?>
 <?php if (!is_null($values['data']['tbai_qr'])) : ?>
     <div class="qr">
       <label>TICKET BAI</label>

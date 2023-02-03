@@ -21,23 +21,19 @@ class imprimirService extends OService {
 	 *
 	 * @param Venta $venta Objeto venta con todos los datos de la venta
 	 *
-	 * @param bool $regalo Indica si es un ticket regalo
+	 * @param string $tipo Indica si es un ticket de venta, regalo o reserva
 	 *
 	 * @param bool $silent Indica si deben mostrarse mensajes, sirve para la tarea ticket
 	 *
 	 * @return string Ruta al archivo PDF generado
 	 */
-	public function generateTicket(Venta $venta, bool $regalo = false, bool $silent = true): string {
+	public function generateTicket(Venta $venta, string $tipo = 'venta', bool $silent = true): string {
 		require_once $this->getConfig()->getDir('ofw_lib').'dompdf/autoload.inc.php';
 		require_once $this->getConfig()->getDir('ofw_lib').'phpqrcode/qrlib.php';
 		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 
 		if (!$silent) {
-			echo "Creo ticket de venta ".$venta->get('id')."\n";
-			if ($regalo) {
-				echo "TICKET REGALO\n";
-			}
-			echo "\n";
+			echo "Creo ticket de venta ".$venta->get('id')." (".$tipo.")\n\n";
 		}
 
 		// Cargo archivo de configuración
@@ -49,14 +45,14 @@ class imprimirService extends OService {
 		}
 
 		if ($silent) {
-			$route = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'.html';
-			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').($regalo ? '-regalo' : '').'.pdf';
-			$route_qr = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').($regalo ? '-qr' : '').'.png';
+			$route = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'-'.$tipo.'.html';
+			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'-'.$tipo.'.pdf';
+			$route_qr = $this->getConfig()->getDir('ofw_tmp').'ticket_'.$venta->get('id').'-'.$tipo.'-qr.png';
 		}
 		else {
-			$route = $this->getConfig()->getDir('web').'ticket.html';
-			$route_pdf = $this->getConfig()->getDir('web').'ticket'.($regalo ? '-regalo' : '').'.pdf';
-			$route_qr = $this->getConfig()->getDir('web').'ticket'.($regalo ? '-regalo' : '').'-qr.png';
+			$route = $this->getConfig()->getDir('web').'ticket-'.$tipo.'.html';
+			$route_pdf = $this->getConfig()->getDir('web').'ticket-'.$tipo.'.pdf';
+			$route_qr = $this->getConfig()->getDir('web').'ticket-'.$tipo.'-qr.png';
 		}
 		if (file_exists($route)) {
 			unlink($route);
@@ -118,7 +114,7 @@ class imprimirService extends OService {
 			'forma_pago'       => $venta->getNombreTipoPago(),
 			'cliente'          => $venta->getCliente(),
 			'employee'         => (!is_null($venta->getEmpleado())) ? $venta->getEmpleado()->get('nombre') : '-',
-			'regalo'           => $regalo,
+			'tipo'             => $tipo,
 			'ivas'             => $ivas,
 			'qr'               => $qr,
 			'tbai_qr'          => $venta->get('tbai_qr'),
