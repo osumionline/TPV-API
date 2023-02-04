@@ -5,7 +5,7 @@ namespace OsumiFramework\App\Module;
 use OsumiFramework\OFW\Routing\OModule;
 
 #[OModule(
-	actions: ['searchClientes', 'saveCliente', 'getEstadisticasCliente', 'getClientes', 'deleteCliente', 'asignarCliente', 'getCliente', 'getVentasCliente', 'getFacturasCliente', 'saveFactura', 'deleteFactura', 'getFacturaCliente', 'saveFacturaFromVenta', 'sendFactura'],
+	actions: ['searchClientes', 'saveCliente', 'getEstadisticasCliente', 'getClientes', 'deleteCliente', 'asignarCliente', 'getCliente', 'getVentasCliente', 'getFacturasCliente', 'saveFactura', 'deleteFactura', 'getFacturaCliente', 'saveFacturaFromVenta', 'sendFactura', 'saveReserva'],
 	type: 'json',
 	prefix: '/api-clientes'
 )]
