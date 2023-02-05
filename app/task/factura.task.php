@@ -9,9 +9,9 @@ use OsumiFramework\App\Service\imprimirService;
 class facturaTask extends OTask {
 	private ?imprimirService $imprimir_service = null;
 
-  function __construct() {
+	function __construct() {
 		$this->imprimir_service = new imprimirService();
-  }
+	}
 
 	public function __toString() {
 		return "factura: Genera el PDF de la factura indicada.";
