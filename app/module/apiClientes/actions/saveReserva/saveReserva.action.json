@@ -1,1 +1,6 @@
-¡La nueva acción <strong>saveReserva</strong> funciona!
+{
+	"status": "{{status}}",
+	"id": {{id}},
+	"importe": {{importe}},
+	"cambio": null
+}
