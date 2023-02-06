@@ -28,6 +28,13 @@ class deleteReservaAction extends OAction {
 		if ($status == 'ok') {
 			$reserva = new Reserva();
 			if ($reserva->find(['id' => $id])) {
+				$lineas = $reserva->getLineas();
+				foreach ($lineas as $linea) {
+					$articulo = $linea->getArticulo();
+					$articulo->set('stock', $articulo->get('stock') + $linea->get('unidades'));
+					$articulo->save();
+				}
+				// recupero el stock
 				$reserva->deleteFull();
 			}
 			else {

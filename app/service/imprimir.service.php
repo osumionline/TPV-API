@@ -278,4 +278,22 @@ class imprimirService extends OService {
 
 		return $route_pdf;
 	}
+
+	/**
+	 * Función para imprimir un ticket previamente generado
+	 *
+	 * @param string $ticket_pdf Ruta al archivo PDF
+	 *
+	 * @rreturn void
+	 */
+	public function imprimirTicket(string $ticket_pdf): void {
+		if (PHP_OS_FAMILY == 'Windows') {
+			$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_pdf).'" '.$this->getConfig()->getExtra('impresora');
+		}
+		else {
+			$comando = "lpr -P ".$this->getConfig()->getExtra('impresora')." ".$ticket_pdf." &";
+		}
+		$this->getLog()->debug($comando);
+		exec($comando, $salida);
+	}
 }

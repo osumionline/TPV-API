@@ -10,6 +10,7 @@ use OsumiFramework\App\DTO\VentaDTO;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Model\Reserva;
 use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
 use OsumiFramework\App\Utils\AppData;
 
@@ -53,12 +54,19 @@ class saveVentaAction extends OAction {
 			$venta->save();
 
 			$app_data = $this->general_service->getAppData();
+			$from_reserva = null;
+			$linea_reserva = null;
 
 			foreach ($data->getLineas() as $linea) {
 				$nombre = $linea['descripcion'];
 				$puc = 0;
 				$pvp = $linea['pvp'];
 				$iva = $linea['iva'];
+
+				if (!is_null($linea['fromReserva'])) {
+					$from_reserva = $linea['fromReserva'];
+					$linea_reserva = $this->ventas_service->getLineaReserva($from_reserva, $linea['idArticulo']);
+				}
 
 				if ($linea['idArticulo'] != 0) {
 					$art = new Articulo();
@@ -96,7 +104,13 @@ class saveVentaAction extends OAction {
 
 				// Reduzco el stock
 				if ($linea['idArticulo'] != 0) {
-					$art->set('stock', $art->get('stock') - $linea['cantidad']);
+					$restar = $linea['cantidad'];
+
+					// Si la línea es de una reserva, hay que recuperar el stock
+					if (!is_null($linea_reserva)) {
+						$restar = $linea['cantidad'] - $linea_reserva->get('unidades');
+					}
+					$art->set('stock', $art->get('stock') - $restar);
 					$art->save();
 
 					// Si la línea proviene de una venta, es una devolución, por lo que hay que marcar cuantas unidades se han devuelto de esa línea original
@@ -107,6 +121,13 @@ class saveVentaAction extends OAction {
 						$lv_dev->save();
 					}
 				}
+			}
+
+			// Si la venta era de una reserva, luego tengo que borrarla
+			if (!is_null($from_reserva)) {
+				$reserva = new Reserva();
+				$reserva->find(['id' => $from_reserva]);
+				$reserva->deleteFull();
 			}
 
 			// TicketBai
@@ -137,26 +158,12 @@ class saveVentaAction extends OAction {
 			if ($data->getImprimir() == 'si' || $data->getImprimir() == 'regalo' || $data->getImprimir() == 'email') {
 				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
 				if ($data->getImprimir() == 'si') {
-					if (PHP_OS_FAMILY == 'Windows') {
-						$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_pdf).'" '.$this->getConfig()->getExtra('impresora');
-					}
-					else {
-						$comando = "lpr -P ".$this->getConfig()->getExtra('impresora')." ".$ticket_pdf." &";
-					}
-					$this->getLog()->debug($comando);
-					exec($comando, $salida);
+					$this->imprimir_service->imprimirTicket($ticket_pdf);
 				}
 
 				if ($data->getImprimir() == 'regalo') {
 					$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, 'regalo');
-					if (PHP_OS_FAMILY == 'Windows') {
-						$comando =  '"'.$this->getConfig()->getExtra('foxit').'" -t "'.str_ireplace('/', "\\", $ticket_regalo_pdf).'" '.$this->getConfig()->getExtra('impresora');
-					}
-					else {
-						$comando = "lpr -P ".$this->getConfig()->getExtra('impresora')." ".$ticket_regalo_pdf." &";
-					}
-					$this->getLog()->debug($comando);
-					exec($comando, $salida);
+					$this->imprimir_service->imprimirTicket($ticket_regalo_pdf);
 				}
 
 				if ($data->getImprimir() == 'email') {

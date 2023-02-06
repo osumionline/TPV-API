@@ -12,7 +12,7 @@ use OsumiFramework\App\Model\Articulo;
 
 #[OModuleAction(
 	url: '/save-reserva',
-	services: ['general']
+	services: ['general', 'ventas', 'imprimir']
 )]
 class saveReservaAction extends OAction {
 	/**
@@ -83,6 +83,10 @@ class saveReservaAction extends OAction {
 					$art->save();
 				}
 			}
+
+			//$venta = $this->ventas_service->getVentaFromReserva($reserva);
+			//$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva');
+			//$this->imprimir_service->imprimirTicket($ticket_pdf);
 
 			$id = $reserva->get('id');
 			$importe = $reserva->get('total');
