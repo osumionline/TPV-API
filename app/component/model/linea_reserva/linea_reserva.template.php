@@ -5,6 +5,8 @@ null
 	"id": <?php echo $values['lineareserva']->get('id') ?>,
 	"idArticulo": <?php echo is_null($values['lineareserva']->get('id_articulo')) ? 'null' : $values['lineareserva']->get('id_articulo') ?>,
 	"nombreArticulo": "<?php echo is_null($values['lineareserva']->get('nombre_articulo')) ? 'null' : urlencode($values['lineareserva']->get('nombre_articulo')) ?>",
+	"localizador": <?php echo is_null($values['lineareserva']->get('id_articulo')) ? 'null' : $values['lineareserva']->getArticulo()->get('localizador') ?>,
+	"marca": <?php echo is_null($values['lineareserva']->get('id_articulo')) ? 'null' : '"'.urlencode($values['lineareserva']->getArticulo()->getMarca()->get('nombre')).'"' ?>,
 	"puc": <?php echo $values['lineareserva']->get('puc') ?>,
 	"pvp": <?php echo $values['lineareserva']->get('pvp') ?>,
 	"iva": <?php echo $values['lineareserva']->get('iva') ?>,

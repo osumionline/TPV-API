@@ -8,6 +8,7 @@ use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Factura;
 use OsumiFramework\App\Model\FacturaVenta;
+use OsumiFramework\App\Model\Reserva;
 use OsumiFramework\App\Utils\AppData;
 
 class clientesService extends OService {
@@ -266,5 +267,25 @@ class clientesService extends OService {
 		}
 
 		return $app_data->getFacturaInicial();
+	}
+
+	/**
+	 * Función para obtener la lista de reservas
+	 *
+	 * @return array Lista de reservas
+	 */
+	public function getReservas(): array {
+		$db = new ODB();
+		$sql = "SELECT * FROM `reserva` ORDER BY `created_at` DESC";
+		$db->query($sql);
+		$list = [];
+
+		while ($res = $db->next()) {
+			$reserva = new Reserva();
+			$reserva->update($res);
+			array_push($list, $reserva);
+		}
+
+		return $list;
 	}
 }

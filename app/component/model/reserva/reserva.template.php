@@ -10,7 +10,7 @@ else { ?>
 {
 	"id": <?php echo $values['reserva']->get('id') ?>,
 	"idCliente": <?php echo is_null($values['reserva']->get('id_cliente')) ? 'null' : $values['reserva']->get('id_cliente') ?>,
-	"cliente": <?php echo is_null($values['reserva']->get('id_cliente')) ? 'null' : '"'.urlencode($values['reserva']->getCliente()->getNombre()).'"' ?>,
+	"cliente": <?php echo is_null($values['reserva']->get('id_cliente')) ? 'null' : '"'.urlencode($values['reserva']->getCliente()->get('nombre_apellidos')).'"' ?>,
 	"total": <?php echo $values['reserva']->get('total') ?>,
 	"fecha": "<?php echo $values['reserva']->get('created_at', 'd/m/Y H:i') ?>",
 	"lineas": [<?php echo new LineaReservaListComponent(['list' => $values['reserva']->getLineas()]) ?>]
