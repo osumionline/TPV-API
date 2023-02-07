@@ -25,7 +25,7 @@ class saveReservaAction extends OAction {
 		$status  = 'ok';
 		$id      = 'null';
 		$importe = 'null';
-		
+
 		if (!$data->isValid()) {
 			$status = 'error';
 		}
@@ -37,7 +37,7 @@ class saveReservaAction extends OAction {
 			$reserva->save();
 
 			$app_data = $this->general_service->getAppData();
-			
+
 			foreach ($data->getLineas() as $linea) {
 				$nombre = $linea['descripcion'];
 				$puc = 0;
@@ -84,14 +84,14 @@ class saveReservaAction extends OAction {
 				}
 			}
 
-			//$venta = $this->ventas_service->getVentaFromReserva($reserva);
-			//$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva');
-			//$this->imprimir_service->imprimirTicket($ticket_pdf);
+			$venta = $this->ventas_service->getVentaFromReserva($reserva);
+			$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva');
+			$this->imprimir_service->imprimirTicket($ticket_pdf);
 
 			$id = $reserva->get('id');
 			$importe = $reserva->get('total');
 		}
-		
+
 		$this->getTemplate()->add('status',  $status);
 		$this->getTemplate()->add('id',      $id);
 		$this->getTemplate()->add('importe', $importe);

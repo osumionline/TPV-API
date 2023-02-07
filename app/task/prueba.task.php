@@ -3,14 +3,16 @@
 namespace OsumiFramework\App\Task;
 
 use OsumiFramework\OFW\Core\OTask;
-use OsumiFramework\App\Model\Venta;
-use OsumiFramework\OFW\Plugins\OTicketBai;
+use OsumiFramework\App\Model\Reserva;
+use OsumiFramework\App\Service\ventasService;
 use OsumiFramework\App\Service\imprimirService;
 
 class pruebaTask extends OTask {
+	private ?ventasService   $ventas_service = null;
 	private ?imprimirService $imprimir_service = null;
 
 	function __construct() {
+		$this->ventas_service   = new ventasService();
 		$this->imprimir_service = new imprimirService();
 	}
 
@@ -20,46 +22,20 @@ class pruebaTask extends OTask {
 
 	public function run(array $options=[]): void {
 		if (count($options) < 1) {
-			echo "\nERROR: Tienes que indicar el id de la venta de la que generar el ticket.\n\n";
-			echo "  ofw ticket 1\n\n";
+			echo "\nERROR: Tienes que indicar el id de la reserva de la que generar el ticket.\n\n";
+			echo "  ofw prueba 1\n\n";
 			exit();
 		}
 
 		$id = $options[0];
 
-		$venta = new Venta();
-		if (!$venta->find(['id' => $id])) {
-			echo "\nERROR: No se ha encontrado la venta indicada.\n\n";
+		$reserva = new Reserva();
+		if (!$reserva->find(['id' => $id])) {
+			echo "\nERROR: No se ha encontrado la reserva indicada.\n\n";
 			exit();
 		}
 
-		$tbai = new OTicketBai(false);
-		var_dump($tbai);
-		echo "----------------\n\n";
-
-		if ($tbai->checkStatus()) {
-			echo "STATUS TBAI: OK\n";
-			$response = $tbai->nuevoTbai($venta->getDatosTBai());
-			var_dump($response);
-			echo "----------------\n\n";
-			if (is_array($response)) {
-				$venta->set('tbai_huella', $response['huella_tbai']);
-				$venta->set('tbai_qr',     $response['qr']);
-				$venta->set('tbai_url',    $response['url']);
-				$venta->save();
-
-				echo "VENTA ACTUALIZADA CON DATOS TICKET BAI.\n";
-
-				$this->imprimir_service->generateTicket($venta, 'venta', false);
-			}
-			else {
-				echo "OCURRIÓ UN ERROR:\n";
-				echo $response;
-				echo "\n";
-			}
-		}
-		else {
-			echo "STATUS TBAI: ERROR\n";
-		}
+		$venta = $this->ventas_service->getVentaFromReserva($reserva);
+		$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva', false);
 	}
 }

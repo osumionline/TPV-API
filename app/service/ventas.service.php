@@ -43,7 +43,7 @@ class ventasService extends OService {
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Función para obtener un nuevo número de venta
 	 *
@@ -102,22 +102,30 @@ class ventasService extends OService {
 	public function getVentaFromReserva(Reserva $reserva): Venta {
 		$venta = new Venta();
 
-		$venta->set('id',         $reserva->get('id'));
-		$venta->set('created_at', $reserva->get('created_at'));
+		$venta->set('id',             $reserva->get('id'));
+		$venta->set('total',          $reserva->get('total'));
+		$venta->get('pago_mixto',     0);
+		$venta->get('entregado',      0);
+		$venta->get('entregado_otro', 0);
+		$venta->get('id_tipo_pago',   null);
+		$venta->get('id_empleado',    null);
+		$venta->get('tbai_qr',        null);
+		$venta->get('tbai_huella',    null);
+		$venta->set('created_at',     $reserva->get('created_at'));
 
 		$lineas = $reserva->getLineas();
 		foreach ($lineas as $linea) {
 			$linea_venta = new LineaVenta();
-			$linea_venta->set('id_venta',        $reserva->get('id'));
-			$linea_venta->set('id_articulo',     $reserva->get('id_articulo'));
-			$linea_venta->set('nombre_articulo', $reserva->get('nombre_articulo'));
-			$linea_venta->set('puc',             $reserva->get('puc'));
-			$linea_venta->set('pvp',             $reserva->get('pvp'));
-			$linea_venta->set('iva',             $reserva->get('iva'));
-			$linea_venta->set('importe',         $reserva->get('importe'));
-			$linea_venta->set('descuento',       $reserva->get('descuento'));
+			$linea_venta->set('id_venta',        $linea->get('id'));
+			$linea_venta->set('id_articulo',     $linea->get('id_articulo'));
+			$linea_venta->set('nombre_articulo', $linea->get('nombre_articulo'));
+			$linea_venta->set('puc',             $linea->get('puc'));
+			$linea_venta->set('pvp',             $linea->get('pvp'));
+			$linea_venta->set('iva',             $linea->get('iva'));
+			$linea_venta->set('importe',         $linea->get('importe'));
+			$linea_venta->set('descuento',       $linea->get('descuento'));
 			$linea_venta->set('devuelto',        0);
-			$linea_venta->set('unidades',        $reserva->get('unidades'));
+			$linea_venta->set('unidades',        $linea->get('unidades'));
 			$venta->addLinea($linea_venta);
 		}
 

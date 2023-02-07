@@ -196,10 +196,12 @@
         <td>Fecha: <?php echo $values['data']['date'] ?></td>
         <td class="right">Hora: <?php echo $values['data']['hour'] ?></td>
       </tr>
+<?php if ($values['data']['tipo'] !== 'reserva'): ?>
       <tr>
         <td>F. Simp: <?php echo $values['data']['timestamp'].'-'.$values['data']['num_venta'] ?></td>
         <td class="right">Le atendió: <?php echo $values['data']['employee'] ?></td>
       </tr>
+<?php endif ?>
     </table>
     <table class="venta">
       <thead>
@@ -242,26 +244,27 @@
         <td class="total-label">Total:</td>
         <td class="total-amount"><?php echo number_format($values['data']['total'], 2, ',') ?> €</td>
       </tr>
-<?php if (!$values['data']['mixto']): ?>
+  <?php if ($values['data']['tipo'] !== 'reserva'): ?>
+    <?php if (!$values['data']['mixto']): ?>
       <tr>
         <td class="total-label"><?php echo $values['data']['forma_pago'] ?>:</td>
         <td class="total-amount">
           <?php echo number_format(is_null($values['data']['id_tipo_pago']) ? $values['data']['entregado'] : $values['data']['total'], 2, ',') ?> €
         </td>
       </tr>
-  <?php if (is_null($values['data']['id_tipo_pago'])): ?>
+      <?php if (is_null($values['data']['id_tipo_pago'])): ?>
       <tr>
         <td class="total-label">Cambio:</td>
         <td class="total-amount"><?php echo number_format($values['data']['entregado'] - $values['data']['total'], 2, ',') ?> €</td>
       </tr>
-  <?php endif ?>
-  <?php if ($descuento_total > 0): ?>
+      <?php endif ?>
+      <?php if ($descuento_total > 0): ?>
     <tr>
       <td class="total-label">Descuento:</td>
       <td class="total-amount">-<?php echo number_format($descuento_total, 2, ',') ?> €</td>
     </tr>
-  <?php endif ?>
-<?php else: ?>
+      <?php endif ?>
+    <?php else: ?>
       <tr>
         <td class="total-label"><?php echo $values['data']['forma_pago'] ?>:</td>
         <td class="total-amount"><?php echo number_format($values['data']['entregado_otro'], 2, ',') ?> €</td>
@@ -270,13 +273,14 @@
         <td class="total-label">Efectivo:</td>
         <td class="total-amount"><?php echo number_format($values['data']['entregado'], 2, ',') ?> €</td>
       </tr>
-  <?php if ($values['data']['total'] != ($values['data']['entregado'] + $values['data']['entregado_otro'])): ?>
+      <?php if ($values['data']['total'] != ($values['data']['entregado'] + $values['data']['entregado_otro'])): ?>
       <tr>
         <td class="total-label">Cambio:</td>
         <td class="total-amount"><?php echo number_format(($values['data']['entregado'] + $values['data']['entregado_otro']) - $values['data']['total'], 2, ',') ?> €</td>
       </tr>
+      <?php endif ?>
+    <?php endif ?>
   <?php endif ?>
-<?php endif ?>
     </table>
 <?php if (!is_null($values['data']['cliente'])): ?>
     <div class="cliente">Cliente: <?php echo $values['data']['cliente']->get('nombre_apellidos') ?></div>
@@ -302,14 +306,14 @@
     <div class="regalo">TICKET REGALO</div>
 <?php endif ?>
 
-    <div class="qr">
-      <img src="<?php echo $values['data']['qr'] ?>" width="80">
-    </div>
-
 <?php if ($values['data']['tipo'] == 'reserva'): ?>
 <div class="reserva">RESERVA</div>
 <?php endif ?>
 <?php if ($values['data']['tipo'] !== 'reserva'): ?>
+    <div class="qr">
+      <img src="<?php echo $values['data']['qr'] ?>" width="80">
+    </div>
+
     <div class="legal">
       No se admitirán cambios ni devoluciones sin ticket o de productos abiertos o en mal estado
       <br>
