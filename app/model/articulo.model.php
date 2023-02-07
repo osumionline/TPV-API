@@ -290,6 +290,20 @@ class Articulo extends OModel {
 		return $ret;
 	}
 
+	/**
+	 * Función para saber si un artículo tiene algún código de barras distinto del por defecto
+	 *
+	 * @return bool Indica si tiene o no un código de barras distinto del por defecto
+	 */
+	public function hasCodigoBarras(): bool {
+		foreach ($this->getCodigosBarras() as $cb) {
+      if (!$cb->get('por_defecto')) {
+        return true;
+      }
+    }
+    return false;
+	}
+
 	private ?array $fotos = null;
 
 	/**
