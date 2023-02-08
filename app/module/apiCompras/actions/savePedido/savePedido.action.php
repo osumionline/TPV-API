@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\LineaPedido;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\VistaPedido;
 use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
 	url: '/save-pedido',
@@ -23,12 +24,23 @@ class savePedidoAction extends OAction {
 	 * @return void
 	 */
 	public function run(PedidoDTO $data):void {
+		require_once $this->getConfig()->getDir('app_utils').'AppData.php';
 		$status  = 'ok';
 		$message = '';
 
 		if (!$data->isValid()) {
 			$status = 'error';
 		}
+
+		$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+		$app_data = new AppData($app_data_file);
+		if (!$app_data->getLoaded()) {
+			echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+			exit();
+		}
+
+		$iva_list = $app_data->getIvaList();
+		$re_list  = $app_data->getReList();
 
 		if ($status == 'ok') {
 			$pedido = new Pedido();
@@ -103,7 +115,8 @@ class savePedidoAction extends OAction {
 						$lp->set('palb', $linea['palb']);
 						$lp->set('pvp', $linea['pvp']);
 						$lp->set('iva', $linea['iva']);
-						$lp->set('re', $data->getRe() ? $linea['re'] : null);
+						$ind = array_search($linea['iva'], $iva_list);
+						$lp->set('re', $data->getRe() ? $re_list[$ind] : 0);
 						$lp->set('descuento', $linea['descuento']);
 						$lp->save();
 
@@ -115,7 +128,8 @@ class savePedidoAction extends OAction {
 							$articulo->set('palb', $linea['palb']);
 							$articulo->set('pvp', $linea['pvp']);
 							$articulo->set('iva', $linea['iva']);
-							$articulo->set('re', $data->getRe() ? $linea['re'] : null);
+							$ind = array_search($linea['iva'], $iva_list);
+							$articulo->set('re', $re_list[$ind]);
 							$articulo->save();
 
 							// Si viene un nuevo código de barras se lo creo
