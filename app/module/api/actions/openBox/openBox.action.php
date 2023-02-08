@@ -108,7 +108,7 @@ class openBoxAction extends OAction {
 			}
 
 			// Al abrir una caja nueva el importe que debería haber en caja es el que había al cerrar la anterior
-			$caja->set('importe_apertura', $previous_caja->get('importe_cierre_real') - $previous_caja->get('importe_retirado') + $previous_caja->get('importe_entrada'));
+			$caja->set('importe_apertura', $previous_caja->get('importe_cierre_real') + $previous_caja->get('importe_entrada'));
 			$caja->save();
 		}
 

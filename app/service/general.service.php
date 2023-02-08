@@ -250,7 +250,7 @@ class generalService extends OService {
 		$db = new ODB();
 		$cierre = $caja->get('cierre', 'Y-m-d H:i:s');
 		if (is_null($caja->get('cierre'))) {
-			$cierre = $caja->get('apertura', 'Y-m-d').' 23:59:59';
+			$cierre = date('Y-m-d', time()).' 23:59:59';
 		}
 		$sql = "SELECT * FROM `pago_caja` WHERE `created_at` BETWEEN ? AND ?";
 		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $cierre]);
@@ -280,7 +280,7 @@ class generalService extends OService {
 		$db = new ODB();
 		$cierre = $caja->get('cierre', 'Y-m-d H:i:s');
 		if (is_null($caja->get('cierre'))) {
-			$cierre = $caja->get('apertura', 'Y-m-d').' 23:59:59';
+			$cierre = date('Y-m-d', time()).' 23:59:59';
 		}
 		$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN ? AND ?";
 		$db->query($sql, [$caja->get('apertura', 'Y-m-d H:i:s'), $cierre]);

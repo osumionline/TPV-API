@@ -31,7 +31,7 @@ class saveSalidaCajaAction extends OAction {
 				$pc->find(['id' => $data->getId()]);
 			}
 			$pc->set('concepto', urldecode($data->getConcepto()));
-			$pc->set('descripcion', urldecode($data->getDescripcion()));
+			$pc->set('descripcion', !is_null($data->getDescripcion()) ? urldecode($data->getDescripcion()) : null);
 			$pc->set('importe', $data->getImporte());
 
 			$pc->save();
