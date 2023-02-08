@@ -95,6 +95,13 @@ class LineaVenta extends OModel {
 				comment: 'Cantidad de artículos vendidos'
 			),
 			new OModelField(
+				name: 'regalo',
+				type: OMODEL_BOOL,
+				nullable: false,
+				default: false,
+				comment: 'Indica si línea es un regalo'
+			),
+			new OModelField(
 				name: 'created_at',
 				type: OMODEL_CREATED,
 				comment: 'Fecha de creación del registro'

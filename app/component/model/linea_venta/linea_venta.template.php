@@ -14,6 +14,7 @@ null
 	"descuento": <?php echo is_null($values['linea_venta']->get('descuento')) ? 'null' : $values['linea_venta']->get('descuento') ?>,
 	"importeDescuento": <?php echo is_null($values['linea_venta']->get('importe_descuento')) ? 'null' : $values['linea_venta']->get('importe_descuento') ?>,
 	"devuelto": <?php echo $values['linea_venta']->get('devuelto') ?>,
-	"unidades": <?php echo $values['linea_venta']->get('unidades') ?>
+	"unidades": <?php echo $values['linea_venta']->get('unidades') ?>,
+	"regalo": <?php echo $values['linea_venta']->get('regalo') ? 'true' : 'false' ?>
 }
 <?php endif ?>

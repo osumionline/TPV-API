@@ -100,6 +100,7 @@ class saveVentaAction extends OAction {
 				$lv->set('importe', $importe);
 				$lv->set('devuelto', 0);
 				$lv->set('unidades', $linea['cantidad']);
+				$lv->set('regalo', $linea['regalo']);
 				$lv->save();
 
 				// Reduzco el stock
