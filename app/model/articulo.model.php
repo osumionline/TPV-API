@@ -451,7 +451,7 @@ class Articulo extends OModel {
 		if (is_null($this->proveedor)) {
 			$this->loadProveedor();
 		}
-		if (is_null($this->proveedor->get('deleted_at'))){
+		if (!is_null($this->proveedor->get('deleted_at'))){
 			return null;
 		}
 		return $this->proveedor;

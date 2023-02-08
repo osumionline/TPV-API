@@ -5,6 +5,7 @@ null
     "id": <?php echo $values['item']['id'] ?>,
     "localizador": <?php echo $values['item']['localizador'] ?>,
     "marca": "<?php echo urlencode($values['item']['marca']) ?>",
+    "proveedor": <?php echo is_null($values['item']['proveedor']) ? 'null' : '"'.urlencode($values['item']['proveedor']).'"' ?>,
     "referencia": "<?php echo urlencode($values['item']['referencia']) ?>",
     "nombre": "<?php echo urlencode($values['item']['nombre']) ?>",
     "stock": <?php echo $values['item']['stock'] ?>,

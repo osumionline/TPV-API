@@ -23,7 +23,7 @@ class printTicketAction extends OAction {
 		$id = $req->getParamInt('id');
 		$tipo = $req->getParamString('tipo');
 
-		if (is_null($id) || is_null($regalo)) {
+		if (is_null($id) || is_null($tipo)) {
 			$status = 'error';
 		}
 

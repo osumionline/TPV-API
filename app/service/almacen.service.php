@@ -59,6 +59,7 @@ class almacenService extends OService {
 
 		$db->query($sql.$sql_body.$sql_limit);
 		$marcas = [];
+		$proveedores = [];
 
 		while ($res = $db->next()) {
 			$articulo = new Articulo();
@@ -67,11 +68,17 @@ class almacenService extends OService {
 			if (!array_key_exists($articulo->get('id_marca'), $marcas)) {
 				$marcas[$articulo->get('id_marca')] = $articulo->getMarca();
 			}
+			if (!is_null($articulo->get('id_proveedor'))) {
+				if (!array_key_exists($articulo->get('id_proveedor'), $proveedores)) {
+					$proveedores[$articulo->get('id_proveedor')] = $articulo->getProveedor();
+				}
+			}
 
 			array_push($ret['list'], [
 				'id'                 => $articulo->get('id'),
 				'localizador'        => $articulo->get('localizador'),
 				'marca'              => $marcas[$articulo->get('id_marca')]->get('nombre'),
+				'proveedor'          => !is_null($articulo->get('id_proveedor')) ? $proveedores[$articulo->get('id_proveedor')]->get('nombre') : null,
 				'referencia'         => $articulo->get('referencia'),
 				'nombre'             => $articulo->get('nombre'),
 				'stock'              => $articulo->get('stock'),
