@@ -226,7 +226,11 @@
       </tr>
 <?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && $values['data']['tipo'] !== 'regalo'): ?>
       <tr>
+        <?php if (!$linea->get('regalo')): ?>
         <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
+        <?php else: ?>
+        <td class="table-articulo center descuento"><strong>Regalo</strong></td>
+        <?php endif ?>
         <td class="table-unidades">&nbsp;</td>
         <td class="table-pvp right descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
         <td class="table-total right descuento">-<?php
