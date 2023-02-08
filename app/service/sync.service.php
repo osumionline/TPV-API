@@ -181,6 +181,7 @@ class syncService extends OService {
 				$lv->set('importe', $item['num'] * $art->get('pvp'));
 				$lv->set('devuelto', 0);
 				$lv->set('unidades', $item['num']);
+				$lv->set('regalo', false);
 				$lv->save();
 
 				$this->getLog()->info('Sync - Linea ticket introducida');
