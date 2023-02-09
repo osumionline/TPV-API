@@ -124,7 +124,7 @@ class LineaVenta extends OModel {
 	 * @return float Beneficio de la venta
 	 */
 	public function getBeneficio(): float {
-		return $this->get('unidades') * ($this->get('importe') - $this->get('puc'));
+		return $this->get('importe') - ($this->get('unidades') * $this->get('puc'));
 	}
 
 	/**
