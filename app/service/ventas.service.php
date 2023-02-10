@@ -103,6 +103,7 @@ class ventasService extends OService {
 		$venta = new Venta();
 
 		$venta->set('id',             $reserva->get('id'));
+		$venta->set('id_cliente',     $reserva->get('id_cliente'));
 		$venta->set('total',          $reserva->get('total'));
 		$venta->get('pago_mixto',     0);
 		$venta->get('entregado',      0);
