@@ -29,8 +29,16 @@ class asignarTipoPagoAction extends OAction {
 		if ($status=='ok') {
 			$venta = new Venta();
 			if ($venta->find(['id' => $id])) {
-				$venta->set('id_tipo_pago', $id_tipo_pago);
-				$venta->save();
+				if (is_null($venta->get('id_tipo_pago')) && $id_tipo_pago != -1) {
+					$venta->set('id_tipo_pago', $id_tipo_pago);
+					$venta->set('entregado', 0);
+					$venta->save();
+				}
+				else {
+					$venta->set('id_tipo_pago', null);
+					$venta->set('entregado', $venta->get('total'));
+					$venta->save();
+				}
 			}
 			else {
 				$status = 'error';
