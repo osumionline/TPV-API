@@ -166,42 +166,30 @@ class clientesService extends OService {
 	 *
 	 * @param int $id_cliente Id del cliente
 	 *
-	 * @param string $facturadas Sirve para elegir las ventas ya facturadas ("si"), las no facturadas ("no") o todas ("todas")
-	 *
 	 * @param int $id_factura_include Sirve para añadir al resultado las ventas de una factura concreta. Se usa al editar una factura no impresa todavía.
 	 * @return array Lista de ventas de un cliente
 	 */
-	public function getVentasCliente(int $id_cliente, string $facturadas, ?int $id_factura_include): array {
+	public function getVentasCliente(int $id_cliente, ?int $id_factura_include): array {
 		$db = new ODB();
 		$list = [];
 
-		switch ($facturadas) {
-			case 'si': {
-				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
-				$db->query($sql, [$id_cliente, $id_cliente]);
-			}
-			break;
-			case 'no': {
-				if (is_null($id_factura_include)) {
-					$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ?)) ORDER BY `created_at` DESC";
-					$db->query($sql, [$id_cliente, $id_cliente]);
-				}
-				else {
-					$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND `id` NOT IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` IN (SELECT `id` FROM `factura` WHERE `id_cliente` = ? AND `id` != ?)) ORDER BY `created_at` DESC";
-					$db->query($sql, [$id_cliente, $id_cliente, $id_factura_include]);
-				}
-			}
-			break;
-			case 'todas': {
-				$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
-				$db->query($sql, [$id_cliente]);
-			}
-			break;
-		}
+		$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? ORDER BY `created_at` DESC";
+		$db->query($sql, [$id_cliente]);
 
 		while ($res = $db->next()) {
 			$venta = new Venta();
 			$venta->update($res);
+			$factura = $venta->getFactura();
+			if (!is_null($factura)) {
+				if (is_null($id_factura_include) || (!is_null($id_factura_include) && $factura->get('id') != $id_factura_include)) {
+					if ($factura->get('impresa')) {
+						$venta->setStatusFactura('si');
+					}
+					else {
+						$venta->setStatusFactura('used');
+					}
+				}
+			}
 			array_push($list, $venta);
 		}
 

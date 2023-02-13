@@ -457,6 +457,28 @@ class Venta extends OModel {
 		return null;
 	}
 
+	private string $status_factura = 'no';
+
+	/**
+	 * Función para asignar el estado de la venta en una factura
+	 *
+	 * @param string $status_factura Estado de la factura (no - Venta no facturada / si - Venta facturada / used: Venta en una factura no terminada)
+	 *
+	 * @return void
+	 */
+	public function setStatusFactura(string $status_factura): void {
+		$this->status_factura = $status_factura;
+	}
+
+	/**
+	 * Función para obtener el estado de la venta en una factura
+	 *
+	 * @return string Estado de la venta en una factura
+	 */
+	public function getStatusFactura(): string {
+		return $this->status_factura;
+	}
+
 	/**
 	 * Función para borrar completamente una venta y sus líneas
 	 *
