@@ -54,7 +54,8 @@ class saveVentaAction extends OAction {
 			$venta->save();
 
 			$app_data = $this->general_service->getAppData();
-			$from_reserva = null;
+			$reservas = [];
+			$from_reserva  = null;
 			$linea_reserva = null;
 
 			foreach ($data->getLineas() as $linea) {
@@ -66,6 +67,9 @@ class saveVentaAction extends OAction {
 				if (!is_null($linea['fromReserva'])) {
 					$from_reserva = $linea['fromReserva'];
 					$linea_reserva = $this->ventas_service->getLineaReserva($from_reserva, $linea['idArticulo']);
+					if (array_search($from_reserva, $reservas) === false) {
+						array_push($reservas, $from_reserva);
+					}
 				}
 
 				if ($linea['idArticulo'] != 0) {
@@ -125,10 +129,12 @@ class saveVentaAction extends OAction {
 			}
 
 			// Si la venta era de una reserva, luego tengo que borrarla
-			if (!is_null($from_reserva)) {
-				$reserva = new Reserva();
-				$reserva->find(['id' => $from_reserva]);
-				$reserva->deleteFull();
+			if (count($reservas) > 0) {
+				foreach ($reservas as $id_reserva) {
+					$reserva = new Reserva();
+					$reserva->find(['id' => $id_reserva]);
+					$reserva->deleteFull();
+				}
 			}
 
 			// TicketBai
