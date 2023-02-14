@@ -9,7 +9,7 @@ use OsumiFramework\App\Model\Factura;
 use OsumiFramework\App\Utils\PDF;
 use OsumiFramework\App\Utils\AppData;
 use OsumiFramework\App\Component\Imprimir\TicketComponent;
-use OsumiFramework\App\Component\Imprimir\FacturaEmailComponent;
+use OsumiFramework\App\Component\Imprimir\FacturaComponent;
 
 class imprimirService extends OService {
 	function __construct() {
@@ -187,8 +187,10 @@ class imprimirService extends OService {
 			$route_pdf = $this->getConfig()->getDir('ofw_tmp').'factura_'.$factura->get('id').'.pdf';
 		}
 		else {
-			$route = $this->getConfig()->getDir('web').'factura.html';
-			$route_pdf = $this->getConfig()->getDir('web').'factura.pdf';
+			$route = $this->getConfig()->getDir('web').'factura_'.$factura->get('id').'.html';
+			$route_pdf = $this->getConfig()->getDir('web').'factura_'.$factura->get('id').'.pdf';
+			echo "RUTA HTML: ".$route."\n";
+			echo "RUTA PDF: ".$route_pdf."\n";
 		}
 		if (file_exists($route)) {
 			unlink($route);
@@ -201,6 +203,7 @@ class imprimirService extends OService {
 		$subtotal  = 0;
 		$descuento = 0;
 		$total     = 0;
+		$ivas      = [];
 
 		foreach ($factura->getVentas() as $venta) {
 			$temp = [
@@ -224,7 +227,7 @@ class imprimirService extends OService {
 					'precio_sin_iva' => $linea->get('pvp') / ((100 + $linea->get('iva')) / 100),
 					'unidades'       => $linea->get('unidades'),
 					'iva'            => $linea->get('iva'),
-					'descuento'      => $linea->getTotalDescuento(),
+					'descuento'      => -1 * $linea->getTotalDescuento(),
 					'total'          => $linea->get('importe')
 				];
 				$venta_linea['subtotal']    = $linea->get('unidades') * $venta_linea['precio_sin_iva'];
@@ -241,11 +244,24 @@ class imprimirService extends OService {
 				$descuento += $venta_linea['descuento'];
 				$total     += $venta_linea['total'];
 
+				if (!array_key_exists('iva_'.$linea->get('iva'), $ivas)) {
+					$ivas['iva_'.$linea->get('iva')] = [
+						'iva' => $linea->get('iva'),
+						'base' => 0,
+						'cuota_iva' => 0
+					];
+				}
+				$importe = $linea->get('pvp') * $linea->get('unidades');
+				$base = $importe / (($linea->get('iva') / 100) +1);
+				$ivas['iva_'.$linea->get('iva')]['base'] += $base;
+				$ivas['iva_'.$linea->get('iva')]['cuota_iva'] += $importe - $base;
+
 				array_push($temp['lineas'], $venta_linea);
 			}
 
 			array_push($list, $temp);
 		}
+		usort($ivas, fn($a, $b) => $a['iva'] - $b['iva']);
 
 		$factura_data = [
 			'id'                       => $factura->get('id'),
@@ -265,16 +281,22 @@ class imprimirService extends OService {
 			'cliente_poblacion'	       => $factura->get('poblacion'),
 			'list'                     => $list,
 			'subtotal'                 => $subtotal,
-			'ivas'                     => [],
+			'ivas'                     => $ivas,
 			'descuento'                => $descuento,
 			'total'                    => $total
 		];
 
-		$factura_email_component = new FacturaEmailComponent($factura_data);
-		$html = strval($factura_email_component);
+		$factura_component = new FacturaComponent($factura_data);
+		$html = strval($factura_component);
 		file_put_contents($route, $html);
 
 		$dompdf = new \Dompdf\Dompdf();
+		$dompdf->set_paper("A4", "portrait");
+		$dompdf->loadHtml($html);
+		$dompdf->render();
+
+		$output = $dompdf->output();
+		file_put_contents($route_pdf, $output);
 
 		return $route_pdf;
 	}

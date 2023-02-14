@@ -48,7 +48,7 @@ class sendTicketAction extends OAction {
 				$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
 				$email = new OEmailSMTP();
 				$email->addRecipient(urldecode($email_address));
-				$email->setSubject('TIENDA - Ticket venta '.$venta->get('id'));
+				$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->get('id'));
 				$email->setMessage(strval($content));
 				$email->setFrom($email_conf['user']);
 				$email->addAttachment($ticket_pdf);

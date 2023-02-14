@@ -33,6 +33,5 @@ class facturaTask extends OTask {
 		}
 
 		$route_pdf = $this->imprimir_service->generateFactura($factura, false);
-		echo "ROUTE PDF: ".$route_pdf."\n\n";
 	}
 }
