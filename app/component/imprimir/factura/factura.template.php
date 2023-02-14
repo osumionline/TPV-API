@@ -148,7 +148,7 @@
         font-size: 1.2em;
       }
       .factura .pagado {
-        line-height: 50px;
+        padding: 10px 0;
         border-top: 2px solid #000;
         border-bottom: 2px solid #000;
         width: 40%;
