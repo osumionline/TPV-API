@@ -31,6 +31,7 @@ class InstallationDTO implements ODTO{
 	private bool   $venta_online = false;
 	private string $url_api = '';
 	private string $secret_api = '';
+	private string $backup_api_key = '';
 	private bool   $fecha_cad = false;
 	private bool   $empleados = false;
 
@@ -184,6 +185,12 @@ class InstallationDTO implements ODTO{
 	private function setSecretApi(string $secret_api): void {
 		$this->secret_api = $secret_api;
 	}
+	public function getBackupApiKey(): string {
+		return $this->backup_api_key;
+	}
+	private function setBackupApiKey(string $backup_api_key): void {
+		$this->backup_api_key = $backup_api_key;
+	}
 	public function getFechaCad(): bool {
 		return $this->fecha_cad;
 	}
@@ -236,6 +243,7 @@ class InstallationDTO implements ODTO{
 		$this->setVentaOnline( $req->getParamBool('ventaOnline', false) );
 		$this->setUrlApi( $req->getParamString('urlApi') );
 		$this->setSecretApi( $req->getParamString('secretApi') );
+		$this->setBackupApiKey( $req->getParamString('backupApiKey') );
 		$this->setFechaCad( $req->getParamBool('fechaCad', false) );
 		$this->setEmpleados( $req->getParamBool('empleados', false) );
 	}

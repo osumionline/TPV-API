@@ -7,7 +7,8 @@
   </head>
   <body>
     <p>¡Hola!</p>
-    <p>Le enviamos adjunto el ticket de la compra que acabas de hacer en <?php echo $values['nombre'] ?>.</p>
-    <p>GRACIAS POR SU VISITA.</p>
+    <p>Te enviamos adjunto el ticket de la compra que acabas de hacer en <?php echo $values['nombre'] ?>.</p>
+    <p>GRACIAS POR TU COMPRA.</p>
+		<p>Un saludo.</p>
   </body>
 </html>

@@ -69,7 +69,6 @@ class backupTask extends OTask {
 			'id_account' => $this->getConfig()->getExtra('backup_id_account'),
 			'file'       => $cfile
 		];
-		var_dump($post);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 		$result = curl_exec ($ch);

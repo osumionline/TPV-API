@@ -27,6 +27,7 @@ class AppData {
 	private bool   $venta_online = false;
 	private string $url_api = '';
 	private string $secret_api = '';
+	private string $backup_api_key = '';
 	private bool   $fecha_cad = false;
 	private bool   $empleados = false;
 
@@ -55,6 +56,7 @@ class AppData {
 				$this->setVentaOnline($data['ventaOnline']);
 				$this->setUrlApi($data['urlApi']);
 				$this->setSecretApi($data['secretApi']);
+				$this->setBackupApiKey($data['backupApiKey']);
 				$this->setFechaCad($data['fechaCad']);
 				$this->setEmpleados($data['empleados']);
 				$this->setLoaded(true);
@@ -84,6 +86,7 @@ class AppData {
 		$this->setVentaOnline($data->getVentaOnline());
 		$this->setUrlApi($data->getUrlApi());
 		$this->setSecretApi($data->getSecretApi());
+		$this->setBackupApiKey($data->getBackupApiKey());
 		$this->setFechaCad($data->getFechaCad());
 		$this->setEmpleados($data->getEmpleados());
 		$this->setLoaded(true);
@@ -221,6 +224,12 @@ class AppData {
 	public function getSecretApi(): string {
 		return $this->secret_api;
 	}
+	private function setBackupApiKey(string $backup_api_key): void {
+		$this->backup_api_key = $backup_api_key;
+	}
+	public function getBackupApiKey(): string {
+		return $this->backup_api_key;
+	}
 	private function setFechaCad(bool $fecha_cad): void {
 		$this->fecha_cad = $fecha_cad;
 	}
@@ -294,6 +303,7 @@ class AppData {
 			'ventaOnline'     => $this->getVentaOnline(),
 			'urlApi'          => $this->getUrlApi(),
 			'secretApi'       => $this->getSecretApi(),
+			'backupApiKey'    => $this->getBackupApiKey(),
 			'fechaCad'        => $this->getFechaCad(),
 			'empleados'       => $this->getEmpleados()
 		]);
