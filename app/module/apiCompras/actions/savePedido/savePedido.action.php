@@ -130,6 +130,11 @@ class savePedidoAction extends OAction {
 							$articulo->set('iva', $linea['iva']);
 							$ind = array_search($linea['iva'], $iva_list);
 							$articulo->set('re', $re_list[$ind]);
+
+							$total_iva = $articulo->get('iva') + ($app_data->getTipoIva() == 're' ? $articulo->get('re') : 0);
+							$nuevo_puc = $articulo->get('palb') * (($total_iva + 100) / 100);
+							$articulo->set('puc', $nuevo_puc);
+
 							$articulo->save();
 
 							// Si viene un nuevo código de barras se lo creo

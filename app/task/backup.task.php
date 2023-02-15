@@ -73,6 +73,5 @@ class backupTask extends OTask {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 		$result = curl_exec ($ch);
 		curl_close ($ch);
-		var_dump($result);
 	}
 }
