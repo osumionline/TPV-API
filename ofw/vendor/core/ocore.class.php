@@ -73,6 +73,7 @@ class OCore {
 		require $this->config->getDir('ofw_vendor').'routing/ourl.class.php';
 		require $this->config->getDir('ofw_vendor').'tools/oform.class.php';
 		require $this->config->getDir('ofw_vendor').'tools/otools.class.php';
+		require $this->config->getDir('ofw_vendor').'tools/ocolors.class.php';
 
 		// Due to a circular dependancy, check name of the log file after core loading
 		if (is_null($this->config->getLog('name'))) {
@@ -123,7 +124,6 @@ class OCore {
 			$this->session  = new OSession();
 		}
 		else {
-			require $this->config->getDir('ofw_vendor').'tools/ocolors.class.php';
 			require $this->config->getDir('ofw_vendor').'core/oupdate.class.php';
 		}
 
