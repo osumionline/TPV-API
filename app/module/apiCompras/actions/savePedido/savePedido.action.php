@@ -14,7 +14,7 @@ use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
 	url: '/save-pedido',
-	services: ['compras']
+	services: ['compras', 'articulos']
 )]
 class savePedidoAction extends OAction {
 	/**
@@ -134,6 +134,8 @@ class savePedidoAction extends OAction {
 							$total_iva = $articulo->get('iva') + ($app_data->getTipoIva() == 're' ? $articulo->get('re') : 0);
 							$nuevo_puc = $articulo->get('palb') * (($total_iva + 100) / 100);
 							$articulo->set('puc', $nuevo_puc);
+
+							$articulo->set('margen', $this->articulos_service->getMargen($articulo->get('puc'), $articulo->get('pvp')));
 
 							$articulo->save();
 
