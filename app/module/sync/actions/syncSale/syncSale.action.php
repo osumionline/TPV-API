@@ -19,16 +19,18 @@ class syncSaleAction extends OAction {
 	 */
 	public function run(ORequest $req):void {
 		$status = 'ok';
-		$token = $req->getParamString('token');
+		$token  = $req->getParamString('token');
+		$items  = [];
 
 		if (is_null($token)) {
 			$status = 'error';
 		}
 
 		if ($status == 'ok') {
-			$this->sync_service->updateStock($token);
+			$items = $this->sync_service->updateStock($token);
 		}
 
 		$this->getTemplate()->add('status', $status);
+		$this->getTemplate()->add('items', json_encode($items), 'nourlencode');
 	}
 }

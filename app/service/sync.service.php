@@ -134,65 +134,85 @@ class syncService extends OService {
 	 *
 	 * @param string $token Token con información de artículos a actualizar
 	 *
-	 * @return bool Estado de la operación
+	 * @return array Estado de la operación
 	 */
-	public function updateStock(string $token): bool {
+	public function updateStock(string $token): array {
 		if (!$this->checkToken($token)) {
 			$this->getLog()->info('Sync - Token error: '.$token);
-			return false;
+			return [];
 		}
 
 		$this->getLog()->info('Sync - Token ok');
+		$status = [];
 
 		foreach ($this->params as $data) {
-			$venta = new Venta();
-			$venta->set('num_venta',      $this->ventas_service->generateNumVenta());
-			$venta->set('id_empleado',    1);
-			$venta->set('id_cliente',     null);
-			$venta->set('total',          $data['amount']);
-			$venta->set('entregado',      0);
-			$venta->set('pago_mixto',     0);
-			$venta->set('id_tipo_pago',   $data['method']);
-			$venta->set('entregado_otro', 0);
-			$venta->set('saldo',          null);
-			$venta->set('facturada',      false);
-			$venta->set('tbai_huella',    null);
-			$venta->set('tbai_qr',        null);
-			$venta->set('tbai_url',       null);
-			$venta->save();
+			$venta_status = ['id' => $data['id'], 'status' => 'ok'];
 
-			$this->getLog()->info('Sync - Nueva venta '.$venta->get('id'));
-
+			// Primero compruebo que existan todos los artículos
+			$articulos = [];
 			foreach ($data['items'] as $item) {
-				$this->getLog()->info('Sync - Item: '.var_export($item, true));
-
 				$art = new Articulo();
-				$art->find(['localizador' => $item['localizador']]);
-
-				$lv = new LineaVenta();
-				$lv->set('id_venta', $venta->get('id'));
-				$lv->set('id_articulo', $art->get('id'));
-				$lv->set('nombre_articulo', $art->get('nombre'));
-				$lv->set('puc', $art->get('puc'));
-				$lv->set('pvp', $art->get('pvp'));
-				$lv->set('iva', $art->get('iva'));
-				$lv->set('descuento', 0);
-				$lv->set('importe_descuento', null);
-				$lv->set('importe', $item['num'] * $art->get('pvp'));
-				$lv->set('devuelto', 0);
-				$lv->set('unidades', $item['num']);
-				$lv->set('regalo', false);
-				$lv->save();
-
-				$this->getLog()->info('Sync - Linea ticket introducida');
-
-				$art->set('stock', $art->get('stock') - $item['num']);
-				$art->save();
-
-				$this->getLog()->info('Sync - Actualizo stock');
+				if ($art->find(['localizador' => $item['localizador']])) {
+					$articulos['loc_'.$item['localizador']] = $art;
+				}
+				else {
+					$venta_status['status'] = 'error';
+					break;
+				}
 			}
+
+			if ($venta_status['status'] == 'ok') {
+				$venta = new Venta();
+				$venta->set('num_venta',      $this->ventas_service->generateNumVenta());
+				$venta->set('id_empleado',    1);
+				$venta->set('id_cliente',     null);
+				$venta->set('total',          $data['amount']);
+				$venta->set('entregado',      0);
+				$venta->set('pago_mixto',     0);
+				$venta->set('id_tipo_pago',   $data['method']);
+				$venta->set('entregado_otro', 0);
+				$venta->set('saldo',          null);
+				$venta->set('facturada',      false);
+				$venta->set('tbai_huella',    null);
+				$venta->set('tbai_qr',        null);
+				$venta->set('tbai_url',       null);
+				$venta->save();
+
+				$this->getLog()->info('Sync - Nueva venta '.$venta->get('id'));
+
+				foreach ($data['items'] as $item) {
+					$this->getLog()->info('Sync - Item: '.var_export($item, true));
+
+					$art = $articulos['loc_'.$item['localizador']];
+					$art->find(['localizador' => $item['localizador']]);
+
+					$lv = new LineaVenta();
+					$lv->set('id_venta', $venta->get('id'));
+					$lv->set('id_articulo', $art->get('id'));
+					$lv->set('nombre_articulo', $art->get('nombre'));
+					$lv->set('puc', $art->get('puc'));
+					$lv->set('pvp', $art->get('pvp'));
+					$lv->set('iva', $art->get('iva'));
+					$lv->set('descuento', 0);
+					$lv->set('importe_descuento', null);
+					$lv->set('importe', $item['num'] * $art->get('pvp'));
+					$lv->set('devuelto', 0);
+					$lv->set('unidades', $item['num']);
+					$lv->set('regalo', false);
+					$lv->save();
+
+					$this->getLog()->info('Sync - Linea ticket introducida');
+
+					$art->set('stock', $art->get('stock') - $item['num']);
+					$art->save();
+
+					$this->getLog()->info('Sync - Actualizo stock');
+				}
+			}
+
+			array_push($status, $venta_status);
 		}
-		return true;
+		return $status;
 	}
 
 	/**
