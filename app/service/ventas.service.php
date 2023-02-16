@@ -26,11 +26,11 @@ class ventasService extends OService {
 	public function getHistoricoVentas(HistoricoDTO $data): array {
 		$db = new ODB();
 		if ($data->getModo() == 'fecha') {
-			$sql = "SELECT * FROM `venta` WHERE DATE_FORMAT(`created_at`, '%d/%m/%Y') = ? AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
+			$sql = "SELECT * FROM `venta` WHERE DATE_FORMAT(`created_at`, '%d/%m/%Y') = ? AND `deleted_at` IS NULL ORDER BY `created_at` ASC";
 			$db->query($sql, [$data->getFecha()]);
 		}
 		if ($data->getModo() == 'rango') {
-			$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND `deleted_at` IS NULL ORDER BY `created_at` DESC";
+			$sql = "SELECT * FROM `venta` WHERE `created_at` BETWEEN STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND STR_TO_DATE(?,'%d/%m/%Y %H:%i:%s') AND `deleted_at` IS NULL ORDER BY `created_at` ASC";
 			$db->query($sql, [$data->getDesde().' 00:00:00', $data->getHasta().' 23:59:59']);
 		}
 		$ret = [];
