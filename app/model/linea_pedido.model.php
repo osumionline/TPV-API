@@ -46,36 +46,43 @@ class LineaPedido extends OModel {
 			new OModelField(
 				name: 'unidades',
 				type: OMODEL_NUM,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'Número de unidades recibidas'
 			),
 			new OModelField(
 				name: 'palb',
 				type: OMODEL_FLOAT,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'Precio de albarán del artículo'
+			),
+			new OModelField(
+				name: 'puc',
+				type: OMODEL_FLOAT,
+				nullable: false,
+				default: 0,
+				comment: 'PUC del artículo'
 			),
 			new OModelField(
 				name: 'pvp',
 				type: OMODEL_FLOAT,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'PVP del artículo'
 			),
 			new OModelField(
 				name: 'margen',
 				type: OMODEL_FLOAT,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'Porcentaje de margen del artículo'
 			),
 			new OModelField(
 				name: 'iva',
 				type: OMODEL_FLOAT,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'IVA del artículo'
 			),
 			new OModelField(
@@ -88,8 +95,8 @@ class LineaPedido extends OModel {
 			new OModelField(
 				name: 'descuento',
 				type: OMODEL_FLOAT,
-				nullable: true,
-				default: null,
+				nullable: false,
+				default: 0,
 				comment: 'Porcentaje de descuento del artículo'
 			),
 			new OModelField(

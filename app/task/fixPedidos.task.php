@@ -20,7 +20,7 @@ class fixPedidosTask extends OTask {
 
 	public function run(array $options=[]): void {
 		$db = new ODB();
-		$sql = "SELECT * FROM `pedido` WHERE `recepcionado` = 1";
+		$sql = "SELECT * FROM `pedido`";
 		$db->query($sql);
 
 		while ($res = $db->next()) {
@@ -33,19 +33,9 @@ class fixPedidosTask extends OTask {
 			foreach ($lineas as $linea) {
 				$articulo = $linea->getArticulo();
 				echo "  Articulo ".$articulo->get('nombre')."\n";
-				echo "    IVA: ".$articulo->get('iva')." - RE: ".$articulo->get('re')."\n";
-				echo "    PUC original: ".$articulo->get('puc')."\n";
-
-				$total_iva = $articulo->get('iva') + $articulo->get('re');
-				$nuevo_puc = floatval(number_format($articulo->get('palb') * (($total_iva + 100) / 100), 2, '.', ''));
-				$articulo->set('puc', $nuevo_puc);
-				echo "    Nuevo PUC: ".$nuevo_puc."\n";
-				echo "    Margen original: ".$articulo->get('margen')."\n";
-
-				$nuevo_margen = $this->articulos_service->getMargen($articulo->get('puc'), $articulo->get('pvp'));
-				$articulo->set('margen', floatval(number_format($nuevo_margen, 2, '.', '')));
-				echo "    Nuevo margen: ".$articulo->get('margen')."\n";
-				$articulo->save();
+				$linea->set('puc', $articulo->get('puc'));
+				$linea->set('margen', $articulo->get('margen'));
+				$linea->save();
 			}
 		}
 	}

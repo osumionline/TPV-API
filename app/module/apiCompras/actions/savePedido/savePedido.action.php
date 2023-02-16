@@ -106,37 +106,33 @@ class savePedidoAction extends OAction {
 
 					// Guardo nuevas líneas del pedido
 					foreach ($data->getLineas() as $linea) {
-						$lp = new LineaPedido();
-						$lp->set('id_pedido', $pedido->get('id'));
-						$lp->set('id_articulo', $linea['idArticulo']);
-						$lp->set('nombre_articulo', urldecode($linea['nombreArticulo']));
-						$lp->set('codigo_barras', $linea['codBarras']);
-						$lp->set('unidades', $linea['unidades']);
-						$lp->set('palb', $linea['palb']);
-						$lp->set('pvp', $linea['pvp']);
-						$lp->set('iva', $linea['iva']);
 						$ind = array_search($linea['iva'], $iva_list);
-						$lp->set('re', $data->getRe() ? $re_list[$ind] : 0);
-						$lp->set('descuento', $linea['descuento']);
+						$lp = new LineaPedido();
+						$lp->set('id_pedido',       $pedido->get('id'));
+						$lp->set('id_articulo',     $linea['idArticulo']);
+						$lp->set('nombre_articulo', urldecode($linea['nombreArticulo']));
+						$lp->set('codigo_barras',   $linea['codBarras']);
+						$lp->set('unidades',        $linea['unidades']);
+						$lp->set('palb',            $linea['palb']);
+						$lp->set('puc',             $linea['puc']);
+						$lp->set('pvp',             $linea['pvp']);
+						$lp->set('margen',          $linea['margen']);
+						$lp->set('iva',             $linea['iva']);
+						$lp->set('re',              $data->getRe() ? $re_list[$ind] : 0);
+						$lp->set('descuento',       $linea['descuento']);
 						$lp->save();
 
 						// Si el pedido está recepcionado
 						if ($pedido->get('recepcionado')) {
 							$articulo = new Articulo();
 							$articulo->find(['id' => $linea['idArticulo']]);
-							$articulo->set('stock', $articulo->get('stock') + $linea['unidades']);
-							$articulo->set('palb', $linea['palb']);
-							$articulo->set('pvp', $linea['pvp']);
-							$articulo->set('iva', $linea['iva']);
-							$ind = array_search($linea['iva'], $iva_list);
-							$articulo->set('re', $re_list[$ind]);
-
-							$total_iva = $articulo->get('iva') + ($app_data->getTipoIva() == 're' ? $articulo->get('re') : 0);
-							$nuevo_puc = $articulo->get('palb') * (($total_iva + 100) / 100);
-							$articulo->set('puc', $nuevo_puc);
-
-							$articulo->set('margen', $this->articulos_service->getMargen($articulo->get('puc'), $articulo->get('pvp')));
-
+							$articulo->set('stock',  $articulo->get('stock') + $linea['unidades']);
+							$articulo->set('palb',   $linea['palb']);
+							$articulo->set('puc',    $linea['puc']);
+							$articulo->set('pvp',    $linea['pvp']);
+							$articulo->set('margen', $linea['margen']);
+							$articulo->set('iva',    $linea['iva']);
+							$articulo->set('re',     $re_list[$ind]);
 							$articulo->save();
 
 							// Si viene un nuevo código de barras se lo creo

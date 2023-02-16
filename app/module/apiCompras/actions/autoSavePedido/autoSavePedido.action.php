@@ -68,16 +68,18 @@ class autoSavePedidoAction extends OAction {
 		// Guardo nuevas líneas del pedido
 		foreach ($data->getLineas() as $linea) {
 			$lp = new LineaPedido();
-			$lp->set('id_pedido', $pedido->get('id'));
-			$lp->set('id_articulo', $linea['idArticulo']);
+			$lp->set('id_pedido',       $pedido->get('id'));
+			$lp->set('id_articulo',     $linea['idArticulo']);
 			$lp->set('nombre_articulo', urldecode($linea['nombreArticulo']));
-			$lp->set('codigo_barras', $linea['codBarras']);
-			$lp->set('unidades', $linea['unidades']);
-			$lp->set('palb', $linea['palb']);
-			$lp->set('pvp', $linea['pvp']);
-			$lp->set('iva', $linea['iva']);
-			$lp->set('re', $data->getRe() ? $linea['re'] : null);
-			$lp->set('descuento', $linea['descuento']);
+			$lp->set('codigo_barras',   $linea['codBarras']);
+			$lp->set('unidades',        $linea['unidades']);
+			$lp->set('palb',            $linea['palb']);
+			$lp->set('puc',             $linea['puc']);
+			$lp->set('pvp',             $linea['pvp']);
+			$lp->set('margen',          $linea['margen']);
+			$lp->set('iva',             $linea['iva']);
+			$lp->set('re',              $data->getRe() ? $linea['re'] : null);
+			$lp->set('descuento',       $linea['descuento']);
 			$lp->save();
 		}
 
