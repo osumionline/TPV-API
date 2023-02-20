@@ -72,27 +72,6 @@ class ventasService extends OService {
 	}
 
 	/**
-	 * Función para obtener una línea concreta de una reserva
-	 *
-	 * @param int $id_reserva Id de la reserva en la que buscar la línea
-	 *
-	 * @param int $id_articulo Id del artículo a buscar
-	 *
-	 * @return LineaReserva Línea encontrada de la reserva
-	 */
-	public function getLineaReserva(int $id_reserva, int $id_articulo): LineaReserva {
-		$db = new ODB();
-		$sql = "SELECT * FROM `linea_reserva` WHERE `id_reserva` = ? AND `id_articulo` = ?";
-		$db->query($sql, [$id_reserva, $id_articulo]);
-
-		$res = $db->next();
-		$linea_reserva = new LineaReserva();
-		$linea_reserva->update($res);
-
-		return $linea_reserva;
-	}
-
-	/**
 	 * Función para obtener un objeto Venta a partir de un objeto Reserva
 	 *
 	 * @param Reserva $reserva Objeto Reserva

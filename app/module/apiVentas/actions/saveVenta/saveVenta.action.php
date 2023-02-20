@@ -11,6 +11,7 @@ use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Reserva;
+use OsumiFramework\App\Model\LineaReserva;
 use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
 use OsumiFramework\App\Utils\AppData;
 
@@ -66,7 +67,8 @@ class saveVentaAction extends OAction {
 
 				if (!is_null($linea['fromReserva'])) {
 					$from_reserva = $linea['fromReserva'];
-					$linea_reserva = $this->ventas_service->getLineaReserva($from_reserva, $linea['idArticulo']);
+					$linea_reserva = new LineaReserva();
+					$linea_reserva->find(['id' => $linea['fromReservaLineaId']]);
 					if (array_search($from_reserva, $reservas) === false) {
 						array_push($reservas, $from_reserva);
 					}
