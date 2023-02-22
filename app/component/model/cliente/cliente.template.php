@@ -19,8 +19,9 @@ null
 	"factDireccion": <?php echo is_null($values['cliente']->get('fact_direccion')) ? 'null' : '"'.urlencode($values['cliente']->get('fact_direccion')).'"' ?>,
 	"factCodigoPostal": <?php echo is_null($values['cliente']->get('fact_codigo_postal')) ? 'null' : '"'.urlencode($values['cliente']->get('fact_codigo_postal')).'"' ?>,
 	"factPoblacion": <?php echo is_null($values['cliente']->get('fact_poblacion')) ? 'null' : '"'.urlencode($values['cliente']->get('fact_poblacion')).'"' ?>,
-	"factProvincia": <?php echo is_null($values['cliente']->get('fact_provincia')) ? 'null' : $values['cliente']->get('fact_provincia').'"' ?>,
+	"factProvincia": <?php echo is_null($values['cliente']->get('fact_provincia')) ? 'null' : $values['cliente']->get('fact_provincia') ?>,
 	"observaciones": <?php echo is_null($values['cliente']->get('observaciones')) ? 'null' : '"'.urlencode($values['cliente']->get('observaciones')).'"' ?>,
+	"descuento": <?php echo $values['cliente']->get('descuento') ?>,
 	"ultimaVenta": <?php echo is_null($values['cliente']->getUltimaVenta()) ? 'null' : '"'.$values['cliente']->getUltimaVenta()->get('created_at', 'd/m/Y H:i').'"' ?>
 }
 <?php endif ?>

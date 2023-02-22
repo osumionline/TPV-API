@@ -156,6 +156,13 @@ class Cliente extends OModel {
 				comment: 'Campo libre para observaciones personales del cliente'
 			),
 			new OModelField(
+				name: 'descuento',
+				type: OMODEL_NUM,
+				nullable: false,
+				default: 0,
+				comment: 'Descuento por defecto para el cliente'
+			),
+			new OModelField(
 				name: 'created_at',
 				type: OMODEL_CREATED,
 				comment: 'Fecha de creación del registro'

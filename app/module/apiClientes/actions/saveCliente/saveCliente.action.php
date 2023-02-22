@@ -48,6 +48,7 @@ class saveClienteAction extends OAction {
 			$cliente->set('fact_poblacion',        !is_null($data->getFactPoblacion()) ? urldecode($data->getFactPoblacion()) : null);
 			$cliente->set('fact_provincia',        $data->getFactProvincia());
 			$cliente->set('observaciones',         !is_null($data->getObservaciones()) ? urldecode($data->getObservaciones()) : null);
+			$cliente->set('descuento',             $data->getDescuento());
 
 			$cliente->save();
 
