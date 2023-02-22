@@ -12,7 +12,7 @@ null
 	"palb": <?php echo $values['linea_pedido']->get('palb') ?>,
 	"puc": <?php echo $values['linea_pedido']->get('puc') ?>,
 	"pvp": <?php echo $values['linea_pedido']->get('pvp') ?>,
-	"margen": <?php echo $values['linea_pedido']->get('margen') ?>,
+	"margen": <?php echo is_null($values['linea_pedido']->get('margen')) ? 'null' : $values['linea_pedido']->get('margen') ?>,
 	"stock": <?php echo $values['linea_pedido']->getArticulo()->get('stock') ?>,
 	"iva": <?php echo $values['linea_pedido']->get('iva') ?>,
 	"re": <?php echo is_null($values['linea_pedido']->get('re')) ? 'null' : $values['linea_pedido']->get('re') ?>,
