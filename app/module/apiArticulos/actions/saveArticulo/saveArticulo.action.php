@@ -71,7 +71,7 @@ class saveArticuloAction extends OAction {
 					$fecha_caducidad = date('Y-m-d H:i:s', $time);
 				}
 				// Guardo datos del artículo
-				$art->set('localizador',         $data->getLocalizador());
+				$art->set('localizador',         intval($data->getLocalizador()));
 				$art->set('nombre',              urldecode($data->getNombre()));
 				$art->set('slug',                OTools::slugify(urldecode($data->getNombre())));
 				$art->set('id_categoria',        $data->getIdCategoria());
