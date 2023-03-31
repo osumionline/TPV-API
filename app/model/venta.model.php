@@ -234,6 +234,19 @@ class Venta extends OModel {
 		}
 	}
 
+	private bool $hide_gifts = false;
+
+	/**
+	 * Indica si se deben cargar las líneas de tipo regalo
+	 *
+	 * @param bool $mode Indica si cargar las líneas de tipo regalo
+	 *
+	 * @return void
+	 */
+	public function setHideGifts($mode): void {
+		$this->hide_gifts = $mode;
+	}
+
 	private ?array $lineas = null;
 
 	/**
@@ -281,6 +294,9 @@ class Venta extends OModel {
 	public function loadLineas(): void {
 		$db = new ODB();
 		$sql = "SELECT * FROM `linea_venta` WHERE `id_venta` = ?";
+		if  ($this->hide_gifts) {
+			$sql .= " AND `regalo` = 0";
+		}
 		$db->query($sql, [$this->get('id')]);
 		$list = [];
 

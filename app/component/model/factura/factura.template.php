@@ -23,7 +23,7 @@ else{
 	"importe": <?php echo $values['factura']->get('importe') ?>,
 	"impresa": <?php echo $values['factura']->get('impresa') ? 'true' : 'false' ?>,
 	"fecha": "<?php echo $values['factura']->get('created_at', 'd/m/Y H:i') ?>",
-	"ventas": [<?php echo new VentaListComponent(['list' => $values['factura']->getVentas()]) ?>]
+	"ventas": [<?php echo new VentaListComponent(['list' => $values['factura']->getVentas('hideGifts')]) ?>]
 }
 <?php
 }

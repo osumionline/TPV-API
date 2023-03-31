@@ -170,11 +170,13 @@ class Factura extends OModel {
 	/**
 	 * Obtiene el listado de ventas de una factura
 	 *
+	 * @param string $option Indica si mostrar los regalos
+	 *
 	 * @return array Listado de ventas
 	 */
-	public function getVentas(): array {
+	public function getVentas(string $option = ''): array {
 		if (is_null($this->ventas)) {
-			$this->loadVentas();
+			$this->loadVentas($option);
 		}
 		return $this->ventas;
 	}
@@ -193,9 +195,11 @@ class Factura extends OModel {
 	/**
 	 * Carga la lista de ventas de una factura
 	 *
+	 * @param string $option Indica si mostrar los regalos
+	 *
 	 * @return void
 	 */
-	public function loadVentas(): void {
+	public function loadVentas(string $option = ''): void {
 		$db = new ODB();
 		$sql = "SELECT * FROM `venta` WHERE `id` IN (SELECT `id_venta` FROM `factura_venta` WHERE `id_factura` = ?) ORDER BY `created_at` ASC";
 		$db->query($sql, [$this->get('id')]);
@@ -204,6 +208,9 @@ class Factura extends OModel {
 		while ($res=$db->next()) {
 			$v = new Venta();
 			$v->update($res);
+			if ($option == 'hideGifts') {
+				$v->setHideGifts(true);
+			}
 			array_push($list, $v);
 		}
 
