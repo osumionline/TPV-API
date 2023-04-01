@@ -142,7 +142,7 @@ class saveVentaAction extends OAction {
 			// TicketBai
 			$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
 			if ($tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
-				$tbai = new OTicketBai(false);
+				$tbai = new OTicketBai( ($this->getConfig()->getEnvironment()=='prod') );
 
 				if ($tbai->checkStatus()) {
 					$this->getLog()->info('TicketBai status OK');
