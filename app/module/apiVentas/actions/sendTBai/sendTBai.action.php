@@ -30,6 +30,7 @@ class sendTBaiAction extends OAction {
 		$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
 		if ($status == 'ok' && $tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
 			$tbai = new OTicketBai( ($this->getConfig()->getEnvironment()=='prod') );
+			$this->getLog()->info(var_export($tbai, true));
 
 			if ($tbai->checkStatus()) {
 				$this->getLog()->info('TicketBai status OK');
