@@ -208,6 +208,27 @@ class syncService extends OService {
 
 					$this->getLog()->info('Sync - Actualizo stock');
 				}
+
+				$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
+				if ($tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
+					$tbai = new OTicketBai( ($this->getConfig()->getEnvironment()=='prod') );
+	
+					if ($tbai->checkStatus()) {
+						$this->getLog()->info('TicketBai status OK');
+						$response = $tbai->nuevoTbai($venta->getDatosTBai());
+						if (is_array($response)) {
+							$this->getLog()->info('TicketBai response OK');
+							$venta->set('tbai_huella', $response['huella_tbai']);
+							$venta->set('tbai_qr',     $response['qr']);
+							$venta->set('tbai_url',    $response['url']);
+							$venta->save();
+						}
+						else {
+							$this->getLog()->error('Ocurrió un error al generar el TicketBai de la venta '.$venta->get('id'));
+							$this->getLog()->error(var_export($response, true));
+						}
+					}
+				}
 			}
 
 			array_push($status, $venta_status);
