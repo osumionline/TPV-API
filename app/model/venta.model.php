@@ -555,6 +555,27 @@ class Venta extends OModel {
 			];
 
 			array_push($ret['lineas'], $datos_linea);
+
+			if ($linea->get('descuento') != 0 || !is_null($linea->get('importe_descuento'))) {
+				if ($linea->get('descuento') != 0) {
+					$importe_desc = $importe_siva * ($linea->get('descuento') / 100);
+				}
+				if (!is_null($linea->get('importe_descuento'))) {
+					$importe_desc = $linea->get('importe_descuento') / $linea->get('unidades');
+					$importe_desc = $importe_desc / (1 + ($linea->get('iva') / 100));
+				}
+
+				$datos_linea = [
+					'iva'              => ($linea->get('iva') == 0) ? 21 : $linea->get('iva'),
+					'descripcion'      => html_entity_decode('Descuento - '.$linea->get('nombre_articulo')),
+					'cantidad'         => $linea->get('unidades'),
+					'importe_unitario' => round(-1 * $importe_desc, 4),
+					'tipo_iva'         => $linea->get('iva'),
+					'tipo_req'         => 0
+				];
+
+				array_push($ret['lineas'], $datos_linea);
+			}
 		}
 
 		return $ret;
