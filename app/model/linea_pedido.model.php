@@ -38,9 +38,10 @@ class LineaPedido extends OModel {
 			),
 			new OModelField(
 				name: 'codigo_barras',
-				type: OMODEL_NUM,
+				type: OMODEL_TEXT,
 				nullable: true,
 				default: null,
+				size: 20,
 				comment: 'Nuevo código de barras para el artículo'
 			),
 			new OModelField(
