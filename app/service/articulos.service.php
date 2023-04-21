@@ -11,6 +11,7 @@ use OsumiFramework\App\Model\Foto;
 use OsumiFramework\App\Model\ArticuloFoto;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\LineaPedido;
+use OsumiFramework\App\Model\HistoricoArticulo;
 
 class articulosService extends OService {
 	function __construct() {
@@ -359,5 +360,46 @@ class articulosService extends OService {
       return 0;
     }
     return (100 * ($pvp - $puc)) / $pvp;
+	}
+
+	/**
+	 * Función para obtener los datos históricos de un artículo
+	 *
+	 * @param int $id_articulo Id del artículo del que obtener los datos
+	 *
+	 * @param int $pag Número de página de resultados
+	 *
+	 * @return array Lista de resultados
+	 */
+	public function getHistoricoArticulo(int $id_articulo, int $pag): array {
+		$db = new ODB();
+		$lim = ($pag - 1) * $this->getConfig()->getExtra('num_por_pag');
+		$sql = "SELECT * FROM `historico_articulo` WHERE `id_articulo` = ? ORDER BY `created_at` DESC LIMIT ".$lim.", ".$this->getConfig()->getExtra('num_por_pag');
+		$ret = [];
+		$db->query($sql, [$id_articulo]);
+
+		while ($res = $db->next()) {
+			$ha = new HistoricoArticulo();
+			$ha->update($res);
+			array_push($ret, $ha);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Función para obtener el número de páginas que tiene el histórico de un artículo concreto
+	 *
+	 * @param int $id_articulo Id del artículo del que obtener los datos
+	 *
+	 * @return int Número de páginas
+	 */
+	public function getHistoricoArticuloPags(int $id_articulo): int {
+		$db = new ODB();
+		$sql = "SELECT COUNT(*) AS `num` FROM `historico_articulo` WHERE `id_articulo` = ?";
+		$db->query($sql, [$id_articulo]);
+		$res = $db->next();
+
+		return $res['num'];
 	}
 }

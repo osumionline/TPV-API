@@ -9,6 +9,7 @@ use OsumiFramework\App\Service\ventasService;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\LineaVenta;
+use OsumiFramework\App\Model\HistoricoArticulo;
 use OsumiFramework\App\Utils\AppData;
 
 class syncService extends OService {
@@ -204,8 +205,23 @@ class syncService extends OService {
 
 					$this->getLog()->info('Sync - Linea ticket introducida');
 
+					$stock_previo = $art->get('stock');
+
 					$art->set('stock', $art->get('stock') - $item['num']);
 					$art->save();
+
+					// Histórico
+					$ha = new HistoricoArticulo();
+					$ha->set('id_articulo',  $art->get('id'));
+					$ha->set('tipo',         0);
+					$ha->set('stock_previo', $stock_previo);
+					$ha->set('diferencia',   $item['num']);
+					$ha->set('stock_final',  $art->get('stock'));
+					$ha->set('id_venta',     $venta->get('id'));
+					$ha->set('id_pedido',    null);
+					$ha->set('puc',          $art->get('puc'));
+					$ha->set('pvp',          $art->get('pvp'));
+					$ha->save();
 
 					$this->getLog()->info('Sync - Actualizo stock');
 				}

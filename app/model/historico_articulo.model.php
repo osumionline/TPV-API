@@ -94,4 +94,112 @@ class HistoricoArticulo extends OModel {
 
 		parent::load($model);
 	}
+
+	private ?Articulo $articulo = null;
+
+	/**
+	 * Obtiene el artículo al que pertenece el registro
+	 *
+	 * @return Articulo Artículo al que pertenece el registro
+	 */
+	public function getArticulo(): Articulo {
+		if (is_null($this->articulo)) {
+			$this->loadArticulo();
+		}
+		return $this->articulo;
+	}
+
+	/**
+	 * Guarda el artículo al que pertenece el registro
+	 *
+	 * @param Articulo $a Artículo al que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function setArticulo(Articulo $a): void {
+		$this->articulo = $a;
+	}
+
+	/**
+	 * Carga el artículo al que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function loadArticulo(): void {
+		$a = new Articulo();
+		$a->find(['id' => $this->get('id_articulo')]);
+		$this->setArticulo($a);
+	}
+
+	private ?Venta $venta = null;
+
+	/**
+	 * Obtiene la venta a la que pertenece el registro
+	 *
+	 * @return Venta Venta a la que pertenece el registro
+	 */
+	public function getVenta(): Venta {
+		if (is_null($this->venta)) {
+			$this->loadVenta();
+		}
+		return $this->venta;
+	}
+
+	/**
+	 * Guarda la venta a la que pertenece el registro
+	 *
+	 * @param Venta $v Venta a la que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function setVenta(Venta $v): void {
+		$this->venta = $v;
+	}
+
+	/**
+	 * Carga la venta a la que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function loadVenta(): void {
+		$v = new Venta();
+		$v->find(['id' => $this->get('id_venta')]);
+		$this->setVenta($v);
+	}
+
+	private ?Pedido $pedido = null;
+
+	/**
+	 * Obtiene el pedido al que pertenece el registro
+	 *
+	 * @return Pedido Pedido al que pertenece el registro
+	 */
+	public function getPedido(): Pedido {
+		if (is_null($this->pedido)) {
+			$this->loadPedido();
+		}
+		return $this->pedido;
+	}
+
+	/**
+	 * Guarda el pedido al que pertenece el registro
+	 *
+	 * @param Pedido $p Pedido al que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function setPedido(Pedido $p): void {
+		$this->pedido = $p;
+	}
+
+	/**
+	 * Carga el pedido al que pertenece el registro
+	 *
+	 * @return void
+	 */
+	public function loadPedido(): void {
+		$p = new Pedido();
+		$p->find(['id' => $this->get('id_pedido')]);
+		$this->setPedido($p);
+	}
 }
