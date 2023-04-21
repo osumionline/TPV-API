@@ -373,7 +373,7 @@ class articulosService extends OService {
 	 */
 	public function getHistoricoArticulo(int $id_articulo, int $pag): array {
 		$db = new ODB();
-		$lim = ($pag - 1) * $this->getConfig()->getExtra('num_por_pag');
+		$lim = $pag * $this->getConfig()->getExtra('num_por_pag');
 		$sql = "SELECT * FROM `historico_articulo` WHERE `id_articulo` = ? ORDER BY `created_at` DESC LIMIT ".$lim.", ".$this->getConfig()->getExtra('num_por_pag');
 		$ret = [];
 		$db->query($sql, [$id_articulo]);
