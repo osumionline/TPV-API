@@ -517,18 +517,16 @@ class OCore {
 	public function errorHandler(\Throwable $ex): void {
 		$log = new OLog(get_class($this));
 		$params = ['message' => OTools::getMessage('ERROR_500_LABEL')];
-		if ($this->config->getEnvironment()!='prod') {
-			$params['message'] = "<strong>Error:</strong> \"".$ex->getMessage()."\"\n<strong>File:</strong> \"".$ex->getFile()."\" (Line: ".$ex->getLine().")\n\n<strong>Trace:</strong> \n";
-			foreach ($ex->getTrace() as $trace) {
-				if (array_key_exists('file', $trace)) {
-					$params['message'] .= "  <strong>File:</strong> \"".$trace['file']." (Line: ".$trace['line'].")\"\n";
-				}
-				if (array_key_exists('class', $trace)) {
-					$params['message'] .= "  <strong>Class:</strong> \"".$trace['class']."\"\n";
-				}
-				if (array_key_exists('function', $trace)) {
-					$params['message'] .= "  <strong>Function:</strong> \"".$trace['function']."\"\n\n";
-				}
+		$params['message'] = "<strong>Error:</strong> \"".$ex->getMessage()."\"\n<strong>File:</strong> \"".$ex->getFile()."\" (Line: ".$ex->getLine().")\n\n<strong>Trace:</strong> \n";
+		foreach ($ex->getTrace() as $trace) {
+			if (array_key_exists('file', $trace)) {
+				$params['message'] .= "  <strong>File:</strong> \"".$trace['file']." (Line: ".$trace['line'].")\"\n";
+			}
+			if (array_key_exists('class', $trace)) {
+				$params['message'] .= "  <strong>Class:</strong> \"".$trace['class']."\"\n";
+			}
+			if (array_key_exists('function', $trace)) {
+				$params['message'] .= "  <strong>Function:</strong> \"".$trace['function']."\"\n\n";
 			}
 		}
 		$log->error( str_ireplace('</strong>', '', str_ireplace('<strong>', '', $params['message'])) );

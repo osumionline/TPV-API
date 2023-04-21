@@ -12,6 +12,7 @@ use OsumiFramework\App\Model\LineaVenta;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Reserva;
 use OsumiFramework\App\Model\LineaReserva;
+use OsumiFramework\App\Model\HistoricoArticulo;
 use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
 use OsumiFramework\App\Utils\AppData;
 
@@ -117,8 +118,26 @@ class saveVentaAction extends OAction {
 					if (!is_null($linea_reserva)) {
 						$restar = $linea['cantidad'] - $linea_reserva->get('unidades');
 					}
+
+					// Histórico
+					$stock_previo = $art->get('stock');
+
+					// Reduzco stock
 					$art->set('stock', $art->get('stock') - $restar);
 					$art->save();
+
+					// Histórico
+					$ha = new HistoricoArticulo();
+					$ha->set('id_articulo',  $art->get('id'));
+					$ha->set('tipo',         0);
+					$ha->set('stock_previo', $stock_previo);
+					$ha->set('diferencia',   $restar);
+					$ha->set('stock_final',  $art->get('stock'));
+					$ha->set('id_venta',     $venta->get('id'));
+					$ha->set('id_pedido',    null);
+					$ha->set('puc',          $art->get('puc'));
+					$ha->set('pvp',          $art->get('pvp'));
+					$ha->save();
 
 					// Si la línea proviene de una venta, es una devolución, por lo que hay que marcar cuantas unidades se han devuelto de esa línea original
 					if (!is_null($linea['fromVenta'])) {

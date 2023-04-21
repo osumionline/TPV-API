@@ -10,6 +10,7 @@ use OsumiFramework\App\Model\LineaPedido;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\VistaPedido;
 use OsumiFramework\App\Model\Articulo;
+use OsumiFramework\App\Model\HistoricoArticulo;
 use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
@@ -126,6 +127,9 @@ class savePedidoAction extends OAction {
 						if ($pedido->get('recepcionado')) {
 							$articulo = new Articulo();
 							$articulo->find(['id' => $linea['idArticulo']]);
+
+							$stock_previo = $articulo->get('stock');
+
 							$articulo->set('stock',  $articulo->get('stock') + $linea['unidades']);
 							$articulo->set('palb',   $linea['palb']);
 							$articulo->set('puc',    $linea['puc']);
@@ -134,6 +138,19 @@ class savePedidoAction extends OAction {
 							$articulo->set('iva',    $linea['iva']);
 							$articulo->set('re',     $re_list[$ind]);
 							$articulo->save();
+
+							// Histórico
+							$ha = new HistoricoArticulo();
+							$ha->set('id_articulo',  $articulo->get('id'));
+							$ha->set('tipo',         1);
+							$ha->set('stock_previo', $stock_previo);
+							$ha->set('diferencia',   $linea['unidades']);
+							$ha->set('stock_final',  $articulo->get('stock'));
+							$ha->set('id_venta',     null);
+							$ha->set('id_pedido',    $pedido->get('id'));
+							$ha->set('puc',          $articulo->get('puc'));
+							$ha->set('pvp',          $articulo->get('pvp'));
+							$ha->save();
 
 							// Si viene un nuevo código de barras se lo creo
 							if (!is_null($linea['codBarras'])) {

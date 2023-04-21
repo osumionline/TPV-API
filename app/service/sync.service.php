@@ -4,6 +4,7 @@ namespace OsumiFramework\App\Service;
 
 use OsumiFramework\OFW\Core\OService;
 use OsumiFramework\OFW\DB\ODB;
+use OsumiFramework\OFW\Plugins\OTicketBai;
 use OsumiFramework\App\Service\ventasService;
 use OsumiFramework\App\Model\Venta;
 use OsumiFramework\App\Model\Articulo;
@@ -212,7 +213,7 @@ class syncService extends OService {
 				$tbai_conf = $this->getConfig()->getPluginConfig('ticketbai');
 				if ($tbai_conf['token'] !== '' && $tbai_conf['nif'] !== '') {
 					$tbai = new OTicketBai( ($this->getConfig()->getEnvironment()=='prod') );
-	
+
 					if ($tbai->checkStatus()) {
 						$this->getLog()->info('TicketBai status OK');
 						$response = $tbai->nuevoTbai($venta->getDatosTBai());
