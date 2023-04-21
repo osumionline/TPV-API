@@ -8,6 +8,7 @@ use OsumiFramework\OFW\Tools\OTools;
 use OsumiFramework\App\DTO\ArticuloDTO;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\HistoricoArticulo;
 
 #[OModuleAction(
 	url: '/save-articulo',
@@ -70,6 +71,11 @@ class saveArticuloAction extends OAction {
 					$time = mktime(0, 0, 0, intval($fec_cad_data[0]), 1, (2000 + intval($fec_cad_data[1])));
 					$fecha_caducidad = date('Y-m-d H:i:s', $time);
 				}
+
+				$stock_previo = $art->get('stock');
+				$stock_final = $data->getStock();
+				$diferencia = $stock_final - $stock_previo;
+
 				// Guardo datos del artículo
 				$art->set('localizador',         intval($data->getLocalizador()));
 				$art->set('nombre',              urldecode($data->getNombre()));
@@ -134,6 +140,19 @@ class saveArticuloAction extends OAction {
 
 				// Obtengo el localizador del artículo, o el que se le ha asignado
 				$localizador = $data->getLocalizador();
+
+				// Histórico
+				$ha = new HistoricoArticulo();
+				$ha->set('id_articulo',  $art->get('id'));
+				$ha->set('tipo',         2);
+				$ha->set('stock_previo', $stock_previo);
+				$ha->set('diferencia',   $diferencia);
+				$ha->set('stock_final',  $stock_final);
+				$ha->set('id_venta',     null);
+				$ha->set('id_pedido',    null);
+				$ha->set('puc',          $art->get('puc'));
+				$ha->set('pvp',          $art->get('pvp'));
+				$ha->save();
 			}
 		}
 

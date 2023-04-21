@@ -7,6 +7,7 @@ use OsumiFramework\OFW\Routing\OAction;
 use OsumiFramework\OFW\Web\ORequest;
 use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\CodigoBarras;
+use OsumiFramework\App\Model\HistoricoArticulo;
 use OsumiFramework\App\Component\Api\StatusIdMessageListComponent;
 
 #[OModuleAction(
@@ -47,6 +48,10 @@ class saveAllInventarioAction extends OAction {
 
 					// Si no viene código de barras o si es válido, sigo adelante
 					if ($item_status['status'] == 'ok') {
+						$stock_previo = $articulo->get('stock');
+						$stock_final = $item['stock'];
+						$diferencia = $stock_final - $stock_previo;
+
 						$articulo->set('stock',  $item['stock']);
 						$articulo->set('pvp',    $item['pvp']);
 						$articulo->set('margen', $this->articulos_service->getMargen($item['puc'], $item['pvp']));
@@ -59,6 +64,19 @@ class saveAllInventarioAction extends OAction {
 							$cb->set('por_defecto', false);
 							$cb->save();
 						}
+
+						// Histórico
+						$ha = new HistoricoArticulo();
+						$ha->set('id_articulo',  $articulo->get('id'));
+						$ha->set('tipo',         2);
+						$ha->set('stock_previo', $stock_previo);
+						$ha->set('diferencia',   $diferencia);
+						$ha->set('stock_final',  $stock_final);
+						$ha->set('id_venta',     null);
+						$ha->set('id_pedido',    null);
+						$ha->set('puc',          $articulo->get('puc'));
+						$ha->set('pvp',          $articulo->get('pvp'));
+						$ha->save();
 					}
 				}
 				else {
