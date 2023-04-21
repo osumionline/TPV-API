@@ -11,6 +11,7 @@ use OsumiFramework\App\Model\Foto;
 use OsumiFramework\App\Model\ArticuloFoto;
 use OsumiFramework\App\Model\CodigoBarras;
 use OsumiFramework\App\Model\LineaPedido;
+use OsumiFramework\App\DTO\HistoricoArticuloDTO;
 use OsumiFramework\App\Model\HistoricoArticulo;
 
 class articulosService extends OService {
@@ -365,18 +366,48 @@ class articulosService extends OService {
 	/**
 	 * Función para obtener los datos históricos de un artículo
 	 *
-	 * @param int $id_articulo Id del artículo del que obtener los datos
-	 *
-	 * @param int $pag Número de página de resultados
+	 * @param HistoricoArticuloDTO $data Objeto con la información del artículo a buscar
 	 *
 	 * @return array Lista de resultados
 	 */
-	public function getHistoricoArticulo(int $id_articulo, int $pag): array {
+	public function getHistoricoArticulo(HistoricoArticuloDTO $data): array {
 		$db = new ODB();
-		$lim = $pag * $this->getConfig()->getExtra('num_por_pag');
-		$sql = "SELECT * FROM `historico_articulo` WHERE `id_articulo` = ? ORDER BY `created_at` DESC LIMIT ".$lim.", ".$this->getConfig()->getExtra('num_por_pag');
+		$sql = "SELECT * FROM `historico_articulo` WHERE `id_articulo` = ?";
+
+		if (!is_null($data->getOrderBy()) && !is_null($data->getOrderSent())) {
+			$order_field = '';
+			switch ($data->getOrderBy()) {
+				case "createdAt": { $order_field = 'created_at'; }
+				break;
+		    case "tipo": { $order_field = 'tipo'; }
+				break;
+		    case "stockPrevio": { $order_field = 'stock_previo'; }
+				break;
+		    case "diferencia": { $order_field = 'diferencia'; }
+				break;
+		    case "stockFinal": { $order_field = 'stock_final'; }
+				break;
+		    case "puc": { $order_field = 'puc'; }
+				break;
+		    case "pvp": { $order_field = 'pvp'; }
+				break;
+		    case "idVenta": { $order_field = 'id_venta'; }
+				break;
+		    case "idPedido": { $order_field = 'id_pedido'; }
+				break;
+			}
+			$sql_limit = " ORDER BY `".$order_field."` ".strtoupper($data->getOrderSent());
+		}
+		else {
+			$sql_limit = " ORDER BY `created_at` DESC";
+		}
+		if (!is_null($data->getNum())) {
+			$lim = ($data->getPagina() - 1) * $data->getNum();
+			$sql_limit .= " LIMIT ".$lim.",".$data->getNum();
+		}
+
 		$ret = [];
-		$db->query($sql, [$id_articulo]);
+		$db->query($sql.$sql_limit, [$data->getId()]);
 
 		while ($res = $db->next()) {
 			$ha = new HistoricoArticulo();
