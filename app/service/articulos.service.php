@@ -48,11 +48,11 @@ class articulosService extends OService {
 	public function checkNombre(string $name, ?int $id_articulo): array {
 		$db = new ODB();
 		if (!is_null($id_articulo)) {
-			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `id` != ? AND `deleted_at` IS NULL";
+			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '".OTools::slugify($name)."' AND `id` != ? AND `deleted_at` IS NULL";
 			$db->query($sql, [$id_articulo]);
 		}
 		else {
-			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '%".OTools::slugify($name)."%' AND `deleted_at` IS NULL";
+			$sql = "SELECT * FROM `articulo` WHERE `slug` LIKE '".OTools::slugify($name)."' AND `deleted_at` IS NULL";
 			$db->query($sql);
 		}
 		if ($res = $db->next()) {
