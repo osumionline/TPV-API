@@ -74,6 +74,9 @@ class saveArticuloAction extends OAction {
 
 				$stock_previo = $art->get('stock');
 				$stock_final = $data->getStock();
+				if (is_null($stock_previo)) {
+					$stock_previo = 0;
+				}
 				$diferencia = $stock_final - $stock_previo;
 
 				// Guardo datos del artículo
