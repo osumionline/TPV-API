@@ -111,6 +111,7 @@ class saveArticuloAction extends OAction {
 
 				// Guardo los códigos de barras
 				$cod_barras_por_defecto = false;
+				$cb_checked = [];
 				foreach ($data->getCodigosBarras() as $cod) {
 					if (!empty($cod['codigoBarras'])) {
 						$cb = new CodigoBarras();
@@ -126,6 +127,7 @@ class saveArticuloAction extends OAction {
 							$cb->set('por_defecto', false);
 						}
 						$cb->save();
+						array_push($cb_checked, $cb->get('id'));
 					}
 				}
 
@@ -136,7 +138,11 @@ class saveArticuloAction extends OAction {
 					$cb->set('codigo_barras', strval($data->getLocalizador()));
 					$cb->set('por_defecto', true);
 					$cb->save();
+					array_push($cb_checked, $cb->get('id'));
 				}
+
+				//Limpio códigos de barras que hayan sido marcados para borrar
+				$this->articulos_service->cleanCodigosDeBarras($art->get('id'), $cb_checked);
 
 				// Actualizo las fotos del artículo
 				$this->articulos_service->updateFotos($art, $data->getFotosList());

@@ -128,6 +128,17 @@ class articulosService extends OService {
 	}
 
 	/**
+	 * Función para limpiar los códigos de barras borrados
+	 *
+	 * @param int $id_articulo
+	 */
+	public function cleanCodigosDeBarras(int $id_articulo, array $checked): void {
+		$db = new ODB();
+		$sql = "DELETE FROM `codigo_barras` WHERE `id_articulo` = ? AND `id` NOT IN (".implode(",", $checked).")";
+		$db->query($sql, [$id_articulo]);
+	}
+
+	/**
 	 * Busca entre los artículos existentes
 	 *
 	 * @param string $name Nombre del artículo a buscar
