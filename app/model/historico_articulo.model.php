@@ -95,6 +95,13 @@ class HistoricoArticulo extends OModel {
 		parent::load($model);
 	}
 
+	const FROM_VENTA          = 1;
+	const FROM_VENTA_SYNC     = 2;
+	const FROM_PEDIDO         = 3;
+	const FROM_ARTICULO       = 4;
+	const FROM_INVENTARIO     = 5;
+	const FROM_INVENTARIO_ALL = 6;
+
 	private ?Articulo $articulo = null;
 
 	/**

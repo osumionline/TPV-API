@@ -142,7 +142,7 @@ class savePedidoAction extends OAction {
 							// Histórico
 							$ha = new HistoricoArticulo();
 							$ha->set('id_articulo',  $articulo->get('id'));
-							$ha->set('tipo',         1);
+							$ha->set('tipo',         HistoricoArticulo::FROM_PEDIDO);
 							$ha->set('stock_previo', $stock_previo);
 							$ha->set('diferencia',   $linea['unidades']);
 							$ha->set('stock_final',  $articulo->get('stock'));

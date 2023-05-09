@@ -129,7 +129,7 @@ class saveVentaAction extends OAction {
 					// Histórico
 					$ha = new HistoricoArticulo();
 					$ha->set('id_articulo',  $art->get('id'));
-					$ha->set('tipo',         0);
+					$ha->set('tipo',         HistoricoArticulo::FROM_VENTA);
 					$ha->set('stock_previo', $stock_previo);
 					$ha->set('diferencia',   $restar);
 					$ha->set('stock_final',  $art->get('stock'));

@@ -78,6 +78,7 @@ class saveArticuloAction extends OAction {
 					$stock_previo = 0;
 				}
 				$diferencia = $stock_final - $stock_previo;
+				$pvp_previo = $art->get('pvp');
 
 				// Guardo datos del artículo
 				$art->set('localizador',         intval($data->getLocalizador()));
@@ -151,17 +152,19 @@ class saveArticuloAction extends OAction {
 				$localizador = $data->getLocalizador();
 
 				// Histórico
-				$ha = new HistoricoArticulo();
-				$ha->set('id_articulo',  $art->get('id'));
-				$ha->set('tipo',         2);
-				$ha->set('stock_previo', $stock_previo);
-				$ha->set('diferencia',   $diferencia);
-				$ha->set('stock_final',  $stock_final);
-				$ha->set('id_venta',     null);
-				$ha->set('id_pedido',    null);
-				$ha->set('puc',          $art->get('puc'));
-				$ha->set('pvp',          $art->get('pvp'));
-				$ha->save();
+				if ($diferencia != 0 || $pvp_previo != $art->get('pvp')) {
+					$ha = new HistoricoArticulo();
+					$ha->set('id_articulo',  $art->get('id'));
+					$ha->set('tipo',         HistoricoArticulo::FROM_ARTICULO);
+					$ha->set('stock_previo', $stock_previo);
+					$ha->set('diferencia',   $diferencia);
+					$ha->set('stock_final',  $stock_final);
+					$ha->set('id_venta',     null);
+					$ha->set('id_pedido',    null);
+					$ha->set('puc',          $art->get('puc'));
+					$ha->set('pvp',          $art->get('pvp'));
+					$ha->save();
+				}
 			}
 		}
 

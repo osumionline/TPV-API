@@ -68,7 +68,7 @@ class saveInventarioAction extends OAction {
 					// Histórico
 					$ha = new HistoricoArticulo();
 					$ha->set('id_articulo',  $articulo->get('id'));
-					$ha->set('tipo',         2);
+					$ha->set('tipo',         HistoricoArticulo::FROM_INVENTARIO);
 					$ha->set('stock_previo', $stock_previo);
 					$ha->set('diferencia',   $diferencia);
 					$ha->set('stock_final',  $stock_final);

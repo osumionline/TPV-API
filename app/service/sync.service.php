@@ -213,7 +213,7 @@ class syncService extends OService {
 					// Histórico
 					$ha = new HistoricoArticulo();
 					$ha->set('id_articulo',  $art->get('id'));
-					$ha->set('tipo',         0);
+					$ha->set('tipo',         HistoricoArticulo::FROM_VENTA_SYNC);
 					$ha->set('stock_previo', $stock_previo);
 					$ha->set('diferencia',   $item['num']);
 					$ha->set('stock_final',  $art->get('stock'));
