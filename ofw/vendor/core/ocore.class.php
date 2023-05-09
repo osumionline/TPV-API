@@ -157,7 +157,7 @@ class OCore {
 		}
 
 		// Database model classes
-		if (file_exists($this->config->getDir('app_model'))) {
+		if (file_exists($this->config->getDir('app_model')) && !is_null($this->dbContainer)) {
 			if ($model = opendir($this->config->getDir('app_model'))) {
 				while (false !== ($entry = readdir($model))) {
 					if ($entry != '.' && $entry != '..') {
