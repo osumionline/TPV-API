@@ -16,9 +16,11 @@ class ArticuloDTO implements ODTO{
 	private float $palb = 0;
 	private float $puc = 0;
 	private float $pvp = 0;
+	private float $pvp_descuento = 0;
 	private int $iva = 0;
 	private float $re = 0;
 	private float $margen = 0;
+	private float $margen_descuento = 0;
 	private int $stock = 0;
 	private int $stock_min = 0;
 	private int $stock_max = 0;
@@ -95,6 +97,12 @@ class ArticuloDTO implements ODTO{
 	private function setPvp(float $pvp): void {
 		$this->pvp = $pvp;
 	}
+	public function getPvpDescuento(): float {
+		return $this->pvp_descuento;
+	}
+	private function setPvpDescuento(float $pvp_descuento): void {
+		$this->pvp_descuento = $pvp_descuento;
+	}
 	public function getIva(): int {
 		return $this->iva;
 	}
@@ -112,6 +120,12 @@ class ArticuloDTO implements ODTO{
 	}
 	private function setMargen(float $margen): void {
 		$this->margen = $margen;
+	}
+	public function getMargenDescuento(): float {
+		return $this->margen_descuento;
+	}
+	private function setMargenDescuento(float $margen_descuento): void {
+		$this->margen_descuento = $margen_descuento;
 	}
 	public function getStock(): int {
 		return $this->stock;
@@ -226,9 +240,11 @@ class ArticuloDTO implements ODTO{
 		$this->setPalb( $req->getParamFloat('palb') );
 		$this->setPuc( $req->getParamFloat('puc') );
 		$this->setPvp( $req->getParamFloat('pvp') );
+		$this->setPvpDescuento( $req->getParamFloat('pvpDescuento') );
 		$this->setIva( $req->getParamInt('iva') );
 		$this->setRe( $req->getParamFloat('re') );
 		$this->setMargen( $req->getParamFloat('margen') );
+		$this->setMargenDescuento( $req->getParamFloat('margenDescuento') );
 		$this->setStock( $req->getParamInt('stock') );
 		$this->setStockMin( $req->getParamInt('stockMin') );
 		$this->setStockMax( $req->getParamInt('stockMax') );

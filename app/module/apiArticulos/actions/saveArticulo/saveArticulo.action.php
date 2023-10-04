@@ -91,9 +91,11 @@ class saveArticuloAction extends OAction {
 				$art->set('palb',                $data->getPalb());
 				$art->set('puc',                 $data->getPuc());
 				$art->set('pvp',                 $data->getPvp());
+				$art->set('pvp_descuento',       $data->getPvpDescuento());
 				$art->set('iva',                 $data->getIva());
 				$art->set('re',                  $data->getRe());
 				$art->set('margen',              $data->getMargen());
+				$art->set('margen_descuento',    $data->getMargenDescuento());
 				$art->set('stock',               $data->getStock());
 				$art->set('stock_min',           $data->getStockMin());
 				$art->set('stock_max',           $data->getStockMax());

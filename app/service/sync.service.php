@@ -260,12 +260,19 @@ class syncService extends OService {
 	 */
 	public function getSyncStock(): array {
 		$db = new ODB();
-		$sql = "SELECT `localizador`, `stock`, `pvp` FROM `articulo`";
+		$sql = "SELECT `localizador`, `stock`, `pvp`, `pvp_descuento` FROM `articulo`";
 		$db->query($sql);
 		$ret = [];
 
 		while ($res = $db->next()) {
-			array_push($ret, $res['localizador'].'_'.$res['stock'].'_'.$res['pvp']);
+			$cad = $res['localizador'].'_'.$res['stock'].'_'.$res['pvp'].'_';
+			if (!is_null($res['pvp_descuento']) && $res['pvp_descuento'] !== "" && $res['pvp_descuento'] !==0) {
+				$cad .= $res['pvp_descuento'];
+			}
+			else {
+				$cad .= "0";
+			}
+			array_push($ret, $cad);
 		}
 
 		return $ret;

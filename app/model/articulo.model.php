@@ -91,6 +91,13 @@ class Articulo extends OModel {
 				comment: 'Precio de Venta al Público del artículo'
 			),
 			new OModelField(
+				name: 'pvp_descuento',
+				type: OMODEL_FLOAT,
+				nullable: true,
+				default: null,
+				comment: 'PVP del artículo con descuento'
+			),
+			new OModelField(
 				name: 'iva',
 				type: OMODEL_NUM,
 				nullable: false,
@@ -110,6 +117,13 @@ class Articulo extends OModel {
 				nullable: false,
 				default: 0,
 				comment: 'Margen de beneficio del artículo'
+			),
+			new OModelField(
+				name: 'margen_descuento',
+				type: OMODEL_FLOAT,
+				nullable: true,
+				default: null,
+				comment: 'Margen de beneficio del artículo con descuento'
 			),
 			new OModelField(
 				name: 'stock',
@@ -375,9 +389,6 @@ class Articulo extends OModel {
 	public function getMarca(): ?Marca {
 		if (is_null($this->marca)) {
 			$this->loadMarca();
-		}
-		if (!is_null($this->marca->get('deleted_at'))){
-			return null;
 		}
 		return $this->marca;
 	}
