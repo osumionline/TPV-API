@@ -16,11 +16,11 @@ class ArticuloDTO implements ODTO{
 	private float $palb = 0;
 	private float $puc = 0;
 	private float $pvp = 0;
-	private float $pvp_descuento = 0;
+	private ?float $pvp_descuento = 0;
 	private int $iva = 0;
 	private float $re = 0;
 	private float $margen = 0;
-	private float $margen_descuento = 0;
+	private ?float $margen_descuento = 0;
 	private int $stock = 0;
 	private int $stock_min = 0;
 	private int $stock_max = 0;
@@ -97,10 +97,10 @@ class ArticuloDTO implements ODTO{
 	private function setPvp(float $pvp): void {
 		$this->pvp = $pvp;
 	}
-	public function getPvpDescuento(): float {
+	public function getPvpDescuento(): ?float {
 		return $this->pvp_descuento;
 	}
-	private function setPvpDescuento(float $pvp_descuento): void {
+	private function setPvpDescuento(?float $pvp_descuento): void {
 		$this->pvp_descuento = $pvp_descuento;
 	}
 	public function getIva(): int {
@@ -121,10 +121,10 @@ class ArticuloDTO implements ODTO{
 	private function setMargen(float $margen): void {
 		$this->margen = $margen;
 	}
-	public function getMargenDescuento(): float {
+	public function getMargenDescuento(): ?float {
 		return $this->margen_descuento;
 	}
-	private function setMargenDescuento(float $margen_descuento): void {
+	private function setMargenDescuento(?float $margen_descuento): void {
 		$this->margen_descuento = $margen_descuento;
 	}
 	public function getStock(): int {
