@@ -22,6 +22,7 @@ class getInventarioAction extends OAction {
 		$status = 'ok';
 		$inventario_list_component = new InventarioItemListComponent(['list' => []]);
 		$pags = 0;
+		$total = 0;
 
 		if (!$data->isValid()) {
 			$status = 'error';
@@ -32,10 +33,12 @@ class getInventarioAction extends OAction {
 
 			$inventario_list_component->setValue('list', $inventario['list']);
 			$pags = $inventario['pags'];
+			$total = $inventario['total'];
 		}
 
 		$this->getTemplate()->add('status', $status);
 		$this->getTemplate()->add('list',   $inventario_list_component);
 		$this->getTemplate()->add('pags',   $pags);
+		$this->getTemplate()->add('total',  $total);
 	}
 }

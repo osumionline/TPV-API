@@ -1,5 +1,6 @@
 {
   "status": "{{status}}",
   "list": [{{list}}],
-  "pags": {{pags}}
+  "pags": {{pags}},
+  "total": {{total}}
 }

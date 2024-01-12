@@ -24,7 +24,7 @@ class almacenService extends OService {
 		$db = new ODB();
 		$sql = "SELECT a.*";
 		$sql_body = " FROM `articulo` a, `marca` m WHERE a.`id_marca` = m.`id` AND a.`deleted_at` IS NULL";
-		$ret = ['list' => [], 'pags' => 0];
+		$ret = ['list' => [], 'pags' => 0, 'total' => 0];
 
 		if (!is_null($data->getNombre())) {
 			$parts = explode(' ', $data->getNombre());
@@ -94,6 +94,14 @@ class almacenService extends OService {
 
 		$res = $db->next();
 		$ret['pags'] = $res['num'];
+
+		$sql_sum = "SELECT SUM(a.`stock` * a.`pvp`) AS `total`";
+		$db->query($sql_sum.$sql_body);
+
+		$res = $db->next();
+		if (!is_null($res['total'])) {
+			$ret['total'] = round($res['total'], 2);
+		}
 
 		return $ret;
 	}
