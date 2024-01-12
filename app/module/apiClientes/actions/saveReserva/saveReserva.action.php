@@ -84,9 +84,11 @@ class saveReservaAction extends OAction {
 				}
 			}
 
-			$venta = $this->ventas_service->getVentaFromReserva($reserva);
-			$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva');
-			$this->imprimir_service->imprimirTicket($ticket_pdf);
+			if ($data->getImprimir() == 'reserva') {
+				$venta = $this->ventas_service->getVentaFromReserva($reserva);
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'reserva');
+				$this->imprimir_service->imprimirTicket($ticket_pdf);
+			}
 
 			$id = $reserva->get('id');
 			$importe = $reserva->get('total');
