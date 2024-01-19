@@ -24,7 +24,7 @@ class almacenService extends OService {
 		$db = new ODB();
 		$sql = "SELECT a.*";
 		$sql_body = " FROM `articulo` a, `marca` m WHERE a.`id_marca` = m.`id` AND a.`deleted_at` IS NULL";
-		$ret = ['list' => [], 'pags' => 0, 'total' => 0];
+		$ret = ['list' => [], 'pags' => 0, 'total_pvp' => 0, 'total_puc' => 0];
 
 		if (!is_null($data->getNombre())) {
 			$parts = explode(' ', $data->getNombre());
@@ -95,12 +95,22 @@ class almacenService extends OService {
 		$res = $db->next();
 		$ret['pags'] = $res['num'];
 
-		$sql_sum = "SELECT SUM(a.`stock` * a.`pvp`) AS `total`";
+		// Calculo total PVP de la selección
+		$sql_sum = "SELECT SUM(a.`stock` * a.`pvp`) AS `total_pvp`";
 		$db->query($sql_sum.$sql_body);
 
 		$res = $db->next();
-		if (!is_null($res['total'])) {
-			$ret['total'] = round($res['total'], 2);
+		if (!is_null($res['total_pvp'])) {
+			$ret['total_pvp'] = round($res['total_pvp'], 2);
+		}
+
+		// Calculo total PUC de la selección
+		$sql_sum = "SELECT SUM(a.`stock` * a.`puc`) AS `total_puc`";
+		$db->query($sql_sum.$sql_body);
+
+		$res = $db->next();
+		if (!is_null($res['total_puc'])) {
+			$ret['total_puc'] = round($res['total_puc'], 2);
 		}
 
 		return $ret;

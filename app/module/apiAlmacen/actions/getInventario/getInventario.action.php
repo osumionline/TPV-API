@@ -22,7 +22,8 @@ class getInventarioAction extends OAction {
 		$status = 'ok';
 		$inventario_list_component = new InventarioItemListComponent(['list' => []]);
 		$pags = 0;
-		$total = 0;
+		$total_pvp = 0;
+		$total_puc = 0;
 
 		if (!$data->isValid()) {
 			$status = 'error';
@@ -33,12 +34,14 @@ class getInventarioAction extends OAction {
 
 			$inventario_list_component->setValue('list', $inventario['list']);
 			$pags = $inventario['pags'];
-			$total = $inventario['total'];
+			$total_pvp = $inventario['total_pvp'];
+			$total_puc = $inventario['total_puc'];
 		}
 
-		$this->getTemplate()->add('status', $status);
-		$this->getTemplate()->add('list',   $inventario_list_component);
-		$this->getTemplate()->add('pags',   $pags);
-		$this->getTemplate()->add('total',  $total);
+		$this->getTemplate()->add('status',    $status);
+		$this->getTemplate()->add('list',      $inventario_list_component);
+		$this->getTemplate()->add('pags',      $pags);
+		$this->getTemplate()->add('total_pvp', $total_pvp);
+		$this->getTemplate()->add('total_puc', $total_puc);
 	}
 }
