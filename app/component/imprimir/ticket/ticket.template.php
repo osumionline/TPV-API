@@ -51,7 +51,7 @@
       }
       .ticket-info td {
         width: 50%;
-        font-size: 8px;
+        font-size: 6px;
         line-height: 10px;
       }
       .venta {
@@ -182,7 +182,7 @@
     </div>
     <div class="header"><?php echo $values['data']['direccion'] ?> <?php echo $values['data']['poblacion'] ?></div>
     <div class="header">Tel: <?php echo $values['data']['telefono'] ?></div>
-    <div class="header-small"><?php echo $values['data']['nombre_comercial'] ?> - NIF: <?php echo $values['data']['nif'] ?></div>
+    <div class="header-small">NIF: <?php echo $values['data']['nif'] ?></div>
     <div class="social">
 <?php foreach ($values['data']['social'] as $value): ?>
       <div class="social-item">
@@ -232,7 +232,7 @@
         <td class="table-articulo center descuento"><strong>Regalo</strong></td>
         <?php endif ?>
         <td class="table-unidades">&nbsp;</td>
-        <td class="table-pvp right descuento">-<?php echo $linea->get('pvp') * ($linea->get('descuento') / 100) ?></td>
+        <td class="table-pvp right descuento">-<?php echo number_format(($linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',') ?></td>
         <td class="table-total right descuento">-<?php
         echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',');
         $descuento_total += ($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100));
