@@ -39,6 +39,9 @@ class almacenService extends OService {
 		if (!is_null($data->getIdProveedor())) {
 			$sql_body .= " AND a.`id_proveedor` = ".$data->getIdProveedor();
 		}
+		if ($data->getDescuento()) {
+			$sql_body .= " AND a.`pvp_descuento` IS NOT NULL";
+		}
 
 		$sql_limit = "";
 		if (!is_null($data->getOrderBy()) && !is_null($data->getOrderSent())) {

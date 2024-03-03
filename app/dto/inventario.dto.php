@@ -9,6 +9,7 @@ class InventarioDTO implements ODTO {
   private ?int $id_proveedor = null;
   private ?int $id_marca = null;
   private ?string $nombre = null;
+  private ?bool $descuento = null;
   private ?string $order_by = null;
   private ?string $order_sent = null;
   private ?int $pagina = null;
@@ -31,6 +32,12 @@ class InventarioDTO implements ODTO {
 	}
 	private function setNombre(?string $nombre): void {
 		$this->nombre = $nombre;
+	}
+  public function getDescuento(): ?bool {
+		return $this->descuento;
+	}
+	private function setDescuento(?bool $descuento): void {
+		$this->descuento = $descuento;
 	}
   public function getOrderBy(): ?string {
 		return $this->order_by;
@@ -65,6 +72,7 @@ class InventarioDTO implements ODTO {
     $this->setIdProveedor( $req->getParamInt('idProveedor') );
   	$this->setIdMarca( $req->getParamInt('idMarca') );
     $this->setNombre( $req->getParamString('nombre') );
+    $this->setDescuento( $req->getParamBool('descuento') );
     $this->setOrderBy( $req->getParamString('orderBy') );
     $this->setOrderSent( $req->getParamString('orderSent') );
     $this->setPagina( $req->getParamInt('pagina') );

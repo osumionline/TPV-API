@@ -224,18 +224,45 @@
         <td class="table-total right"><?php echo number_format($linea->get('unidades') * $linea->get('pvp'), 2, ',') ?></td>
       <?php endif ?>
       </tr>
-<?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0 && $values['data']['tipo'] !== 'regalo'): ?>
+<?php if (
+          (
+            (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0) ||
+            (!is_null($linea->get('importe_descuento')) && $linea->get('importe_descuento') > 0)
+          ) && $values['data']['tipo'] !== 'regalo'): ?>
       <tr>
         <?php if (!$linea->get('regalo')): ?>
-        <td class="table-articulo center descuento"><strong>Descuento: <?php echo $linea->get('descuento') ?>%</strong></td>
+        <td class="table-articulo center descuento">
+          <strong>
+            Descuento:
+            <?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0): ?>
+              <?php echo $linea->get('descuento') ?>%
+            <?php endif ?>
+            <?php if (!is_null($linea->get('importe_descuento')) && $linea->get('importe_descuento') > 0): ?>
+              <?php echo number_format($linea->get('importe_descuento'), 2, ',') ?>€
+            <?php endif ?>
+          </strong>
+        </td>
         <?php else: ?>
         <td class="table-articulo center descuento"><strong>Regalo</strong></td>
         <?php endif ?>
         <td class="table-unidades">&nbsp;</td>
-        <td class="table-pvp right descuento">-<?php echo number_format(($linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',') ?></td>
+        <td class="table-pvp right descuento">
+          <?php if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0): ?>
+            -<?php echo number_format(($linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',') ?>
+          <?php endif ?>
+          <?php if (!is_null($linea->get('importe_descuento')) && $linea->get('importe_descuento') > 0): ?>
+            -<?php echo number_format($linea->get('importe_descuento'), 2, ',') ?>
+          <?php endif ?>
+        </td>
         <td class="table-total right descuento">-<?php
-        echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',');
-        $descuento_total += ($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100));
+          if (!is_null($linea->get('descuento')) && $linea->get('descuento') > 0) {
+            echo number_format(($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100)), 2, ',');
+            $descuento_total += ($linea->get('unidades') * $linea->get('pvp') * ($linea->get('descuento') / 100));
+          }
+          if (!is_null($linea->get('importe_descuento')) && $linea->get('importe_descuento') > 0) {
+            echo number_format($linea->get('importe_descuento'), 2, ',');
+            $descuento_total += $linea->get('importe_descuento');
+          }
         ?></td>
       </tr>
 <?php endif ?>
