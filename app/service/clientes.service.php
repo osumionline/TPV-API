@@ -197,6 +197,40 @@ class clientesService extends OService {
 	}
 
 	/**
+	 * Función para crear una nueva factura
+	 *
+	 * @param int | null $num_factura Número de factura, null si no está facturada
+	 *
+	 * @param int $id_cliente Id del cliente al que se le realiza la factura
+	 *
+	 * @param array $datos Datos del cliente
+	 *
+	 * @param bool $imprimir Indica si la factura se ha imprimido
+	 *
+	 * @return Factura Objeto factura creado o actualizado
+	 */
+	public function createNewFactura(Factura | null $factura, int | null $num_factura, int $id_cliente, array $datos, bool $imprimir): Factura {
+		if (is_null($factura)) {
+			$factura = new Factura();
+		}
+		$factura->set('num_factura',      $num_factura);
+		$factura->set('id_cliente',       $id_cliente);
+		$factura->set('nombre_apellidos', $datos['nombre_apellidos']);
+		$factura->set('dni_cif',          $datos['dni_cif']);
+		$factura->set('telefono',         $datos['telefono']);
+		$factura->set('email',            $datos['email']);
+		$factura->set('direccion',        $datos['direccion']);
+		$factura->set('codigo_postal',    $datos['codigo_postal']);
+		$factura->set('poblacion',        $datos['poblacion']);
+		$factura->set('provincia',        $datos['provincia']);
+		$factura->set('importe',          0);
+		$factura->set('impresa',          $imprimir);
+		$factura->save();
+
+		return $factura;
+	}
+
+	/**
 	 * Función que actualiza las ventas asignadas a una factura y devuelve el importe total de la factura
 	 *
 	 * @param int $id_factura Id de la factura a actualizar

@@ -45,19 +45,7 @@ class saveFacturaAction extends OAction {
 					if ($data->getImprimir()) {
 						$num_factura = $this->clientes_service->generateNumFactura();
 					}
-					$factura->set('num_factura',      $num_factura);
-					$factura->set('id_cliente',       $data->getIdCliente());
-					$factura->set('nombre_apellidos', $datos['nombre_apellidos']);
-					$factura->set('dni_cif',          $datos['dni_cif']);
-					$factura->set('telefono',         $datos['telefono']);
-					$factura->set('email',            $datos['email']);
-					$factura->set('direccion',        $datos['direccion']);
-					$factura->set('codigo_postal',    $datos['codigo_postal']);
-					$factura->set('poblacion',        $datos['poblacion']);
-					$factura->set('provincia',        $datos['provincia']);
-					$factura->set('importe',          0);
-					$factura->set('impresa',          $data->getImprimir());
-					$factura->save();
+					$factura = $this->clientes_service->createNewFactura($factura, $num_factura, $data->getIdCliente(), $datos, $data->getImprimir());
 
 					// Actualizo las ventas de la factura y recalculo el importe
 					$importe = $this->clientes_service->updateFacturaVentas($factura->get('id'), $data->getVentas(), $data->getImprimir());

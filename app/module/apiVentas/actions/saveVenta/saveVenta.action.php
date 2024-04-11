@@ -13,12 +13,13 @@ use OsumiFramework\App\Model\Articulo;
 use OsumiFramework\App\Model\Reserva;
 use OsumiFramework\App\Model\LineaReserva;
 use OsumiFramework\App\Model\HistoricoArticulo;
+use OsumiFramework\App\Model\Cliente;
 use OsumiFramework\App\Component\Imprimir\TicketEmailComponent;
 use OsumiFramework\App\Utils\AppData;
 
 #[OModuleAction(
 	url: '/save-venta',
-	services: ['imprimir', 'general', 'ventas']
+	services: ['imprimir', 'general', 'ventas', 'clientes']
 )]
 class saveVentaAction extends OAction {
 	/**
@@ -189,36 +190,53 @@ class saveVentaAction extends OAction {
 			$ticket_pdf = null;
 			$ticket_regalo_pdf = null;
 
-			if ($data->getImprimir() == 'si' || $data->getImprimir() == 'regalo' || $data->getImprimir() == 'email') {
+			// Imprimir ticket
+			if ($data->getImprimir() == 'si') {
 				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
-				if ($data->getImprimir() == 'si') {
-					$this->imprimir_service->imprimirTicket($ticket_pdf);
+				$this->imprimir_service->imprimirTicket($ticket_pdf);
+			}
+
+			// Imprimir ticket regalo
+			if ($data->getImprimir() == 'regalo') {
+				$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, 'regalo');
+				$this->imprimir_service->imprimirTicket($ticket_regalo_pdf);
+			}
+
+			// Enviar ticket por email
+			if ($data->getImprimir() == 'email') {
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
+				$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
+				$app_data = new AppData($app_data_file);
+				if (!$app_data->getLoaded()) {
+					echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
+					exit();
 				}
 
-				if ($data->getImprimir() == 'regalo') {
-					$ticket_regalo_pdf = $this->imprimir_service->generateTicket($venta, 'regalo');
-					$this->imprimir_service->imprimirTicket($ticket_regalo_pdf);
-				}
+				$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
 
-				if ($data->getImprimir() == 'email') {
-					$app_data_file = $this->getConfig()->getDir('ofw_cache').'app_data.json';
-					$app_data = new AppData($app_data_file);
-					if (!$app_data->getLoaded()) {
-						echo "ERROR: No se encuentra el archivo de configuración del sitio o está mal formado.\n";
-						exit();
-					}
+				$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
+				$email = new OEmailSMTP();
+				$email->addRecipient(urldecode($data->getEmail()));
+				$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->get('id'));
+				$email->setMessage(strval($content));
+				$email->setFrom($email_conf['user']);
+				$email->addAttachment($ticket_pdf);
+				$email->send();
+			}
 
-					$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
-
-					$content = new TicketEmailComponent(['id' => $venta->get('id'), 'nombre' => $app_data->getNombre()]);
-					$email = new OEmailSMTP();
-					$email->addRecipient(urldecode($data->getEmail()));
-					$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->get('id'));
-					$email->setMessage(strval($content));
-					$email->setFrom($email_conf['user']);
-					$email->addAttachment($ticket_pdf);
-					$email->send();
-				}
+			// Imprimir ticket y generar factura
+			if ($data->getImprimir() == 'factura') {
+				$ticket_pdf = $this->imprimir_service->generateTicket($venta, 'venta');
+				$this->imprimir_service->imprimirTicket($ticket_pdf);
+				$cliente = new Cliente();
+				$cliente->find(['id' => $data->getIdCliente()]);
+				$datos = $cliente->getDatosFactura();
+				$num_factura = $this->clientes_service->generateNumFactura();
+				$factura = $this->clientes_service->createNewFactura(null, $num_factura, $data->getIdCliente(), $datos, true);
+				$importe = $this->clientes_service->updateFacturaVentas($factura->get('id'), [$venta->get('id')], true);
+				$factura->set('importe', $importe);
+				$factura->save();
+				$status = 'ok-factura-'.$factura->get('id');
 			}
 
 			$id = $venta->get('id');
