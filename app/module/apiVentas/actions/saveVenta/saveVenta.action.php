@@ -39,6 +39,16 @@ class saveVentaAction extends OAction {
 			$status = 'error';
 		}
 
+		// Compruebo que vengan unidades en cada línea de la venta
+		if (is_array($data->getLineas()) && count($data->getLineas()) > 0) {
+			foreach ($data->getLineas() as $linea) {
+				if (is_null($linea['cantidad'])) {
+					$status = 'error';
+					break;
+				}
+			}
+		}
+
 		if ($status=='ok') {
 			$venta = new Venta();
 			$venta->set('num_venta',      $this->ventas_service->generateNumVenta());
