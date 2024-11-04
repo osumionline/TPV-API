@@ -1,9 +1,0 @@
-{
-  "status": "{{status}}",
-  "list": [{{list}}],
-  "totalDia": {{total_dia}},
-  "ventasEfectivo": {{ventas_efectivo}},
-  "ventasOtros": {{ventas_otros}},
-  "ventasWeb": {{ventas_web}},
-  "ventasBeneficio": {{ventas_beneficio}}
-}

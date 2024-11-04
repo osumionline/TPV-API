@@ -1,0 +1,9 @@
+{
+  "status": "{{status}}",
+  "ultimasVentas": [
+{{ultimas_ventas}}
+  ],
+  "topVentas": [
+{{top_ventas}}
+  ]
+}

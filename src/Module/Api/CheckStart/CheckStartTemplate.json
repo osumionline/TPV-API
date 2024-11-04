@@ -1,0 +1,7 @@
+{
+	"opened": {{opened}},
+	"appData": {{app_data}},
+	"tiposPago": [
+{{tipos_pago}}
+	]
+}
