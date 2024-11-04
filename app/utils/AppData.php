@@ -35,17 +35,17 @@ class AppData {
 		if (!is_null($path) && file_exists($path)) {
 			$data = json_decode(file_get_contents($path), true);
 			if ($data !== null) {
-				$this->setNombre($data['nombre']);
-				$this->setNombreComercial($data['nombreComercial']);
-				$this->setCif($data['cif']);
-				$this->setTelefono($data['telefono']);
-				$this->setDireccion($data['direccion']);
-				$this->setPoblacion($data['poblacion']);
-				$this->setEmail($data['email']);
-				$this->setTwitter($data['twitter']);
-				$this->setFacebook($data['facebook']);
-				$this->setInstagram($data['instagram']);
-				$this->setWeb($data['web']);
+				$this->setNombre(urldecode($data['nombre']));
+				$this->setNombreComercial(urldecode($data['nombreComercial']));
+				$this->setCif(urldecode($data['cif']));
+				$this->setTelefono(urldecode($data['telefono']));
+				$this->setDireccion(urldecode($data['direccion']));
+				$this->setPoblacion(urldecode($data['poblacion']));
+				$this->setEmail(urldecode($data['email']));
+				$this->setTwitter(urldecode($data['twitter']));
+				$this->setFacebook(urldecode($data['facebook']));
+				$this->setInstagram(urldecode($data['instagram']));
+				$this->setWeb(urldecode($data['web']));
 				$this->setCajaInicial($data['cajaInicial']);
 				$this->setTicketInicial($data['ticketInicial']);
 				$this->setFacturaInicial($data['facturaInicial']);
@@ -54,9 +54,9 @@ class AppData {
 				$this->setReList($data['reList']);
 				$this->setMarginList($data['marginList']);
 				$this->setVentaOnline($data['ventaOnline']);
-				$this->setUrlApi($data['urlApi']);
-				$this->setSecretApi($data['secretApi']);
-				$this->setBackupApiKey($data['backupApiKey']);
+				$this->setUrlApi(urldecode($data['urlApi']));
+				$this->setSecretApi(urldecode($data['secretApi']));
+				$this->setBackupApiKey(urldecode($data['backupApiKey']));
 				$this->setFechaCad($data['fechaCad']);
 				$this->setEmpleados($data['empleados']);
 				$this->setLoaded(true);
@@ -277,22 +277,22 @@ class AppData {
 		]);
 	}
 
-	public function getArray(): ?string {
+	public function getArray(bool $encoded = false): ?string {
 		if (!$this->getLoaded()) {
 			return null;
 		}
 		return json_encode([
-			'nombre'          => $this->getNombre(),
-			'nombreComercial' => $this->getNombreComercial(),
-			'cif'             => $this->getCif(),
-			'telefono'        => $this->getTelefono(),
-			'direccion'       => $this->getDireccion(),
-			'poblacion'       => $this->getPoblacion(),
-			'email'           => $this->getEmail(),
-			'twitter'         => $this->getTwitter(),
-			'facebook'        => $this->getFacebook(),
-			'instagram'       => $this->getInstagram(),
-			'web'             => $this->getWeb(),
+			'nombre'          => $encoded ? urlencode($this->getNombre()) : $this->getNombre(),
+			'nombreComercial' => $encoded ? urlencode($this->getNombreComercial()) : $this->getNombreComercial(),
+			'cif'             => $encoded ? urlencode($this->getCif()) : $this->getCif(),
+			'telefono'        => $encoded ? urlencode($this->getTelefono()) : $this->getTelefono(),
+			'direccion'       => $encoded ? urlencode($this->getDireccion()) : $this->getDireccion(),
+			'poblacion'       => $encoded ? urlencode($this->getPoblacion()) : $this->getPoblacion(),
+			'email'           => $encoded ? urlencode($this->getEmail()) : $this->getEmail(),
+			'twitter'         => $encoded ? urlencode($this->getTwitter()) : $this->getTwitter(),
+			'facebook'        => $encoded ? urlencode($this->getFacebook()) : $this->getFacebook(),
+			'instagram'       => $encoded ? urlencode($this->getInstagram()) : $this->getInstagram(),
+			'web'             => $encoded ? urlencode($this->getWeb()) : $this->getWeb(),
 			'cajaInicial'     => $this->getCajaInicial(),
 			'ticketInicial'   => $this->getTicketInicial(),
 			'facturaInicial'  => $this->getFacturaInicial(),
@@ -301,9 +301,9 @@ class AppData {
 			'reList'          => $this->getReList(),
 			'marginList'      => $this->getMarginList(),
 			'ventaOnline'     => $this->getVentaOnline(),
-			'urlApi'          => $this->getUrlApi(),
-			'secretApi'       => $this->getSecretApi(),
-			'backupApiKey'    => $this->getBackupApiKey(),
+			'urlApi'          => $encoded ? urlencode($this->getUrlApi()) : $this->getUrlApi(),
+			'secretApi'       => $encoded ? urlencode($this->getSecretApi()) : $this->getSecretApi(),
+			'backupApiKey'    => $encoded ? urlencode($this->getBackupApiKey()) : $this->getBackupApiKey(),
 			'fechaCad'        => $this->getFechaCad(),
 			'empleados'       => $this->getEmpleados()
 		]);

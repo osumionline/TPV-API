@@ -126,7 +126,7 @@ class generalService extends OService {
 		$sql = "SELECT COUNT(*) AS `num` FROM `caja`";
 		$db->query($sql);
 		$res = $db->next();
-		if ($res['num'] == 0) {
+		if ($res['num'] === 0) {
 			$caja = new Caja();
 			$caja->set('apertura',             date('Y-m-d H:i:s', time()));
 			$caja->set('cierre',               null);
@@ -151,7 +151,7 @@ class generalService extends OService {
 		// Guardo datos de configuración
 		$app_data = new AppData();
 		$app_data->fromDTO($data);
-		file_put_contents($app_data_file, $app_data->getArray());
+		file_put_contents($app_data_file, $app_data->getArray(true));
 	}
 
 	/**

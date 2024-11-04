@@ -66,7 +66,6 @@ class saveVentaAction extends OAction {
 			$venta->set('tbai_url',       null);
 			$venta->save();
 
-			$app_data = $this->general_service->getAppData();
 			$reservas = [];
 			$from_reserva  = null;
 			$linea_reserva = null;
@@ -192,7 +191,7 @@ class saveVentaAction extends OAction {
 					}
 				}
 			}
-			catch (Exception $e) {
+			catch (Throwable $e) {
 				$this->getLog()->error('Ocurrió un error al generar el TicketBai de la venta '.$venta->get('id'));
 				$status = 'ok-tbai-error';
 			}

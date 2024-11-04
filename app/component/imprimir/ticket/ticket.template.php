@@ -2,11 +2,11 @@
   $descuento_total = 0;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <title>Ticket</title>
-    <style type="text/css">
+    <style>
       html, body {
         margin: 0;
         font-size: 10px;
@@ -178,7 +178,7 @@
   </head>
   <body>
     <div class="logo">
-      <img src="<?php echo $values['data']['logo'] ?>" width="100">
+      <img src="<?php echo $values['data']['logo'] ?>" width="100" alt="Logo">
     </div>
     <div class="header"><?php echo $values['data']['direccion'] ?> <?php echo $values['data']['poblacion'] ?></div>
     <div class="header">Tel: <?php echo $values['data']['telefono'] ?></div>
@@ -186,7 +186,7 @@
     <div class="social">
 <?php foreach ($values['data']['social'] as $value): ?>
       <div class="social-item">
-        <img src="<?php echo $value[0] ?>" width="10">
+        <img src="<?php echo $value[0] ?>" width="10" alt="<?php echo $value[1] ?>">
         <span><?php echo $value[1] ?></span>
       </div>
 <?php endforeach ?>
@@ -342,7 +342,7 @@
 <?php endif ?>
 <?php if ($values['data']['tipo'] !== 'reserva'): ?>
     <div class="qr">
-      <img src="<?php echo $values['data']['qr'] ?>" width="80">
+      <img src="<?php echo $values['data']['qr'] ?>" width="80" alt="QR">
     </div>
 
     <div class="legal">
@@ -362,7 +362,7 @@
 <?php if (!is_null($values['data']['tbai_qr'])) : ?>
     <div class="qr">
       <label>TICKET BAI</label>
-      <img src="data:image/png;base64,<?php echo $values['data']['tbai_qr'] ?>" width="80">
+      <img src="data:image/png;base64,<?php echo $values['data']['tbai_qr'] ?>" width="80" alt="QR">
       <span><?php echo $values['data']['tbai_huella'] ?></span>
     </div>
 <?php endif ?>
