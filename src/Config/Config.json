@@ -1,0 +1,38 @@
+{
+	"name": "Indomable",
+	"db": {
+		"host": "localhost",
+		"user": "apitpv",
+		"pass": "6Te!l983x",
+		"name": "apitpv"
+	},
+	"base_url": "https://apitpvtest.osumi.dev",
+	"default_title": "API TPV",
+	"dir": {
+		"fotos": "fotos/"
+	},
+	"log_level": "ALL",
+	"extra": {
+		"num_por_pag": 20,
+		"fotos": "/var/www/vhosts/osumi.dev/apitpvtest.osumi.dev/web/fotos",
+		"foxit": "C:\\Foxit Software\\Foxit Reader\\Foxit Reader.exe",
+		"impresora": "tickets",
+		"backup_api_url": "https://tpvbackup.osumi.dev/api/",
+		"backup_api_key": "R54kHNTvqCGSIx8cuD21f7nMPBzFyi-GzXSaTAZIl-skWjBucZPAw1aYOedRUyN5XnzHlDr0",
+		"backup_id_account": 1
+	},
+	"plugins": {
+		"email_smtp": {
+			"host": "smtp.gmail.com",
+			"port": 587,
+			"secure": "tls",
+			"user": "hola@indomablestore.com",
+			"pass": "vxszoejzhikhjkrs"
+		},
+		"ticketbai": {
+			"token": "2d87bddbd36bc5156ca8bd52d6d833b502b0ecb2d9a422a2d3148903ece2fac3",
+			"nif": "78941531B"
+		}
+	},
+	"environment": "prod"
+}

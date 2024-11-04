@@ -1,7 +1,0 @@
-{
-  "status": "{{status}}",
-  "guardados": [{{guardados}}],
-  "recepcionados": [{{recepcionados}}],
-  "guardadosPags": {{guardados_pags}},
-  "recepcionadosPags": {{recepcionados_pags}}
-}

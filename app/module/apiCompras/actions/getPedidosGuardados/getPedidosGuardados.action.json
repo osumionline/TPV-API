@@ -1,5 +1,0 @@
-{
-  "status": "{{status}}",
-  "list": [{{list}}],
-  "pags": {{pags}}
-}

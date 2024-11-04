@@ -1,3 +1,3 @@
-web/.php-ini
-web/.php-version
-ofw/cache/urls.cache.json
+/vendor/
+/ofw/
+/composer.lock
