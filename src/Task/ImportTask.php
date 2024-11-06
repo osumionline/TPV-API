@@ -177,7 +177,7 @@ class ImportTask extends OTask {
 		foreach ($file as $line) {
 			$data = str_getcsv($line, ";");
 			if ($data[0] !== 'Id') {
-				array_push($list, $data);
+				$list[] = $data;
 			}
 		}
 		return $list;

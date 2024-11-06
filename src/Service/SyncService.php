@@ -248,7 +248,7 @@ class SyncService extends OService {
 				}
 			}
 
-			array_push($status, $venta_status);
+			$status[] = $venta_status;
 		}
 		return $status;
 	}
