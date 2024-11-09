@@ -2,9 +2,9 @@
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $pdfpedido->id ?>,
+	"id": {{ pdfpedido.id }},
 	"data": null,
-	"nombre": <?php echo is_null($pdfpedido->nombre) ? 'null' : '"' . urlencode($pdfpedido->nombre) . '"' ?>,
+	"nombre": {{ pdfpedido.nombre | string }},
 	"url": "<?php echo $pdfpedido->getUrl() ?>",
 	"deleted": false
 	}

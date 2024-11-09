@@ -7,11 +7,11 @@ use Osumi\OsumiFramework\App\Component\Model\LineaReservaList\LineaReservaListCo
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $reserva->id ?>,
-	"idCliente": <?php echo is_null($reserva->id_cliente) ? 'null' : $reserva->id_cliente ?>,
+	"id": {{ reserva.id }},
+	"idCliente": {{ reserva.id_cliente | number }},
 	"cliente": <?php echo new ClienteComponent(['cliente' => $reserva->getCliente()]) ?>,
-	"total": <?php echo $reserva->total ?>,
-	"fecha": "<?php echo $reserva->get('created_at', 'd/m/Y H:i') ?>",
+	"total": {{ reserva.total }},
+	"fecha": {{ reserva.created_at | date("d/m/Y H:i") }},
 	"lineas": [<?php echo new LineaReservaListComponent(['list' => $reserva->getLineas()]) ?>]
 	}
 <?php endif ?>

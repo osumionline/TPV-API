@@ -2,19 +2,19 @@
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $lineaventa->id ?>,
-	"idArticulo": <?php echo is_null($lineaventa->id_articulo) ? 'null' : $lineaventa->id_articulo ?>,
-	"articulo": <?php echo is_null($lineaventa->nombre_articulo) ? 'null' : '"' . urlencode($lineaventa->nombre_articulo) . '"' ?>,
+	"id": {{ lineaventa.id }},
+	"idArticulo": {{ lineaventa.id_articulo | number }},
+	"articulo": {{ lineaventa.nombre_articulo | string }},
 	"localizador": <?php echo is_null($lineaventa->getArticulo()) ? 'null' : $lineaventa->getArticulo()->localizador ?>,
 	"marca": <?php echo is_null($lineaventa->getArticulo()) ? 'null' : '"' . urlencode($lineaventa->getArticulo()->getMarca()->nombre) . '"' ?>,
-	"puc": <?php echo $lineaventa->puc ?>,
-	"pvp": <?php echo $lineaventa->pvp ?>,
-	"iva": <?php echo $lineaventa->iva ?>,
-	"importe": <?php echo $lineaventa->importe ?>,
-	"descuento": <?php echo is_null($lineaventa->descuento) ? 'null' : $lineaventa->descuento ?>,
-	"importeDescuento": <?php echo is_null($lineaventa->importe_descuento) ? 'null' : $lineaventa->importe_descuento ?>,
-	"devuelto": <?php echo $lineaventa->devuelto ?>,
-	"unidades": <?php echo $lineaventa->unidades ?>,
-	"regalo": <?php echo $lineaventa->regalo ? 'true' : 'false' ?>
+	"puc": {{ lineaventa.puc }},
+	"pvp": {{ lineaventa.pvp }},
+	"iva": {{ lineaventa.iva }},
+	"importe": {{ lineaventa.importe }},
+	"descuento": {{ lineaventa.descuento | number }},
+	"importeDescuento": {{ lineaventa.importe_descuento | number }},
+	"devuelto": {{ lineaventa.devuelto }},
+	"unidades": {{ lineaventa.unidades }},
+	"regalo": {{ lineaventa.regalo | bool }}
 	}
 <?php endif ?>

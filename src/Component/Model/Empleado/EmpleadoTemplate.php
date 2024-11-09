@@ -2,10 +2,10 @@
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $empleado->id ?>,
-	"nombre": "<?php echo urlencode($empleado->nombre) ?>",
+	"id": {{ empleado.id }},
+	"nombre": {{ empleado.nombre | string }},
 	"hasPassword": <?php echo !is_null($empleado->pass) ? 'true' : 'false' ?>,
-	"color": "<?php echo urlencode($empleado->color) ?>",
+	"color": {{ empleado.color | string }},
 	"roles": [<?php echo implode(', ', $empleado->getRoles()) ?>]
 	}
 <?php endif ?>

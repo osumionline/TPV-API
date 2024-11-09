@@ -2,11 +2,11 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $tipopago->id ?>,
-	"nombre": "<?php echo urlencode($tipopago->nombre) ?>",
+	"id": {{ tipopago.id }},
+	"nombre": {{ tipopago.nombre | string }},
 	"foto": "<?php echo $tipopago->getFoto() ?>",
-	"afectaCaja": <?php echo $tipopago->afecta_caja ? 'true' : 'false' ?>,
-	"orden": <?php echo $tipopago->orden ?>,
-	"fisico": <?php echo $tipopago->fisico ? 'true' : 'false' ?>
+	"afectaCaja": {{ tipopago.afecta_caja | bool }},
+	"orden": {{ tipopago.orden }},
+	"fisico": {{ tipopago.fisico | bool }}
 }
 <?php endif ?>
