@@ -2,8 +2,8 @@
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $etiquetaweb->id ?>,
-	"texto": <?php echo urlencode($etiquetaweb->texto) ?>,
-	"slug": <?php echo urlencode($etiquetaweb->slug) ?>
+	"id": {{ etiquetaweb.id }},
+	"texto": {{ etiquetaweb.texto | string }},
+	"slug": {{ etiquetaweb.slug | string }}
 	}
 <?php endif ?>

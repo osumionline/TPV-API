@@ -6,14 +6,14 @@ use Osumi\OsumiFramework\App\Component\Model\ComercialList\ComercialListComponen
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $proveedor->id ?>,
-	"nombre": "<?php echo urlencode($proveedor->nombre) ?>",
+	"id": {{ proveedor.id }},
+	"nombre": {{ proveedor.nombre | string }},
 	"foto": <?php echo is_null($proveedor->getFoto()) ? 'null' : '"' . $proveedor->getFoto() . '"' ?>,
-	"direccion": <?php echo is_null($proveedor->direccion) ? 'null' : '"' . urlencode($proveedor->direccion) . '"' ?>,
-	"telefono": <?php echo is_null($proveedor->telefono) ? 'null' : '"' . urlencode($proveedor->telefono) . '"' ?>,
-	"email": <?php echo is_null($proveedor->email) ? 'null' : '"' . urlencode($proveedor->email) . '"' ?>,
-	"web": <?php echo is_null($proveedor->web) ? 'null' : '"' . urlencode($proveedor->web) . '"' ?>,
-	"observaciones": <?php echo is_null($proveedor->observaciones) ? 'null' : '"' . urlencode($proveedor->observaciones) . '"' ?>,
+	"direccion": {{ proveedor.direccion | string }},
+	"telefono": {{ proveedor.telefono | string }},
+	"email": {{ proveedor.email | string }},
+	"web": {{ proveedor.web | string }},
+	"observaciones": {{ proveedor.observaciones | string }},
 	"marcas": [<?php echo implode(',', $proveedor->getMarcasList()) ?>],
 	"comerciales": [<?php echo new ComercialListComponent(['list' => $proveedor->getComerciales()]) ?>]
 	}

@@ -2,8 +2,8 @@
 	null
 <?php else: ?>
 	{
-	"id": <?php echo $codigobarras->id ?>,
-	"codigoBarras": "<?php echo urlencode($codigobarras->codigo_barras) ?>",
-	"porDefecto": <?php echo $codigobarras->por_defecto ? 'true' : 'false' ?>
+	"id": {{ codigobarras.id }},
+	"codigoBarras": {{ codigobarras.codigo_barras | string }},
+	"porDefecto": {{ codigobarras.por_defecto | bool }}
 	}
 <?php endif ?>

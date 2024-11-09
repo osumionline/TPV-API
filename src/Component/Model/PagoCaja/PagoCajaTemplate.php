@@ -2,11 +2,11 @@
 null
 <?php else: ?>
 {
-	"id": <?php echo $pagocaja->id ?>,
-	"concepto": "<?php echo urlencode($pagocaja->concepto) ?>",
-	"descripcion": <?php echo is_null($pagocaja->descripcion) ? 'null' : '"'.urlencode($pagocaja->descripcion).'"' ?>,
-	"importe": <?php echo $pagocaja->importe ?>,
-	"fecha": "<?php echo $pagocaja->get('created_at', 'd/m/Y H:i') ?>",
+	"id": {{ pagocaja.id }},
+	"concepto": {{ pagocaja.concepto | string }},
+	"descripcion": {{ pagocaja.descripcion | string }},
+	"importe": {{ pagocaja.importe }},
+	"fecha": {{ pagocaja.created_at | date("d/m/Y H:i") }},
 	"editable": <?php echo $pagocaja->getEditable() ? 'true' : 'false' ?>
 }
 <?php endif ?>

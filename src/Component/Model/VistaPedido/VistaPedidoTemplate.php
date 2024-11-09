@@ -2,7 +2,7 @@
 	null
 <?php else: ?>
 	{
-	"idColumn": <?php echo $vistapedido->id_column ?>,
-	"status": <?php echo $vistapedido->status ? 'true' : 'false' ?>
+	"idColumn": {{ vistapedido.id_column }},
+	"status": {{ vistapedido.status | bool }}
 	}
 <?php endif ?>
