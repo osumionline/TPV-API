@@ -25,12 +25,12 @@ class LoadArticuloComponent extends OComponent {
 		$this->articulo = new ArticuloComponent();
 
 		if (is_null($localizador)) {
-			$this->status = 'error';
+			$this->status = 'error-1';
 		}
 
 		if ($this->status == 'ok') {
 			$art = Articulo::findOne(['acceso_directo' => $localizador]);
-			if (!is_null($a)) {
+			if (!is_null($art)) {
 				$this->articulo->articulo = $art;
 			} else {
 				$cb = CodigoBarras::findOne(['codigo_barras' => strval($localizador)]);
@@ -38,7 +38,7 @@ class LoadArticuloComponent extends OComponent {
 					$art = Articulo::findOne(['id' => $cb->id_articulo]);
 					$this->articulo->articulo = $art;
 				} else {
-					$this->status = 'error';
+					$this->status = 'error-2';
 				}
 			}
 		}

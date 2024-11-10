@@ -89,7 +89,7 @@ class Cliente extends OModel {
 
 	#[OField(
 	  comment: 'Nombre y apellidos del cliente para la facturación',
-	  nullable: false,
+	  nullable: true,
 	  max: 150,
 	  default: null
 	)]
