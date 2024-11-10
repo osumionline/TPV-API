@@ -6,7 +6,7 @@
 		"pass": "6Te!l983x",
 		"name": "apitpv"
 	},
-	"base_url": "https://apitpvtest.osumi.dev",
+	"base_url": "https://apitpv.osumi.dev",
 	"default_title": "API TPV",
 	"dir": {
 		"fotos": "fotos/"
@@ -14,7 +14,7 @@
 	"log_level": "ALL",
 	"extra": {
 		"num_por_pag": 20,
-		"fotos": "/var/www/vhosts/osumi.dev/apitpvtest.osumi.dev/web/fotos",
+		"fotos": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/web/fotos",
 		"foxit": "C:\\Foxit Software\\Foxit Reader\\Foxit Reader.exe",
 		"impresora": "tickets",
 		"backup_api_url": "https://tpvbackup.osumi.dev/api/",

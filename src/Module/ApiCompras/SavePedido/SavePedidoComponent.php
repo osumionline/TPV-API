@@ -12,6 +12,7 @@ use Osumi\OsumiFramework\App\Model\VistaPedido;
 use Osumi\OsumiFramework\App\Model\Articulo;
 use Osumi\OsumiFramework\App\Model\HistoricoArticulo;
 use Osumi\OsumiFramework\App\Utils\AppData;
+use \DateTime;
 
 class SavePedidoComponent extends OComponent {
   private ?ComprasService $cs = null;
@@ -81,13 +82,17 @@ class SavePedidoComponent extends OComponent {
 				$pedido->portes       = $data->portes;
 				$pedido->descuento    = $data->descuento;
 				if (!is_null($data->fecha_pago)) {
-					$pedido->fecha_pago = date('%e/%c/%Y', strtotime(urldecode($data->fecha_pago)));
+          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pago));
+          $timestamp = $dateTime->getTimestamp();
+    			$pedido->fecha_pago = date('Y-m-d H:i:s', $timestamp);
 				}
 				else {
 					$pedido->fecha_pago = null;
 				}
 				if (!is_null($data->fecha_pedido)) {
-					$pedido->fecha_pedido = date('%e/%c/%Y', strtotime(urldecode($data->fecha_pedido)));
+          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pedido));
+          $timestamp = $dateTime->getTimestamp();
+    			$pedido->fecha_pedido = date('Y-m-d H:i:s', $timestamp);
 				}
 				else {
 					$pedido->fecha_pedido = null;

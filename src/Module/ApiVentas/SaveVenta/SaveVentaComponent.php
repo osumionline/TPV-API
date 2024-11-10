@@ -250,7 +250,7 @@ class SaveVentaComponent extends OComponent {
 
 				$factura->importe = $this->importe;
 				$factura->save();
-				$this->status = 'ok-factura-' . $factura->id
+				$this->status = 'ok-factura-' . $factura->id;
 			}
 
 			$this->id      = $venta->id;

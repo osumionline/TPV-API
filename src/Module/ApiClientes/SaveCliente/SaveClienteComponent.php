@@ -23,7 +23,7 @@ class SaveClienteComponent extends OComponent {
 
 		if ($this->status === 'ok') {
 			$cliente = Cliente::create();
-			if (!is_null($data->getId())) {
+			if (!is_null($data->id)) {
 				$cliente = Cliente::findOne(['id' => $data->id]);
 			}
 

@@ -47,7 +47,7 @@ class Articulo extends OModel {
 
 	#[OField(
 	  comment: 'Id de la categoría en la que se engloba el artículo',
-	  nullable: false,
+	  nullable: true,
 	  default: null
 	)]
 	public ?int $id_categoria;
@@ -55,14 +55,13 @@ class Articulo extends OModel {
 	#[OField(
 	  comment: 'Id de la marca del artículo',
 	  nullable: false,
-	  ref: 'marca.id',
-	  default: null
+	  ref: 'marca.id'
 	)]
 	public ?int $id_marca;
 
 	#[OField(
 	  comment: 'Id del proveedor del artículo',
-	  nullable: false,
+	  nullable: true,
 	  ref: 'proveedor.id',
 	  default: null
 	)]

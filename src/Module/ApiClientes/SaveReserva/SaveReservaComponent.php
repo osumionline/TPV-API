@@ -39,11 +39,11 @@ class SaveReservaComponent extends OComponent {
 
 		if ($this->status === 'ok') {
 			$reserva = Reserva::create();
-			$reserva->id_cliente = ($data->getIdCliente() !== -1) ? $data->getIdCliente() : null;
-			$reserva->total      = $data->getTotal();
+			$reserva->id_cliente = ($data->id_cliente !== -1) ? $data->id_cliente : null;
+			$reserva->total      = $data->total;
 			$reserva->save();
 
-			foreach ($data->getLineas() as $linea) {
+			foreach ($data->lineas as $linea) {
 				$nombre = $linea['descripcion'];
 				$puc = 0;
 				$pvp = $linea['pvp'];

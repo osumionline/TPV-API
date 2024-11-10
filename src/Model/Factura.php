@@ -156,7 +156,7 @@ class Factura extends OModel {
 	 * @return void
 	 */
 	public function loadCliente(): void {
-		$this->setCliente(Cliente::fineOne(['id' => $this->id_cliente]));
+		$this->setCliente(Cliente::findOne(['id' => $this->id_cliente]));
 	}
 
 	private ?array $ventas = null;

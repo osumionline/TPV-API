@@ -7,7 +7,7 @@ use Osumi\OsumiFramework\Web\ORequest;
 
 class ClienteDTO implements ODTO {
 	public ?int    $id                    = null;
-	private string $nombre_apellidos      = '';
+	public string $nombre_apellidos      = '';
 	public ?string $dni_cif               = '';
 	public ?string $telefono              = null;
 	public ?string $email                 = null;
