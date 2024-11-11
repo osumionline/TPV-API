@@ -94,7 +94,7 @@ class SaveVentaComponent extends OComponent {
 					}
 				}
 
-				if ($linea['idArticulo'] != 0) {
+				if ($linea['idArticulo'] !== 0) {
 					$art = Articulo::findOne(['id' => $linea['idArticulo']]);
 					$nombre = $art->nombre;
 					$puc    = $art->puc;

@@ -193,8 +193,8 @@ class SyncService extends OService {
 					$lv->id_articulo       = $art->id;
 					$lv->nombre_articulo   = $art->nombre;
 					$lv->puc               = $art->puc;
-					$lv->pvp               = $art->pvp);
-					$lv->iva               = $art->iva);
+					$lv->pvp               = $art->pvp;
+					$lv->iva               = $art->iva;
 					$lv->descuento         = 0;
 					$lv->importe_descuento = null;
 					$lv->importe           = $item['num'] * $art->pvp;

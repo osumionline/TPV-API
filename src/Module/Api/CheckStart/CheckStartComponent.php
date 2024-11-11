@@ -5,6 +5,7 @@ namespace Osumi\OsumiFramework\App\Module\Api\CheckStart;
 use Osumi\OsumiFramework\Core\OComponent;
 use Osumi\OsumiFramework\Web\ORequest;
 use Osumi\OsumiFramework\Tools\OTools;
+use Osumi\OsumiFramework\Plugins\OFile;
 use Osumi\OsumiFramework\App\Service\GeneralService;
 use Osumi\OsumiFramework\App\Component\Model\TipoPagoList\TipoPagoListComponent;
 
@@ -43,5 +44,9 @@ class CheckStartComponent extends OComponent {
 		foreach (glob($this->getConfig()->getDir('ofw_tmp') . "*.png") as $nombre_fichero) {
     	unlink($nombre_fichero);
 		}
+    OFile::rrmdir($this->getConfig()->getDir('ofw_tmp') . "venta");
+
+    // Limpieza de carpeta public
+    OFile::rrmdir($this->getConfig()->getDir('public') . "venta");
 	}
 }

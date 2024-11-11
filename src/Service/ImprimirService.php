@@ -4,6 +4,7 @@ namespace Osumi\OsumiFramework\App\Service;
 
 use Osumi\OsumiFramework\Core\OService;
 use Osumi\OsumiFramework\Tools\OTools;
+use Osumi\OsumiFramework\Plugins\OImage;
 use Osumi\OsumiFramework\App\Model\Venta;
 use Osumi\OsumiFramework\App\Model\Factura;
 use Osumi\OsumiFramework\App\Utils\AppData;
@@ -43,23 +44,49 @@ class ImprimirService extends OService {
 		}
 
 		if ($silent) {
-			$route     = $this->getConfig()->getDir('ofw_tmp') . "ticket_{$venta->id}-{$tipo}.html";
-			$route_pdf = $this->getConfig()->getDir('ofw_tmp') . "ticket_{$venta->id}-{$tipo}.pdf";
-			$route_qr  = $this->getConfig()->getDir('ofw_tmp') . "ticket_{$venta->id}-{$tipo}-qr.png";
+			$folder    = $this->getConfig()->getDir('ofw_tmp') . "venta/{$venta->id}";
+			$route     = "{$folder}/ticket_{$venta->id}-{$tipo}.html";
+			$route_pdf = "{$folder}/ticket_{$venta->id}-{$tipo}.pdf";
+			$route_qr  = "{$folder}/ticket_{$venta->id}-{$tipo}-qr.png";
 		}
 		else {
-			$route     = $this->getConfig()->getDir('public') . "ticket-{$tipo}.html";
-			$route_pdf = $this->getConfig()->getDir('public') . "ticket-{$tipo}.pdf";
-			$route_qr  = $this->getConfig()->getDir('public') . "ticket-{$tipo}-qr.png";
+			$folder    = $this->getConfig()->getDir('public') . "venta/{$venta->id}";
+			$route     = "{$folder}/ticket-{$tipo}.html";
+			$route_pdf = "{$folder}/ticket-{$tipo}.pdf";
+			$route_qr  = "{$folder}/ticket-{$tipo}-qr.png";
+		}
+		if (!is_dir($folder)) {
+			if (!$silent) {
+				echo "LA CARPETA \"{$folder}\" no existe, la creo.\n";
+			}
+			mkdir($folder, 0777, true);
 		}
 		if (file_exists($route)) {
+			if (!$silent) {
+				echo "EL ARCHIVO \"{$route}\" existe, lo borro.\n";
+			}
 			unlink($route);
 		}
 		if (file_exists($route_pdf)) {
+			if (!$silent) {
+				echo "EL ARCHIVO \"{$route_pdf}\" existe, lo borro.\n";
+			}
 			unlink($route_pdf);
 		}
 		if (file_exists($route_qr)) {
+			if (!$silent) {
+				echo "EL ARCHIVO \"{$route_qr}\" existe, lo borro.\n";
+			}
 			unlink($route_qr);
+		}
+		$check_images = glob($folder . '/' . pathinfo($route_pdf, PATHINFO_FILENAME) . '_*.jpg');
+		if (count($check_images) > 0) {
+			foreach ($check_images as $image) {
+				if (!$silent) {
+					echo "EL ARCHIVO \"{$image}\" existe, lo borro.\n";
+				}
+				unlink($image);
+			}
 		}
 		if (!$silent) {
 			echo "RUTA HTML: {$route}\n";
@@ -161,6 +188,14 @@ class ImprimirService extends OService {
 
 		$output = $dompdf->output();
 		file_put_contents($route_pdf, $output);
+
+		// Convierto el ticket a JPG
+		$images = OImage::convertPdfToJpg($route_pdf, $folder);
+
+		if (!$silent) {
+			echo "IMAGENES GENERADAS: \n";
+			var_dump($images);
+		}
 
 		return $route_pdf;
 	}

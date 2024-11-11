@@ -1,0 +1,8 @@
+{
+  "status": "{{status}}",
+  "list": [{{list}}],
+  "pags": {{pags}},
+  "totalUnidades": {{total_unidades}},
+  "totalPVP": {{total_pvp}},
+  "totalPUC": {{total_puc}}
+}
