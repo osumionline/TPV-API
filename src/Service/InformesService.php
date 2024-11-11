@@ -4,9 +4,16 @@ namespace Osumi\OsumiFramework\App\Service;
 
 use Osumi\OsumiFramework\Core\OService;
 use Osumi\OsumiFramework\ORM\ODB;
+use Osumi\OsumiFramework\App\Service\AlmacenService;
 use Osumi\OsumiFramework\App\Model\Venta;
 
 class InformesService extends OService {
+	private ?AlmacenService $as = null;
+
+	public function __construct() {
+		$this->as = inject(AlmacenService::class);
+	}
+
 	/**
 	 * Función para formatear un número
 	 *
@@ -113,5 +120,88 @@ class InformesService extends OService {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Función para obtener los datos para el informe de caducidades
+	 *
+	 * @param CaducidadesDTO $data Filtros usados para buscar las caducidades
+	 *
+	 * @return array Lista con los resultados obtenidos
+	 */
+	public function getInformeCaducidades(CaducidadesDTO $data): array {
+		$caducidades = $this->as->getCaducidades($data);
+		$ret = [];
+
+		foreach ($caducidades as $caducidad) {
+			$fecha = new DateTime($caducidad->created_at);
+			$year  = (int) $fecha->format('Y');
+			$month = (int) $fecha->format('m');
+
+			if (!isset($ret[$year])) {
+				$ret[$year] = [
+					"year"          => $year,
+					"totalUnidades" => 0,
+					"totalPVP"      => 0,
+					"totalPUC"      => 0,
+					"months"        => []
+				];
+			}
+
+      $current_year = &$ret[$year];
+
+			// Sumar al total del año
+			$current_year["totalUnidades"] += $caducidad->unidades;
+			$current_year["totalPVP"]      += $caducidad->pvp * $caducidad->unidades;
+			$current_year["totalPUC"]      += $caducidad->puc * $caducidad->unidades;
+
+			// Verificamos si ya existe la entrada para el mes en el año actual
+			if (!isset($current_year["months"][$month])) {
+				$current_year["months"][$month] = [
+					"month"         => $month,
+					"totalUnidades" => 0,
+					"totalPVP"      => 0,
+					"totalPUC"      => 0,
+					"brands"        => []
+				];
+			}
+
+			// Referencia al mes actual
+			$current_month = &$current_year["months"][$month];
+
+			// Sumar al total del mes
+			$current_month["totalUnidades"] += $caducidad->unidades;
+			$current_month["totalPVP"]      += $caducidad->pvp * $caducidad->unidades;
+			$current_month["totalPUC"]      += $caducidad->puc * $caducidad->unidades;
+
+			$nombre_marca = $caducidad->getArticulo()->getMarca()->nombre;
+
+			// Verificamos si ya existe la entrada para la marca en el mes actual
+			if (!isset($current_month["brands"][$nombre_marca])) {
+				$current_month["brands"][$nombre_marca] = [
+					"name"          => $nombre_marca,
+					"totalUnidades" => 0,
+					"totalPVP"      => 0,
+					"totalPUC"      => 0
+				];
+			}
+
+			// Referencia a la marca actual
+			$current_marca = &$current_month["brands"][$nombre_marca];
+
+			// Sumar al total de la marca
+			$current_marca["totalUnidades"] += $caducidad->unidades;
+			$current_marca["totalPVP"]      += $caducidad->pvp * $caducidad->unidades;
+			$current_marca["totalPUC"]      += $caducidad->puc * $caducidad->unidades;
+		}
+
+		foreach ($ret as &$year_data) {
+			$year_data["months"] = array_values($year_data["months"]);
+			foreach ($year_data["months"] as &$month_Data) {
+				$month_Data["brands"] = array_values($month_Data["brands"]);
+			}
+		}
+
+		return array_values($ret);
 	}
 }

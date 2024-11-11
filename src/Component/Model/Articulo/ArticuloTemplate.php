@@ -1,5 +1,4 @@
 <?php
-
 use Osumi\OsumiFramework\App\Component\Model\CodigoBarrasList\CodigoBarrasListComponent;
 use Osumi\OsumiFramework\App\Component\Model\EtiquetaList\EtiquetaListComponent;
 use Osumi\OsumiFramework\App\Component\Model\EtiquetaWebList\EtiquetaWebListComponent;

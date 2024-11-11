@@ -18,7 +18,8 @@
     "dompdf/dompdf": "^3.0",
     "osumionline/framework": "^9.0",
     "osumionline/plugin-email-smtp": "^3.0",
-    "osumionline/plugin-image": "^3.0",
+    "osumionline/plugin-image": "^3.1",
+    "osumionline/plugin-file": "^3.0",
     "osumionline/plugin-ticketbai": "^2.0",
     "osumionline/plugin-token": "^3.0"
   },
