@@ -171,6 +171,7 @@ class Pedido extends OModel {
 			}
 			break;
 		}
+		return null;
 	}
 
 	private ?Proveedor $proveedor = null;

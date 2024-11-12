@@ -13,7 +13,7 @@ class GetInformeCaducidadesComponent extends OComponent {
 
 	public function __construct() {
 		parent::__construct();
-		$this->as = inject(InformesService::class);
+		$this->is = inject(InformesService::class);
 	}
 
 	/**

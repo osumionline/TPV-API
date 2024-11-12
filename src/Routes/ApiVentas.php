@@ -14,13 +14,13 @@ use Osumi\OsumiFramework\App\Module\ApiVentas\SendTBai\SendTBaiComponent;
 use Osumi\OsumiFramework\App\Module\ApiVentas\SendTicket\SendTicketComponent;
 
 ORoute::prefix('/api-ventas', function() {
-  ORoute::post('/asignar-tipo-pago', AsignarTipoPagoComponent::class);
-  ORoute::post('/get-historico',     GetHistoricoComponent::class);
-  ORoute::post('/get-lineas-ticket', GetLineasTicketComponent::class);
-  ORoute::get('/get-ticket-image',   GetTicketImageComponent::class);
-  ORoute::post('/print-ticket',      PrintTicketComponent::class);
-  ORoute::post('/save-venta',        SaveVentaComponent::class);
-  ORoute::post('/search',            SearchComponent::class);
-  ORoute::post('/send-tbai/:id',     SendTBaiComponent::class);
-  ORoute::post('/send-ticket',       SendTicketComponent::class);
+  ORoute::post('/asignar-tipo-pago',   AsignarTipoPagoComponent::class);
+  ORoute::post('/get-historico',       GetHistoricoComponent::class);
+  ORoute::post('/get-lineas-ticket',   GetLineasTicketComponent::class);
+  ORoute::get('/get-ticket-image/:id', GetTicketImageComponent::class);
+  ORoute::post('/print-ticket',        PrintTicketComponent::class);
+  ORoute::post('/save-venta',          SaveVentaComponent::class);
+  ORoute::post('/search',              SearchComponent::class);
+  ORoute::post('/send-tbai/:id',       SendTBaiComponent::class);
+  ORoute::post('/send-ticket',         SendTicketComponent::class);
 });

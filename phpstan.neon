@@ -1,0 +1,6 @@
+parameters:
+	level: 0
+	paths:
+		- src
+	scanFiles:
+		- vendor/osumionline/framework/src/Tools/functions.php

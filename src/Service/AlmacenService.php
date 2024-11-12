@@ -133,14 +133,14 @@ class AlmacenService extends OService {
 			'total_puc'      => 0
 		];
 		$sql = "SELECT c.*";
-		$sql_body = " FROM `caducidad` c, `articulo` a WHERE c.`id_articulo` = a.`id`";
+		$sql_body = " FROM `caducidad` c, `articulo` a, `marca` m WHERE c.`id_articulo` = a.`id` AND m.`id` = a.`id_marca`";
 
 		$conditions = [];
 		if (!is_null($data->year)) {
-			$conditions[] = "YEAR(`created_at`) = " . $data->year;
+			$conditions[] = "YEAR(c.`created_at`) = " . $data->year;
 		}
 		if (!is_null($data->month)) {
-			$conditions[] = "MONTH(`created_at`) = " . $data->month;
+			$conditions[] = "MONTH(c.`created_at`) = " . $data->month;
 		}
 		if (!is_null($data->id_marca)) {
 			$conditions[] = "a.`id_marca` = ".$data->id_marca;
@@ -152,11 +152,25 @@ class AlmacenService extends OService {
 			}
 			$conditions[] = "a.`slug` LIKE '%" . implode('%', $parts) . "%'";
 		}
+		if (count($conditions) > 0) {
+			$sql_body .= " AND ";
+		}
 		$sql_body .= implode(" AND ", $conditions);
 
 		$sql_limit = "";
-		if (!is_null($data->pag) && !is_null($data->num)) {
-			$lim = ($data->pag - 1) * $data->num;
+		if (!is_null($data->order_by) && !is_null($data->order_sent)) {
+			if ($data->order_by !== 'marca') {
+				$sql_limit = " ORDER BY a.`" . $data->order_by . "` " . strtoupper($data->order_sent);
+			}
+			else {
+				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->order_sent);
+			}
+		}
+		else {
+			$sql_limit = " ORDER BY m.`nombre` ASC, a.`nombre` ASC";
+		}
+		if (!is_null($data->pagina) && !is_null($data->num)) {
+			$lim = ($data->pagina - 1) * $data->num;
 			$sql_limit = " LIMIT " . $lim . "," . $data->num;
 		}
 
@@ -170,7 +184,7 @@ class AlmacenService extends OService {
 			$ret['total_puc']      += $caducidad->unidades * $caducidad->puc;
 		}
 
-		$sql_count = "SELECT COUNT(c.*) AS `num`";
+		$sql_count = "SELECT COUNT(*) AS `num`";
 		$db->query($sql_count . $sql_body);
 		$res = $db->next();
 		$ret['pags'] = (int) $res['num'];

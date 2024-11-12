@@ -6,6 +6,8 @@ use Osumi\OsumiFramework\Core\OService;
 use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\App\Service\AlmacenService;
 use Osumi\OsumiFramework\App\Model\Venta;
+use Osumi\OsumiFramework\App\DTO\CaducidadesDTO;
+use \DateTime;
 
 class InformesService extends OService {
 	private ?AlmacenService $as = null;

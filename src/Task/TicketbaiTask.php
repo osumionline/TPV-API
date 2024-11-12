@@ -18,7 +18,7 @@ class TicketbaiTask extends OTask {
 			exit();
 		}
 
-		$id = $options[id];
+		$id = $options['id'];
 
 		$venta = Venta::findOne(['id' => $id]);
 		if (is_null($venta)) {
