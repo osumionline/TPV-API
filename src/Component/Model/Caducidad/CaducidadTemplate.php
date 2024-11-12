@@ -8,8 +8,8 @@ null
 	"id": {{ caducidad.id }},
 	"articulo": <?php echo new ArticuloComponent(['articulo' => $caducidad->getArticulo()]) ?>,
 	"unidades": {{ caducidad.unidades }},
-	"puc": {{ caducidad.puc | number }},
 	"pvp": {{caducidad.pvp | number }},
+	"puc": {{ caducidad.puc | number }},
 	"createdAt": {{ caducidad.created_at | date }}
 }
 <?php endif ?>

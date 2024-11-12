@@ -51,7 +51,7 @@ class CategoriasService extends OService {
 			$options['depth'] = 0;
 		}
 		else {
-			$cat = Category::findOne(['id' => $options['id_category']]);
+			$cat = Categoria::findOne(['id' => $options['id_category']]);
 		}
 
 		$item = [

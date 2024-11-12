@@ -30,12 +30,12 @@ class GetCaducidadesComponent extends OComponent {
 	 * @return void
 	 */
 	public function run(CaducidadesDTO $data): void {
-		if (is_null($data->pag) || is_null($data->num)) {
+		if (is_null($data->pagina) || is_null($data->num)) {
 			$this->status = 'error';
 		}
 
 		if ($this->status === 'ok') {
-			$caducidades = $this->als->getCaducidades($data);
+			$caducidades = $this->as->getCaducidades($data);
 
 			$this->list->list     = $caducidades['list'];
 			$this->pags           = $caducidades['pags'];

@@ -44,9 +44,15 @@ class CheckStartComponent extends OComponent {
 		foreach (glob($this->getConfig()->getDir('ofw_tmp') . "*.png") as $nombre_fichero) {
     	unlink($nombre_fichero);
 		}
-    OFile::rrmdir($this->getConfig()->getDir('ofw_tmp') . "venta");
+    $venta_tmp = $this->getConfig()->getDir('ofw_tmp') . "venta";
+    if (is_dir($venta_tmp)) {
+      OFile::rrmdir($venta_tmp);
+    }
 
     // Limpieza de carpeta public
-    OFile::rrmdir($this->getConfig()->getDir('public') . "venta");
+    $venta_public = $this->getConfig()->getDir('public') . "venta";
+    if (is_dir($venta_public)) {
+      OFile::rrmdir($venta_public);
+    }
 	}
 }

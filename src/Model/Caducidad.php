@@ -82,6 +82,6 @@ class Caducidad extends OModel {
 	 * @return void
 	 */
 	private function loadArticulo(): void {
-		$this->articulo = Articulo::findOne(['id_articulo' => $this->id]);
+		$this->articulo = Articulo::findOne(['id' => $this->id_articulo]);
 	}
 }
