@@ -9,6 +9,7 @@ use Osumi\OsumiFramework\App\DTO\CaducidadesDTO;
 class GetInformeCaducidadesComponent extends OComponent {
 	private ?InformesService $is = null;
 
+	public string $status = 'ok';
 	public string $data = '[]';
 
 	public function __construct() {
@@ -23,6 +24,6 @@ class GetInformeCaducidadesComponent extends OComponent {
 	 * @return void
 	 */
 	public function run(CaducidadesDTO $data): void {
-		$this->data = $this->is->getInformeCaducidades($data);
+		$this->data = json_encode($this->is->getInformeCaducidades($data));
 	}
 }
