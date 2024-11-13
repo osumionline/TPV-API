@@ -132,7 +132,7 @@ class AlmacenService extends OService {
 			'total_pvp'      => 0,
 			'total_puc'      => 0
 		];
-		$sql = "SELECT c.*";
+		$sql = "SELECT c.*, (c.`unidades` * a.`pvp`) AS `pvp_total`, (c.`unidades` * a.`puc`) AS `puc_total`";
 		$sql_body = " FROM `caducidad` c, `articulo` a, `marca` m WHERE c.`id_articulo` = a.`id` AND m.`id` = a.`id_marca`";
 
 		$conditions = [];
@@ -159,11 +159,23 @@ class AlmacenService extends OService {
 
 		$sql_limit = "";
 		if (!is_null($data->order_by) && !is_null($data->order_sent)) {
-			if ($data->order_by !== 'marca') {
-				$sql_limit = " ORDER BY a.`" . $data->order_by . "` " . strtoupper($data->order_sent);
+			if ($data->order_by === 'localizador') {
+				$sql_limit = " ORDER BY a.`localizador` " . strtoupper($data->order_sent);
 			}
-			else {
+			if ($data->order_by === 'marca') {
 				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->order_sent);
+			}
+			if ($data->order_by === 'nombre') {
+				$sql_limit = " ORDER BY a.`nombre` " . strtoupper($data->order_sent);
+			}
+			if ($data->order_by === 'unidades') {
+				$sql_limit = " ORDER BY c.`unidades` " . strtoupper($data->order_sent);
+			}
+			if ($data->order_by === 'pvp') {
+				$sql_limit = " ORDER BY `pvp_total` " . strtoupper($data->order_sent);
+			}
+			if ($data->order_by === 'puc') {
+				$sql_limit = " ORDER BY `puc_total` " . strtoupper($data->order_sent);
 			}
 		}
 		else {
@@ -171,7 +183,7 @@ class AlmacenService extends OService {
 		}
 		if (!is_null($data->pagina) && !is_null($data->num)) {
 			$lim = ($data->pagina - 1) * $data->num;
-			$sql_limit = " LIMIT " . $lim . "," . $data->num;
+			$sql_limit .= " LIMIT " . $lim . "," . $data->num;
 		}
 
 		$db->query($sql . $sql_body . $sql_limit);

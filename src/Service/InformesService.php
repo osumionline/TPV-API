@@ -135,7 +135,7 @@ class InformesService extends OService {
 		$caducidades = $this->as->getCaducidades($data);
 		$ret = [];
 
-		foreach ($caducidades as $caducidad) {
+		foreach ($caducidades['list'] as $caducidad) {
 			$fecha = new DateTime($caducidad->created_at);
 			$year  = (int) $fecha->format('Y');
 			$month = (int) $fecha->format('m');
