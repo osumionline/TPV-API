@@ -19,7 +19,8 @@
 		"impresora": "tickets",
 		"backup_api_url": "https://tpvbackup.osumi.dev/api/",
 		"backup_api_key": "R54kHNTvqCGSIx8cuD21f7nMPBzFyi-GzXSaTAZIl-skWjBucZPAw1aYOedRUyN5XnzHlDr0",
-		"backup_id_account": 1
+		"backup_id_account": 1,
+		"backup_folder": "/var/www/vhosts/osumi.dev/apitpv.osumi.dev/ofw/tmp/"
 	},
 	"plugins": {
 		"email_smtp": {
