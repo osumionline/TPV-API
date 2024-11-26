@@ -303,15 +303,18 @@ class SyncService extends OService {
 
 		$token = $header_64 . '.' . $payload_64 . '.' . $signature;
 
+		$this->getLog()->info('syncStock - Llamo a ' . $app_data->getUrlApi() . 'sync-stock');
+
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_URL, $app_data->getUrlApi() . 'syncStock');
+		curl_setopt($ch, CURLOPT_URL, $app_data->getUrlApi() . 'sync-stock');
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['token' => $token]));
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		$server_output = curl_exec($ch);
+		$this->getLog()->info('syncStock - Resultado: ' . var_export($server_output, true));
 
 		curl_close ($ch);
 
