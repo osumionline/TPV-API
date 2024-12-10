@@ -6,6 +6,7 @@ use Osumi\OsumiFramework\Routing\ORoute;
 use Osumi\OsumiFramework\App\Module\ApiClientes\AsignarCliente\AsignarClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\DeleteCliente\DeleteClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\DeleteFactura\DeleteFacturaComponent;
+use Osumi\OsumiFramework\App\Module\ApiClientes\DeleteLineaReserva\DeleteLineaReservaComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\DeleteReserva\DeleteReservaComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetCliente\GetClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetClientes\GetClientesComponent;
@@ -25,6 +26,7 @@ ORoute::prefix('/api-clientes', function() {
   ORoute::post('/asignar-cliente',          AsignarClienteComponent::class);
   ORoute::post('/delete-cliente',           DeleteClienteComponent::class);
   ORoute::post('/delete-factura',           DeleteFacturaComponent::class);
+  ORoute::post('/delete-linea-reserva',     DeleteLineaReservaComponent::class);
   ORoute::post('/delete-reserva',           DeleteReservaComponent::class);
   ORoute::post('/get-cliente',              GetClienteComponent::class);
   ORoute::post('/get-clientes',             GetClientesComponent::class);
