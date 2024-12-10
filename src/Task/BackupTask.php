@@ -26,6 +26,10 @@ class BackupTask extends OTask {
 		if (file_exists($file)) {
 			$this->getLog()->info("BACKUP: Nuevo archivo de backup creado.");
 			$new_file = $this->getConfig()->getExtra('backup_folder').'backup_'.date('Ymd', time()).'.sql';
+			if (file_exists($new_file)) {
+				$this->getLog()->info("BACKUP: El archivo destino existía, será borrado.");
+				unlink($new_file);
+			}
 			if (rename($file, $new_file)) {
 				$this->getLog()->info("BACKUP: Archivo de backup copiado correctamente.");
 			}
