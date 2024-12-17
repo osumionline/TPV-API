@@ -171,7 +171,7 @@ class SyncService extends OService {
 				$venta->id_cliente     = null;
 				$venta->total          = $data['amount'];
 				$venta->entregado      = 0;
-				$venta->pago_mixto     = 0;
+				$venta->pago_mixto     = false;
 				$venta->id_tipo_pago   = $data['method'];
 				$venta->entregado_otro = 0;
 				$venta->saldo          = null;
