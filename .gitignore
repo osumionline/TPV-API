@@ -2,3 +2,5 @@
 /ofw/
 /composer.lock
 /public/venta/
+/public/.php-ini
+/public/.php-version

@@ -228,14 +228,20 @@ class SaveVentaComponent extends OComponent {
 
 				$email_conf = $this->getConfig()->getPluginConfig('email_smtp');
 
-				$content = new TicketEmailComponent(['id' => $venta->id, 'nombre' => $app_data->getNombre()]);
-				$email = new OEmailSMTP();
-				$email->addRecipient(urldecode($data->email));
-				$email->setSubject($app_data->getNombre() . ' - Ticket venta ' . $venta->id);
-				$email->setMessage(strval($content));
-				$email->setFrom($email_conf['user']);
-				$email->addAttachment($ticket_pdf);
-				$email->send();
+				try {
+					$content = new TicketEmailComponent(['id' => $venta->id, 'nombre' => $app_data->getNombre()]);
+					$email = new OEmailSMTP();
+					$email->addRecipient(urldecode($data->email));
+					$email->setSubject($app_data->getNombre() . ' - Ticket venta ' . $venta->id);
+					$email->setMessage(strval($content));
+					$email->setFrom($email_conf['user']);
+					$email->addAttachment($ticket_pdf);
+					$email->send();
+				}
+				catch (Throwable $t) {
+					$this->getLog()->error("Error enviando email: " . $t->getMessage());
+					$this->status = 'error-send';
+				}
 			}
 
 			// Imprimir ticket y generar factura
