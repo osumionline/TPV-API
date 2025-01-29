@@ -48,14 +48,20 @@ class SendTicketComponent extends OComponent {
 
 				$ticket_pdf = $this->is->generateTicket($venta, 'venta');
 
-				$content = new TicketEmailComponent(['id' => $venta->id, 'nombre' => $app_data->getNombre()]);
-				$email = new OEmailSMTP();
-				$email->addRecipient(urldecode($email_address));
-				$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->id);
-				$email->setMessage(strval($content));
-				$email->setFrom($email_conf['user']);
-				$email->addAttachment($ticket_pdf);
-				$email->send();
+        try {
+  				$content = new TicketEmailComponent(['id' => $venta->id, 'nombre' => $app_data->getNombre()]);
+  				$email = new OEmailSMTP();
+  				$email->addRecipient(urldecode($email_address));
+  				$email->setSubject($app_data->getNombre().' - Ticket venta '.$venta->id);
+  				$email->setMessage(strval($content));
+  				$email->setFrom($email_conf['user']);
+  				$email->addAttachment($ticket_pdf);
+  				$email->send();
+        }
+        catch (Throwable $t) {
+          $this->getLog()->error("Error enviando email: " . $t->getMessage());
+          $this->status = 'error-send';
+        }
 			}
 			else {
 				$this->status = 'error';
