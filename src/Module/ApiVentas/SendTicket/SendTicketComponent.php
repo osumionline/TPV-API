@@ -60,7 +60,7 @@ class SendTicketComponent extends OComponent {
         }
         catch (Throwable $t) {
           $this->getLog()->error("Error enviando email: " . $t->getMessage());
-          $this->status = 'error-send';
+          $this->status = 'ok-email-error';
         }
 			}
 			else {

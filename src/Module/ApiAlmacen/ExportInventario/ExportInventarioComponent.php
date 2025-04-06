@@ -29,7 +29,7 @@ class ExportInventarioComponent extends OComponent {
 		$lines = ["Localizador;Marca;Referencia;Nombre;Stock;PVP;Margen"];
 
 		foreach ($inventario['list'] as $item) {
-			$lines[] = implode(';',[
+			$lines[] = implode(';', [
 				$item['localizador'],
 				'"'.$item['marca'].'"',
 				'"'.$item['referencia'].'"',

@@ -348,10 +348,10 @@ class ArticulosService extends OService {
 	 * @return float Margen de beneficio de un artículo
 	 */
 	public function getMargen(float $puc, float $pvp): float {
-		if ($pvp === 0) {
-      return 0;
+		if ($pvp === 0 || $pvp === 0.0) {
+      return 0.0;
     }
-    return (100 * ($pvp - $puc)) / $pvp;
+		return (100 * ($pvp - $puc)) / $pvp;
 	}
 
 	/**
