@@ -13,6 +13,7 @@ class GetInformeDetalladoComponent extends OComponent {
 	private ?InformesService $is = null;
 
   public string $status = 'ok';
+	public string $data   = '';
 
   public function __construct() {
     parent::__construct();
@@ -34,6 +35,7 @@ class GetInformeDetalladoComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
+			$this->data = json_encode($this->is->getInformeDetallado($month, $year));
 		}
 	}
 }
