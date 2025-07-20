@@ -20,6 +20,7 @@ use Osumi\OsumiFramework\App\Module\ApiClientes\SaveFactura\SaveFacturaComponent
 use Osumi\OsumiFramework\App\Module\ApiClientes\SaveFacturaFromVenta\SaveFacturaFromVentaComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\SaveReserva\SaveReservaComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\SearchClientes\SearchClientesComponent;
+use Osumi\OsumiFramework\App\Module\ApiClientes\SearchVentasCliente\SearchVentasClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\SendFactura\SendFacturaComponent;
 
 ORoute::prefix('/api-clientes', function() {
@@ -40,5 +41,6 @@ ORoute::prefix('/api-clientes', function() {
   ORoute::post('/save-factura-from-venta',  SaveFacturaFromVentaComponent::class);
   ORoute::post('/save-reserva',             SaveReservaComponent::class);
   ORoute::post('/search-clientes',          SearchClientesComponent::class);
+  ORoute::post('/search-ventas-cliente',    SearchVentasClienteComponent::class);
   ORoute::post('/send-factura',             SendFacturaComponent::class);
 });
