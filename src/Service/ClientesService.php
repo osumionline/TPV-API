@@ -144,6 +144,7 @@ class ClientesService extends OService {
 	 * @param int $id_cliente Id del cliente
 	 *
 	 * @param int $id_factura_include Sirve para añadir al resultado las ventas de una factura concreta. Se usa al editar una factura no impresa todavía.
+	 *
 	 * @return array Lista de ventas de un cliente
 	 */
 	public function getVentasCliente(int $id_cliente, ?int $id_factura_include): array {
@@ -163,6 +164,37 @@ class ClientesService extends OService {
 				}
 			}
 			$list[] = $venta;
+		}
+
+		return $list;
+	}
+
+	/**
+	 * Función para obtener las ventas de un cliente de un mes concreto o las del mes actual por defecto
+	 *
+	 * @param int $id_cliente Id del cliente
+	 *
+	 * @param int $month Mes a buscar
+	 *
+	 * @param int $year Año a buscar
+	 *
+	 * @return array Lista de ventas de un cliente
+	 */
+	public function searchVentasCliente(int $id_cliente, ?int $month, ?int $year): array {
+		// Si mes y año son nulos, usamos los actuales
+		if (is_null($month) && is_null($year)) {
+			$month = (int) date('n');
+			$year  = (int) date('Y');
+		}
+
+		$db = new ODB();
+		$sql = "SELECT * FROM `venta` WHERE `id_cliente` = ? AND MONTH(`created_at`) = ? AND YEAR(`created_at`) = ?";
+
+		$db->query($sql, [$id_cliente, $month, $year]);
+		$list = [];
+
+		while ($res = $db->next()) {
+			$list[] = Venta::from($res);
 		}
 
 		return $list;
