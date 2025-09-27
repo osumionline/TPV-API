@@ -29,8 +29,10 @@ class DeleteReservaComponent extends OComponent {
 				$lineas = $reserva->getLineas();
 				foreach ($lineas as $linea) {
 					$articulo = $linea->getArticulo();
-					$articulo->stock = $articulo->stock + $linea->unidades;
-					$articulo->save();
+          if (!is_null($articulo)) {
+					  $articulo->stock = $articulo->stock + $linea->unidades;
+					  $articulo->save();
+          }
 				}
         // Borro la reserva
 				$reserva->deleteFull();
