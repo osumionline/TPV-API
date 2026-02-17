@@ -2,19 +2,13 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class AddCaducidadDTO implements ODTO {
-	public ?int $id_articulo = null;
-	public ?int $unidades    = null;
+class AddCaducidadDTO extends ODTO {
+	#[ODTOField(required: true)]
+	public ?int $idArticulo = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->id_articulo) && !is_null($this->unidades));
-	}
-
-	public function load(ORequest $req): void {
-		$this->id_articulo = $req->getParamInt('idArticulo');
-		$this->unidades    = $req->getParamInt('unidades');
-	}
+	#[ODTOField(required: true)]
+	public ?int $unidades = null;
 }

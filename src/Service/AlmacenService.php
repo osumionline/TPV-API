@@ -31,23 +31,23 @@ class AlmacenService extends OService {
 			}
 			$sql_body .= " AND a.`slug` LIKE '%" . implode('%', $parts) . "%'";
 		}
-		if (!is_null($data->id_marca)) {
-			$sql_body .= " AND a.`id_marca` = " . $data->id_marca;
+		if (!is_null($data->idMarca)) {
+			$sql_body .= " AND a.`id_marca` = " . $data->idMarca;
 		}
-		if (!is_null($data->id_proveedor)) {
-			$sql_body .= " AND a.`id_proveedor` = " . $data->id_proveedor;
+		if (!is_null($data->idProveedor)) {
+			$sql_body .= " AND a.`id_proveedor` = " . $data->idProveedor;
 		}
 		if ($data->descuento) {
 			$sql_body .= " AND a.`pvp_descuento` IS NOT NULL";
 		}
 
 		$sql_limit = "";
-		if (!is_null($data->order_by) && !is_null($data->order_sent)) {
-			if ($data->order_by !== 'marca') {
-				$sql_limit = " ORDER BY a.`" . $data->order_by . "` " . strtoupper($data->order_sent);
+		if (!is_null($data->orderBy) && !is_null($data->orderSent)) {
+			if ($data->orderBy !== 'marca') {
+				$sql_limit = " ORDER BY a.`" . $data->orderBy . "` " . strtoupper($data->orderSent);
 			}
 			else {
-				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->order_sent);
+				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->orderSent);
 			}
 		}
 		else {
@@ -143,7 +143,7 @@ class AlmacenService extends OService {
 			$conditions[] = "MONTH(c.`created_at`) = " . $data->month;
 		}
 		if (!is_null($data->id_marca)) {
-			$conditions[] = "a.`id_marca` = ".$data->id_marca;
+			$conditions[] = "a.`id_marca` = ".$data->idMarca;
 		}
 		if (!is_null($data->nombre)) {
 			$parts = explode(' ', $data->nombre);
@@ -158,24 +158,24 @@ class AlmacenService extends OService {
 		$sql_body .= implode(" AND ", $conditions);
 
 		$sql_limit = "";
-		if (!is_null($data->order_by) && !is_null($data->order_sent)) {
-			if ($data->order_by === 'localizador') {
-				$sql_limit = " ORDER BY a.`localizador` " . strtoupper($data->order_sent);
+		if (!is_null($data->orderBy) && !is_null($data->orderSent)) {
+			if ($data->orderBy === 'localizador') {
+				$sql_limit = " ORDER BY a.`localizador` " . strtoupper($data->orderSent);
 			}
-			if ($data->order_by === 'marca') {
-				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->order_sent);
+			if ($data->orderBy === 'marca') {
+				$sql_limit = " ORDER BY m.`nombre` " . strtoupper($data->orderSent);
 			}
-			if ($data->order_by === 'nombre') {
-				$sql_limit = " ORDER BY a.`nombre` " . strtoupper($data->order_sent);
+			if ($data->orderBy === 'nombre') {
+				$sql_limit = " ORDER BY a.`nombre` " . strtoupper($data->orderSent);
 			}
-			if ($data->order_by === 'unidades') {
-				$sql_limit = " ORDER BY c.`unidades` " . strtoupper($data->order_sent);
+			if ($data->orderBy === 'unidades') {
+				$sql_limit = " ORDER BY c.`unidades` " . strtoupper($data->orderSent);
 			}
-			if ($data->order_by === 'pvp') {
-				$sql_limit = " ORDER BY `pvp_total` " . strtoupper($data->order_sent);
+			if ($data->orderBy === 'pvp') {
+				$sql_limit = " ORDER BY `pvp_total` " . strtoupper($data->orderSent);
 			}
-			if ($data->order_by === 'puc') {
-				$sql_limit = " ORDER BY `puc_total` " . strtoupper($data->order_sent);
+			if ($data->orderBy === 'puc') {
+				$sql_limit = " ORDER BY `puc_total` " . strtoupper($data->orderSent);
 			}
 		}
 		else {

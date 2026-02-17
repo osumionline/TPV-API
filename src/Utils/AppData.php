@@ -66,7 +66,7 @@ class AppData {
 
 	public function fromDTO(InstallationDTO $data): void {
 		$this->setNombre($data->nombre);
-		$this->setNombreComercial($data->nombre_comercial);
+		$this->setNombreComercial($data->nombreComercial);
 		$this->setCif($data->cif);
 		$this->setTelefono($data->telefono);
 		$this->setDireccion($data->direccion);
@@ -76,18 +76,18 @@ class AppData {
 		$this->setFacebook($data->facebook);
 		$this->setInstagram($data->instagram);
 		$this->setWeb($data->web);
-		$this->setCajaInicial($data->caja_inicial);
-		$this->setTicketInicial($data->ticket_inicial);
-		$this->setFacturaInicial($data->factura_inicial);
-		$this->setTipoIva($data->tipo_iva);
-		$this->setIvaList($data->iva_list);
-		$this->setReList($data->re_list);
-		$this->setMarginList($data->margin_list);
-		$this->setVentaOnline($data->venta_online);
-		$this->setUrlApi($data->url_api);
-		$this->setSecretApi($data->secret_api);
-		$this->setBackupApiKey($data->backup_api_key);
-		$this->setFechaCad($data->fecha_cad);
+		$this->setCajaInicial($data->cajaInicial);
+		$this->setTicketInicial($data->ticketInicial);
+		$this->setFacturaInicial($data->facturaInicial);
+		$this->setTipoIva($data->tipoIva);
+		$this->setIvaList($data->ivaList);
+		$this->setReList($data->reList);
+		$this->setMarginList($data->marginList);
+		$this->setVentaOnline($data->ventaOnline);
+		$this->setUrlApi($data->urlApi);
+		$this->setSecretApi($data->secretApi);
+		$this->setBackupApiKey($data->backupApiKey);
+		$this->setFechaCad($data->fechaCad);
 		$this->setEmpleados($data->empleados);
 		$this->setLoaded(true);
 	}

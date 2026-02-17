@@ -35,10 +35,10 @@ class SaveEmpleadoComponent extends OComponent {
 			}
 			$empleado->nombre = $data->nombre;
 			if (
-				$data->has_password &&
+				$data->hasPassword &&
 				!is_null($data->password) &&
-				!is_null($data->confirm_password) &&
-				($data->password == $data->confirm_password)
+				!is_null($data->confirmPassword) &&
+				($data->password == $data->confirmPassword)
 			) {
 				$empleado->pass = password_hash($data->password, PASSWORD_BCRYPT);
 			}

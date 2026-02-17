@@ -74,23 +74,23 @@ class SavePedidoComponent extends OComponent {
 
 			if ($this->status === 'ok') {
 				// Guardo datos del pedido
-				$pedido->id_proveedor = $data->id_proveedor;
-				$pedido->metodo_pago  = $data->id_metodo_pago;
+				$pedido->id_proveedor = $data->idProveedor;
+				$pedido->metodo_pago  = $data->idMetodoPago;
 				$pedido->tipo         = $data->tipo;
 				$pedido->num          = !is_null($data->num) ? urldecode($data->num) : null;
 				$pedido->importe      = $data->importe;
 				$pedido->portes       = $data->portes;
 				$pedido->descuento    = $data->descuento;
-				if (!is_null($data->fecha_pago)) {
-          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pago));
+				if (!is_null($data->fechaPago)) {
+          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fechaPago));
           $timestamp = $dateTime->getTimestamp();
     			$pedido->fecha_pago = date('Y-m-d H:i:s', $timestamp);
 				}
 				else {
 					$pedido->fecha_pago = null;
 				}
-				if (!is_null($data->fecha_pedido)) {
-          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pedido));
+				if (!is_null($data->fechaPedido)) {
+          $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fechaPedido));
           $timestamp = $dateTime->getTimestamp();
     			$pedido->fecha_pedido = date('Y-m-d H:i:s', $timestamp);
 				}

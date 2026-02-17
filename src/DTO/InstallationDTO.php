@@ -2,38 +2,93 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class InstallationDTO implements ODTO{
-	public string $nombre           = '';
-	public string $nombre_comercial = '';
-	public string $cif              = '';
-	public string $telefono         = '';
-	public string $direccion        = '';
-	public string $poblacion        = '';
-	public string $email            = '';
-	public string $logo             = '';
-	public string $nombre_empleado  = '';
-	public string $pass             = '';
-	public string $color            = '';
-	public string $twitter          = '';
-	public string $facebook         = '';
-	public string $instagram        = '';
-	public string $web              = '';
-	public float  $caja_inicial     = 0;
-	public int    $ticket_inicial   = 1;
-	public int    $factura_inicial  = 1;
-	public string $tipo_iva         = '';
-	public array  $iva_list         = [];
-	public array  $re_list          = [];
-	public array  $margin_list      = [];
-	public bool   $venta_online     = false;
-	public string $url_api          = '';
-	public string $secret_api       = '';
-	public string $backup_api_key   = '';
-	public bool   $fecha_cad        = false;
-	public bool   $empleados        = false;
+class InstallationDTO extends ODTO{
+	#[ODTOField(required: true)]
+	public string $nombre = '';
+
+	#[ODTOField(required: true)]
+	public string $nombreComercial = '';
+
+	#[ODTOField(required: true)]
+	public string $cif = '';
+
+	#[ODTOField(required: false)]
+	public string $telefono = '';
+
+	#[ODTOField(required: false)]
+	public string $direccion = '';
+
+	#[ODTOField(required: false)]
+	public string $poblacion = '';
+
+	#[ODTOField(required: false)]
+	public string $email = '';
+
+	#[ODTOField(required: true)]
+	public string $logo = '';
+
+	#[ODTOField(required: false)]
+	public string $nombreEmpleado = '';
+
+	#[ODTOField(required: false)]
+	public string $pass = '';
+
+	#[ODTOField(required: true)]
+	public string $color = '';
+
+	#[ODTOField(required: false)]
+	public string $twitter = '';
+
+	#[ODTOField(required: false)]
+	public string $facebook = '';
+
+	#[ODTOField(required: false)]
+	public string $instagram = '';
+
+	#[ODTOField(required: false)]
+	public string $web = '';
+
+	#[ODTOField(required: false)]
+	public float $cajaInicial = 0;
+
+	#[ODTOField(required: false)]
+	public int $ticketInicial = 1;
+
+	#[ODTOField(required: false)]
+	public int $facturaInicial = 1;
+
+	#[ODTOField(required: true)]
+	public string $tipoIva = '';
+
+	#[ODTOField(required: false)]
+	public array $ivaList = [];
+
+	#[ODTOField(required: false)]
+	public array $reList = [];
+
+	#[ODTOField(required: false)]
+	public array $marginList = [];
+
+	#[ODTOField(required: false)]
+	public bool $ventaOnline = false;
+
+	#[ODTOField(required: false)]
+	public string $urlApi = '';
+
+	#[ODTOField(required: false)]
+	public string $secretApi = '';
+
+	#[ODTOField(required: false)]
+	public string $backupApiKey = '';
+
+	#[ODTOField(required: false)]
+	public bool $fechaCad = false;
+
+	#[ODTOField(required: false)]
+	public bool $empleados = false;
 
 	public function isValid(): bool {
 		return (

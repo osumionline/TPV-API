@@ -365,9 +365,9 @@ class ArticulosService extends OService {
 		$db = new ODB();
 		$sql = "SELECT * FROM `historico_articulo` WHERE `id_articulo` = ?";
 
-		if (!is_null($data->order_by) && !is_null($data->order_sent)) {
+		if (!is_null($data->orderBy) && !is_null($data->orderSent)) {
 			$order_field = '';
-			switch ($data->order_by) {
+			switch ($data->orderBy) {
 				case "createdAt": { $order_field = 'created_at'; }
 				break;
 		    case "tipo": { $order_field = 'tipo'; }
@@ -387,7 +387,7 @@ class ArticulosService extends OService {
 		    case "idPedido": { $order_field = 'id_pedido'; }
 				break;
 			}
-			$sql_limit = " ORDER BY `".$order_field."` ".strtoupper($data->order_sent);
+			$sql_limit = " ORDER BY `".$order_field."` ".strtoupper($data->orderSent);
 		}
 		else {
 			$sql_limit = " ORDER BY `created_at` DESC";

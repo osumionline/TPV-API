@@ -54,23 +54,23 @@ class ComprasService extends OService {
 		$sql_all = "SELECT * FROM `pedido` WHERE `recepcionado` = ".($recepcionado ? '1' : '0');
 		$sql = "";
 
-		if (!is_null($data->fecha_desde)) {
-			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` > STR_TO_DATE('".$data->fecha_desde." 00:00:00', '%d/%m/%Y %H:%i:%s')";
+		if (!is_null($data->fechaDesde)) {
+			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` > STR_TO_DATE('".$data->fechaDesde." 00:00:00', '%d/%m/%Y %H:%i:%s')";
 		}
-		if (!is_null($data->fecha_hasta)) {
-			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` < STR_TO_DATE('".$data->fecha_hasta." 23:59:59', '%d/%m/%Y %H:%i:%s')";
+		if (!is_null($data->fechaHasta)) {
+			$sql .= " AND `".($recepcionado ? 'fecha_recepcionado' : 'created_at')."` < STR_TO_DATE('".$data->fechaHasta." 23:59:59', '%d/%m/%Y %H:%i:%s')";
 		}
-		if (!is_null($data->id_proveedor)) {
-			$sql .= " AND `id_proveedor` = ".$data->id_proveedor;
+		if (!is_null($data->idProveedor)) {
+			$sql .= " AND `id_proveedor` = ".$data->idProveedor;
 		}
 		if (!is_null($data->albaran)) {
 			$sql .= " AND `albaran` LIKE '%".$data->albaran."%'";
 		}
-		if (!is_null($data->importe_desde)) {
-			$sql .= " AND `importe` >= ".$data->importe_desde;
+		if (!is_null($data->importeDesde)) {
+			$sql .= " AND `importe` >= ".$data->importeDesde;
 		}
-		if (!is_null($data->importe_hasta)) {
-			$sql .= " AND `importe` <= ".$data->importe_hasta;
+		if (!is_null($data->importeHasta)) {
+			$sql .= " AND `importe` <= ".$data->importeHasta;
 		}
 		$sql .= " ORDER BY `created_at` DESC";
 

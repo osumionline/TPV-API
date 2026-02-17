@@ -2,55 +2,67 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class ClienteDTO implements ODTO {
-	public ?int    $id                    = null;
-	public string $nombre_apellidos      = '';
-	public ?string $dni_cif               = '';
-	public ?string $telefono              = null;
-	public ?string $email                 = null;
-	public ?string $direccion             = null;
-	public ?string $codigo_postal         = null;
-	public ?string $poblacion             = null;
-	public ?int    $provincia             = null;
-	public bool    $fact_igual            = true;
-	public ?string $fact_nombre_apellidos = null;
-	public ?string $fact_dni_cif          = null;
-	public ?string $fact_telefono         = null;
-	public ?string $fact_email            = null;
-	public ?string $fact_direccion        = null;
-	public ?string $fact_codigo_postal    = null;
-	public ?string $fact_poblacion        = null;
-	public ?int    $fact_provincia        = null;
-	public ?string $observaciones         = null;
-	public ?int    $descuento             = null;
+class ClienteDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->nombre_apellidos));
-	}
+	#[ODTOField(required: true)]
+	public string $nombreApellidos = '';
 
-	public function load(ORequest $req): void {
-		$this->id                    = $req->getParamInt('id');
-		$this->nombre_apellidos      = $req->getParamString('nombreApellidos');
-		$this->dni_cif               = $req->getParamString('dniCif');
-		$this->telefono              = $req->getParamString('telefono');
-		$this->email                 = $req->getParamString('email');
-		$this->direccion             = $req->getParamString('direccion');
-		$this->codigo_postal         = $req->getParamString('codigoPostal');
-		$this->poblacion             = $req->getParamString('poblacion');
-		$this->provincia             = $req->getParamInt('provincia');
-		$this->fact_igual            = $req->getParamBool('factIgual');
-		$this->fact_nombre_apellidos = $req->getParamString('factNombreApellidos');
-		$this->fact_dni_cif          = $req->getParamString('factDniCif');
-		$this->fact_telefono         = $req->getParamString('factTelefono');
-		$this->fact_email            = $req->getParamString('factEmail');
-		$this->fact_direccion        = $req->getParamString('factDireccion');
-		$this->fact_codigo_postal    = $req->getParamString('factCodigoPostal');
-		$this->fact_poblacion        = $req->getParamString('factPoblacion');
-		$this->fact_provincia        = $req->getParamInt('factProvincia');
-		$this->observaciones         = $req->getParamString('observaciones');
-		$this->descuento             = $req->getParamInt('descuento');
-	}
+	#[ODTOField(required: false)]
+	public ?string $dniCif = '';
+
+	#[ODTOField(required: false)]
+	public ?string $telefono = null;
+
+	#[ODTOField(required: false)]
+	public ?string $email = null;
+
+	#[ODTOField(required: false)]
+	public ?string $direccion = null;
+
+	#[ODTOField(required: false)]
+	public ?string $codigoPostal = null;
+
+	#[ODTOField(required: false)]
+	public ?string $poblacion = null;
+
+	#[ODTOField(required: false)]
+	public ?int $provincia = null;
+
+	#[ODTOField(required: false)]
+	public bool $factIgual = true;
+
+	#[ODTOField(required: false)]
+	public ?string $factNombreApellidos = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factDniCif = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factTelefono = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factEmail = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factDireccion = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factCodigoPostal = null;
+
+	#[ODTOField(required: false)]
+	public ?string $factPoblacion = null;
+
+	#[ODTOField(required: false)]
+	public ?int $factProvincia = null;
+
+	#[ODTOField(required: false)]
+	public ?string $observaciones = null;
+
+	#[ODTOField(required: false)]
+	public ?int $descuento = null;
 }

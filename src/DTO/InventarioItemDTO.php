@@ -2,37 +2,34 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class InventarioItemDTO implements ODTO {
-	public ?int    $id            = null;
-	public ?int    $localizador   = null;
-	public ?string $marca         = null;
-	public ?string $referencia    = null;
-	public ?string $nombre        = null;
-	public ?int    $stock         = null;
-	public ?float  $puc           = null;
-	public ?float  $pvp           = null;
-	public ?string $codigo_barras = null;
+class InventarioItemDTO extends ODTO {
+	#[ODTOField(required: true)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (
-			!is_null($this->id) &&
-			!is_null($this->stock) &&
-			!is_null($this->pvp)
-		);
-	}
+	#[ODTOField(required: false)]
+	public ?int $localizador = null;
 
-	public function load(ORequest $req): void {
-		$this->id            = $req->getParamInt('id');
-		$this->localizador   = $req->getParamInt('localizador');
-		$this->marca         = $req->getParamString('marca');
-		$this->referencia    = $req->getParamString('referencia');
-		$this->nombre        = $req->getParamString('nombre');
-		$this->stock         = $req->getParamInt('stock');
-		$this->puc           = $req->getParamFloat('puc');
-		$this->pvp           = $req->getParamFloat('pvp');
-		$this->codigo_barras = $req->getParamString('codigoBarras');
-	}
+	#[ODTOField(required: false)]
+	public ?string $marca = null;
+
+	#[ODTOField(required: false)]
+	public ?string $referencia = null;
+
+	#[ODTOField(required: false)]
+	public ?string $nombre = null;
+
+	#[ODTOField(required: true)]
+	public ?int $stock = null;
+
+	#[ODTOField(required: false)]
+	public ?float $puc = null;
+
+	#[ODTOField(required: true)]
+	public ?float $pvp = null;
+
+	#[ODTOField(required: false)]
+	public ?string $codigoBarras = null;
 }

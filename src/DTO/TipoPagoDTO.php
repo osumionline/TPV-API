@@ -2,27 +2,25 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class TipoPagoDTO implements ODTO{
-	public ?int    $id          = null;
-	public string  $nombre      = '';
-	public ?string $foto        = null;
-	public ?bool   $afecta_caja = null;
-	public ?int    $orden       = null;
-	public ?bool   $fisico      = null;
+class TipoPagoDTO extends ODTO{
+	#[ODTOField(required: false)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->nombre));
-	}
+	#[ODTOField(required: true)]
+	public string $nombre = '';
 
-	public function load(ORequest $req): void {
-		$this->id          = $req->getParamInt('id');
-		$this->nombre      = $req->getParamString('nombre');
-		$this->foto        = $req->getParamString('foto');
-		$this->afecta_caja = $req->getParamBool('afectaCaja', false);
-		$this->orden       = $req->getParamInt('orden');
-		$this->fisico      = $req->getParamBool('fisico', true);
-	}
+	#[ODTOField(required: false)]
+	public ?string $foto = null;
+
+	#[ODTOField(required: false)]
+	public bool $afectaCaja = false;
+
+	#[ODTOField(required: false)]
+	public ?int $orden = null;
+
+	#[ODTOField(required: false)]
+	public bool $fisico = true;
 }

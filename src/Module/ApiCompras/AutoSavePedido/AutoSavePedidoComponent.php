@@ -33,28 +33,28 @@ class AutoSavePedidoComponent extends OComponent {
 		}
 
 		// Guardo datos del pedido
-		if (!is_null($data->id_proveedor) && $data->id_proveedor !== -1) {
-			$pedido->id_proveedor = $data->id_proveedor;
+		if (!is_null($data->idProveedor) && $data->idProveedor !== -1) {
+			$pedido->id_proveedor = $data->idProveedor;
 		}
 		else {
 			$pedido->id_proveedor = null;
 		}
-		$pedido->metodo_pago = $data->id_metodo_pago;
+		$pedido->metodo_pago = $data->idMetodoPago;
 		$pedido->tipo        = $data->tipo;
 		$pedido->num         = !is_null($data->num) ? urldecode($data->num) : null;
 		$pedido->importe     = $data->importe;
 		$pedido->portes      = $data->portes;
 		$pedido->descuento   = $data->descuento;
-		if (!is_null($data->fecha_pago)) {
-      $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pago));
+		if (!is_null($data->fechaPago)) {
+      $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fechaPago));
       $timestamp = $dateTime->getTimestamp();
 			$pedido->fecha_pago = date('Y-m-d H:i:s', $timestamp);
 		}
 		else {
 			$pedido->fecha_pago = null;
 		}
-		if (!is_null($data->fecha_pedido)) {
-      $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fecha_pedido));
+		if (!is_null($data->fechaPedido)) {
+      $dateTime  = DateTime::createFromFormat('d/m/Y', urldecode($data->fechaPedido));
       $timestamp = $dateTime->getTimestamp();
 			$pedido->fecha_pedido = date('Y-m-d H:i:s', $timestamp);
 		}

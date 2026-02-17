@@ -2,31 +2,31 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class CaducidadesDTO implements ODTO {
-	public ?int    $year       = null;
-	public ?int    $month      = null;
-	public ?int    $pagina     = null;
-	public ?int    $num        = null;
-	public ?int    $id_marca   = null;
-	public ?string $nombre     = null;
-	public ?string $order_by   = null;
-	public ?string $order_sent = null;
+class CaducidadesDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $year = null;
 
-	public function isValid(): bool {
-		return true;
-	}
+	#[ODTOField(required: false)]
+	public ?int $month = null;
 
-	public function load(ORequest $req): void {
-		$this->year       = $req->getParamInt('year');
-		$this->month      = $req->getParamInt('month');
-		$this->pagina     = $req->getParamInt('pagina');
-		$this->num        = $req->getParamInt('num');
-		$this->id_marca   = $req->getParamInt('idMarca');
-		$this->nombre     = $req->getParamString('nombre');
-		$this->order_by   = $req->getParamString('orderBy');
-		$this->order_sent = $req->getParamString('orderSent');
-	}
+	#[ODTOField(required: true)]
+	public ?int $pagina = null;
+
+	#[ODTOField(required: true)]
+	public ?int $num = null;
+
+	#[ODTOField(required: false)]
+	public ?int $idMarca = null;
+
+	#[ODTOField(required: false)]
+	public ?string $nombre = null;
+
+	#[ODTOField(required: false)]
+	public ?string $orderBy = null;
+
+	#[ODTOField(required: false)]
+	public ?string $orderSent = null;
 }

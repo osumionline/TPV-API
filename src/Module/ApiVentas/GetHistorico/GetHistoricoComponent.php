@@ -41,6 +41,14 @@ class GetHistoricoComponent extends OComponent {
 			$this->status = 'error';
 		}
 
+		if ($this->status === 'ok' && !(
+			($data->modo === 'id'    && !is_null($data->id)) ||
+			($data->modo === 'fecha' && !is_null($data->fecha)) ||
+			($data->modo === 'rango' && !is_null($data->desde) && !is_null($data->hasta))
+		)) {
+			$this->status = 'error';
+		}
+
 		if ($this->status === 'ok') {
 			$ventas_list = [];
 			if ($data->modo !== 'id') {

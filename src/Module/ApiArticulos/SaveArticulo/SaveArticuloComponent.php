@@ -44,7 +44,7 @@ class SaveArticuloComponent extends OComponent {
 			}
 			// Validaciones
 			// Comprobar nombre ya usado
-			if ($data->nombre_status === 'ok') {
+			if ($data->nombreStatus === 'ok') {
 				$check = $this->ars->checkNombre(urldecode($data->nombre), $data->id);
 				if ($check['status'] !== 'ok') {
 					$this->status  = $check['status'];
@@ -61,7 +61,7 @@ class SaveArticuloComponent extends OComponent {
 			}
 			// Comprobar código de barras ya usado
 			if ($this->status === 'ok') {
-				$check = $this->ars->checkCodigosBarras($data->codigos_barras, $data->id);
+				$check = $this->ars->checkCodigosBarras($data->codigosBarras, $data->id);
 				if ($check['status'] !== 'ok') {
 					$this->status  = $check['status'];
 					$this->message = $check['message'];
@@ -70,8 +70,8 @@ class SaveArticuloComponent extends OComponent {
 
 			if ($this->status === 'ok') {
 				$fecha_caducidad = null;
-				if (!is_null($data->fecha_caducidad)) {
-					$fec_cad_data = explode('/', $data->fecha_caducidad);
+				if (!is_null($data->fechaCaducidad)) {
+					$fec_cad_data = explode('/', $data->fechaCaducidad);
 					$time = mktime(0, 0, 0, intval($fec_cad_data[0]), 1, (2000 + intval($fec_cad_data[1])));
 					$fecha_caducidad = date('Y-m-d H:i:s', $time);
 				}
@@ -88,30 +88,30 @@ class SaveArticuloComponent extends OComponent {
 				$a->localizador         = intval($data->localizador);
 				$a->nombre              = urldecode($data->nombre);
 				$a->slug                = OTools::slugify(urldecode($data->nombre));
-				$a->id_categoria        = $data->id_categoria;
-				$a->id_marca            = $data->id_marca;
-				$a->id_proveedor        = $data->id_proveedor;
+				$a->id_categoria        = $data->idCategoria;
+				$a->id_marca            = $data->idMarca;
+				$a->id_proveedor        = $data->idProveedor;
 				$a->referencia          = $data->referencia;
 				$a->palb                = $data->palb;
 				$a->puc                 = $data->puc;
 				$a->pvp                 = $data->pvp;
-				$a->pvp_descuento       = $data->pvp_descuento;
+				$a->pvp_descuento       = $data->pvpDescuento;
 				$a->iva                 = $data->iva;
 				$a->re                  = $data->re;
 				$a->margen              = $data->margen;
-				$a->margen_descuento    = $data->margen_descuento;
+				$a->margen_descuento    = $data->margenDescuento;
 				$a->stock               = $data->stock;
-				$a->stock_min           = $data->stock_min;
-				$a->stock_max           = $data->stock_max;
-				$a->lote_optimo         = $data->lote_optimo;
-				$a->venta_online        = $data->venta_online;
+				$a->stock_min           = $data->stockMin;
+				$a->stock_max           = $data->stockMax;
+				$a->lote_optimo         = $data->loteOptimo;
+				$a->venta_online        = $data->ventaOnline;
 				$a->fecha_caducidad     = $fecha_caducidad;
-				$a->mostrar_en_web      = $data->mostrar_en_web;
-				$a->desc_corta          = urldecode($data->desc_corta);
+				$a->mostrar_en_web      = $data->mostrarEnWeb;
+				$a->desc_corta          = urldecode($data->descCorta);
 				$a->descripcion         = urldecode($data->descripcion);
 				$a->observaciones       = urldecode($data->observaciones);
-				$a->mostrar_obs_pedidos = $data->mostrar_obs_pedidos;
-				$a->mostrar_obs_ventas  = $data->mostrar_obs_ventas;
+				$a->mostrar_obs_pedidos = $data->mostrarObsPedidos;
+				$a->mostrar_obs_ventas  = $data->mostrarObsVentas;
 
 				$a->save();
 				$data->id = $a->id;
@@ -119,7 +119,7 @@ class SaveArticuloComponent extends OComponent {
 				// Guardo los códigos de barras
 				$cod_barras_por_defecto = false;
 				$cb_checked = [];
-				foreach ($data->codigos_barras as $cod) {
+				foreach ($data->codigosBarras as $cod) {
 					if (!empty($cod['codigoBarras'])) {
 						$cb = CodigoBarras::create();
 						if (!empty($cod['id'])) {
@@ -151,7 +151,7 @@ class SaveArticuloComponent extends OComponent {
 				$this->ars->cleanCodigosDeBarras($a->id, $cb_checked);
 
 				// Actualizo las fotos del artículo
-				$this->ars->updateFotos($a, $data->fotos_list);
+				$this->ars->updateFotos($a, $data->fotosList);
 
 				// Obtengo el localizador del artículo, o el que se le ha asignado
 				$this->localizador = $data->localizador;

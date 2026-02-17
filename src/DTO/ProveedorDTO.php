@@ -2,35 +2,37 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class ProveedorDTO implements ODTO{
-	public ?int    $id            = null;
-	public string  $nombre        = '';
-	public ?int    $id_foto       = null;
-	public ?string $foto          = null;
-	public string  $direccion     = '';
-	public string  $telefono      = '';
-	public string  $email         = '';
-	public string  $web           = '';
-	public string  $observaciones = '';
-	public array   $marcas        = [];
+class ProveedorDTO extends ODTO{
+	#[ODTOField(required: false)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->nombre));
-	}
+	#[ODTOField(required: true)]
+	public string $nombre = '';
 
-	public function load(ORequest $req): void {
-		$this->id            = $req->getParamInt('id');
-		$this->nombre        = $req->getParamString('nombre');
-		$this->id_foto       = $req->getParamInt('idFoto');
-		$this->foto          = $req->getParamString('foto');
-		$this->direccion     = $req->getParamString('direccion');
-		$this->telefono      = $req->getParamString('telefono');
-		$this->email         = $req->getParamString('email');
-		$this->web           = $req->getParamString('web');
-		$this->observaciones = $req->getParamString('observaciones');
-		$this->marcas        = $req->getParam('marcas');
-	}
+	#[ODTOField(required: false)]
+	public ?int $idFoto = null;
+
+	#[ODTOField(required: false)]
+	public ?string $foto = null;
+
+	#[ODTOField(required: false)]
+	public string $direccion = '';
+
+	#[ODTOField(required: false)]
+	public string $telefono = '';
+
+	#[ODTOField(required: false)]
+	public string $email = '';
+
+	#[ODTOField(required: false)]
+	public string $web = '';
+
+	#[ODTOField(required: false)]
+	public string $observaciones = '';
+
+	#[ODTOField(required: false)]
+	public array $marcas = [];
 }

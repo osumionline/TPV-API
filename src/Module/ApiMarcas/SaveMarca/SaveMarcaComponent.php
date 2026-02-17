@@ -61,7 +61,7 @@ class SaveMarcaComponent extends OComponent {
 				}
 
 				// Si tiene el check de crear proveedor, creo uno nuevo con los mismos datos de la marca
-				if ($data->crear_proveedor) {
+				if ($data->crearProveedor) {
 					$proveedor = Proveedor::create();
           $proveedor->nombre        = urldecode($data->nombre);
 					$proveedor->direccion     = is_null($data->direccion)     ? null : urldecode($data->direccion);

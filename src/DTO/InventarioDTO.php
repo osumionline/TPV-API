@@ -2,31 +2,31 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class InventarioDTO implements ODTO {
-	public ?int    $id_proveedor = null;
-	public ?int    $id_marca     = null;
-	public ?string $nombre       = null;
-	public ?bool   $descuento    = null;
-	public ?string $order_by     = null;
-	public ?string $order_sent   = null;
-	public ?int    $pagina       = null;
-	public ?int    $num          = null;
+class InventarioDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $idProveedor = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->pagina));
-	}
+	#[ODTOField(required: false)]
+	public ?int $idMarca = null;
 
-	public function load(ORequest $req): void {
-		$this->id_proveedor = $req->getParamInt('idProveedor');
-		$this->id_marca     = $req->getParamInt('idMarca');
-		$this->nombre       = $req->getParamString('nombre');
-		$this->descuento    = $req->getParamBool('descuento');
-		$this->order_by     = $req->getParamString('orderBy');
-		$this->order_sent   = $req->getParamString('orderSent');
-		$this->pagina       = $req->getParamInt('pagina');
-		$this->num          = $req->getParamInt('num');
-	}
+	#[ODTOField(required: false)]
+	public ?string $nombre = null;
+
+	#[ODTOField(required: false)]
+	public ?bool $descuento = null;
+
+	#[ODTOField(required: false)]
+	public ?string $orderBy = null;
+
+	#[ODTOField(required: false)]
+	public ?string $orderSent = null;
+
+	#[ODTOField(required: true)]
+	public ?int $pagina = null;
+
+	#[ODTOField(required: false)]
+	public ?int $num = null;
 }
