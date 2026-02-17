@@ -22,7 +22,7 @@ class AddCaducidadComponent extends OComponent {
 		}
 
 		if ($this->status === 'ok') {
-			$articulo = Articulo::findOne(['id' => $data->id_articulo]);
+			$articulo = Articulo::findOne(['id' => $data->idArticulo]);
 			if (!is_null($articulo)) {
 				$caducidad = Caducidad::create();
 				$caducidad->id_articulo = $articulo->id;

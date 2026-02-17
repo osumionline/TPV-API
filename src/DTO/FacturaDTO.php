@@ -2,14 +2,21 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class FacturaDTO implements ODTO {
-	public ?int   $id         = null;
-	public ?int   $id_cliente = null;
-	public ?array $ventas     = null;
-	public bool   $imprimir   = false;
+class FacturaDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $id = null;
+
+	#[ODTOField(required: true)]
+	public ?int $idCliente = null;
+
+	#[ODTOField(required: true)]
+	public ?array $ventas = null;
+
+	#[ODTOField(required: false)]
+	public bool $imprimir = false;
 
 	public function isValid(): bool {
 		return (

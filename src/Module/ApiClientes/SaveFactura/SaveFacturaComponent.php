@@ -32,8 +32,12 @@ class SaveFacturaComponent extends OComponent {
 			$this->status = 'error';
 		}
 
+		if ($this->status === 'ok' && (!is_array($this->ventas) || (is_array($this->ventas) && count($this->ventas) < 1))) {
+			$this->status = 'error';
+		}
+
 		if ($this->status === 'ok') {
-			$cliente = Cliente::findOne(['id' => $data->id_cliente]);
+			$cliente = Cliente::findOne(['id' => $data->idCliente]);
 			// Primero busco datos del cliente
 			if (!is_null($cliente)) {
 				$factura = Factura::create();
@@ -51,7 +55,7 @@ class SaveFacturaComponent extends OComponent {
 					if ($data->imprimir) {
 						$num_factura = $this->cs->generateNumFactura();
 					}
-					$factura = $this->cs->createNewFactura($factura, $num_factura, $data->id_cliente, $datos, $data->imprimir);
+					$factura = $this->cs->createNewFactura($factura, $num_factura, $data->idCliente, $datos, $data->imprimir);
 
 					// Actualizo las ventas de la factura y recalculo el importe
 					$importe = $this->cs->updateFacturaVentas($factura->id, $data->ventas, $data->imprimir);

@@ -39,7 +39,7 @@ class SaveReservaComponent extends OComponent {
 
 		if ($this->status === 'ok') {
 			$reserva = Reserva::create();
-			$reserva->id_cliente = ($data->id_cliente !== -1) ? $data->id_cliente : null;
+			$reserva->id_cliente = ($data->idCliente !== -1) ? $data->idCliente : null;
 			$reserva->total      = $data->total;
 			$reserva->save();
 

@@ -27,10 +27,10 @@ class SaveComercialComponent extends OComponent {
 				$comercial = Comercial::findOne(['id' => $data->id]);
 			}
 
-      $comercial->id_proveedor  = $data->id_proveedor;
+      $comercial->id_proveedor  = $data->idProveedor;
 			$comercial->nombre        = urldecode($data->nombre);
-			$comercial->telefono      = !is_null($data->telefono) ? urldecode($data->telefono) : null;
-			$comercial->email         = !is_null($data->email) ? urldecode($data->email) : null;
+			$comercial->telefono      = !is_null($data->telefono)      ? urldecode($data->telefono)      : null;
+			$comercial->email         = !is_null($data->email)         ? urldecode($data->email)         : null;
 			$comercial->observaciones = !is_null($data->observaciones) ? urldecode($data->observaciones) : null;
 			$comercial->save();
 

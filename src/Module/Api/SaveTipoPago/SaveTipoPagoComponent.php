@@ -41,7 +41,7 @@ class SaveTipoPagoComponent extends OComponent {
 			}
 			$tp->nombre      = urldecode($data->nombre);
 			$tp->slug        = OTools::slugify(urldecode($data->nombre));
-			$tp->afecta_caja = $data->afecta_caja;
+			$tp->afecta_caja = $data->afectaCaja;
 			$tp->orden       = $orden;
 			$tp->fisico      = $data->fisico;
 

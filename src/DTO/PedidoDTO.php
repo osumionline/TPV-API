@@ -2,57 +2,61 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class PedidoDTO implements ODTO{
-	public ?int    $id             = null;
-	public ?int    $id_proveedor   = null;
-	public ?int    $id_metodo_pago = null;
-	public ?bool   $re             = null;
-	public ?bool   $ue             = null;
-	public ?string $tipo           = null;
-	public ?string $num            = null;
-	public ?string $fecha_pago     = null;
-	public ?string $fecha_pedido   = null;
-	public ?array  $lineas         = null;
-	public ?float  $importe        = null;
-	public ?float  $portes         = null;
-	public ?int    $descuento      = null;
-	public ?bool   $faltas         = null;
-	public ?bool   $recepcionado   = null;
-	public ?string $observaciones  = null;
-	public ?array  $pdfs           = null;
-	public ?array  $vista          = null;
+class PedidoDTO extends ODTO{
+	#[ODTOField(required: false)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (
-			!is_null($this->tipo) &&
-			!is_null($this->fecha_pago) &&
-			!is_null($this->fecha_pedido) &&
-			!is_null($this->lineas) &&
-			!is_null($this->recepcionado)
-	    );
-	}
+	#[ODTOField(required: false)]
+	public ?int $idProveedor = null;
 
-	public function load(ORequest $req): void {
-		$this->id             = $req->getParamInt('id');
-		$this->id_proveedor   = $req->getParamInt('idProveedor');
-		$this->id_metodo_pago = $req->getParamInt('idMetodoPago');
-		$this->re             = $req->getParamBool('re');
-		$this->ue             = $req->getParamBool('ue');
-		$this->tipo           = $req->getParamString('tipo');
-		$this->num            = $req->getParamString('num');
-		$this->fecha_pago     = $req->getParamString('fechaPago');
-		$this->fecha_pedido   = $req->getParamString('fechaPedido');
-		$this->lineas         = $req->getParam('lineas');
-		$this->importe        = $req->getParamFloat('importe');
-		$this->portes         = $req->getParamFloat('portes');
-		$this->descuento      = $req->getParamInt('descuento');
-		$this->faltas         = $req->getParamBool('faltas');
-		$this->recepcionado   = $req->getParamBool('recepcionado');
-		$this->observaciones  = $req->getParamString('observaciones');
-		$this->pdfs           = $req->getParam('pdfs');
-		$this->vista          = $req->getParam('vista');
-	}
+	#[ODTOField(required: false)]
+	public ?int $idMetodoPago = null;
+
+	#[ODTOField(required: false)]
+	public ?bool $re = null;
+
+	#[ODTOField(required: false)]
+	public ?bool $ue = null;
+
+	#[ODTOField(required: true)]
+	public ?string $tipo = null;
+
+	#[ODTOField(required: false)]
+	public ?string $num = null;
+
+	#[ODTOField(required: true)]
+	public ?string $fechaPago = null;
+
+	#[ODTOField(required: true)]
+	public ?string $fechaPedido = null;
+
+	#[ODTOField(required: true)]
+	public ?array $lineas = null;
+
+	#[ODTOField(required: false)]
+	public ?float $importe = null;
+
+	#[ODTOField(required: false)]
+	public ?float $portes = null;
+
+	#[ODTOField(required: false)]
+	public ?int $descuento = null;
+
+	#[ODTOField(required: false)]
+	public ?bool $faltas = null;
+
+	#[ODTOField(required: true)]
+	public ?bool $recepcionado = null;
+
+	#[ODTOField(required: false)]
+	public ?string $observaciones = null;
+
+	#[ODTOField(required: false)]
+	public ?array $pdfs = null;
+
+	#[ODTOField(required: false)]
+	public ?array $vista = null;
 }

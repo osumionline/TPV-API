@@ -2,23 +2,19 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class SalidaCajaDTO implements ODTO{
-	public ?int    $id          = null;
-	public string  $concepto    = '';
+class SalidaCajaDTO extends ODTO{
+	#[ODTOField(required: false)]
+	public ?int $id = null;
+
+	#[ODTOField(required: true)]
+	public string $concepto = '';
+
+	#[ODTOField(required: false)]
 	public ?string $descripcion = null;
-	public ?float  $importe     = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->concepto));
-	}
-
-	public function load(ORequest $req): void {
-		$this->id          = $req->getParamInt('id');
-		$this->concepto    = $req->getParamString('concepto');
-		$this->descripcion = $req->getParamString('descripcion');
-		$this->importe     = $req->getParamFloat('importe');
-	}
+	#[ODTOField(required: false)]
+	public ?float $importe = null;
 }

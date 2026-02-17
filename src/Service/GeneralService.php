@@ -101,7 +101,7 @@ class GeneralService extends OService {
 		// Empleado (si ya existe el archivo de configuración es que se están editando sus datos y no hay que crear ningún empleado nuevo)
 		if (!file_exists($app_data_file)) {
 			$empleado = Empleado::create();
-			$empleado->nombre = $data->nombre_empleado;
+			$empleado->nombre = $data->nombreEmpleado;
 			$empleado->pass   = password_hash($data->pass, PASSWORD_BCRYPT);
 			$empleado->color  = str_ireplace('#', '', $data->color);
 			$empleado->save();
@@ -131,7 +131,7 @@ class GeneralService extends OService {
 			$caja->descuento_otros      = 0;
 			$caja->importe_pagos_caja   = 0;
 			$caja->num_pagos_caja       = 0;
-			$caja->importe_apertura     = $data->caja_inicial;
+			$caja->importe_apertura     = $data->cajaInicial;
 			$caja->importe_cierre       = 0;
 			$caja->importe_cierre_real  = 0;
 			$caja->importe_retirado     = 0;

@@ -2,14 +2,23 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class HistoricoDTO implements ODTO {
-	public ?int    $id    = null;
-	public ?string $modo  = null;
+class HistoricoDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $id = null;
+
+	#[ODTOField(required: true)]
+	public ?string $modo = null;
+
+	#[ODTOField(required: false)]
 	public ?string $fecha = null;
+
+	#[ODTOField(required: false)]
 	public ?string $desde = null;
+
+	#[ODTOField(required: false)]
 	public ?string $hasta = null;
 
 	public function isValid(): bool {

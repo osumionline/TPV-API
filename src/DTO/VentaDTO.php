@@ -2,40 +2,40 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class VentaDTO implements ODTO{
-	public ?float  $efectivo     = null;
-	public ?float  $cambio       = null;
-	public ?float  $tarjeta      = null;
-	public ?int    $id_empleado  = null;
-	public ?int    $id_tipo_pago = null;
-	public ?int    $id_cliente   = null;
-	public ?float  $total        = null;
-	public array   $lineas       = [];
-	public bool    $pago_mixto   = false;
-	public ?string $imprimir     = null;
-	public ?string $email        = null;
+class VentaDTO extends ODTO{
+	#[ODTOField(required: false)]
+	public ?float $efectivo = null;
 
-	public function isValid(): bool {
-		return (
-			count($this->lineas) > 0 &&
-			!is_null($this->imprimir)
-		);
-	}
+	#[ODTOField(required: false)]
+	public ?float $cambio = null;
 
-	public function load(ORequest $req): void {
-		$this->efectivo     = $req->getParamFloat('efectivo');
-		$this->cambio       = $req->getParamFloat('cambio');
-		$this->tarjeta      = $req->getParamFloat('tarjeta');
-		$this->id_empleado  = $req->getParamInt('idEmpleado');
-		$this->id_tipo_pago = $req->getParamInt('idTipoPago');
-		$this->id_cliente   = $req->getParamInt('idCliente');
-		$this->total        = $req->getParamFloat('total');
-		$this->lineas       = $req->getParam('lineas');
-		$this->pago_mixto   = $req->getParamBool('pagoMixto');
-		$this->imprimir     = $req->getParamString('imprimir');
-		$this->email        = $req->getParamString('email');
-	}
+	#[ODTOField(required: false)]
+	public ?float $tarjeta = null;
+
+	#[ODTOField(required: false)]
+	public ?int $idEmpleado = null;
+
+	#[ODTOField(required: false)]
+	public ?int $idTipoPago = null;
+
+	#[ODTOField(required: false)]
+	public ?int $idCliente = null;
+
+	#[ODTOField(required: false)]
+	public ?float $total = null;
+
+	#[ODTOField(required: true)]
+	public array $lineas = [];
+
+	#[ODTOField(required: false)]
+	public bool $pagoMixto = false;
+
+	#[ODTOField(required: true)]
+	public ?string $imprimir = null;
+
+	#[ODTOField(required: false)]
+	public ?string $email = null;
 }

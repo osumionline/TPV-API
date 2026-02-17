@@ -2,29 +2,28 @@
 
 namespace Osumi\OsumiFramework\App\DTO;
 
-use Osumi\OsumiFramework\Core\ODTO;
-use Osumi\OsumiFramework\Web\ORequest;
+use Osumi\OsumiFramework\DTO\ODTO;
+use Osumi\OsumiFramework\DTO\ODTOField;
 
-class EmpleadoDTO implements ODTO {
-	public ?int    $id               = null;
-	public string  $nombre           = '';
-	public bool    $has_password     = false;
-	public ?string $password         = null;
-	public ?string $confirm_password = null;
-	public ?string $color            = null;
-	public array   $roles            = [];
+class EmpleadoDTO extends ODTO {
+	#[ODTOField(required: false)]
+	public ?int $id = null;
 
-	public function isValid(): bool {
-		return (!is_null($this->nombre));
-	}
+	#[ODTOField(required: true)]
+	public string $nombre = '';
 
-	public function load(ORequest $req): void {
-		$this->id               = $req->getParamInt('id');
-		$this->nombre           = $req->getParamString('nombre');
-		$this->has_password     = $req->getParamBool('hasPassword');
-		$this->password         = $req->getParamString('password');
-		$this->confirm_password = $req->getParamString('confirmPassword');
-		$this->color            = $req->getParamString('color');
-		$this->roles            = $req->getParam('roles');
-	}
+	#[ODTOField(required: false)]
+	public bool $hasPassword = false;
+
+	#[ODTOField(required: false)]
+	public ?string $password = null;
+
+	#[ODTOField(required: false)]
+	public ?string $confirmPassword = null;
+
+	#[ODTOField(required: false)]
+	public ?string $color = null;
+
+	#[ODTOField(required: false)]
+	public array $roles = [];
 }

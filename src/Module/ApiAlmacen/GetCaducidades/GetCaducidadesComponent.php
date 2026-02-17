@@ -30,7 +30,7 @@ class GetCaducidadesComponent extends OComponent {
 	 * @return void
 	 */
 	public function run(CaducidadesDTO $data): void {
-		if (is_null($data->pagina) || is_null($data->num)) {
+		if (!$data->isValid()) {
 			$this->status = 'error';
 		}
 

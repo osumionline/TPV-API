@@ -62,12 +62,12 @@ class SaveVentaComponent extends OComponent {
 		if ($this->status === 'ok') {
 			$venta = Venta::create();
 			$venta->num_venta      = $this->vs->generateNumVenta();
-			$venta->id_empleado    = $data->id_empleado;
-			$venta->id_cliente     = ($data->id_cliente !== -1) ? $data->id_cliente : null;
+			$venta->id_empleado    = $data->idEmpleado;
+			$venta->id_cliente     = ($data->idCliente !== -1) ? $data->idCliente : null;
 			$venta->total          = $data->total;
 			$venta->entregado      = $data->efectivo;
-			$venta->pago_mixto     = $data->pago_mixto;
-			$venta->id_tipo_pago   = $data->id_tipo_pago;
+			$venta->pago_mixto     = $data->pagoMixto;
+			$venta->id_tipo_pago   = $data->idTipoPago;
 			$venta->entregado_otro = $data->tarjeta;
 			$venta->saldo          = null;
 			$venta->facturada      = false;
@@ -248,10 +248,10 @@ class SaveVentaComponent extends OComponent {
 			if ($data->imprimir === 'factura') {
 				$ticket_pdf = $this->is->generateTicket($venta, 'venta');
 				$this->is->imprimirTicket($ticket_pdf);
-				$cliente       = Cliente::findOne(['id' => $data->id_cliente]);
+				$cliente       = Cliente::findOne(['id' => $data->idCliente]);
 				$datos         = $cliente->getDatosFactura();
 				$num_factura   = $this->cs->generateNumFactura();
-				$factura       = $this->cs->createNewFactura(null, $num_factura, $data->id_cliente, $datos, true);
+				$factura       = $this->cs->createNewFactura(null, $num_factura, $data->idCliente, $datos, true);
 				$this->importe = $this->cs->updateFacturaVentas($factura->id, [$venta->id], true);
 
 				$factura->importe = $this->importe;

@@ -16,6 +16,26 @@ class SaveInstallationComponent extends OComponent {
     $this->gs = inject(GeneralService::class);
   }
 
+  private function isValid(InstallationDTO $data): bool {
+		return (
+			$data->nombre !== '' &&
+			$data->nombre_comercial !== '' &&
+			$data->cif !== '' &&
+			$data->logo !== '' &&
+			$data->color !== '' &&
+			$data->tipo_iva !== '' &&
+			count($data->iva_list) > 0 &&
+			(
+				!$data->venta_online ||
+				(
+					$data->venta_online &&
+					$data->url_api !== '' &&
+					$data->secret_api !== ''
+				)
+			)
+		);
+	}
+
 	/**
 	 * Función guardar los datos iniciales de configuración
 	 *
@@ -23,7 +43,7 @@ class SaveInstallationComponent extends OComponent {
 	 * @return void
 	 */
 	public function run(InstallationDTO $data): void {
-		if (!$data->isValid()) {
+		if (!$this->isValid($data)) {
 			$this->status = 'error';
 		}
 
