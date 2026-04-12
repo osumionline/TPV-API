@@ -9,6 +9,7 @@ null
     "referencia": "<?php echo urlencode($item['referencia']) ?>",
     "nombre": "<?php echo urlencode($item['nombre']) ?>",
     "stock": <?php echo $item['stock'] ?>,
+    "palb": <?php echo $item['palb'] ?>,
     "puc": <?php echo $item['puc'] ?>,
     "pvp": <?php echo $item['pvp'] ?>,
     "hasCodigosBarras": <?php echo $item['has_codigos_barras'] ? 'true' : 'false' ?>,
