@@ -74,6 +74,49 @@ class Categoria extends OModel {
 		$this->setPadre(Categoria::findOne(['id' => $this->id_padre]));
 	}
 
+	private ?array $articulos = null;
+
+	/**
+	 * Guarda artículos asociados a una categoría
+	 *
+	 * @param array $articulos Lista de artículos
+	 *
+	 * @return void
+	 */
+	public function setArticulos(array $articulos): void {
+		$this->articulos = $articulos;
+	}
+
+	/**
+	 * Obtiene lista de artículos asociadas a una categoría
+	 *
+	 * @return array Lista de artículos
+	 */
+	public function getArticulos(): array {
+		if (is_null($this->articulos)) {
+			$this->loadArticulos();
+		}
+		return $this->articulos;
+	}
+
+	/**
+	 * Carga artículos de la categoría
+	 *
+	 * @return void
+	 */
+	private function loadArticulos(): void {
+		$db = new ODB();
+		$list = [];
+		$sql = "SELECT * FROM `articulo` WHERE `id_categoria` = ?";
+		$db->query($sql, [$this->id]);
+
+		while ($res = $db->next()) {
+			$list[] = Articulo::from($res);
+		}
+
+		$this->articulos = $list;
+	}
+
 	/**
 	 * Función para borrar una categoría y quitarse de los artículos que la tuviesen asignada
 	 *
