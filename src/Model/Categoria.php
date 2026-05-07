@@ -118,6 +118,20 @@ class Categoria extends OModel {
 	}
 
 	/**
+	 * Función para actualizar la lista de artículos de una categoría
+	 */
+	public function updateArticulos(array $id_articulos): void {
+		$db = new ODB();
+		$sql = "UPDATE `articulo` SET `id_categoria` = NULL WHERE `id_categoria` = ?";
+		$db->query($sql, [$this->id]);
+
+		foreach ($id_articulos as $id) {
+			$sql = "UPDATE `articulo` SET `id_categoria` = ? WHERE `id` = ?";
+			$db->query($sql, [$this->id, $id]);
+		}
+	}
+
+	/**
 	 * Función para borrar una categoría y quitarse de los artículos que la tuviesen asignada
 	 *
 	 * @return void
@@ -126,6 +140,8 @@ class Categoria extends OModel {
 		$db = new ODB();
 		$sql = "UPDATE `articulo` SET `id_categoria` = NULL WHERE `id_categoria` = ?";
 		$db->query($sql, [$this->id]);
+		$sql = "UPDATE `categoria` SET `id_padre` = ? WHERE `id_padre` = ?";
+		$db->query($sql, [$this->id_padre, $this->id]);
 
 		$this->delete();
 	}
