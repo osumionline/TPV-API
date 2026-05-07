@@ -56,6 +56,7 @@ class CategoriasService extends OService {
 
 		$item = [
 			'id'          => $cat->id,
+			'idPadre'     => $cat->id_padre,
 			'nombre'      => $cat->nombre,
 			'profundidad' => $options['depth'],
 			'hijos'       => []
