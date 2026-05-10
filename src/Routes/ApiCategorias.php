@@ -8,6 +8,7 @@ use Osumi\OsumiFramework\App\Module\ApiCategorias\GetArticulosCategoria\GetArtic
 use Osumi\OsumiFramework\App\Module\ApiCategorias\SaveArticulosCategoria\SaveArticulosCategoriaComponent;
 use Osumi\OsumiFramework\App\Module\ApiCategorias\SaveCategoria\SaveCategoriaComponent;
 use Osumi\OsumiFramework\App\Module\ApiCategorias\DeleteCategoria\DeleteCategoriaComponent;
+use Osumi\OsumiFramework\App\Module\ApiCategorias\AddCategoria\AddCategoriaComponent;
 
 ORoute::prefix('/api-categorias', function() {
   ORoute::post('/get-categorias',           GetCategoriasComponent::class);
@@ -15,4 +16,5 @@ ORoute::prefix('/api-categorias', function() {
   ORoute::post('/save-articulos-categoria', SaveArticulosCategoriaComponent::class);
   ORoute::post('/save-categoria',           SaveCategoriaComponent::class);
   ORoute::post('/delete-categoria',         DeleteCategoriaComponent::class);
+  ORoute::post('/add-categoria',            AddCategoriaComponent::class);
 });
