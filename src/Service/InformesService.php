@@ -401,4 +401,165 @@ class InformesService extends OService {
 
 		return $ret;
 	}
+
+	/**
+	 * Función para obtener los datos del informe de ventas.
+	 *
+	 * @param int $id_category Id de la categoría de la que obtener los artículos
+	 * @param int $month       Mes del que obtener los datos
+	 * @param int $year        Año del que obtener los datos
+	 *
+	 * @return array Array con los datos obtenidos
+	 */
+	public function getInformeVentas(int $id_category, int $month, int $year): array {
+		$db = new ODB();
+
+		$categories_by_id = [];
+		$categories_by_parent = [];
+
+		$sql = "SELECT `id`, `id_padre`, `nombre` FROM `categoria` ORDER BY `nombre`";
+		$db->query($sql);
+
+		while ($res = $db->next()) {
+			$id = (int) $res['id'];
+			$id_parent = is_null($res['id_padre']) ? null : (int) $res['id_padre'];
+
+			$category = [
+				'id'       => $id,
+				'id_padre' => $id_parent,
+				'nombre'   => $res['nombre']
+			];
+
+			$categories_by_id[$id] = $category;
+
+			if (!is_null($id_parent)) {
+				if (!isset($categories_by_parent[$id_parent])) {
+					$categories_by_parent[$id_parent] = [];
+				}
+
+				$categories_by_parent[$id_parent][] = $category;
+			}
+		}
+
+		if (!isset($categories_by_id[$id_category])) {
+			return [];
+		}
+
+		$category_ids = [];
+
+		$collect_category_ids = function(int $category_id) use (&$collect_category_ids, &$category_ids, $categories_by_parent): void {
+			$category_ids[] = $category_id;
+
+			if (!isset($categories_by_parent[$category_id])) {
+				return;
+			}
+
+			foreach ($categories_by_parent[$category_id] as $subcategory) {
+				$collect_category_ids((int) $subcategory['id']);
+			}
+		};
+
+		$collect_category_ids($id_category);
+
+		$category_ids = array_values(array_unique($category_ids));
+
+		if (count($category_ids) === 0) {
+			return [];
+		}
+
+		$category_ids_sql = implode(',', $category_ids);
+
+		$date_start = sprintf('%04d-%02d-01 00:00:00', $year, $month);
+
+		$date_end_object = new DateTime($date_start);
+		$date_end_object->modify('first day of next month');
+
+		$date_end = $date_end_object->format('Y-m-d 00:00:00');
+
+		$articles_by_category = [];
+
+		$sql = sprintf(
+			"SELECT
+			a.`id` AS `id`,
+			a.`nombre` AS `nombre`,
+			a.`id_categoria` AS `id_categoria`,
+			a.`id_marca` AS `id_marca`,
+			m.`nombre` AS `marca`,
+			ROUND(SUM(lv.`importe`), 2) AS `importe`
+			FROM `articulo` a
+			INNER JOIN `marca` m ON m.`id` = a.`id_marca`
+			INNER JOIN `linea_venta` lv ON lv.`id_articulo` = a.`id`
+			WHERE a.`id_categoria` IN (%s)
+			AND lv.`created_at` >= '%s'
+			AND lv.`created_at` < '%s'
+			GROUP BY
+			a.`id`,
+			a.`nombre`,
+			a.`id_categoria`,
+			a.`id_marca`,
+			m.`nombre`
+			ORDER BY SUM(lv.`importe`) DESC, a.`nombre`",
+			$category_ids_sql,
+			$date_start,
+			$date_end
+		);
+		$db->query($sql);
+
+		while ($res = $db->next()) {
+			$id_category_article = (int) $res['id_categoria'];
+
+			if (!isset($articles_by_category[$id_category_article])) {
+				$articles_by_category[$id_category_article] = [];
+			}
+
+			$articles_by_category[$id_category_article][] = [
+				'id'       => (int) $res['id'],
+				'nombre'   => $res['nombre'],
+				'idMarca'  => (int) $res['id_marca'],
+				'marca'    => $res['marca'],
+				'importe'  => (float) $res['importe']
+			];
+		}
+
+		$build_category_tree = function(int $category_id) use (&$build_category_tree, $categories_by_id, $categories_by_parent, $articles_by_category): ?array {
+			$category = $categories_by_id[$category_id];
+
+			$ret = [
+				'id'            => (int) $category['id'],
+				'nombre'        => $category['nombre'],
+				'articulos'     => $articles_by_category[$category_id] ?? [],
+				'total'         => 0,
+				'subcategorias' => []
+			];
+
+			$total = 0;
+
+			foreach ($ret['articulos'] as $article) {
+				$total += (float) $article['importe'];
+			}
+
+			if (isset($categories_by_parent[$category_id])) {
+				foreach ($categories_by_parent[$category_id] as $subcategory) {
+					$subcategory_data = $build_category_tree((int) $subcategory['id']);
+
+					if (!is_null($subcategory_data)) {
+						$total += (float) $subcategory_data['total'];
+						$ret['subcategorias'][] = $subcategory_data;
+					}
+				}
+			}
+
+			$ret['total'] = round($total, 2);
+
+			if ($ret['total'] === 0.0) {
+				return null;
+			}
+
+			return $ret;
+		};
+
+		$ret = $build_category_tree($id_category);
+
+		return $ret ?? [];
+	}
 }
