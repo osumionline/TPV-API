@@ -107,9 +107,9 @@ class SaveArticuloComponent extends OComponent {
 				$a->venta_online        = $data->ventaOnline;
 				$a->fecha_caducidad     = $fecha_caducidad;
 				$a->mostrar_en_web      = $data->mostrarEnWeb;
-				$a->desc_corta          = urldecode($data->descCorta);
-				$a->descripcion         = urldecode($data->descripcion);
-				$a->observaciones       = urldecode($data->observaciones);
+				$a->desc_corta          = !is_null($data->descCorta) ? urldecode($data->descCorta) : '';
+				$a->descripcion         = !is_null($data->descripcion) ? urldecode($data->descripcion) : '';
+				$a->observaciones       = !is_null($data->observaciones) ? urldecode($data->observaciones) : '';
 				$a->mostrar_obs_pedidos = $data->mostrarObsPedidos;
 				$a->mostrar_obs_ventas  = $data->mostrarObsVentas;
 

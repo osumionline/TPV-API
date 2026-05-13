@@ -73,13 +73,13 @@ class ArticuloDTO extends ODTO {
 	public bool $mostrarEnWeb = false;
 
 	#[ODTOField(required: false)]
-	public string $descCorta = '';
+	public ?string $descCorta = '';
 
 	#[ODTOField(required: false)]
-	public string $descripcion = '';
+	public ?string $descripcion = '';
 
 	#[ODTOField(required: false)]
-	public string $observaciones = '';
+	public ?string $observaciones = '';
 
 	#[ODTOField(required: false)]
 	public bool $mostrarObsPedidos = false;
