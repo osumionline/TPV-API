@@ -59,6 +59,7 @@ class SaveAllInventarioComponent extends OComponent {
 
 						$articulo->stock  = $item['stock'];
 						$articulo->pvp    = $item['pvp'];
+            $articulo->palb   = $item['palb'];
 						$articulo->margen = $this->ars->getMargen($item['puc'], $item['pvp']);
 						$articulo->save();
 
