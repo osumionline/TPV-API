@@ -25,6 +25,9 @@ class InventarioItemDTO extends ODTO {
 	public ?int $stock = null;
 
 	#[ODTOField(required: false)]
+	public ?float $palb = null;
+
+	#[ODTOField(required: false)]
 	public ?float $puc = null;
 
 	#[ODTOField(required: true)]

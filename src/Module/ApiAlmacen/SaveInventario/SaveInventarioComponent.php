@@ -60,6 +60,7 @@ class SaveInventarioComponent extends OComponent {
 					$diferencia   = $stock_final - $stock_previo;
 
 					$articulo->stock  = $data->stock;
+					$articulo->palb   = $data->palb;
 					$articulo->pvp    = $data->pvp;
 					$articulo->margen = $this->ars->getMargen($data->puc, $data->pvp);
 					$articulo->save();
