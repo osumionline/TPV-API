@@ -11,7 +11,7 @@ class EmpleadosService extends OService {
 	/**
 	 * Comprueba el inicio de sesión de un empleado
 	 *
-	 * @param int $id Id del usuario
+	 * @param int $id Id del empleado
 	 *
 	 * @param string $pass Contraseña introducida por el empleado
 	 *
@@ -19,6 +19,23 @@ class EmpleadosService extends OService {
 	 */
 	public function login(int $id, string $pass): ?Empleado {
 		$empleado = Empleado::findOne(['id' => $id]);
+		if (!is_null($empleado) && password_verify($pass, $empleado->pass)) {
+			return $empleado;
+		}
+		return null;
+	}
+
+	/**
+	 * Comprueba el inicio de sesión de un empleado, buscándolo por su nombre
+	 *
+	 * @param string $name Nombre del empleado
+	 *
+	 * @param string $pass Contraseña introducida por el empleado
+	 *
+	 * @return ?Empleado Devuelve el empleado en caso de datos correctos o null en caso contrario
+	 */
+	public function loginByName(string $name, string $pass): ?Empleado {
+		$empleado = Empleado::findOne(['nombre' => $name]);
 		if (!is_null($empleado) && password_verify($pass, $empleado->pass)) {
 			return $empleado;
 		}
