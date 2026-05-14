@@ -37,6 +37,9 @@ class AlmacenService extends OService {
 		if (!is_null($data->idProveedor)) {
 			$sql_body .= " AND a.`id_proveedor` = " . $data->idProveedor;
 		}
+		if (!is_null($data->idCategoria)) {
+			$sql_body .= " AND a.`id_categoria` = " . $data->idCategoria;
+		}
 		if ($data->descuento) {
 			$sql_body .= " AND a.`pvp_descuento` IS NOT NULL";
 		}

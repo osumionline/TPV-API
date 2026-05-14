@@ -13,6 +13,9 @@ class InventarioDTO extends ODTO {
 	public ?int $idMarca = null;
 
 	#[ODTOField(required: false)]
+	public ?int $idCategoria = null;
+
+	#[ODTOField(required: false)]
 	public ?string $nombre = null;
 
 	#[ODTOField(required: false)]
