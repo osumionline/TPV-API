@@ -77,6 +77,7 @@ class AlmacenService extends OService {
 			$ret['list'][] = [
 				'id'                 => $articulo->id,
 				'localizador'        => $articulo->localizador,
+				'id_categoria'       => $articulo->id_categoria,
 				'marca'              => $marcas[$articulo->id_marca]->nombre,
 				'proveedor'          => !is_null($articulo->id_proveedor) ? $proveedores[$articulo->id_proveedor]->nombre : null,
 				'referencia'         => $articulo->referencia,

@@ -13,6 +13,9 @@ class InventarioItemDTO extends ODTO {
 	public ?int $localizador = null;
 
 	#[ODTOField(required: false)]
+	public ?int $idCategoria = null;
+
+	#[ODTOField(required: false)]
 	public ?string $marca = null;
 
 	#[ODTOField(required: false)]

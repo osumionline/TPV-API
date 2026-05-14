@@ -4,6 +4,7 @@ null
   {
     "id": <?php echo $item['id'] ?>,
     "localizador": <?php echo $item['localizador'] ?>,
+    "idCategoria": <?php echo is_null($item['id_categoria']) ? 'null' : $item['id_categoria'] ?>,
     "marca": "<?php echo urlencode($item['marca']) ?>",
     "proveedor": <?php echo is_null($item['proveedor']) ? 'null' : '"'.urlencode($item['proveedor']).'"' ?>,
     "referencia": "<?php echo urlencode($item['referencia']) ?>",
