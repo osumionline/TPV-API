@@ -54,15 +54,16 @@ class SaveInventarioComponent extends OComponent {
 				}
 
 				// Si no viene código de barras o si es válido, sigo adelante
-				if ($status == 'ok') {
+				if ($status === 'ok') {
 					$stock_previo = $articulo->stock;
 					$stock_final  = $data->stock;
 					$diferencia   = $stock_final - $stock_previo;
 
-					$articulo->stock  = $data->stock;
-					$articulo->palb   = $data->palb;
-					$articulo->pvp    = $data->pvp;
-					$articulo->margen = $this->ars->getMargen($data->puc, $data->pvp);
+					$articulo->id_categoria = $data->idCategoria;
+					$articulo->stock        = $data->stock;
+					$articulo->palb         = $data->palb;
+					$articulo->pvp          = $data->pvp;
+					$articulo->margen       = $this->ars->getMargen($data->puc, $data->pvp);
 					$articulo->save();
 
 					if (!is_null($data->codigoBarras)) {

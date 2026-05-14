@@ -57,10 +57,11 @@ class SaveAllInventarioComponent extends OComponent {
 						$stock_final  = $item['stock'];
 						$diferencia   = $stock_final - $stock_previo;
 
-						$articulo->stock  = $item['stock'];
-						$articulo->pvp    = $item['pvp'];
-            $articulo->palb   = $item['palb'];
-						$articulo->margen = $this->ars->getMargen($item['puc'], $item['pvp']);
+            $articulo->id_categoria = $item['idCategoria'];
+						$articulo->stock        = $item['stock'];
+						$articulo->pvp          = $item['pvp'];
+            $articulo->palb         = $item['palb'];
+						$articulo->margen       = $this->ars->getMargen($item['puc'], $item['pvp']);
 						$articulo->save();
 
 						if (!is_null($item['codigoBarras'])) {
