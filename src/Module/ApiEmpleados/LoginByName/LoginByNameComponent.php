@@ -9,6 +9,7 @@ use Osumi\OsumiFramework\App\Service\EmpleadosService;
 class LoginByNameComponent extends OComponent {
   private ?EmpleadosService $es = null;
   public string $status = 'ok';
+  public string $id     = 'null';
 
   public function __construct() {
     parent::__construct();
@@ -31,7 +32,10 @@ class LoginByNameComponent extends OComponent {
 
 		if ($this->status === 'ok') {
 			$empleado = $this->es->loginByName($name, $pass);
-			if (is_null($empleado)) {
+			if (!is_null($empleado)) {
+        $this->id = strval($empleado->id);
+      }
+      else {
 				$this->status = 'error';
 			}
 		}
