@@ -485,7 +485,20 @@ class InformesService extends OService {
 			a.`id_categoria` AS `id_categoria`,
 			a.`id_marca` AS `id_marca`,
 			m.`nombre` AS `marca`,
-			ROUND(SUM(lv.`importe`), 2) AS `importe`
+			ROUND(SUM(lv.`importe`), 2) AS `importe`,
+			SUM(lv.`unidades`) AS `unidades`,
+			CASE
+			WHEN SUM(lv.`pvp` * lv.`unidades`) = 0 THEN 0
+			ELSE ROUND(
+				(
+					(
+						SUM(lv.`pvp` * lv.`unidades`) -
+						SUM(lv.`puc` * lv.`unidades`)
+					) / SUM(lv.`pvp` * lv.`unidades`)
+				) * 100,
+				2
+			)
+			END AS `margen`
 			FROM `articulo` a
 			INNER JOIN `marca` m ON m.`id` = a.`id_marca`
 			INNER JOIN `linea_venta` lv ON lv.`id_articulo` = a.`id`
@@ -517,7 +530,9 @@ class InformesService extends OService {
 				'nombre'   => $res['nombre'],
 				'idMarca'  => (int) $res['id_marca'],
 				'marca'    => $res['marca'],
-				'importe'  => (float) $res['importe']
+				'importe'  => (float) $res['importe'],
+				'unidades' => (int) $res['unidades'],
+				'margen'   => (float) $res['margen']
 			];
 		}
 
@@ -529,13 +544,21 @@ class InformesService extends OService {
 				'nombre'        => $category['nombre'],
 				'articulos'     => $articles_by_category[$category_id] ?? [],
 				'total'         => 0,
+				'unidades'      => 0,
+				'margen'        => 0,
 				'subcategorias' => []
 			];
 
 			$total = 0;
+			$unidades = 0;
+			$margen_sum = 0;
+			$margen_count = 0;
 
 			foreach ($ret['articulos'] as $article) {
 				$total += (float) $article['importe'];
+				$unidades += (int) $article['unidades'];
+				$margen_sum += (float) $article['margen'];
+				$margen_count++;
 			}
 
 			if (isset($categories_by_parent[$category_id])) {
@@ -544,22 +567,41 @@ class InformesService extends OService {
 
 					if (!is_null($subcategory_data)) {
 						$total += (float) $subcategory_data['total'];
+						$unidades += (int) $subcategory_data['unidades'];
+						$margen_sum += (float) $subcategory_data['_margen_sum'];
+						$margen_count += (int) $subcategory_data['_margen_count'];
+
+						unset($subcategory_data['_margen_sum']);
+						unset($subcategory_data['_margen_count']);
+
 						$ret['subcategorias'][] = $subcategory_data;
 					}
 				}
 			}
 
 			$ret['total'] = round($total, 2);
+			$ret['unidades'] = $unidades;
+			$ret['margen'] = $margen_count > 0 ? round($margen_sum / $margen_count, 2) : 0;
 
 			if ($ret['total'] === 0.0) {
 				return null;
 			}
+
+			$ret['_margen_sum'] = $margen_sum;
+			$ret['_margen_count'] = $margen_count;
 
 			return $ret;
 		};
 
 		$ret = $build_category_tree($id_category);
 
-		return $ret ?? [];
+		if (is_null($ret)) {
+			return [];
+		}
+
+		unset($ret['_margen_sum']);
+		unset($ret['_margen_count']);
+
+		return $ret;
 	}
 }
