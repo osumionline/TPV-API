@@ -20,7 +20,15 @@ class AlmacenService extends OService {
 	 */
 	public function getInventario(InventarioDTO $data): array {
 		$db = new ODB();
-		$sql = "SELECT a.*";
+		$meses_sin_ventas = 12;
+		$sql = "SELECT
+		a.*,
+		NOT EXISTS (
+			SELECT 1
+			FROM `linea_venta` lv
+			WHERE lv.`id_articulo` = a.`id`
+				AND lv.`created_at` >= DATE_SUB(NOW(), INTERVAL ".$meses_sin_ventas." MONTH)
+		) AS `sin_ventas`";
 		$sql_body = " FROM `articulo` a, `marca` m WHERE a.`id_marca` = m.`id` AND a.`deleted_at` IS NULL";
 		$ret = ['list' => [], 'pags' => 0, 'total_pvp' => 0, 'total_puc' => 0];
 
@@ -90,7 +98,8 @@ class AlmacenService extends OService {
 				'puc'                => $articulo->puc,
 				'pvp'                => $articulo->pvp,
 				'has_codigos_barras' => (count($articulo->getNotDefaultCodigosBarras()) > 0),
-				'observaciones'      => $articulo->observaciones
+				'observaciones'      => $articulo->observaciones,
+				'sin_ventas'         => ((int) $res['sin_ventas'] === 1)
 			];
 		}
 

@@ -14,6 +14,7 @@ null
     "puc": <?php echo $item['puc'] ?>,
     "pvp": <?php echo $item['pvp'] ?>,
     "hasCodigosBarras": <?php echo $item['has_codigos_barras'] ? 'true' : 'false' ?>,
-    "observaciones": "<?php echo urlencode($item['observaciones']) ?>"
+    "observaciones": "<?php echo urlencode($item['observaciones']) ?>",
+    "sinVentas": <?php echo $item['sin_ventas'] ? 'true' : 'false' ?>
   }
 <?php endif ?>

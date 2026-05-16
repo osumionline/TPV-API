@@ -44,7 +44,7 @@ class SaveInventarioComponent extends OComponent {
 				$id = $data->id;
 
 				// Si viene un código de barras compruebo que no esté siendo usado
-				if (!is_null($data->codigoBarras)) {
+				if (!is_null($data->codigoBarras) && $data->codigoBarras !== '') {
 					$cb = CodigoBarras::findOne(['codigo_barras' => $data->codigoBarras]);
 					if (!is_null($cb)) {
 						$cb_articulo = $cb->getArticulo();
@@ -66,7 +66,7 @@ class SaveInventarioComponent extends OComponent {
 					$articulo->margen       = $this->ars->getMargen($data->puc, $data->pvp);
 					$articulo->save();
 
-					if (!is_null($data->codigoBarras)) {
+					if (!is_null($data->codigoBarras) && $data->codigoBarras !== '') {
 						$cb = CodigoBarras::create();
 						$cb->id_articulo   = $articulo->id;
 						$cb->codigo_barras = $data->codigoBarras;
