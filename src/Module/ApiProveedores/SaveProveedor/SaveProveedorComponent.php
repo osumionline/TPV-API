@@ -42,11 +42,11 @@ class SaveProveedorComponent extends OComponent {
 
 			if ($this->status === 'ok') {
         $proveedor->nombre        = urldecode($data->nombre);
-				$proveedor->direccion     = urldecode($data->direccion);
-				$proveedor->telefono      = urldecode($data->telefono);
-				$proveedor->email         = urldecode($data->email);
-				$proveedor->web           = urldecode($data->web);
-				$proveedor->observaciones = urldecode($data->observaciones);
+				$proveedor->direccion     = is_null($data->direccion)     ? null : urldecode($data->direccion);
+				$proveedor->telefono      = is_null($data->telefono)      ? null : urldecode($data->telefono);
+				$proveedor->email         = is_null($data->email)         ? null : urldecode($data->email);
+				$proveedor->web           = is_null($data->web)           ? null : urldecode($data->web);
+				$proveedor->observaciones = is_null($data->observaciones) ? null : urldecode($data->observaciones);
 				$proveedor->save();
 
 				if (!is_null($data->foto) && !str_starts_with($data->foto, 'http') && !str_starts_with($data->foto, '/')) {

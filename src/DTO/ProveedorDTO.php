@@ -19,19 +19,19 @@ class ProveedorDTO extends ODTO{
 	public ?string $foto = null;
 
 	#[ODTOField(required: false)]
-	public string $direccion = '';
+	public ?string $direccion = '';
 
 	#[ODTOField(required: false)]
-	public string $telefono = '';
+	public ?string $telefono = '';
 
 	#[ODTOField(required: false)]
-	public string $email = '';
+	public ?string $email = '';
 
 	#[ODTOField(required: false)]
-	public string $web = '';
+	public ?string $web = '';
 
 	#[ODTOField(required: false)]
-	public string $observaciones = '';
+	public ?string $observaciones = '';
 
 	#[ODTOField(required: false)]
 	public array $marcas = [];
