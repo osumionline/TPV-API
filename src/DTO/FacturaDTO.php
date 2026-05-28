@@ -20,7 +20,7 @@ class FacturaDTO extends ODTO {
 
 	public function isValid(): bool {
 		return (
-			!is_null($this->id_cliente) &&
+			!is_null($this->idCliente) &&
 			!is_null($this->ventas) &&
 			is_array($this->ventas) &&
 			count($this->ventas) > 0
@@ -28,9 +28,9 @@ class FacturaDTO extends ODTO {
 	}
 
 	public function load(ORequest $req): void {
-		$this->id         = $req->getParamInt('id');
-		$this->id_cliente = $req->getParamInt('idCliente');
-		$this->ventas     = $req->getParam('ventas');
-		$this->imprimir   = $req->getParamBool('imprimir');
+		$this->id        = $req->getParamInt('id');
+		$this->idCliente = $req->getParamInt('idCliente');
+		$this->ventas    = $req->getParam('ventas');
+		$this->imprimir  = $req->getParamBool('imprimir');
 	}
 }

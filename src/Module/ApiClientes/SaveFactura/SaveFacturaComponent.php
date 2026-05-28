@@ -32,7 +32,7 @@ class SaveFacturaComponent extends OComponent {
 			$this->status = 'error';
 		}
 
-		if ($this->status === 'ok' && (!is_array($this->ventas) || (is_array($this->ventas) && count($this->ventas) < 1))) {
+		if ($this->status === 'ok' && (!is_array($data->ventas) || (is_array($data->ventas) && count($data->ventas) < 1))) {
 			$this->status = 'error';
 		}
 
