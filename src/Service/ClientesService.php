@@ -170,6 +170,29 @@ class ClientesService extends OService {
 	}
 
 	/**
+	 * Función para obtener el sumatorio de ventas de un cliente
+	 *
+	 * @param int $id_cliente Id del cliente del que obtener los datos
+	 *
+	 * @return array Listado de Año-Mes-Total PUC-Total PVP
+	 */
+	public function getSumaCliente(int $id_cliente): array {
+		$db = new ODB();
+		$sql = "SELECT YEAR(lv.`created_at`) AS `y`, MONTH(lv.`created_at`) AS `m`, ROUND(SUM(lv.`puc` * lv.`unidades`), 2) AS `puc`, ROUND(SUM(lv.`pvp` * lv.`unidades`), 2) AS `pvp` FROM `venta` v JOIN `linea_venta` lv ON v.`id` = lv.`id_venta` WHERE v.`id_cliente` = ? GROUP BY YEAR(lv.`created_at`), MONTH(lv.`created_at`) ORDER BY YEAR(lv.`created_at`), MONTH(lv.`created_at`)";
+		$db->query($sql, [$id_cliente]);
+		$ret = [];
+		while ($res = $db->next()) {
+			$ret[] = [
+				'year'  => (int) $res['y'],
+				'month' => (int) $res['m'],
+				'puc'   => (float) $res['puc'],
+				'pvp'   => (float) $res['pvp']
+			];
+		}
+		return $ret;
+	}
+
+	/**
 	 * Función para obtener las ventas de un cliente de un mes concreto o las del mes actual por defecto
 	 *
 	 * @param int $id_cliente Id del cliente

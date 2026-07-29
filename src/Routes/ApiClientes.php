@@ -14,6 +14,7 @@ use Osumi\OsumiFramework\App\Module\ApiClientes\GetEstadisticasCliente\GetEstadi
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetFacturaCliente\GetFacturaClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetFacturasCliente\GetFacturasClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetReservas\GetReservasComponent;
+use Osumi\OsumiFramework\App\Module\ApiClientes\GetSumaCliente\GetSumaClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\GetVentasCliente\GetVentasClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\SaveCliente\SaveClienteComponent;
 use Osumi\OsumiFramework\App\Module\ApiClientes\SaveFactura\SaveFacturaComponent;
@@ -35,6 +36,7 @@ ORoute::prefix('/api-clientes', function() {
   ORoute::post('/get-factura-cliente',      GetFacturaClienteComponent::class);
   ORoute::post('/get-facturas-cliente',     GetFacturasClienteComponent::class);
   ORoute::post('/get-reservas',             GetReservasComponent::class);
+  ORoute::post('/get-suma-cliente',         GetSumaClienteComponent::class);
   ORoute::post('/get-ventas-cliente',       GetVentasClienteComponent::class);
   ORoute::post('/save-cliente',             SaveClienteComponent::class);
   ORoute::post('/save-factura',             SaveFacturaComponent::class);
