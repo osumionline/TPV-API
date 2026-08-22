@@ -1,9 +1,9 @@
 {
-  "name": "osumionline/new",
-  "description": "Aplicación esqueleto basada en Osumi Framework.",
+  "name": "osumi-tpv-api",
+  "description": "API para la aplicación Osumi TPV",
+  "version": "1.0.0",
   "type": "project",
-  "keywords": ["osumi", "framework", "skeleton"],
-  "homepage": "https://github.com/osumionline/new",
+  "homepage": "https://github.com/osumionline/Osumi-TPV",
   "license": "MIT",
   "authors": [
     {
