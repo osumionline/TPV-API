@@ -16,6 +16,7 @@ use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\Tools\OTools;
 
 class ExportService extends OService {
+<<<<<<< HEAD
 	private const FORMAT_VERSION = 2;
 	private const SCHEMA_VERSION = 'legacy-2026-07';
 	private const PACKAGE_PREFIX = 'osumi-tpv-migration-';
@@ -34,6 +35,12 @@ class ExportService extends OService {
 		]
 	];
 
+=======
+	private const FORMAT_VERSION = 1;
+	private const SCHEMA_VERSION = 'legacy-2026-07';
+	private const PACKAGE_PREFIX = 'osumi-tpv-migration-';
+	private const WORKSPACE_PREFIX = 'osumi-tpv-export-';
+>>>>>>> 5839a412eb104a058a66212a692db6c5bb96f5a1
 	private const EXPECTED_TABLES = [
 		'articulo',
 		'articulo_etiqueta',
@@ -151,9 +158,12 @@ class ExportService extends OService {
 			$this->progress('Copiando app_data.json...');
 			$this->copyAppData($package_dir);
 
+<<<<<<< HEAD
 			$this->progress('Exportando la configuración de plugins...');
 			$this->exportPluginConfig($package_dir);
 
+=======
+>>>>>>> 5839a412eb104a058a66212a692db6c5bb96f5a1
 			$this->progress('Copiando el logo del negocio...');
 			$this->copyLogo($package_dir);
 
@@ -636,6 +646,7 @@ class ExportService extends OService {
 		}
 	}
 
+<<<<<<< HEAD
 	private function exportPluginConfig(string $package_dir): void {
 		$plugin_config = [];
 
@@ -674,6 +685,8 @@ class ExportService extends OService {
 		$this->writeJson($package_dir . 'plugin_config.json', $plugin_config);
 	}
 
+=======
+>>>>>>> 5839a412eb104a058a66212a692db6c5bb96f5a1
 	private function validateMandatoryLogo(): void {
 		$public_dir = $this->withTrailingSeparator((string) $this->getConfig()->getDir('public'));
 		$logo_path = $public_dir . 'logo.jpg';
@@ -1060,11 +1073,18 @@ class ExportService extends OService {
 				'version' => $dump_tool_version
 			],
 			'contents'           => [
+<<<<<<< HEAD
 				'database'     => true,
 				'appData'      => true,
 				'pluginConfig' => true,
 				'logo'         => true,
 				'files'        => $this->included_file_count > 0
+=======
+				'database' => true,
+				'appData'  => true,
+				'logo'     => true,
+				'files'    => $this->included_file_count > 0
+>>>>>>> 5839a412eb104a058a66212a692db6c5bb96f5a1
 			]
 		];
 	}
@@ -1161,7 +1181,11 @@ class ExportService extends OService {
 				throw new RuntimeException('El ZIP generado no ha superado la comprobación de integridad.');
 			}
 			try {
+<<<<<<< HEAD
 				foreach (['manifest.json', 'database.sql', 'app_data.json', 'plugin_config.json', 'export-report.json', 'checksums.json'] as $required_file) {
+=======
+				foreach (['manifest.json', 'database.sql', 'app_data.json', 'export-report.json', 'checksums.json'] as $required_file) {
+>>>>>>> 5839a412eb104a058a66212a692db6c5bb96f5a1
 					if ($validation_zip->locateName($required_file) === false) {
 						throw new RuntimeException('El paquete no contiene el archivo obligatorio ' . $required_file . '.');
 					}
