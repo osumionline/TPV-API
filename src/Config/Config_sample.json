@@ -1,0 +1,39 @@
+{
+	"name": "Indomable",
+	"db": {
+		"host": "localhost",
+		"user": "apitpv",
+		"pass": "password",
+		"name": "apitpv"
+	},
+	"base_url": "https://apitpv.example.com",
+	"default_title": "API TPV",
+	"dir": {
+		"fotos": "fotos/"
+	},
+	"log_level": "ALL",
+	"extra": {
+		"num_por_pag": 20,
+		"fotos": "/var/www/vhosts/example.com/apitpv.example.com/web/fotos",
+		"foxit": "C:\\Foxit Software\\Foxit Reader\\Foxit Reader.exe",
+		"impresora": "tickets",
+		"backup_api_url": "https://tpvbackup.osumi.dev/api/",
+		"backup_api_key": "BACKUP_API_KEY",
+		"backup_id_account": 1,
+		"backup_folder": "/var/www/vhosts/osumi.dev/apitpv.example.com/ofw/tmp/"
+	},
+	"plugins": {
+		"email_smtp": {
+			"host": "SMTP_HOST",
+			"port": 587,
+			"secure": "tls",
+			"user": "SMTP_USER",
+			"pass": "SMTP_PASS"
+		},
+		"ticketbai": {
+			"token": "TICKET_BAI_TOKEN",
+			"nif": "TICKET_BAI_NIF"
+		}
+	},
+	"environment": "prod"
+}
