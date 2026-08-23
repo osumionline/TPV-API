@@ -16,10 +16,24 @@ use Osumi\OsumiFramework\ORM\ODB;
 use Osumi\OsumiFramework\Tools\OTools;
 
 class ExportService extends OService {
-	private const FORMAT_VERSION = 1;
+	private const FORMAT_VERSION = 2;
 	private const SCHEMA_VERSION = 'legacy-2026-07';
 	private const PACKAGE_PREFIX = 'osumi-tpv-migration-';
 	private const WORKSPACE_PREFIX = 'osumi-tpv-export-';
+	private const EXPORTED_PLUGIN_FIELDS = [
+		'email_smtp' => [
+			'host',
+			'port',
+			'secure',
+			'user',
+			'pass'
+		],
+		'ticketbai' => [
+			'token',
+			'nif'
+		]
+	];
+
 	private const EXPECTED_TABLES = [
 		'articulo',
 		'articulo_etiqueta',
@@ -136,6 +150,9 @@ class ExportService extends OService {
 
 			$this->progress('Copiando app_data.json...');
 			$this->copyAppData($package_dir);
+
+			$this->progress('Exportando la configuración de plugins...');
+			$this->exportPluginConfig($package_dir);
 
 			$this->progress('Copiando el logo del negocio...');
 			$this->copyLogo($package_dir);
@@ -619,6 +636,44 @@ class ExportService extends OService {
 		}
 	}
 
+	private function exportPluginConfig(string $package_dir): void {
+		$plugin_config = [];
+
+		foreach (self::EXPORTED_PLUGIN_FIELDS as $plugin_name => $fields) {
+			$config = $this->getConfig()->getPluginConfig($plugin_name);
+			if (is_null($config)) {
+				$plugin_config[$plugin_name] = null;
+				continue;
+			}
+
+			$plugin_config[$plugin_name] = [];
+			$missing_fields = [];
+
+			foreach ($fields as $field) {
+				if (array_key_exists($field, $config)) {
+					$plugin_config[$plugin_name][$field] = $config[$field];
+				}
+				else {
+					$plugin_config[$plugin_name][$field] = null;
+					$missing_fields[] = $field;
+				}
+			}
+
+			if (count($missing_fields) > 0) {
+				$this->addWarning(
+					'INCOMPLETE_PLUGIN_CONFIG',
+					'La configuración de un plugin está incompleta.',
+					[
+						'plugin'        => $plugin_name,
+						'missingFields' => $missing_fields
+					]
+				);
+			}
+		}
+
+		$this->writeJson($package_dir . 'plugin_config.json', $plugin_config);
+	}
+
 	private function validateMandatoryLogo(): void {
 		$public_dir = $this->withTrailingSeparator((string) $this->getConfig()->getDir('public'));
 		$logo_path = $public_dir . 'logo.jpg';
@@ -1005,10 +1060,11 @@ class ExportService extends OService {
 				'version' => $dump_tool_version
 			],
 			'contents'           => [
-				'database' => true,
-				'appData'  => true,
-				'logo'     => true,
-				'files'    => $this->included_file_count > 0
+				'database'     => true,
+				'appData'      => true,
+				'pluginConfig' => true,
+				'logo'         => true,
+				'files'        => $this->included_file_count > 0
 			]
 		];
 	}
@@ -1105,7 +1161,7 @@ class ExportService extends OService {
 				throw new RuntimeException('El ZIP generado no ha superado la comprobación de integridad.');
 			}
 			try {
-				foreach (['manifest.json', 'database.sql', 'app_data.json', 'export-report.json', 'checksums.json'] as $required_file) {
+				foreach (['manifest.json', 'database.sql', 'app_data.json', 'plugin_config.json', 'export-report.json', 'checksums.json'] as $required_file) {
 					if ($validation_zip->locateName($required_file) === false) {
 						throw new RuntimeException('El paquete no contiene el archivo obligatorio ' . $required_file . '.');
 					}
