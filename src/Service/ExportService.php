@@ -1291,7 +1291,8 @@ class ExportService extends OService {
 			'/usr/bin/mariadb-dump',
 			'/usr/local/bin/mariadb-dump',
 			'/usr/bin/mysqldump',
-			'/usr/local/bin/mysqldump'
+			'/usr/local/bin/mysqldump',
+			'C:/xampp/mysql/bin/mysqldump.exe'
 		];
 
 		foreach ($candidates as $candidate) {
