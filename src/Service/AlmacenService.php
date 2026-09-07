@@ -159,7 +159,7 @@ class AlmacenService extends OService {
 		if (!is_null($data->month)) {
 			$conditions[] = "MONTH(c.`created_at`) = " . $data->month;
 		}
-		if (!is_null($data->id_marca)) {
+		if (!is_null($data->idMarca)) {
 			$conditions[] = "a.`id_marca` = ".$data->idMarca;
 		}
 		if (!is_null($data->nombre)) {
